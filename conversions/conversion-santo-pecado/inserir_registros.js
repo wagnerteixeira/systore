@@ -66,8 +66,12 @@ const inserirRegistros = async () => {
       cpf: line[15],
       seller: line[16],
       job_name: line[17],
-      city_job: line[36],
+      place_of_birth: line[36],
       occupation: line[30],
+      spouse: line[18], //conjuge
+      note: line[19], //observações
+      //phone1: { type: String }, //telefone 1
+      //prohe2: { type: String }, //telefone 2
     }    
     try {
       const res = await axiosInstance.post('/api/client', client);    

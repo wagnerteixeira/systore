@@ -14,8 +14,13 @@ const clientSchema = new mongoose.Schema({
     cpf: { type: String },
     seller: { type: String },
     job_name: { type: String },
-    city_job: { type: String },
-    occupation: { type: String },
+    place_of_birth: { type: String },
+    spouse: { type: String }, //conjuge
+    occupation: { type: String }, //
+    note: { type: String }, //observações
+    phone1: { type: String }, //telefone 1
+    prohe2: { type: String }, //telefone 2
+
     bills_receives: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BillsReceive' }]
 })
 

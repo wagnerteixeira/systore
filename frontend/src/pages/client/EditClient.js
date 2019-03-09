@@ -25,7 +25,12 @@ const styles = theme => ({
       }
   },
   textField: {    
-    width: '100%'
+    width: '100%',
+    marginTop: '0px',
+    marginBotton: '4px',
+  },
+  textFieldInput: {
+    padding: '0px'
   },
   inputFile: {
     display: 'none',
