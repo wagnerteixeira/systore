@@ -45,8 +45,8 @@ function Login(props){
     <div>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant='title' align='center' color="inherit" className={classes.grow}>
-            Entre com seu userName e senha
+          <Typography variant='h6' align='center' color="inherit" className={classes.grow}>
+            Entre com seu usuário e senha
           </Typography>        
         </Toolbar>
       </AppBar>

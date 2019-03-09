@@ -249,7 +249,7 @@ class Menu extends React.Component {
             anchorEl
           } = this.state;
     const open = Boolean(anchorEl);
-
+    
     let _logged = logged;
     let _displayName = displayName;
     if (!_logged){
@@ -290,7 +290,7 @@ class Menu extends React.Component {
             <Divider />            
             <List>              
               <IconListButton 
-                linkTo='/' 
+                linkTo={process.env.REACT_APP_PUBLIC_URL + '/'}
                 iconType='attach_money'               
                 primaryText='Títulos'    
                 onClickButton={() => this.handleHeaderText('Títulos')}
@@ -299,7 +299,7 @@ class Menu extends React.Component {
                 listItemTextClassName={classes.listItemTextClassName}
               />
               <IconListButton 
-                linkTo='/client' 
+                linkTo={process.env.REACT_APP_PUBLIC_URL + '/client'}
                 iconType='assignment_ind'                
                 primaryText='Clientes' 
                 onClickButton={() => this.handleHeaderText('Clientes')}
@@ -308,7 +308,7 @@ class Menu extends React.Component {
                 listItemTextClassName={classes.listItemTextClassName}
               />             
               <IconListButton 
-                linkTo='/user' 
+                linkTo={process.env.REACT_APP_PUBLIC_URL + '/user'}
                 iconType='accessibility_new'                
                 primaryText='Usuários' 
                 onClickButton={() => this.handleHeaderText('Usuários')}
@@ -333,7 +333,7 @@ class Menu extends React.Component {
                 </IconButton>
                 <Typography 
                   className={classes.typographyDawerOpen} 
-                  variant="title" 
+                  variant="h6" 
                   color="inherit" 
                   noWrap
                 >
@@ -345,7 +345,7 @@ class Menu extends React.Component {
                     onClick={this.handleOpenMenu}
                   >
                     <Typography 
-                      variant="title" 
+                      variant="h6" 
                       color="inherit" 
                       className={classes.userText}
                     >
