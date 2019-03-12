@@ -1,8 +1,13 @@
+import 'date-fns';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+
+import ptLocale from "date-fns/locale/pt-BR";
 
 const styles = theme => ({
   container: {
@@ -57,6 +62,9 @@ class EditPublication extends Component {
       handleSave,
       handleCancel,      
     } = this.props;
+
+    console.log(typeof new Date(data.registry_date));
+    console.log(new Date(data.registry_date));
     return (
       <div>
         <form className={classes.container} noValidate autoComplete="off">  
@@ -78,26 +86,150 @@ class EditPublication extends Component {
               onChange={handleValueChange('cpf')}
               margin="normal"
               fullWidth
-            />                         
+            />   
+            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>                     
+              <DatePicker
+                id="registry_date"
+                label="Data de Registro"
+                rows="6"
+                className={classes.textField}
+                value={data.registry_date}
+                onChange={handleValueChange('registry_date')}
+                margin="normal"      
+                format={"dd/MM/yyyy"}
+                views={["year", "month", "day"]}
+                fullWidth                 
+              />                        
+              <DatePicker            
+                id="date_of_birth"
+                label="Data de Aniversário"
+                className={classes.textField}
+                value={data.date_of_birth}              
+                onChange={(e) => handleValueChange('date_of_birth')({...e, target: { ...e.target, value: parseInt(e.target.value) }})}
+                margin="normal"          
+                format={"dd/MM/yyyy"}    
+                fullWidth          
+              />  
+            </MuiPickersUtilsProvider> 
             <TextField
-              id="registry_date"
-              label="Data de Registro"
-              rows="6"
+              id="address"
+              label="Endereço"
               className={classes.textField}
-              value={data.registry_date}
-              onChange={handleValueChange('registry_date')}
+              value={data.address}
+              onChange={handleValueChange('address')}
               margin="normal"
               fullWidth
-            />     
+            />   
             <TextField
-              id="date_of_birth"
-              label="Data de Aniversário"
+              id="neighborhood"
+              label="Bairro"
               className={classes.textField}
-              value={data.date_of_birth}              
-              onChange={(e) => handleValueChange('date_of_birth')({...e, target: { ...e.target, value: parseInt(e.target.value) }})}
-              margin="normal"              
-              fullWidth          
-            />  
+              value={data.neighborhood}
+              onChange={handleValueChange('neighborhood')}
+              margin="normal"
+              fullWidth
+            />   
+            <TextField
+              id="city"
+              label="Cidade"
+              className={classes.textField}
+              value={data.city}
+              onChange={handleValueChange('city')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="state"
+              label="Estado"
+              className={classes.textField}
+              value={data.state}
+              onChange={handleValueChange('state')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="postal_code"
+              label="CEP"
+              className={classes.textField}
+              value={data.postal_code}
+              onChange={handleValueChange('postal_code')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="seller"
+              label="Vendedor"
+              className={classes.textField}
+              value={data.seller}
+              onChange={handleValueChange('seller')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="job_name"
+              label="Empresa"
+              className={classes.textField}
+              value={data.job_name}
+              onChange={handleValueChange('job_name')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="occupation"
+              label="Profissão"
+              className={classes.textField}
+              value={data.occupation}
+              onChange={handleValueChange('occupation')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="place_of_birth"
+              label="Naturalidade"
+              className={classes.textField}
+              value={data.place_of_birth}
+              onChange={handleValueChange('place_of_birth')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="spouse"
+              label="Cônjuge"
+              className={classes.textField}
+              value={data.spouse}
+              onChange={handleValueChange('spouse')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="phone1"
+              label="Bairro"
+              className={classes.textField}
+              value={data.phone1}
+              onChange={handleValueChange('phone1')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+              id="phone2"
+              label="Bairro"
+              className={classes.textField}
+              value={data.phone2}
+              onChange={handleValueChange('phone2')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
+                id="note"
+                label="Observações"
+                rows="6"
+                className={classes.textField}
+                value={data.note}
+                onChange={handleValueChange('note')}
+                margin="normal"
+                multiline
+            />   
+
             <br />
             <div className={classes.divRow}>
               <Button 
