@@ -24,6 +24,7 @@ class Client extends Component {
     inEdit: false,    
     selectedIndex: '0',
     clients: [],
+    countClients: 0,
     data: {
       _id : '',
       title: '',
@@ -31,46 +32,47 @@ class Client extends Component {
       sinopsys: '',      
       urlImage: '',
       position: 0,
-    }    
+    },
+    page: 0,
+    rowsPerPage: 5,
   };
 
   componentWillMount() {
-    this.fetchClients();
+    this.fetchClients(this.state.page, this.state.rowsPerPage);
   }
 
-  fetchClients = () => {    
-    clientservice.getAll(0, 10, '-_id')
+  fetchClients = (page, rowsPerPage) => {
+    clientservice.count().then(res => this.setState({ countClients: res.data.value }));
+    const skip = page * rowsPerPage;  
+    clientservice.getAll(skip, rowsPerPage, '-_id')
       .then(res => {                 
-        console.log(res)
-        this.setState({   
-            ...this.state,         
+        this.setState({
             tabValue: 'LIST', 
             inEdit: false,
             selectedIndex: '0',
             clients: res.data,            
             data: {
               _id : '',
-              title: '',
-              subtitle: '',
-              sinopsys: '',      
-              urlImage: '',
-              position: 0,
-            }                
+              name: '',
+              cpf: ''
+            },
+            page: page,
+            rowsPerPage: rowsPerPage,
         });            
       })
       .catch(error => console.log(error));
   }
 
   handleTabChange = (event, value) => {
-    this.setState({...this.state,  tabValue: value });
+    this.setState({ tabValue: value });
   };
 
   handleValueChange = name => event => {
-    this.setState({...this.state, data: { ...this.state.data, [name]: event.target.value}});
+    this.setState({data: { [name]: event.target.value}});
   };  
 
   handleCancel = () => {
-    this.setState({...this.state, tabValue: 'LIST'});
+    this.setState({ tabValue: 'LIST'});
     this.fetchClients();
   }
 
@@ -83,7 +85,7 @@ class Client extends Component {
     }
     else {
       clientservice.create(this.state.data)
-        .then((data) => this.setState({...this.state, data: data}))
+        .then((data) => this.setState({ data: data}))
         .catch((error) => console.log(error));
     }
   }    
@@ -97,13 +99,20 @@ class Client extends Component {
 
   handleEdit = (key) => {      
     this.setState({    
-      ...this.state,         
       tabValue: 'EDIT', 
       selectedIndex: key,
       inEdit: true,
       data: this.state.clients[key]
     });     
   }
+
+  handleChangePage = (event, page) => {
+    this.fetchClients(page, this.state.rowsPerPage);
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.fetchClients(this.state.page, parseInt(event.target.value));
+  };
   
   render() {
     const { classes } = this.props;
@@ -112,9 +121,11 @@ class Client extends Component {
       inEdit,       
       clients,
       selectedIndex,
-      data,      
+      data,
+      page,
+      rowsPerPage,
+      countClients
     } = this.state;   
-
     return (        
       <div className={classes.root}>
         <Tabs 
@@ -133,6 +144,11 @@ class Client extends Component {
                 clients={clients}
                 handleEdit={this.handleEdit}
                 handleDelete={this.handleDelete}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                handleChangePage={this.handleChangePage}
+                handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+                countClients={countClients}
             />}
         {tabValue === 'EDIT' && 
             <EditClient 

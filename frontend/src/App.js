@@ -28,7 +28,7 @@ const muiTheme = createMuiTheme({
       dark: red[800],
       contrastText: '#000',
     },     
-    buttonEdit: {
+    edit: {
       light: green[500],
       main: green[600],
       dark: green[700],
