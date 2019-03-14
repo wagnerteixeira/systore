@@ -8,6 +8,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import Fab from '@material-ui/core/Fab';
@@ -58,14 +60,45 @@ function ViewClient(props) {
           handleChangePage,
           handleChangeRowsPerPage,
           countClients, 
+          handleSort,
+          order,
+          columnSort
          } = props;
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell padding='checkbox'>Nome</TableCell>
-            <TableCell className={classes.headerCpf}>CPF</TableCell>            
+            <TableCell padding='checkbox'>
+              <Tooltip
+                title="Ordenar"
+                placement={'bottom-start'}
+                enterDelay={300}
+              >
+                <TableSortLabel
+                  active={columnSort === 'name'}
+                  direction={order}
+                  onClick={handleSort('name')}
+                >
+                  Nome
+                </TableSortLabel>
+              </Tooltip>
+            </TableCell>
+            <TableCell className={classes.headerCpf}>
+            <Tooltip
+                title="Ordenar"
+                placement={'bottom-start'}
+                enterDelay={300}
+              >
+                <TableSortLabel
+                  active={columnSort === 'cpf'}
+                  direction={order}
+                  onClick={handleSort('cpf')}
+                >
+                  CPF
+                </TableSortLabel>
+              </Tooltip>
+            </TableCell>            
             <TableCell className={classes.headerAcoes} align='right'>Ações</TableCell>   
           </TableRow>
         </TableHead>
@@ -135,6 +168,9 @@ ViewClient.propTypes = {
   handleChangePage: PropTypes.func.isRequired, 
   handleChangeRowsPerPage: PropTypes.func.isRequired, 
   countClients: PropTypes.number.isRequired,
+  handleSort: PropTypes.func.isRequired, 
+  order: PropTypes.string.isRequired,
+  columnSort: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(ViewClient);
