@@ -26,7 +26,7 @@ const styles = theme => ({
     minWidth: 700,
   },
   fab: {
-    margin: theme.spacing.unit,
+    marginRight: theme.spacing.unit * 0.5,
     color: theme.palette.common.white
   },
   fabEdit: {
@@ -35,44 +35,49 @@ const styles = theme => ({
         backgroundColor: theme.palette.edit.dark,
     },
   },
-  acoes: {
-      paddingLeft: theme.spacing.unit * 8
-  }
+  tableRowHover: {
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
+  headerAcoes: {
+      paddingRight: `${theme.spacing.unit * 4}px !important`
+  },
+  headerCpf: {
+    paddingLeft: `${theme.spacing.unit * 5}px !important`
+}
 });
 
 function ViewClient(props) {
   const { classes, 
           handleEdit, 
           handleDelete, 
-          selectedIndex, 
           clients, 
           page, 
           rowsPerPage,
           handleChangePage,
           handleChangeRowsPerPage,
-          countClients
+          countClients, 
          } = props;
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>Nome</TableCell>
-            <TableCell>Cpf</TableCell>            
-            <TableCell className={classes.acoes}>Ações</TableCell>   
+            <TableCell padding='checkbox'>Nome</TableCell>
+            <TableCell className={classes.headerCpf}>CPF</TableCell>            
+            <TableCell className={classes.headerAcoes} align='right'>Ações</TableCell>   
           </TableRow>
         </TableHead>
         <TableBody>
             {Object.keys(clients).map(key => (
                     <TableRow 
-                        key={key}
-                        hover
-                        //onClick={event => handleClick(event, key)}
-                        selected={selectedIndex === key}
+                      hover
+                      key={key}
                     >
-                        <TableCell>{clients[key].name}</TableCell>
-                        <TableCell>{clients[key].cpf}</TableCell>
-                        <TableCell>
+                        <TableCell padding='checkbox'>{clients[key].name}</TableCell>
+                        <TableCell padding='checkbox'>{clients[key].cpf}</TableCell>
+                        <TableCell padding='none' align='right'>
                             <Fab 
                               color="primary" 
                               aria-label="Edit" 
@@ -125,7 +130,6 @@ ViewClient.propTypes = {
   clients: PropTypes.array.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired, 
-  selectedIndex: PropTypes.string.isRequired, 
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   handleChangePage: PropTypes.func.isRequired, 

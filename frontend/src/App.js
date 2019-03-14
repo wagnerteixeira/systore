@@ -52,7 +52,7 @@ const User = () => (
 
 class App extends Component {
     render() {
-      console.log(process.env.REACT_APP_API_PATH);
+      console.log(muiTheme);
       /*clientService.get('5c5fbe893c498528a588ab16').then( (res) => console.log(res.data));
       clientService.getAll(5878, 10).then( (res) => console.log(res.data));
       clientService.count().then( (res) => console.log(res.data));
