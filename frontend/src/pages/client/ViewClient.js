@@ -13,6 +13,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import Fab from '@material-ui/core/Fab';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
 import classNames from 'classnames';
 
 import TablePaginationActions from '../../components/common/TablePaginationActions';
@@ -45,6 +50,18 @@ const styles = theme => ({
   headerAcoes: {
       paddingRight: `${theme.spacing.unit * 4}px !important`
   },
+  searchContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  selectSearch: {
+    margin: theme.spacing.unit,
+    width: 120
+  },
+  textFieldSearch: {
+    margin: theme.spacing.unit,
+    width: 'calc(100% - 120px)',
+  },
   headerCpf: {
     paddingLeft: `${theme.spacing.unit * 5}px !important`
 }
@@ -62,10 +79,32 @@ function ViewClient(props) {
           countClients, 
           handleSort,
           order,
-          columnSort
+          columnSort,
+          handleRequestSort,
+          search
          } = props;
   return (
     <Paper className={classes.root}>
+      <div className={classes.searchContainer}>
+        <FormControl className={classes.selectSearch}>
+          <InputLabel htmlFor="sort">Pesquisar por</InputLabel>
+          <Select
+            value={columnSort}
+            onChange={handleRequestSort}
+            inputProps={{
+              name: 'sort',
+              id: 'sort',
+            }}
+          >
+            <MenuItem value={'name'}>Nome</MenuItem>
+            <MenuItem value={'cpf'}>Cpf</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl className={classes.textFieldSearch}>
+          <InputLabel htmlFor="serarch">Digite a pesquisa</InputLabel>
+          <Input id="serarch" value={search} />
+        </FormControl>
+      </div>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
@@ -171,6 +210,8 @@ ViewClient.propTypes = {
   handleSort: PropTypes.func.isRequired, 
   order: PropTypes.string.isRequired,
   columnSort: PropTypes.string.isRequired,
+  handleRequestSort: PropTypes.func.isRequired,
+  handleSearch: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ViewClient);

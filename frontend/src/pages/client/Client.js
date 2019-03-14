@@ -36,11 +36,12 @@ class Client extends Component {
     page: 0,
     rowsPerPage: 5,
     order: 'asc',
-    columnSort: 'name'
+    columnSort: 'name',
+    search: ''
   };
 
   componentWillMount() {
-    this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order);
+    this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
   }
 
   fetchClients = (page, rowsPerPage, columnSort, order) => {
@@ -79,7 +80,7 @@ class Client extends Component {
 
   handleCancel = () => {
     this.setState({ tabValue: 'LIST'});
-    this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order);
+    this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
   }
 
   handleSave = () => {   
@@ -98,7 +99,7 @@ class Client extends Component {
 
   handleDelete = (key) => {
     clientservice.remove(this.state.data._id)
-      .then(() =>  this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order))
+      .then(() =>  this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search))
       .catch((error) => console.log(error));
     
   }
@@ -113,11 +114,11 @@ class Client extends Component {
   }
 
   handleChangePage = (event, page) => {
-    this.fetchClients(page, this.state.rowsPerPage, this.state.columnSort, this.state.order);
+    this.fetchClients(page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
   };
 
   handleChangeRowsPerPage = event => {
-    this.fetchClients(this.state.page, parseInt(event.target.value), this.state.columnSort, this.state.order);
+    this.fetchClients(this.state.page, parseInt(event.target.value), this.state.columnSort, this.state.order, this.state.search);
   };
 
   handleSort = property => event => {
@@ -126,10 +127,18 @@ class Client extends Component {
       order = 'desc';
     }
     
-    console.log(property);
-    console.log(order);
-    this.fetchClients(this.state.page, this.state.rowsPerPage, property, order);
+    this.fetchClients(this.state.page, this.state.rowsPerPage, property, order, this.state.search);
   };
+
+  handleRequestSort = event => {
+    if (this.state.columnSort !== event.target.value)
+      this.handleSort(event.target.value)(event);
+  };
+
+  handleSearch = search => {
+    this.fetchClients(this.state.page, this.state.rowsPerPage, property, order, search);
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -171,6 +180,8 @@ class Client extends Component {
                 handleSort={this.handleSort}
                 order={order}
                 columnSort={columnSort}
+                handleRequestSort={this.handleRequestSort}
+                handleSearch={this.handleSearch}
             />}
         {tabValue === 'EDIT' && 
             <EditClient 
