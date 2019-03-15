@@ -8,9 +8,16 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import Fab from '@material-ui/core/Fab';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
 import classNames from 'classnames';
 
 import TablePaginationActions from '../../components/common/TablePaginationActions';
@@ -43,6 +50,18 @@ const styles = theme => ({
   headerAcoes: {
       paddingRight: `${theme.spacing.unit * 4}px !important`
   },
+  searchContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  selectSearch: {
+    margin: theme.spacing.unit,
+    width: 120
+  },
+  textFieldSearch: {
+    margin: theme.spacing.unit,
+    width: 'calc(100% - 120px)',
+  },
   headerCpf: {
     paddingLeft: `${theme.spacing.unit * 5}px !important`
 }
@@ -58,14 +77,67 @@ function ViewClient(props) {
           handleChangePage,
           handleChangeRowsPerPage,
           countClients, 
+          handleSort,
+          order,
+          columnSort,
+          handleRequestSort,
+          search
          } = props;
   return (
     <Paper className={classes.root}>
+      <div className={classes.searchContainer}>
+        <FormControl className={classes.selectSearch}>
+          <InputLabel htmlFor="sort">Pesquisar por</InputLabel>
+          <Select
+            value={columnSort}
+            onChange={handleRequestSort}
+            inputProps={{
+              name: 'sort',
+              id: 'sort',
+            }}
+          >
+            <MenuItem value={'name'}>Nome</MenuItem>
+            <MenuItem value={'cpf'}>Cpf</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl className={classes.textFieldSearch}>
+          <InputLabel htmlFor="serarch">Digite a pesquisa</InputLabel>
+          <Input id="serarch" value={search} />
+        </FormControl>
+      </div>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell padding='checkbox'>Nome</TableCell>
-            <TableCell className={classes.headerCpf}>CPF</TableCell>            
+            <TableCell padding='checkbox'>
+              <Tooltip
+                title="Ordenar"
+                placement={'bottom-start'}
+                enterDelay={300}
+              >
+                <TableSortLabel
+                  active={columnSort === 'name'}
+                  direction={order}
+                  onClick={handleSort('name')}
+                >
+                  Nome
+                </TableSortLabel>
+              </Tooltip>
+            </TableCell>
+            <TableCell className={classes.headerCpf}>
+            <Tooltip
+                title="Ordenar"
+                placement={'bottom-start'}
+                enterDelay={300}
+              >
+                <TableSortLabel
+                  active={columnSort === 'cpf'}
+                  direction={order}
+                  onClick={handleSort('cpf')}
+                >
+                  CPF
+                </TableSortLabel>
+              </Tooltip>
+            </TableCell>            
             <TableCell className={classes.headerAcoes} align='right'>Ações</TableCell>   
           </TableRow>
         </TableHead>
@@ -135,6 +207,11 @@ ViewClient.propTypes = {
   handleChangePage: PropTypes.func.isRequired, 
   handleChangeRowsPerPage: PropTypes.func.isRequired, 
   countClients: PropTypes.number.isRequired,
+  handleSort: PropTypes.func.isRequired, 
+  order: PropTypes.string.isRequired,
+  columnSort: PropTypes.string.isRequired,
+  handleRequestSort: PropTypes.func.isRequired,
+  handleSearch: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ViewClient);

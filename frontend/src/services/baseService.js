@@ -4,7 +4,7 @@ export default (route) => {
 
   const create = (data) => axios.post(`/${route}`, data);
   const update = (data) => axios.put(`/${route}/${data._id}`, data);
-  const getAll = (skip, limit, sort ) => {
+  const getAll = (skip, limit, sort, filter) => {
     let uri = '';
     if (skip)
     {
@@ -26,7 +26,11 @@ export default (route) => {
         uri = `?sort=${sort}`;
       else
         uri = `${uri}&sort=${sort}`;
+      if (filter)  {
+          uri = `${uri}&${sort}__regex=/${filter}/`;
+      }
     }
+    
     return axios.get(`/${route}${uri}`);    
   };
 
