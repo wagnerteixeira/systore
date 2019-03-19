@@ -9,6 +9,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 import ptLocale from "date-fns/locale/pt-BR";
 
@@ -34,15 +35,18 @@ const styles = theme => ({
   },
   textField: {
     marginTop: '0px',
-    marginBotton: '4px',
-    marginLeft: '15px',
-    marginRight: '15px',
+    marginBotton: theme.spacing.unit,
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
   },
   textFieldInput: {
     padding: '0px'
   },
   inputFile: {
     display: 'none',
+  },
+  formControl: {
+    margin: theme.spacing.unit,
   },
   button: {
     margin: theme.spacing.unit,
@@ -70,7 +74,7 @@ function TextMaskCustom(props) {
       ref={ref => {
         inputRef(ref ? ref.inputElement : null);
       }}
-      mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+      mask={['(', /[1-9]/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
       placeholderChar={'\u2000'}
       showMask
     />
@@ -99,10 +103,11 @@ class EditPublication extends Component {
       data,
       handleSave,
       handleCancel,
+      handleDateValueChange
     } = this.props;
 
     const { textmask } = this.state;
-
+    console.log(data.registry_date)
     return (
       <div>
         <form className={classes.container} noValidate autoComplete="off">
@@ -131,17 +136,16 @@ class EditPublication extends Component {
                   label="Data de Registro"
                   className={classes.textField}
                   value={data.registry_date}
-                  onChange={handleValueChange('registry_date')}
+                  onChange={handleDateValueChange('registry_date')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
-                  views={["year", "month", "day"]}
                 />
                 <DatePicker
                   id="date_of_birth"
                   label="Data de Aniversário"
                   className={classes.textField}
                   value={data.date_of_birth}
-                  onChange={handleValueChange('date_of_birth')}
+                  onChange={handleDateValueChange('date_of_birth')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
                 />
@@ -240,21 +244,25 @@ class EditPublication extends Component {
               margin="normal"
               fullWidth
             />
-            <div className={classes.divPhone} height='100px'>
-              <InputLabel htmlFor="formatted-text-mask-input">Telefone 1</InputLabel>
-              <Input
-                value={textmask}
-                onChange={this.handleChange('textmask')}
-                id="phone1"
-                inputComponent={TextMaskCustom}
-              />
-              <InputLabel htmlFor="formatted-text-mask-input">Telefone 2</InputLabel>
-              <Input
-                value={textmask}
-                onChange={this.handleChange('textmask')}
-                id="phone2"
-                inputComponent={TextMaskCustom}
-              />
+            <div className={classes.divPhone}>
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="formatted-text-mask-input">Telefone 1</InputLabel>
+                <Input
+                  value={textmask}
+                  onChange={this.handleChange('textmask')}
+                  id="phone1"
+                  inputComponent={TextMaskCustom}
+                />
+              </FormControl>
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="formatted-text-mask-input">Telefone 2</InputLabel>
+                <Input
+                  value={textmask}
+                  onChange={this.handleChange('textmask')}
+                  id="phone2"
+                  inputComponent={TextMaskCustom}
+                />
+              </FormControl>
             </div>
             <TextField
               id="note"
@@ -299,6 +307,7 @@ EditPublication.propTypes = {
   handleSave: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
+  handleDateValueChange: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EditPublication);

@@ -78,6 +78,10 @@ class Client extends Component {
     this.setState({data: { [name]: event.target.value}});
   };  
 
+  handleDateValueChange = name => date => {
+    this.setState({data: { [name]: date}});
+  }
+
   handleCancel = () => {
     this.setState({ tabValue: 'LIST'});
     this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
@@ -136,7 +140,7 @@ class Client extends Component {
   };
 
   handleSearch = search => {
-    this.fetchClients(this.state.page, this.state.rowsPerPage, property, order, search);
+    this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, search);
   }
 
 
@@ -188,7 +192,8 @@ class Client extends Component {
                 handleValueChange={this.handleValueChange}
                 data={data}
                 handleCancel={this.handleCancel}
-                handleSave={this.handleSave}                    
+                handleSave={this.handleSave}    
+                handleDateValueChange={this.handleDateValueChange}                
             />}
       </div>
     );
