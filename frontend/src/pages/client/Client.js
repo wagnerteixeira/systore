@@ -46,10 +46,8 @@ class Client extends Component {
 
   fetchClients = (page, rowsPerPage, columnSort, order, filter) => {
     clientservice.count(columnSort, filter).then(res => this.setState({ countClients: res.data.value }));
-    let orderBy = '';
-    order === 'asc' ? orderBy = columnSort : orderBy = `-${columnSort}`;
     const skip = page * rowsPerPage;  
-    clientservice.getAll(skip, rowsPerPage, orderBy, filter)
+    clientservice.getAll(skip, rowsPerPage, columnSort, order, filter)
       .then(res => {                 
         this.setState({
             tabValue: 'LIST', 
@@ -139,14 +137,13 @@ class Client extends Component {
       this.handleSort(event.target.value)(event);
   };
 
-  handleSearch  = () => {
-    console.log(this.state.search.length);
+  handleSearch = () => {
     if (this.state.search.length > 0)
       this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
   }
 
   handleChangeTextSearch = (event) => {
-    this.setState({ search: event.target.value });
+    this.setState({ search: event.target.value.toUpperCase() });
   }
 
 

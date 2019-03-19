@@ -4,7 +4,7 @@ export default (route) => {
 
   const create = (data) => axios.post(`/${route}`, data);
   const update = (data) => axios.put(`/${route}/${data._id}`, data);
-  const getAll = (skip, limit, sort, filter) => {
+  const getAll = (skip, limit, sort, order, filter) => {
     let uri = '';
     if (skip)
     {
@@ -25,7 +25,7 @@ export default (route) => {
       if (uri === '')
         uri = `?sort=${sort}`;
       else
-        uri = `${uri}&sort=${sort}`;
+        uri = `${uri}&sort=${order === 'desc'? '-': ''}${sort}`;
       if (filter)  {
         filter = createRegexFromFilter(filter);
         uri = `${uri}&${sort}__regex=/${filter}/`;

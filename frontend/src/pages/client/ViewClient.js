@@ -87,7 +87,7 @@ function ViewClient(props) {
           handleRequestSort,
           search,
           handleSearch,
-          handleChangeTextSearch
+          handleChangeTextSearch,
          } = props;
   return (
     <Paper className={classes.root}>
@@ -108,7 +108,7 @@ function ViewClient(props) {
         </FormControl>
         <FormControl className={classes.textFieldSearch}>
           <InputLabel htmlFor="search">Digite a pesquisa</InputLabel>
-          <Input id="search" value={search} onChange={handleChangeTextSearch}/>
+          <Input id="search" value={search} onChange={handleChangeTextSearch} onKeyPress={(ev) => ev.key === 'Enter' ? handleSearch() : '' }/>
         </FormControl>
         <Fab 
           color="primary" 
