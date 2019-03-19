@@ -10,6 +10,7 @@ import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Grid from '@material-ui/core/Grid';
 
 import ptLocale from "date-fns/locale/pt-BR";
 
@@ -28,10 +29,7 @@ const styles = theme => ({
     borderColor: '#C0C0C0',
     borderStyle: 'solid',
     borderWidth: '1px',
-    width: '50%',
-    [theme.breakpoints.between('xs', 'sm')]: {
-      width: '90%',
-    }
+    width: '90%',
   },
   textField: {
     marginTop: '0px',
@@ -50,11 +48,7 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
-  },
-  divRow: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
+  },  
   divPhone: {
     display: 'flex',
     flexDirection: 'wrap',
@@ -112,16 +106,19 @@ class EditPublication extends Component {
       <div>
         <form className={classes.container} noValidate autoComplete="off">
           <div className={classes.back}>
-            <TextField
-              id="name"
-              label="Nome"
-              className={classes.textField}
-              value={data.name}
-              onChange={handleValueChange('name')}
-              margin="normal"
-              fullWidth
-            />
-            <div className={classes.divRow}>
+            <Grid container spacing={24}>
+              <Grid item xs={12} sm={12} md={12} lg={8} xl={8} >
+                <TextField
+                  id="name"
+                  label="Nome"
+                  className={classes.textField}
+                  value={data.name}
+                  onChange={handleValueChange('name')}
+                  margin="normal"
+                  fullWidth
+                />   
+              </Grid>  
+              <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
               <TextField
                 id="cpf"
                 label="Cpf"
@@ -129,8 +126,11 @@ class EditPublication extends Component {
                 value={data.cpf}
                 onChange={handleValueChange('cpf')}
                 margin="normal"
+                fullWidth
               />
+              </Grid>
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
+              <Grid item xs={12} sm={4} md={4} lg={3} xl={3} >
                 <DatePicker
                   id="registry_date"
                   label="Data de Registro"
@@ -139,7 +139,10 @@ class EditPublication extends Component {
                   onChange={handleDateValueChange('registry_date')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
+                  fullWidth
                 />
+                </Grid>
+                <Grid item xs={12} sm={4} md={4} lg={3} xl={3}  >
                 <DatePicker
                   id="date_of_birth"
                   label="Data de Aniversário"
@@ -148,8 +151,11 @@ class EditPublication extends Component {
                   onChange={handleDateValueChange('date_of_birth')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
+                  fullWidth
                 />
+                </Grid>
               </MuiPickersUtilsProvider>
+              <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >
               <TextField
                 id="place_of_birth"
                 label="Naturalidade"
@@ -157,143 +163,163 @@ class EditPublication extends Component {
                 value={data.place_of_birth}
                 onChange={handleValueChange('place_of_birth')}
                 margin="normal"
+                fullWidth
               />
-            </div>
-            <TextField
-              id="address"
-              label="Endereço"
-              className={classes.textField}
-              value={data.address}
-              onChange={handleValueChange('address')}
-              margin="normal"
-              fullWidth
-            />
-            <div className={classes.divRow}>
+              </Grid>
+              <Grid item xs={12} sm={8} md={8} lg={8} xl={8} >
               <TextField
-                id="neighborhood"
-                label="Bairro"
+                id="address"
+                label="Endereço"
                 className={classes.textField}
-                value={data.neighborhood}
-                onChange={handleValueChange('neighborhood')}
+                value={data.address}
+                onChange={handleValueChange('address')}
                 margin="normal"
                 fullWidth
               />
-              <TextField
-                id="city"
-                label="Cidade"
-                className={classes.textField}
-                value={data.city}
-                onChange={handleValueChange('city')}
-                margin="normal"
-                fullWidth
-              />
-              <TextField
-                id="state"
-                label="Estado"
-                className={classes.textField}
-                value={data.state}
-                onChange={handleValueChange('state')}
-                margin="normal"
-                fullWidth
-              />
-              <TextField
-                id="postal_code"
-                label="CEP"
-                className={classes.textField}
-                value={data.postal_code}
-                onChange={handleValueChange('postal_code')}
-                margin="normal"
-                fullWidth
-              />
-            </div>
-            <TextField
-              id="seller"
-              label="Vendedor"
-              className={classes.textField}
-              value={data.seller}
-              onChange={handleValueChange('seller')}
-              margin="normal"
-              fullWidth
-            />
-            <div className={classes.divRow}>
-              <TextField
-                id="job_name"
-                label="Empresa"
-                className={classes.textField}
-                value={data.job_name}
-                onChange={handleValueChange('job_name')}
-                margin="normal"
-                fullWidth
-              />
-              <TextField
-                id="occupation"
-                label="Profissão"
-                className={classes.textField}
-                value={data.occupation}
-                onChange={handleValueChange('occupation')}
-                margin="normal"
-                fullWidth
-              />
-            </div>
-            <TextField
-              id="spouse"
-              label="Cônjuge"
-              className={classes.textField}
-              value={data.spouse}
-              onChange={handleValueChange('spouse')}
-              margin="normal"
-              fullWidth
-            />
-            <div className={classes.divPhone}>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="formatted-text-mask-input">Telefone 1</InputLabel>
-                <Input
-                  value={textmask}
-                  onChange={this.handleChange('textmask')}
-                  id="phone1"
-                  inputComponent={TextMaskCustom}
+              </Grid>
+              <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
+                <TextField
+                  id="neighborhood"
+                  label="Bairro"
+                  className={classes.textField}
+                  value={data.neighborhood}
+                  onChange={handleValueChange('neighborhood')}
+                  margin="normal"
+                  fullWidth
                 />
-              </FormControl>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="formatted-text-mask-input">Telefone 2</InputLabel>
-                <Input
-                  value={textmask}
-                  onChange={this.handleChange('textmask')}
-                  id="phone2"
-                  inputComponent={TextMaskCustom}
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} >
+                <TextField
+                  id="city"
+                  label="Cidade"
+                  className={classes.textField}
+                  value={data.city}
+                  onChange={handleValueChange('city')}
+                  margin="normal"
+                  fullWidth
                 />
-              </FormControl>
-            </div>
-            <TextField
-              id="note"
-              label="Observações"
-              rows="6"
-              className={classes.textField}
-              value={data.note}
-              onChange={handleValueChange('note')}
-              margin="normal"
-              multiline
-            />
-
-            <br />
-            <div className={classes.divRow}>
-              <Button
-                variant="outlined"
-                color="primary"
-                className={classes.button}
-                onClick={handleSave}
-              >
-                Salvar
+                </Grid>
+                <Grid item xs={12} sm={2} md={2} lg={2} xl={2} >
+                <TextField
+                  id="state"
+                  label="Estado"
+                  className={classes.textField}
+                  value={data.state}
+                  onChange={handleValueChange('state')}
+                  margin="normal"
+                  fullWidth
+                />
+                </Grid>
+                <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
+                <TextField
+                  id="postal_code"
+                  label="CEP"
+                  className={classes.textField}
+                  value={data.postal_code}
+                  onChange={handleValueChange('postal_code')}
+                  margin="normal"
+                  fullWidth
+                />
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+              <TextField
+                id="seller"
+                label="Vendedor"
+                className={classes.textField}
+                value={data.seller}
+                onChange={handleValueChange('seller')}
+                margin="normal"
+                fullWidth
+              />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >
+                <TextField
+                  id="job_name"
+                  label="Empresa"
+                  className={classes.textField}
+                  value={data.job_name}
+                  onChange={handleValueChange('job_name')}
+                  margin="normal"
+                  fullWidth
+                />
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >                
+                <TextField
+                  id="occupation"
+                  label="Profissão"
+                  className={classes.textField}
+                  value={data.occupation}
+                  onChange={handleValueChange('occupation')}
+                  margin="normal"
+                  fullWidth
+                />
+                </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+              <TextField
+                id="spouse"
+                label="Cônjuge"
+                className={classes.textField}
+                value={data.spouse}
+                onChange={handleValueChange('spouse')}
+                margin="normal"
+                fullWidth
+              />
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={12} >
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="formatted-text-mask-input">Telefone 1</InputLabel>
+                  <Input
+                    value={textmask}
+                    onChange={this.handleChange('textmask')}
+                    id="phone1"
+                    inputComponent={TextMaskCustom}
+                  />
+                </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={12} >
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="formatted-text-mask-input">Telefone 2</InputLabel>
+                  <Input
+                    value={textmask}
+                    onChange={this.handleChange('textmask')}
+                    id="phone2"
+                    inputComponent={TextMaskCustom}
+                  />
+                </FormControl>
+                </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+              <TextField
+                id="note"
+                label="Observações"
+                rows="6"
+                className={classes.textField}
+                value={data.note}
+                onChange={handleValueChange('note')}
+                margin="normal"
+                multiline
+                fullWidth
+              />
+              </Grid>
+              <br />
+              <div className={classes.divRow}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  className={classes.button}
+                  onClick={handleSave}
+                >
+                  Salvar
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                className={classes.button}
-                onClick={handleCancel}
-              >
-                Cancelar
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={handleCancel}
+                >
+                  Cancelar
               </Button>
-            </div>
+              </div>
+            </Grid>
           </div>
         </form>
       </div>
