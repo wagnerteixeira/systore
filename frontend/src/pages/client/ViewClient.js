@@ -19,6 +19,7 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import classNames from 'classnames';
+import SearchIcon from '@material-ui/icons/Search';
 
 import TablePaginationActions from '../../components/common/TablePaginationActions';
 
@@ -60,11 +61,14 @@ const styles = theme => ({
   },
   textFieldSearch: {
     margin: theme.spacing.unit,
-    width: 'calc(100% - 120px)',
+    width: 'calc(100% - 220px)',
   },
   headerCpf: {
     paddingLeft: `${theme.spacing.unit * 5}px !important`
-}
+  },
+  searchIcon: {
+    margin: theme.spacing.unit * 2,
+  }
 });
 
 function ViewClient(props) {
@@ -81,7 +85,9 @@ function ViewClient(props) {
           order,
           columnSort,
           handleRequestSort,
-          search
+          search,
+          handleSearch,
+          handleChangeTextSearch
          } = props;
   return (
     <Paper className={classes.root}>
@@ -101,9 +107,18 @@ function ViewClient(props) {
           </Select>
         </FormControl>
         <FormControl className={classes.textFieldSearch}>
-          <InputLabel htmlFor="serarch">Digite a pesquisa</InputLabel>
-          <Input id="serarch" value={search} />
+          <InputLabel htmlFor="search">Digite a pesquisa</InputLabel>
+          <Input id="search" value={search} onChange={handleChangeTextSearch}/>
         </FormControl>
+        <Fab 
+          color="primary" 
+          aria-label="Pesquisar" 
+          className={classNames(classes.fab, classes.searchIcon)}      
+          onClick={handleSearch}                          
+          size="small"
+        >
+          <SearchIcon />
+        </Fab>
       </div>
       <Table className={classes.table}>
         <TableHead>
@@ -212,6 +227,7 @@ ViewClient.propTypes = {
   columnSort: PropTypes.string.isRequired,
   handleRequestSort: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
+  handleChangeTextSearch: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ViewClient);

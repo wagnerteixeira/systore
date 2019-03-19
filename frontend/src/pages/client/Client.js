@@ -44,12 +44,12 @@ class Client extends Component {
     this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
   }
 
-  fetchClients = (page, rowsPerPage, columnSort, order) => {
-    clientservice.count().then(res => this.setState({ countClients: res.data.value }));
+  fetchClients = (page, rowsPerPage, columnSort, order, filter) => {
+    clientservice.count(columnSort, filter).then(res => this.setState({ countClients: res.data.value }));
     let orderBy = '';
     order === 'asc' ? orderBy = columnSort : orderBy = `-${columnSort}`;
     const skip = page * rowsPerPage;  
-    clientservice.getAll(skip, rowsPerPage, orderBy)
+    clientservice.getAll(skip, rowsPerPage, orderBy, filter)
       .then(res => {                 
         this.setState({
             tabValue: 'LIST', 
@@ -139,8 +139,14 @@ class Client extends Component {
       this.handleSort(event.target.value)(event);
   };
 
-  handleSearch = search => {
-    this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, search);
+  handleSearch  = () => {
+    console.log(this.state.search.length);
+    if (this.state.search.length > 0)
+      this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
+  }
+
+  handleChangeTextSearch = (event) => {
+    this.setState({ search: event.target.value });
   }
 
 
@@ -156,7 +162,8 @@ class Client extends Component {
       rowsPerPage,
       countClients,
       order,
-      columnSort
+      columnSort,
+      search
     } = this.state;   
     return (        
       <div className={classes.root}>
@@ -186,6 +193,8 @@ class Client extends Component {
                 columnSort={columnSort}
                 handleRequestSort={this.handleRequestSort}
                 handleSearch={this.handleSearch}
+                handleChangeTextSearch={this.handleChangeTextSearch}     
+                search={search}
             />}
         {tabValue === 'EDIT' && 
             <EditClient 
@@ -193,7 +202,7 @@ class Client extends Component {
                 data={data}
                 handleCancel={this.handleCancel}
                 handleSave={this.handleSave}    
-                handleDateValueChange={this.handleDateValueChange}                
+                handleDateValueChange={this.handleDateValueChange}  
             />}
       </div>
     );

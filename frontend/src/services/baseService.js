@@ -27,7 +27,8 @@ export default (route) => {
       else
         uri = `${uri}&sort=${sort}`;
       if (filter)  {
-          uri = `${uri}&${sort}__regex=/${filter}/`;
+        filter = createRegexFromFilter(filter);
+        uri = `${uri}&${sort}__regex=/${filter}/`;
       }
     }
     
@@ -36,7 +37,35 @@ export default (route) => {
 
   const get = (id) => axios.get(`/${route}/${id}`);
   const remove = (id) => axios.delete(`/${route}/${id}`);
-  const count = () => axios.get(`/${route}/count`);
+  const count = (sort, filter) => {
+    let uri = '';
+    if ((sort) && (filter)) {
+      filter = createRegexFromFilter(filter);
+      if (uri === '')
+        uri = `?${sort}__regex=/${filter}/`;
+      else
+        uri = `${uri}&${sort}__regex=/${filter}/`;
+    }
+   return axios.get(`/${route}/count${uri}`);
+  }
+
+  const createRegexFromFilter = (filterValue) => {
+    let regexString = '';
+    if (filterValue.charAt(0) !== '%')
+      regexString = '^' + filterValue
+    else 
+      regexString = filterValue.substr(1);
+
+    if (regexString.charAt(regexString.length - 1) !== '%')
+      regexString = regexString + '$'
+    else 
+      regexString = regexString.substr(0, regexString.length - 1);
+    
+    
+    regexString = regexString.replace( new RegExp('%', 'g'), '.*');
+    return regexString;
+  
+  }
 
   return {
     create,
@@ -46,5 +75,4 @@ export default (route) => {
     remove,
     count
   }
-
 }
