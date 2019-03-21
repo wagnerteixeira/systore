@@ -28,7 +28,7 @@ export default (route) => {
         uri = `${uri}&sort=${order === 'desc'? '-': ''}${sort}`;
       if (filter)  {
         filter = createRegexFromFilter(filter);
-        uri = `${uri}&${sort}__regex=/${filter}/`;
+        uri = `${uri}&${sort}__regex=/${filter}/i`;
       }
     }
     
@@ -42,9 +42,9 @@ export default (route) => {
     if ((sort) && (filter)) {
       filter = createRegexFromFilter(filter);
       if (uri === '')
-        uri = `?${sort}__regex=/${filter}/`;
+        uri = `?${sort}__regex=/${filter}`;
       else
-        uri = `${uri}&${sort}__regex=/${filter}/`;
+        uri = `${uri}&${sort}__regex=/${filter}`;
     }
    return axios.get(`/${route}/count${uri}`);
   }
@@ -62,7 +62,7 @@ export default (route) => {
       regexString = regexString.substr(0, regexString.length - 1);
     
     
-    regexString = regexString.replace( new RegExp('%', 'g'), '.*');
+    regexString = regexString.replace(new RegExp('%', 'g'), '.*');
     return regexString;
   
   }

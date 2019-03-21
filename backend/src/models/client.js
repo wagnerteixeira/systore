@@ -19,9 +19,12 @@ const clientSchema = new mongoose.Schema({
     spouse: { type: String }, //Cônjuge    
     note: { type: String }, //Observações
     phone1: { type: String }, //Telefone 1
-    prohe2: { type: String }, //Telefone 2
+    phone2: { type: String }, //Telefone 2
 
-    bills_receives: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BillsReceive' }]
+    bills_receives: [{ 
+      type: mongoose.Schema.Types.Object, 
+      ref: 'BillsReceive',
+    }]
 })
 
 module.exports = restful.model('Client', clientSchema)

@@ -69,8 +69,8 @@ function TextMaskCustom(props) {
         inputRef(ref ? ref.inputElement : null);
       }}
       mask={['(', /[1-9]/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-      placeholderChar={'\u2000'}
-      showMask
+      //placeholderChar={'\u2000'}
+      showMask={false}
     />
   );
 }
@@ -80,16 +80,7 @@ TextMaskCustom.propTypes = {
 };
 
 
-class EditPublication extends Component {
-
-  state = {
-    textmask: '(1  )    -    ',
-  };
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
+class EditClient extends Component {
   render() {
     const {
       classes,
@@ -97,11 +88,8 @@ class EditPublication extends Component {
       data,
       handleSave,
       handleCancel,
-      handleDateValueChange
-    } = this.props;
-
-    const { textmask } = this.state;
-    console.log(data.registry_date)
+      handleDateValueChange,
+    } = this.props;        
     return (
       <div>
         <form className={classes.container} noValidate autoComplete="off">
@@ -119,63 +107,63 @@ class EditPublication extends Component {
                 />   
               </Grid>  
               <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
-              <TextField
-                id="cpf"
-                label="Cpf"
-                className={classes.textField}
-                value={data.cpf}
-                onChange={handleValueChange('cpf')}
-                margin="normal"
-                fullWidth
-              />
+                <TextField
+                  id="cpf"
+                  label="Cpf"
+                  className={classes.textField}
+                  value={data.cpf}
+                  onChange={handleValueChange('cpf')}
+                  margin="normal"
+                  fullWidth
+                />
               </Grid>
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-              <Grid item xs={12} sm={4} md={4} lg={3} xl={3} >
-                <DatePicker
-                  id="registry_date"
-                  label="Data de Registro"
-                  className={classes.textField}
-                  value={data.registry_date}
-                  onChange={handleDateValueChange('registry_date')}
-                  margin="normal"
-                  format={"dd/MM/yyyy"}
-                  fullWidth
-                />
+                <Grid item xs={12} sm={4} md={4} lg={3} xl={3} >
+                  <DatePicker
+                    id="registry_date"
+                    label="Data de Registro"
+                    className={classes.textField}
+                    value={data.registry_date}
+                    onChange={handleDateValueChange('registry_date')}
+                    margin="normal"
+                    format={"dd/MM/yyyy"}
+                    fullWidth
+                  />
                 </Grid>
                 <Grid item xs={12} sm={4} md={4} lg={3} xl={3}  >
-                <DatePicker
-                  id="date_of_birth"
-                  label="Data de Aniversário"
-                  className={classes.textField}
-                  value={data.date_of_birth}
-                  onChange={handleDateValueChange('date_of_birth')}
-                  margin="normal"
-                  format={"dd/MM/yyyy"}
-                  fullWidth
-                />
+                  <DatePicker
+                    id="date_of_birth"
+                    label="Data de Aniversário"
+                    className={classes.textField}
+                    value={data.date_of_birth}
+                    onChange={handleDateValueChange('date_of_birth')}
+                    margin="normal"
+                    format={"dd/MM/yyyy"}
+                    fullWidth
+                  />
                 </Grid>
               </MuiPickersUtilsProvider>
               <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >
-              <TextField
-                id="place_of_birth"
-                label="Naturalidade"
-                className={classes.textField}
-                value={data.place_of_birth}
-                onChange={handleValueChange('place_of_birth')}
-                margin="normal"
-                fullWidth
-              />
+                <TextField
+                  id="place_of_birth"
+                  label="Naturalidade"
+                  className={classes.textField}
+                  value={data.place_of_birth}
+                  onChange={handleValueChange('place_of_birth')}
+                  margin="normal"
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12} sm={8} md={8} lg={8} xl={8} >
-              <TextField
-                id="address"
-                label="Endereço"
-                className={classes.textField}
-                value={data.address}
-                onChange={handleValueChange('address')}
-                margin="normal"
-                fullWidth
-              />
+                <TextField
+                  id="address"
+                  label="Endereço"
+                  className={classes.textField}
+                  value={data.address}
+                  onChange={handleValueChange('address')}
+                  margin="normal"
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
                 <TextField
@@ -187,8 +175,8 @@ class EditPublication extends Component {
                   margin="normal"
                   fullWidth
                 />
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} >
+              </Grid>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6} >
                 <TextField
                   id="city"
                   label="Cidade"
@@ -198,8 +186,8 @@ class EditPublication extends Component {
                   margin="normal"
                   fullWidth
                 />
-                </Grid>
-                <Grid item xs={12} sm={2} md={2} lg={2} xl={2} >
+              </Grid>
+              <Grid item xs={12} sm={2} md={2} lg={2} xl={2} >
                 <TextField
                   id="state"
                   label="Estado"
@@ -209,8 +197,8 @@ class EditPublication extends Component {
                   margin="normal"
                   fullWidth
                 />
-                </Grid>
-                <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
+              </Grid>
+              <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
                 <TextField
                   id="postal_code"
                   label="CEP"
@@ -220,17 +208,17 @@ class EditPublication extends Component {
                   margin="normal"
                   fullWidth
                 />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
-              <TextField
-                id="seller"
-                label="Vendedor"
-                className={classes.textField}
-                value={data.seller}
-                onChange={handleValueChange('seller')}
-                margin="normal"
-                fullWidth
-              />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+                <TextField
+                  id="seller"
+                  label="Vendedor"
+                  className={classes.textField}
+                  value={data.seller}
+                  onChange={handleValueChange('seller')}
+                  margin="normal"
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >
                 <TextField
@@ -243,7 +231,7 @@ class EditPublication extends Component {
                   fullWidth
                 />
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >                
+              <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >                
                 <TextField
                   id="occupation"
                   label="Profissão"
@@ -253,52 +241,52 @@ class EditPublication extends Component {
                   margin="normal"
                   fullWidth
                 />
-                </Grid>
+              </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
-              <TextField
-                id="spouse"
-                label="Cônjuge"
-                className={classes.textField}
-                value={data.spouse}
-                onChange={handleValueChange('spouse')}
-                margin="normal"
-                fullWidth
-              />
+                <TextField
+                  id="spouse"
+                  label="Cônjuge"
+                  className={classes.textField}
+                  value={data.spouse}
+                  onChange={handleValueChange('spouse')}
+                  margin="normal"
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6} xl={12} >
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="formatted-text-mask-input">Telefone 1</InputLabel>
                   <Input
-                    value={textmask}
-                    onChange={this.handleChange('textmask')}
+                    value={data.phone1}
+                    onChange={handleValueChange('phone1')}
                     id="phone1"
                     inputComponent={TextMaskCustom}
                   />
                 </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6} xl={12} >
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={12} >
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="formatted-text-mask-input">Telefone 2</InputLabel>
                   <Input
-                    value={textmask}
-                    onChange={this.handleChange('textmask')}
+                    value={data.phone2}
+                    onChange={handleValueChange('phone2')}
                     id="phone2"
                     inputComponent={TextMaskCustom}
                   />
                 </FormControl>
-                </Grid>
+              </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
-              <TextField
-                id="note"
-                label="Observações"
-                rows="6"
-                className={classes.textField}
-                value={data.note}
-                onChange={handleValueChange('note')}
-                margin="normal"
-                multiline
-                fullWidth
-              />
+                <TextField
+                  id="note"
+                  label="Observações"
+                  rows="6"
+                  className={classes.textField}
+                  value={data.note}
+                  onChange={handleValueChange('note')}
+                  margin="normal"
+                  multiline
+                  fullWidth
+                />
               </Grid>
               <br />
               <div className={classes.divRow}>
@@ -309,7 +297,7 @@ class EditPublication extends Component {
                   onClick={handleSave}
                 >
                   Salvar
-              </Button>
+                </Button>
                 <Button
                   variant="outlined"
                   color="secondary"
@@ -317,7 +305,7 @@ class EditPublication extends Component {
                   onClick={handleCancel}
                 >
                   Cancelar
-              </Button>
+                </Button>
               </div>
             </Grid>
           </div>
@@ -327,7 +315,7 @@ class EditPublication extends Component {
   }
 }
 
-EditPublication.propTypes = {
+EditClient.propTypes = {
   classes: PropTypes.object.isRequired,
   handleValueChange: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
@@ -336,4 +324,4 @@ EditPublication.propTypes = {
   handleDateValueChange: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(EditPublication);
+export default withStyles(styles)(EditClient);

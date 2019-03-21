@@ -9,6 +9,8 @@ import ViewClient from './ViewClient';
 
 import clientservice from '../../services/clientService';
 
+import { debounceTime } from '../../utils/operators';
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -19,6 +21,10 @@ const styles = theme => ({
 });
 
 class Client extends Component {
+  constructor(props) {
+    super(props);
+    this._searchDebounce = debounceTime(500, this.handleSearch);
+  }
   state = {
     tabValue: 'LIST',
     inEdit: false,    
@@ -27,11 +33,23 @@ class Client extends Component {
     countClients: 0,
     data: {
       _id : '',
-      title: '',
-      subtitle: '',
-      sinopsys: '',      
-      urlImage: '',
-      position: 0,
+      name: '',
+      cpf: '',
+      registry_date: null, 
+      date_of_birth: null,
+      place_of_birth: '',
+      address: '',
+      neighborhood: '',
+      city: '',
+      state: '',
+      postal_code: '',
+      seller: '',
+      job_name: '',
+      occupation: '',
+      spouse: '',
+      phone1: '',
+      phone2: '',
+      note: '',
     },
     page: 0,
     rowsPerPage: 5,
@@ -57,7 +75,22 @@ class Client extends Component {
             data: {
               _id : '',
               name: '',
-              cpf: ''
+              cpf: '',
+              registry_date: new Date(), 
+              date_of_birth: null,
+              place_of_birth: '',
+              address: '',
+              neighborhood: '',
+              city: '',
+              state: '',
+              postal_code: '',
+              seller: '',
+              job_name: '',
+              occupation: '',
+              spouse: '',
+              phone1: '',
+              phone2: '',
+              note: '',
             },
             page: page,
             rowsPerPage: rowsPerPage,
@@ -73,11 +106,11 @@ class Client extends Component {
   };
 
   handleValueChange = name => event => {
-    this.setState({data: { [name]: event.target.value}});
+    this.setState({ data: { ...this.state.data, [name]: event.target.value}})
   };  
 
   handleDateValueChange = name => date => {
-    this.setState({data: { [name]: date}});
+    this.setState({data: { ...this.state.data, [name]: date}});
   }
 
   handleCancel = () => {
@@ -86,15 +119,16 @@ class Client extends Component {
   }
 
   handleSave = () => {   
-    console.log(this.state);
+    this.state.data.phone1 = this.state.data.phone1.replace(/\D/g, '');
+    this.state.data.phone2 = this.state.data.phone2.replace(/\D/g, '');
     if (this.state.inEdit){     
       clientservice.update(this.state.data)
         .then(() => this.handleCancel())
         .catch((error) => console.log(error));
-    }
-    else {
+    } else {
+      this.state.data._id = undefined;      
       clientservice.create(this.state.data)
-        .then((data) => this.setState({ data: data}))
+        .then(() => this.handleCancel())
         .catch((error) => console.log(error));
     }
   }    
@@ -143,7 +177,8 @@ class Client extends Component {
   }
 
   handleChangeTextSearch = (event) => {
-    this.setState({ search: event.target.value.toUpperCase() });
+    this.setState({ search: event.target.value.toUpperCase() });    
+    this._searchDebounce();
   }
 
 
@@ -199,7 +234,7 @@ class Client extends Component {
                 data={data}
                 handleCancel={this.handleCancel}
                 handleSave={this.handleSave}    
-                handleDateValueChange={this.handleDateValueChange}  
+                handleDateValueChange={this.handleDateValueChange}
             />}
       </div>
     );
