@@ -6,10 +6,6 @@ Client.methods(['get', 'post', 'put', 'delete'])
 Client.updateOptions({new: true, runValidators: true})
 
 Client.after('post', errorHandler).after('put', errorHandler)
-Client.before('post',  (req, res, next) => {
-  console.log(req.body);
-  next()
-})
 
 Client.route('count', ['get'], (req, res, next) => {    
   const query = req.query || '';  
