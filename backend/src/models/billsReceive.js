@@ -8,7 +8,7 @@ const billsReceiveSchema = new mongoose.Schema({
   },
   code: { type: Number },
   quota: { type: Number },
-  orignal_value: { type: mongoose.Decimal128 },
+  original_value: { type: mongoose.Decimal128 },
   interest: { type: mongoose.Decimal128 },
   final_value:  { type: mongoose.Decimal128 },
   purchase_date: { type: Date },

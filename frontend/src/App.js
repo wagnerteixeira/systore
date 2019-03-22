@@ -52,17 +52,6 @@ const User = () => (
 
 class App extends Component {
     render() {
-      //console.log(muiTheme);
-      /*clientService.get('5c5fbe893c498528a588ab16').then( (res) => console.log(res.data));
-      clientService.getAll(5878, 10).then( (res) => console.log(res.data));
-      clientService.count().then( (res) => console.log(res.data));
-
-      billsReceiveService.count().then( (res) => console.log(res.data));
-      billsReceiveService.getAll(5878, 10).then( (res) => console.log(res.data));
-      billsReceiveService.getBillsReceiveServiceByClient('5c5fbe893c498528a588ab16').then( (res) => console.log(res.data));
-      billsReceiveService.getBillsReceiveServiceByClientPaid('5c5fbe893c498528a588ab16').then( (res) => console.log(res.data));
-      billsReceiveService.getBillsReceiveServiceByClientNoPaid('5c5fbe893c498528a588ab16').then( (res) => console.log(res.data));*/
-      
       return (      
         <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>  
           <MuiThemeProvider theme={muiTheme}>

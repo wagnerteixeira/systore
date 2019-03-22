@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import MessageSnackbar from '../../components/common/MessageSnackbar';
 
 import EditClient from './EditClient';
 import ViewClient from './ViewClient';
@@ -49,13 +50,17 @@ class Client extends Component {
       spouse: '',
       phone1: '',
       phone2: '',
-      note: '',
+      note: '',     
     },
     page: 0,
     rowsPerPage: 5,
     order: 'asc',
     columnSort: 'name',
-    search: ''
+    search: '',
+    messageOpen: false,
+    variantMessage: 'success',
+    messageText: '',
+    anchorEl: null,
   };
 
   componentWillMount() {
@@ -95,7 +100,7 @@ class Client extends Component {
             page: page,
             rowsPerPage: rowsPerPage,
             columnSort: columnSort,
-            order: order
+            order: order,
         });            
       })
       .catch(error => console.log(error));
@@ -113,34 +118,45 @@ class Client extends Component {
     this.setState({data: { ...this.state.data, [name]: date}});
   }
 
-  handleCancel = () => {
-    this.setState({ tabValue: 'LIST'});
+  handleCancel = (previusOperation) => {
+    let nextState = { tabValue: 'LIST'};
+    if (previusOperation === 'SAVE'){
+      nextState.messageOpen = true;
+      nextState.messageText = 'Cliente salvo com suceso!'; 
+      nextState.variantMessage = 'success';
+    } else if (previusOperation === 'DELETE'){
+      nextState.messageOpen = true;
+      nextState.messageText = 'Cliente excluído com suceso!'; 
+      nextState.variantMessage = 'success';
+    }
+    this.setState(nextState);
     this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
   }
 
   handleSave = () => {   
+    console.log(this.state.data);
     this.state.data.phone1 = this.state.data.phone1.replace(/\D/g, '');
     this.state.data.phone2 = this.state.data.phone2.replace(/\D/g, '');
     if (this.state.inEdit){     
       clientservice.update(this.state.data)
-        .then(() => this.handleCancel())
+        .then(() => this.handleCancel('SAVE'))
         .catch((error) => console.log(error));
     } else {
       this.state.data._id = undefined;      
       clientservice.create(this.state.data)
-        .then(() => this.handleCancel())
+        .then(() => this.handleCancel('SAVE'))
         .catch((error) => console.log(error));
     }
   }    
 
   handleDelete = (key) => {
-    clientservice.remove(this.state.data._id)
-      .then(() =>  this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search))
+    clientservice.remove(this.state.clients[key]._id)
+      .then(() => this.handleCancel('DELETE'))
       .catch((error) => console.log(error));
     
   }
 
-  handleEdit = (key) => {      
+  handleEdit = (key) => {
     this.setState({    
       tabValue: 'EDIT', 
       selectedIndex: key,
@@ -181,9 +197,19 @@ class Client extends Component {
     this._searchDebounce();
   }
 
+  handleMessageClose = () => {
+    this.setState({ ...this.state, messageOpen: false });
+  }
 
   render() {
     const { classes } = this.props;
+    if (this.state.clients[0]){
+      if (this.state.clients[0].bills_receives[this.state.clients[0].bills_receives.length - 1]){
+        console.log(this.state.clients[0].bills_receives[this.state.clients[0].bills_receives.length - 1].original_value.$numberDecimal)
+      }
+      
+    }
+    
     const { 
       tabValue, 
       inEdit,       
@@ -195,10 +221,19 @@ class Client extends Component {
       countClients,
       order,
       columnSort,
-      search
+      search,
+      messageOpen,
+      variantMessage,
+      messageText
     } = this.state;   
     return (        
       <div className={classes.root}>
+        <MessageSnackbar
+          handleClose={this.handleMessageClose}
+          open={messageOpen}
+          variant={variantMessage}
+          message={messageText}
+        />
         <Tabs 
             value={tabValue} 
             onChange={this.handleTabChange}

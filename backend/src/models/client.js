@@ -21,10 +21,10 @@ const clientSchema = new mongoose.Schema({
     phone1: { type: String }, //Telefone 1
     phone2: { type: String }, //Telefone 2
 
-    bills_receives: [{ 
+    /*bills_receives: [{ 
       type: mongoose.Schema.Types.Object, 
       ref: 'BillsReceive',
-    }]
+    }]*/
 })
 
 module.exports = restful.model('Client', clientSchema)

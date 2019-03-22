@@ -70,8 +70,8 @@ const inserirRegistros = async () => {
       occupation: line[30],
       spouse: line[18], //conjuge
       note: line[19], //observações
-      //phone1: { type: String }, //telefone 1
-      //prohe2: { type: String }, //telefone 2
+      phone1: '', //telefone 1
+      phone2: '', //telefone 2
     }    
     try {
       const res = await axiosInstance.post('/api/client', client);    
@@ -101,7 +101,7 @@ const inserirRegistros = async () => {
         client: client._id,
         code: line[1],
         quota: line[2],
-        orignal_value: line[3].replace(',', '.'),
+        original_value: line[3].replace(',', '.'),
         interest: line[6].replace(',', '.'),
         final_value:  line[3].replace(',', '.'),
         purchase_date: convertDate(line[9]),

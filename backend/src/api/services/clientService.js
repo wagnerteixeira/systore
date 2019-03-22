@@ -7,6 +7,13 @@ Client.updateOptions({new: true, runValidators: true})
 
 Client.after('post', errorHandler).after('put', errorHandler)
 
+Client.before('delete', (req, res, next) => {
+  if(req.params.id)
+    next();
+  else
+    return res.status(404).send({errors: ['Cliente não encontrado']})
+});
+
 Client.route('count', ['get'], (req, res, next) => {    
   const query = req.query || '';  
   let filterQuery = {};

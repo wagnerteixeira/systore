@@ -24,7 +24,14 @@ BillsReceive.methods(['get', 'post', 'put', 'delete'])
 
 BillsReceive.updateOptions({new: true, runValidators: true})
 BillsReceive.after('post', errorHandler).after('put', errorHandler)
-BillsReceive.after('post', refClient);
+//BillsReceive.after('post', refClient);
+
+Client.before('delete', (req, res, next) => {
+  if(req.params.id)
+    next();
+  else
+    return res.status(404).send({errors: ['Título não encontrado']})
+});
 
 BillsReceive.route('count', ['get'], (req, res, next) => {
     BillsReceive.countDocuments((error, value) => {

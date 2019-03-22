@@ -90,7 +90,7 @@ class EditClient extends Component {
       handleCancel,
       handleDateValueChange,
     } = this.props;        
-    return (
+    return (      
       <div>
         <form className={classes.container} noValidate autoComplete="off">
           <div className={classes.back}>
