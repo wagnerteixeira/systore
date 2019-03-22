@@ -8,6 +8,7 @@ import EditClient from './EditClient';
 import ViewClient from './ViewClient';
 
 import clientservice from '../../services/clientService';
+import billsReceiveservice from '../../services/billsReceiveService';
 
 import { debounceTime } from '../../utils/operators';
 
@@ -50,6 +51,7 @@ class Client extends Component {
       phone1: '',
       phone2: '',
       note: '',
+      bills_receives: [],
     },
     page: 0,
     rowsPerPage: 5,
@@ -63,6 +65,7 @@ class Client extends Component {
   }
 
   fetchClients = (page, rowsPerPage, columnSort, order, filter) => {
+    
     clientservice.count(columnSort, filter).then(res => this.setState({ countClients: res.data.value }));
     const skip = page * rowsPerPage;  
     clientservice.getAll(skip, rowsPerPage, columnSort, order, filter)
@@ -91,6 +94,7 @@ class Client extends Component {
               phone1: '',
               phone2: '',
               note: '',
+              bills_receives: [],
             },
             page: page,
             rowsPerPage: rowsPerPage,
@@ -110,7 +114,7 @@ class Client extends Component {
   };  
 
   handleDateValueChange = name => date => {
-    this.setState({data: { ...this.state.data, [name]: date}});
+    this.setState({ data: { ...this.state.data, [name]: date}});
   }
 
   handleCancel = () => {
@@ -145,8 +149,13 @@ class Client extends Component {
       tabValue: 'EDIT', 
       selectedIndex: key,
       inEdit: true,
-      data: this.state.clients[key]
+      data: this.state.clients[key],      
     });     
+    console.log(key);
+    console.log(this.state.clients[key]._id);
+    billsReceiveservice.getBillsReceiveServiceByClient(this.state.clients[key]._id)
+      .then(res => {this.setState({data : { ...this.state.data, bills_receives: res.data}})})
+      .catch((error) => console.log(error));
   }
 
   handleChangePage = (event, page) => {
