@@ -44,7 +44,7 @@ BillsReceive.route('count', ['get'], (req, res, next) => {
 })
 
 BillsReceive.route('client.:id([0-9a-fA-F]{0,24})', ['get'], (req, res, next) => {
-  Client.findById(req.params.id)    
+  /*Client.findById(req.params.id)    
   .populate({
     path: 'bills_receives',
     // Get friends of friends - populate the 'friends' array for every friend
@@ -56,11 +56,19 @@ BillsReceive.route('client.:id([0-9a-fA-F]{0,24})', ['get'], (req, res, next) =>
     } else {
       res.json(client.bills_receives);
     }   
-  });  
+  });*/
+  BillsReceive.find({client: req.params.id})
+  .exec((error, bills_receives) => {
+    if (error){
+      res.status(500).json({erros: [error]})
+    } else {
+      res.json(bills_receives);
+    }   
+  })
 });
 
 BillsReceive.route('client.:id([0-9a-fA-F]{0,24}).paid', ['get'], (req, res, next) => {
-  Client.findById(req.params.id)    
+  /*Client.findById(req.params.id)    
   .populate({
     path: 'bills_receives',
     match: { situation : 'C' },
@@ -73,11 +81,19 @@ BillsReceive.route('client.:id([0-9a-fA-F]{0,24}).paid', ['get'], (req, res, nex
     } else {
       res.json(client.bills_receives);
     }   
-  });  
+  }); */ 
+  BillsReceive.find({client: req.params.id, situation : 'C'})
+  .exec((error, bills_receives) => {
+    if (error){
+      res.status(500).json({erros: [error]})
+    } else {
+      res.json(bills_receives);
+    }   
+  })
 });
 
 BillsReceive.route('client.:id([0-9a-fA-F]{0,24}).no_paid', ['get'], (req, res, next) => {
-  Client.findById(req.params.id)    
+  /*Client.findById(req.params.id)    
   .populate({
     path: 'bills_receives',
     match: { situation : 'O' },
@@ -90,7 +106,15 @@ BillsReceive.route('client.:id([0-9a-fA-F]{0,24}).no_paid', ['get'], (req, res, 
     } else {
       res.json(client.bills_receives);
     }   
-  });  
+  }); */
+  BillsReceive.find({client: req.params.id, situation : 'O'})
+  .exec((error, bills_receives) => {
+    if (error){
+      res.status(500).json({erros: [error]})
+    } else {
+      res.json(bills_receives);
+    }   
+  })
 });
 
 
