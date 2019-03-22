@@ -11,6 +11,12 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+
 
 import ptLocale from "date-fns/locale/pt-BR";
 
@@ -57,6 +63,13 @@ const styles = theme => ({
     height: theme.spacing.unit * 25,
     width: theme.spacing.unit * 40,
   },
+  itens: {
+    paddingTop: theme.spacing.unit * 2,
+  },
+  item: {
+    paddingTop: `${theme.spacing.unit * 0.2}px !important `, 
+    paddingBottom: `${theme.spacing.unit * 0.2}px !important `, 
+  }
 });
 
 function TextMaskCustom(props) {
@@ -69,7 +82,6 @@ function TextMaskCustom(props) {
         inputRef(ref ? ref.inputElement : null);
       }}
       mask={['(', /[1-9]/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-      //placeholderChar={'\u2000'}
       showMask={false}
     />
   );
@@ -89,13 +101,13 @@ class EditClient extends Component {
       handleSave,
       handleCancel,
       handleDateValueChange,
-    } = this.props;        
-    return (      
+    } = this.props; 
+    return (
       <div>
         <form className={classes.container} noValidate autoComplete="off">
           <div className={classes.back}>
-            <Grid container spacing={24}>
-              <Grid item xs={12} sm={12} md={12} lg={8} xl={8} >
+            <Grid className={classes.itens} container spacing={24}>
+              <Grid className={classes.item} item xs={12} sm={12} md={12} lg={8} xl={8} >
                 <TextField
                   id="name"
                   label="Nome"
@@ -106,7 +118,7 @@ class EditClient extends Component {
                   fullWidth
                 />   
               </Grid>  
-              <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
+              <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
                 <TextField
                   id="cpf"
                   label="Cpf"
@@ -118,7 +130,7 @@ class EditClient extends Component {
                 />
               </Grid>
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-                <Grid item xs={12} sm={4} md={4} lg={3} xl={3} >
+                <Grid className={classes.item} item xs={12} sm={4} md={4} lg={3} xl={3} >
                   <DatePicker
                     id="registry_date"
                     label="Data de Registro"
@@ -130,7 +142,7 @@ class EditClient extends Component {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={4} md={4} lg={3} xl={3}  >
+                <Grid className={classes.item} item xs={12} sm={4} md={4} lg={3} xl={3}  >
                   <DatePicker
                     id="date_of_birth"
                     label="Data de Aniversário"
@@ -143,7 +155,7 @@ class EditClient extends Component {
                   />
                 </Grid>
               </MuiPickersUtilsProvider>
-              <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >
+              <Grid className={classes.item} item xs={12} sm={12} md={12} lg={6} xl={6} >
                 <TextField
                   id="place_of_birth"
                   label="Naturalidade"
@@ -154,7 +166,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={8} md={8} lg={8} xl={8} >
+              <Grid className={classes.item} item xs={12} sm={8} md={8} lg={8} xl={8} >
                 <TextField
                   id="address"
                   label="Endereço"
@@ -165,7 +177,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
+              <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
                 <TextField
                   id="neighborhood"
                   label="Bairro"
@@ -176,7 +188,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6} xl={6} >
+              <Grid className={classes.item} item xs={12} sm={6} md={6} lg={6} xl={6} >
                 <TextField
                   id="city"
                   label="Cidade"
@@ -187,7 +199,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={2} md={2} lg={2} xl={2} >
+              <Grid className={classes.item} item xs={12} sm={2} md={2} lg={2} xl={2} >
                 <TextField
                   id="state"
                   label="Estado"
@@ -198,7 +210,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={4} md={4} lg={4} xl={4} >
+              <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
                 <TextField
                   id="postal_code"
                   label="CEP"
@@ -209,7 +221,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+              <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >
                 <TextField
                   id="seller"
                   label="Vendedor"
@@ -220,7 +232,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >
+              <Grid className={classes.item} item xs={12} sm={12} md={12} lg={6} xl={6} >
                 <TextField
                   id="job_name"
                   label="Empresa"
@@ -231,7 +243,7 @@ class EditClient extends Component {
                   fullWidth
                 />
                 </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={6} xl={6} >                
+              <Grid className={classes.item} item xs={12} sm={12} md={12} lg={6} xl={6} >                
                 <TextField
                   id="occupation"
                   label="Profissão"
@@ -242,7 +254,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+              <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >
                 <TextField
                   id="spouse"
                   label="Cônjuge"
@@ -253,7 +265,7 @@ class EditClient extends Component {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6} xl={12} >
+              <Grid className={classes.item} item xs={12} sm={12} md={6} lg={6} xl={12} >
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="formatted-text-mask-input">Telefone 1</InputLabel>
                   <Input
@@ -264,7 +276,7 @@ class EditClient extends Component {
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6} xl={12} >
+              <Grid className={classes.item} item xs={12} sm={12} md={6} lg={6} xl={12} >
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="formatted-text-mask-input">Telefone 2</InputLabel>
                   <Input
@@ -275,7 +287,7 @@ class EditClient extends Component {
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+              <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >
                 <TextField
                   id="note"
                   label="Observações"
@@ -310,6 +322,33 @@ class EditClient extends Component {
             </Grid>
           </div>
         </form>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell padding='checkbox'>Título</TableCell>
+              <TableCell padding='checkbox'>Parcela</TableCell>       
+              <TableCell padding='checkbox'>Data de vencimento</TableCell>
+              <TableCell padding='checkbox'>Data de pagamento</TableCell>    
+              <TableCell padding='checkbox'>Valor</TableCell>
+              <TableCell padding='checkbox'>Valor pago</TableCell>         
+            </TableRow>
+          </TableHead>        
+          <TableBody>
+            {Object.keys(data.bills_receives).map(key => {
+              return (
+                    <TableRow hover key={key}>
+                      <TableCell padding='checkbox'>{data.bills_receives[key].code}</TableCell>
+                      <TableCell padding='checkbox'>{data.bills_receives[key].quota}</TableCell>                        
+                      <TableCell padding='checkbox'>{data.bills_receives[key].due_date}</TableCell>
+                      <TableCell padding='checkbox'>{data.bills_receives[key].pay_date}</TableCell>
+                      <TableCell padding='checkbox'>{data.bills_receives[key].pay_date}</TableCell>
+                      <TableCell padding='checkbox'>{data.bills_receives[key].pay_date}</TableCell>                       
+                    </TableRow>
+                )
+              })
+            }
+          </TableBody>
+        </Table>
       </div>
     );
   }
