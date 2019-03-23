@@ -109,6 +109,7 @@ class EditClient extends Component {
       handleDateValueChange,
       handleEditBillReceive, 
       handleDeleteBillReceive, 
+      handleCreateBillReceive,
     } = this.props; 
 
     const { 
@@ -352,7 +353,7 @@ class EditClient extends Component {
               variant="outlined"
               color="primary"
               className={classes.button}
-              onClick={handleSave}
+              onClick={handleCreateBillReceive}
             >
               INCLUIR
             </Button>                
@@ -421,6 +422,9 @@ EditClient.propTypes = {
   handleCancel: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   handleDateValueChange: PropTypes.func.isRequired,
+  handleEditBillReceive: PropTypes.func.isRequired,
+  handleDeleteBillReceive: PropTypes.func.isRequired,
+  handleCreateBillReceive: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EditClient);
