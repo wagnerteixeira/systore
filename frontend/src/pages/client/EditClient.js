@@ -25,6 +25,8 @@ import TextMaskCustom from '../../components/common/TextMaskCustom';
 
 import ptLocale from "date-fns/locale/pt-BR";
 
+import billsReceiveservice from '../../services/billsReceiveService';
+
 const styles = theme => ({
   container: {
     marginTop: theme.spacing.unit * 3,
@@ -92,35 +94,58 @@ const styles = theme => ({
 class EditClient extends Component {
 
   state = {
-    tabValue: 'EDIT'
+    tabValue: 'EDIT',    
+    bills_receives: [],
   };
+  
 
-  handleTabChange = (event, value) => {
+  fetchBillsReceive(_id) {
+    billsReceiveservice.getBillsReceiveServiceByClient(_id)
+      .then(res => this.setState({bills_receives : res.data}))
+  }
+
+  handleTabChange = _id => (event, value) => {
+    this.fetchBillsReceive(_id);
     this.setState({ tabValue: value });
   };
 
+  handleDeleteBillReceive = (key) => {
+    let copyBill = this.state.bills_receives.slice();
+    copyBill.splice(key, 1);
+    billsReceiveservice.remove(this.state.bills_receives[key]._id)
+      .then(() => this.setState({ bills_receives: copyBill }))
+      .catch((error) => console.log(error));        
+  } 
+
+  handleEditBillReceive = (key) => {
+
+  }
+  
+        
+  handleCreateBillReceive = () => {
+
+  }  
+  
   render() {
     const {
       classes,
-      handleValueChange,
       data,
+      handleValueChange,      
       handleSave,
       handleCancel,
       handleDateValueChange,
-      handleEditBillReceive, 
-      handleDeleteBillReceive, 
-      handleCreateBillReceive,
     } = this.props; 
 
     const { 
       tabValue,       
+      bills_receives,
     } = this.state;   
 
     return (
       <div>        
         <Tabs 
-          value={tabValue} 
-          onChange={this.handleTabChange}
+          value={tabValue}           
+          onChange={this.handleTabChange(data._id)}
           indicatorColor='primary'
           textColor='primary'
         >
@@ -353,7 +378,7 @@ class EditClient extends Component {
               variant="outlined"
               color="primary"
               className={classes.button}
-              onClick={handleCreateBillReceive}
+              onClick={this.handleCreateBillReceive}
             >
               INCLUIR
             </Button>                
@@ -372,21 +397,21 @@ class EditClient extends Component {
                 </TableRow>
               </TableHead>        
               <TableBody>
-                {Object.keys(data.bills_receives).map(key => {   
+                {Object.keys(bills_receives).map(key => {   
                   return (
                         <TableRow hover key={key}>
-                          <TableCell padding='checkbox'>{data.bills_receives[key].code}</TableCell>
-                          <TableCell padding='checkbox'>{data.bills_receives[key].quota}</TableCell>                        
-                          <TableCell padding='checkbox'>{getDateToString(data.bills_receives[key].due_date)}</TableCell>
-                          <TableCell padding='checkbox'>{getDateToString(data.bills_receives[key].pay_date)}</TableCell>
-                          <TableCell padding='checkbox'>{getNumberDecimalToString(data.bills_receives[key].original_value["$numberDecimal"])}</TableCell>
-                          <TableCell padding='checkbox'>{getNumberDecimalToString(data.bills_receives[key].final_value["$numberDecimal"])}</TableCell>   
+                          <TableCell padding='checkbox'>{bills_receives[key].code}</TableCell>
+                          <TableCell padding='checkbox'>{bills_receives[key].quota}</TableCell>                        
+                          <TableCell padding='checkbox'>{getDateToString(bills_receives[key].due_date)}</TableCell>
+                          <TableCell padding='checkbox'>{getDateToString(bills_receives[key].pay_date)}</TableCell>
+                          <TableCell padding='checkbox'>{getNumberDecimalToString(bills_receives[key].original_value["$numberDecimal"])}</TableCell>
+                          <TableCell padding='checkbox'>{getNumberDecimalToString(bills_receives[key].final_value["$numberDecimal"])}</TableCell>   
                           <TableCell padding='none' align='right'>
                             <Fab 
                               color="primary" 
                               aria-label="Edit" 
                               className={classNames(classes.fab, classes.fabEdit)}                                
-                              onClick={() => handleEditBillReceive(key)}
+                              onClick={() => this.handleEditBillReceive(key)}
                               size="small"
                             >
                               <Icon fontSize="small">edit_icon</Icon>
@@ -395,7 +420,7 @@ class EditClient extends Component {
                               color="secondary"
                               aria-label="Delete" 
                               className={classes.fab}
-                              onClick={() => handleDeleteBillReceive(key)}
+                              onClick={() => this.handleDeleteBillReceive(key)}
                               size="small"
                             >
                               <Icon fontSize="small">delete_icon</Icon>
@@ -422,9 +447,6 @@ EditClient.propTypes = {
   handleCancel: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   handleDateValueChange: PropTypes.func.isRequired,
-  handleEditBillReceive: PropTypes.func.isRequired,
-  handleDeleteBillReceive: PropTypes.func.isRequired,
-  handleCreateBillReceive: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EditClient);
