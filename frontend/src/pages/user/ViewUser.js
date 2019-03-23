@@ -20,11 +20,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import classNames from 'classnames';
 import SearchIcon from '@material-ui/icons/Search';
-import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
+import AddIcon from '@material-ui/icons/Add';
 
 import TablePaginationActions from '../../components/common/TablePaginationActions';
-
 
 const styles = theme => ({
   root: {
@@ -57,9 +56,6 @@ const styles = theme => ({
   margin: {
     margin: theme.spacing.unit,
   },
-  headerCpf: {
-    paddingLeft: `${theme.spacing.unit * 5}px !important`
-  },
   searchIcon: {
     margin: `${theme.spacing.unit * 2}px 2px`,
   },
@@ -88,16 +84,16 @@ const styles = theme => ({
   }
 });
 
-function ViewClient(props) {
+function ViewUser(props) {
   const { classes, 
           handleEdit, 
           handleDelete, 
-          clients, 
+          users, 
           page, 
           rowsPerPage,
           handleChangePage,
           handleChangeRowsPerPage,
-          countClients, 
+          countUsers, 
           handleSort,
           order,
           columnSort,
@@ -121,8 +117,7 @@ function ViewClient(props) {
                 id: 'sort',
               }}
             >
-              <MenuItem value={'name'}>Nome</MenuItem>
-              <MenuItem value={'cpf'}>Cpf</MenuItem>
+              <MenuItem value={'user_name'}>Nome</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -149,7 +144,7 @@ function ViewClient(props) {
             </Fab>
           </Tooltip>
           <Tooltip
-                title="Incluir Cliente"
+                title="Incluir Usuário"
                 placement={'bottom-start'}
                 enterDelay={300}
           >
@@ -175,40 +170,24 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'name'}
+                  active={columnSort === 'user_name'}
                   direction={order}
-                  onClick={handleSort('name')}
+                  onClick={handleSort('user_name')}
                 >
                   Nome
                 </TableSortLabel>
               </Tooltip>
-            </TableCell>
-            <TableCell className={classes.headerCpf}>
-            <Tooltip
-                title="Ordenar"
-                placement={'bottom-start'}
-                enterDelay={300}
-              >
-                <TableSortLabel
-                  active={columnSort === 'cpf'}
-                  direction={order}
-                  onClick={handleSort('cpf')}
-                >
-                  CPF
-                </TableSortLabel>
-              </Tooltip>
-            </TableCell>            
+            </TableCell> 
             <TableCell className={classes.headerAcoes} align='right'>Ações</TableCell>   
           </TableRow>
         </TableHead>
         <TableBody>
-            {Object.keys(clients).map(key => (
+            {Object.keys(users).map(key => (
                     <TableRow 
                       hover
                       key={key}
                     >
-                        <TableCell padding='checkbox'>{clients[key].name}</TableCell>
-                        <TableCell padding='checkbox'>{clients[key].cpf}</TableCell>
+                        <TableCell padding='checkbox'>{users[key].user_name}</TableCell>
                         <TableCell padding='none' align='right'>
                             <Fab 
                               color="primary" 
@@ -238,11 +217,11 @@ function ViewClient(props) {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               colSpan={3}
-              count={countClients}
+              count={countUsers}
               rowsPerPage={rowsPerPage}
               page={page}
-              labelDisplayedRows={({ from, to, count }) => `Clientes ${from} até ${to} de ${count}`}
-              labelRowsPerPage={'Clientes por página:'}
+              labelDisplayedRows={({ from, to, count }) => `Useres ${from} até ${to} de ${count}`}
+              labelRowsPerPage={'Useres por página:'}
               SelectProps={{
                 native: true,
               }}
@@ -257,16 +236,16 @@ function ViewClient(props) {
   );
 }
 
-ViewClient.propTypes = {
+ViewUser.propTypes = {
   classes: PropTypes.object.isRequired,
-  clients: PropTypes.array.isRequired,
+  users: PropTypes.array.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired, 
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   handleChangePage: PropTypes.func.isRequired, 
   handleChangeRowsPerPage: PropTypes.func.isRequired, 
-  countClients: PropTypes.number.isRequired,
+  countUsers: PropTypes.number.isRequired,
   handleSort: PropTypes.func.isRequired, 
   order: PropTypes.string.isRequired,
   columnSort: PropTypes.string.isRequired,
@@ -276,4 +255,4 @@ ViewClient.propTypes = {
   handleCreate: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(ViewClient);
+export default withStyles(styles)(ViewUser);

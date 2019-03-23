@@ -19,7 +19,6 @@ import MessageSnackbar from '../common/MessageSnackbar';
 import Login from '../../pages/user/Login';
 
 import IconListButton from '../common/IconListButton';
-import IconListButtonSvg from '../common/IconListButtonSvg';
 
 import localStorageService from '../../localStorage/localStorageService';
 
@@ -131,7 +130,7 @@ class Menu extends React.Component {
   constructor(props) {
     super(props);
     this.state = { user: {}, 
-                   logged: true, 
+                   logged: false, 
                    drawerOpen: false, 
                    headerText: props.initialheaderText,
                    userName: '',
@@ -149,7 +148,7 @@ class Menu extends React.Component {
   };
 
   handleLogout = () => {    
-    localStorageService.setItem('data', '');
+    localStorageService.setItem('user', '');
   }
 
   handleCloseMenu = () => {
@@ -196,7 +195,7 @@ class Menu extends React.Component {
       console.log(res);
       if (res.data.errors) {
         let errors = res.data.errors.join('\n');
-        this.setState({...this.state, 
+        this.setState({
           user: {}, 
           logged: false,
           messageOpen: true, 
@@ -204,10 +203,8 @@ class Menu extends React.Component {
           variantMessage: 'error'
          });
       }
-      else {
-        let user = res.data;
+      else { 
         this.setState({
-          ...this.state, 
           user: user, 
           logged: true, 
           displayName: user.user_name,
@@ -217,11 +214,12 @@ class Menu extends React.Component {
           userName: '',
           password: ''
         })
-        localStorageService.setItem('data', user.user.displayName);
+        localStorageService.setItem('user', user.user_name);
         localStorageService.setItem('token', user.token);
       }
     }
     catch(e){      
+      console.log(e);
       let errors = e.response.data.errors ? e.response.data.errors.join('\n') : 'Verifique usuário e/ou senha!';
       this.setState({...this.state, 
                      user: {}, 
@@ -253,7 +251,7 @@ class Menu extends React.Component {
     let _logged = logged;
     let _displayName = displayName;
     if (!_logged){
-      _displayName = localStorageService.getItem('data')
+      _displayName = localStorageService.getItem('user')
       if ((_displayName != '') && (_displayName != null)){
         _logged = true;
       }

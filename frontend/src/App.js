@@ -6,10 +6,7 @@ import { blue, red, green } from '@material-ui/core/colors';
 import './App.css';
 
 import Client from './pages/client/Client';
-
-import clientService from './services/clientService';
-import billsReceiveService from './services/billsReceiveService';
-
+import User from './pages/user/User';
 
 import Menu from './components/layout/Menu';
 
@@ -37,19 +34,6 @@ const muiTheme = createMuiTheme({
   } 
 });
 
-
-const BillsReceive = () => (
-  <div>
-    <h2>Títulos</h2>
-  </div>
-);
-
-const User = () => (
-  <div>
-    <h2>Usuários</h2>
-  </div>
-);
-
 class App extends Component {
     render() {
       return (      
@@ -57,7 +41,8 @@ class App extends Component {
           <MuiThemeProvider theme={muiTheme}>
             <Menu theme={muiTheme} initialheaderText='Agenda'>        
               <Switch>
-                <Route path='/' exact component={BillsReceive} />
+                <Route path='/' exact component={Client} /> 
+                {/*<Route path='/billsReceive' component={BillsReceive} />*/}
                 <Route path='/client' component={Client} />
                 <Route path='/user' component={User} />
               </Switch>          
