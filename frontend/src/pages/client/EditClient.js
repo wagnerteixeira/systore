@@ -1,6 +1,5 @@
 import 'date-fns';
 import React, { Component } from 'react';
-import MaskedInput from 'react-text-mask';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -16,7 +15,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Fab from '@material-ui/core/Fab';
+import Icon from '@material-ui/core/Icon';
+import classNames from 'classnames';
+import { getDateToString , getNumberDecimalToString } from '../../utils/operators';
+import TextMaskCustom from '../../components/common/TextMaskCustom';
 
 import ptLocale from "date-fns/locale/pt-BR";
 
@@ -69,30 +74,31 @@ const styles = theme => ({
   item: {
     paddingTop: `${theme.spacing.unit * 0.2}px !important `, 
     paddingBottom: `${theme.spacing.unit * 0.2}px !important `, 
-  }
+  },
+  fab: {
+    marginRight: theme.spacing.unit * 0.5,
+    color: theme.palette.common.white
+  },
+  fabEdit: {
+    backgroundColor: theme.palette.edit.main,     
+    '&:hover': {
+        backgroundColor: theme.palette.edit.dark,
+    },
+  },
+
 });
-
-function TextMaskCustom(props) {
-  const { inputRef, ...other } = props;
-
-  return (
-    <MaskedInput
-      {...other}
-      ref={ref => {
-        inputRef(ref ? ref.inputElement : null);
-      }}
-      mask={['(', /[1-9]/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-      showMask={false}
-    />
-  );
-}
-
-TextMaskCustom.propTypes = {
-  inputRef: PropTypes.func.isRequired,
-};
 
 
 class EditClient extends Component {
+
+  state = {
+    tabValue: 'EDIT'
+  };
+
+  handleTabChange = (event, value) => {
+    this.setState({ tabValue: value });
+  };
+
   render() {
     const {
       classes,
@@ -101,10 +107,27 @@ class EditClient extends Component {
       handleSave,
       handleCancel,
       handleDateValueChange,
+      handleEditBillReceive, 
+      handleDeleteBillReceive, 
     } = this.props; 
+
+    const { 
+      tabValue,       
+    } = this.state;   
+
     return (
-      <div>
-        <form className={classes.container} noValidate autoComplete="off">
+      <div>        
+        <Tabs 
+          value={tabValue} 
+          onChange={this.handleTabChange}
+          indicatorColor='primary'
+          textColor='primary'
+        >
+          <Tab value='EDIT' label='CADASTRO' /> 
+          <Tab value='LIST' label='TÍTULOS' />                                 
+        </Tabs>   
+        {tabValue === 'EDIT' &&    
+        <form className={classes.container} noValidate autoComplete="off">                 
           <div className={classes.back}>
             <Grid className={classes.itens} container spacing={24}>
               <Grid className={classes.item} item xs={12} sm={12} md={12} lg={8} xl={8} >
@@ -321,34 +344,71 @@ class EditClient extends Component {
               </div>
             </Grid>
           </div>
-        </form>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell padding='checkbox'>Título</TableCell>
-              <TableCell padding='checkbox'>Parcela</TableCell>       
-              <TableCell padding='checkbox'>Data de vencimento</TableCell>
-              <TableCell padding='checkbox'>Data de pagamento</TableCell>    
-              <TableCell padding='checkbox'>Valor</TableCell>
-              <TableCell padding='checkbox'>Valor pago</TableCell>         
-            </TableRow>
-          </TableHead>        
-          <TableBody>
-            {Object.keys(data.bills_receives).map(key => {
-              return (
-                    <TableRow hover key={key}>
-                      <TableCell padding='checkbox'>{data.bills_receives[key].code}</TableCell>
-                      <TableCell padding='checkbox'>{data.bills_receives[key].quota}</TableCell>                        
-                      <TableCell padding='checkbox'>{data.bills_receives[key].due_date}</TableCell>
-                      <TableCell padding='checkbox'>{data.bills_receives[key].pay_date}</TableCell>
-                      <TableCell padding='checkbox'>{data.bills_receives[key].pay_date}</TableCell>
-                      <TableCell padding='checkbox'>{data.bills_receives[key].pay_date}</TableCell>                       
-                    </TableRow>
-                )
-              })
-            }
-          </TableBody>
-        </Table>
+        </form>}
+        {tabValue === 'LIST' &&       
+        <form className={classes.container} noValidate autoComplete="off">              
+          <div className={classes.divRow}>
+            <Button
+              variant="outlined"
+              color="primary"
+              className={classes.button}
+              onClick={handleSave}
+            >
+              INCLUIR
+            </Button>                
+          </div>   
+          <div className={classes.back}>        
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell padding='checkbox'>Título</TableCell>
+                  <TableCell padding='checkbox'>Parcela</TableCell>       
+                  <TableCell padding='checkbox'>Data de vencimento</TableCell>
+                  <TableCell padding='checkbox'>Data de pagamento</TableCell>    
+                  <TableCell padding='checkbox'>Valor</TableCell>
+                  <TableCell padding='checkbox'>Valor pago</TableCell>      
+                  <TableCell className={classes.headerAcoes} align='right'>Ações</TableCell>      
+                </TableRow>
+              </TableHead>        
+              <TableBody>
+                {Object.keys(data.bills_receives).map(key => {   
+                  return (
+                        <TableRow hover key={key}>
+                          <TableCell padding='checkbox'>{data.bills_receives[key].code}</TableCell>
+                          <TableCell padding='checkbox'>{data.bills_receives[key].quota}</TableCell>                        
+                          <TableCell padding='checkbox'>{getDateToString(data.bills_receives[key].due_date)}</TableCell>
+                          <TableCell padding='checkbox'>{getDateToString(data.bills_receives[key].pay_date)}</TableCell>
+                          <TableCell padding='checkbox'>{getNumberDecimalToString(data.bills_receives[key].original_value["$numberDecimal"])}</TableCell>
+                          <TableCell padding='checkbox'>{getNumberDecimalToString(data.bills_receives[key].final_value["$numberDecimal"])}</TableCell>   
+                          <TableCell padding='none' align='right'>
+                            <Fab 
+                              color="primary" 
+                              aria-label="Edit" 
+                              className={classNames(classes.fab, classes.fabEdit)}                                
+                              onClick={() => handleEditBillReceive(key)}
+                              size="small"
+                            >
+                              <Icon fontSize="small">edit_icon</Icon>
+                            </Fab>
+                            <Fab 
+                              color="secondary"
+                              aria-label="Delete" 
+                              className={classes.fab}
+                              onClick={() => handleDeleteBillReceive(key)}
+                              size="small"
+                            >
+                              <Icon fontSize="small">delete_icon</Icon>
+                            </Fab>                             
+                          </TableCell>                         
+                        </TableRow>
+                    )              
+                  })
+                }
+              </TableBody>
+            </Table>
+          </div> 
+          <br />
+        </form>}
       </div>
     );
   }
