@@ -7,6 +7,7 @@ const cryptPassword = (req, res, next) => {
   const salt = bcrypt.genSaltSync()
   const passwordHash = bcrypt.hashSync(password, salt);
   req.body.password = passwordHash;
+  console.log('fim hash');
   next();
 }
 
