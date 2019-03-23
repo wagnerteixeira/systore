@@ -22,6 +22,9 @@ import Icon from '@material-ui/core/Icon';
 import classNames from 'classnames';
 import { getDateToString , getNumberDecimalToString } from '../../utils/operators';
 import TextMaskCustom from '../../components/common/TextMaskCustom';
+import BillModal from '../billReceive/BillModal';
+
+
 
 import ptLocale from "date-fns/locale/pt-BR";
 
@@ -87,17 +90,38 @@ const styles = theme => ({
         backgroundColor: theme.palette.edit.dark,
     },
   },
-
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    outline: 'none',
+  },
 });
 
 
 class EditClient extends Component {
-
   state = {
     tabValue: 'EDIT',    
     bills_receives: [],
+    openModal: false,
   };
   
+  rand() {
+    return Math.round(Math.random() * 20) - 10;
+  }
+
+  getModalStyle() {
+    const top = 50 + this.rand();
+    const left = 50 + this.rand();
+  
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+    };
+  }
 
   fetchBillsReceive(_id) {
     billsReceiveservice.getBillsReceiveServiceByClient(_id)
@@ -121,9 +145,12 @@ class EditClient extends Component {
 
   }
   
+  handleCloseModal = () => {
+    this.setState({ openModal: false })
+  }
         
   handleCreateBillReceive = () => {
-
+    this.setState({ openModal: true });  
   }  
   
   render() {
@@ -434,6 +461,10 @@ class EditClient extends Component {
             </Table>
           </div> 
           <br />
+          <BillModal
+            open={this.state.openModal}
+            handleClose={this.handleCloseModal}
+          />
         </form>}
       </div>
     );
