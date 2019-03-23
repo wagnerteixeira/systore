@@ -9,7 +9,6 @@ import EditClient from './EditClient';
 import ViewClient from './ViewClient';
 
 import clientservice from '../../services/clientService';
-import billsReceiveservice from '../../services/billsReceiveService';
 
 import { debounceTime } from '../../utils/operators';
 
@@ -179,8 +178,7 @@ class Client extends Component {
   handleDelete = (key) => {
     clientservice.remove(this.state.clients[key]._id)
       .then(() => this.handleCancel('DELETE'))
-      .catch((error) => console.log(error));
-    
+      .catch((error) => console.log(error));    
   }
 
   handleEdit = (key) => {
@@ -189,12 +187,7 @@ class Client extends Component {
       selectedIndex: key,
       inEdit: true,
       data: this.state.clients[key],      
-    });     
-    console.log(key);
-    console.log(this.state.clients[key]._id);
-    billsReceiveservice.getBillsReceiveServiceByClient(this.state.clients[key]._id)
-      .then(res => {this.setState({data : { ...this.state.data, bills_receives: res.data}})})
-      .catch((error) => console.log(error));
+    });   
   }
 
   handleChangePage = (event, page) => {
@@ -232,6 +225,7 @@ class Client extends Component {
   handleMessageClose = () => {
     this.setState({ ...this.state, messageOpen: false });
   }
+
 
   render() {
     const { classes } = this.props;
@@ -287,6 +281,9 @@ class Client extends Component {
                 handleCancel={this.handleCancel}
                 handleSave={this.handleSave}    
                 handleDateValueChange={this.handleDateValueChange}
+                handleEditBillReceive={this.handleEditBillReceive}
+                handleDeleteBillReceive={this.handleDeleteBillReceive}
+                handleCreateBillReceive={this.handleCreateBillReceive}
             />}
       </div>
     );

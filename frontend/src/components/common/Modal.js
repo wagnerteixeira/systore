@@ -35,7 +35,6 @@ const ModalWrapped = props => {
 
 ModalWrapped.propTypes = {
   classes: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   children: PropTypes.node,
