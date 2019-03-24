@@ -39,7 +39,7 @@ class App extends Component {
       return (      
         <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>  
           <MuiThemeProvider theme={muiTheme}>
-            <Menu theme={muiTheme} initialheaderText='Agenda'>        
+            <Menu theme={muiTheme} initialheaderText='Clientes'>        
               <Switch>
                 <Route path='/' exact component={Client} /> 
                 {/*<Route path='/billsReceive' component={BillsReceive} />*/}

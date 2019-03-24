@@ -215,7 +215,7 @@ class Menu extends React.Component {
           password: ''
         })
         localStorageService.setItem('user', user.user_name);
-        localStorageService.setItem('token', user.token);
+        localStorageService.setItem('token', res.data.token);
       }
     }
     catch(e){      

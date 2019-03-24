@@ -56,35 +56,25 @@ class User extends Component {
     userservice.count(columnSort, filter).then(res => this.setState({ countUsers: res.data.value }));
     const skip = page * rowsPerPage;  
     userservice.getAll(skip, rowsPerPage, columnSort, order, filter)
-      .then(res => {             
-        let users = res.data.map(user => {
-          return {
-            user_name: user.user_name,
-            email: user.email,
-            password: '1234567890',
-            password_encripted: user.password,
-          }
-        })    
+      .then(res => {                     
         this.setState({
             stateData: 'LIST', 
             inEdit: false,
             selectedIndex: '0',
-            users: users,            
+            users: res.data,            
             data: {
               _id : '',
               user_name: '',
               email: '',
-              password: '',
-              password_encripted: '',
+              password: ''
             },
-            password_changed: false,
             page: page,
             rowsPerPage: rowsPerPage,
             columnSort: columnSort,
             order: order,
         });            
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log(error.response));
   }
 
   handleValueChange = name => event => {
@@ -109,15 +99,9 @@ class User extends Component {
   handleSave = () => {   
     console.log(this.state.data);
     if (this.state.inEdit){     
-      let user = {
-        _id : this.state.data._id,
-        user_name: this.state.data.user_name,
-        email: this.state.data.email,
-        password: this.state.password_changed ? this.state.data.password : this.state.data.password_encripted
-      }
-      userservice.update(user)
+      userservice.update(this.state.data)
         .then(() => this.handleCancel('SAVE'))
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error.response));
     } else {
       let user = {
         user_name: this.state.data.user_name,
@@ -139,20 +123,20 @@ class User extends Component {
   }    
 
   handleDelete = (key) => {
-    userservice.remove(this.state.clients[key]._id)
+    userservice.remove(this.state.users[key]._id)
       .then(() => this.handleCancel('DELETE'))
       .catch((error) => console.log(error));
     
   }
 
   handleEdit = (key) => {
+    console.log(this.state.users[key])
     this.setState({    
       stateData: 'EDIT_INSERT', 
       selectedIndex: key,
       inEdit: true,
-      data: this.state.users[key],      
+      data: this.state.users[key],
     });     
-    console.log(key);
   }
 
   handleCreate = () => {
@@ -164,7 +148,6 @@ class User extends Component {
         user_name: '',
         email: '',
         password: '',
-        password_encripted: '',       
       }
     });
   };
@@ -257,8 +240,7 @@ class User extends Component {
                 handleValueChange={this.handleValueChange}
                 data={data}
                 handleCancel={this.handleCancel}
-                handleSave={this.handleSave}    
-                handleDateValueChange={this.handleDateValueChange}                
+                handleSave={this.handleSave}                    
             />}
       </div>
     );

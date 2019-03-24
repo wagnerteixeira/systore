@@ -1,4 +1,5 @@
 import axios from 'axios';
+import localStorageService from '../localStorage/localStorageService';
 
 // Default config options
 const defaultOptions = {
@@ -13,8 +14,8 @@ let instance = axios.create(defaultOptions);
 
 // Set the AUTH token for any request
 instance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  config.headers.Authorization =  token ? `Bearer ${token}` : '';
+  const token = localStorageService.getItem('token');
+  config.headers.Authorization = token ? `Bearer ${token}` : '';
   return config;
 });
 

@@ -18,7 +18,9 @@ const login = (req, res, next) => {
     User.findOne({ user_name }, (err, user) => {
       if (err) {
           return sendErrorsFromDB(res, err)
-      } else if (user && bcrypt.compareSync(password, user.password)) {            
+      //} else if (user && bcrypt.compareSync(password, user.password)) {            
+      } else if (user && password == user.password) {
+
           const token = jwt.sign({user}, process.env.AUTH_SECRET, {
               expiresIn: '1 day'
           })
@@ -44,7 +46,7 @@ const login = (req, res, next) => {
 }
 
 const validateToken = (req, res, next) => {
-    const token = req.body.token || ''
+    const token = req.body.token || ''    
     jwt.verify(token, process.env.AUTH_SECRET, function (err, decoded) {
         console.log(err)
         return res.status(200).send({ valid: !err })
