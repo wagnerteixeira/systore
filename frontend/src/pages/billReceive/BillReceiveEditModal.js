@@ -1,30 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
-import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import ptLocale from "date-fns/locale/pt-BR";
 
-
+import ModalWrapped from '../../components/common/Modal';
 
 const styles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 60,
+  paper:{
+    position: 'absolute',    
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2,    
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%,-50%)',
     outline: 'none',
-  },
+    width: theme.spacing.unit * 60,
+  },  
 });
 
-class BillModal extends React.Component {
+class BillReceiveEditModal extends React.Component {
 
   state = {
     bill: {
@@ -42,20 +44,6 @@ class BillModal extends React.Component {
       situation: "O",
       vendor: "",
     }
-  }
-  rand() {
-    return Math.round(Math.random() * 20) - 10;
-  }
-
-  getModalStyle() {
-    const top = 50 + this.rand();
-    const left = 50 + this.rand();
-  
-    return {
-      top: `${top}%`,
-      left: `${left}%`,
-      transform: `translate(-${top}%, -${left}%)`,
-    };
   }
 
   handleValueChange = name => event => {
@@ -84,15 +72,14 @@ class BillModal extends React.Component {
     } = this.props
 
     return (
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={open}            
-      >
-        <div style={this.getModalStyle()} className={classes.paper}>
+      <ModalWrapped
+        handleClose={handleClose}
+        open={open}   
+        paperClass={classes.paper}
+      >        
           <Grid className={classes.itens} container spacing={24}>
-          <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >
-              <Tab label='PAGAMENTO DE TÍTULO' />
+            <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >
+              <Typography align='center' variant='h6'>PAGAMENTO DE TÍTULO</Typography>
             </Grid>         
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
               <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
@@ -104,7 +91,7 @@ class BillModal extends React.Component {
                   onChange={this.handleDateValueChange('purchase_date')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
-                  readonly
+                  
                   fullWidth
                 />
               </Grid>
@@ -117,7 +104,7 @@ class BillModal extends React.Component {
                   onChange={this.handleDateValueChange('due_date')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
-                  readonly
+                  
                   fullWidth
                 />
               </Grid>
@@ -201,7 +188,6 @@ class BillModal extends React.Component {
                 value={bill.pay_value}
                 onChange={this.handleValueChange('pay_value')}
                 margin="normal"
-                readonly
                 fullWidth
               />
             </Grid>
@@ -224,16 +210,15 @@ class BillModal extends React.Component {
                   Cancelar
                 </Button>
               </div>
-        </div>
-      </Modal>
+      </ModalWrapped>
     )
   }
 }
 
-BillModal.propTypes = {
+BillReceiveEditModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(BillModal);
+export default withStyles(styles)(BillReceiveEditModal);

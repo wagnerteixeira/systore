@@ -9,6 +9,7 @@ import ViewUser from './ViewUser';
 import userservice from '../../services/userService';
 
 import { debounceTime } from '../../utils/operators';
+import { getErrosFromApi } from '../../utils/errorsHelper';
 
 const styles = theme => ({
   root: {
@@ -74,7 +75,13 @@ class User extends Component {
             order: order,
         });            
       })
-      .catch(error => console.log(error.response));
+      .catch(error => 
+        this.setState({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'error'
+        })
+      );
   }
 
   handleValueChange = name => event => {
@@ -101,23 +108,27 @@ class User extends Component {
     if (this.state.inEdit){     
       userservice.update(this.state.data)
         .then(() => this.handleCancel('SAVE'))
-        .catch((error) => console.log(error.response));
+        .catch((error) => 
+          this.setState({
+            messageOpen: true,
+            messageText: getErrosFromApi(error),
+            variantMessage: 'error'
+          })
+        );
     } else {
       let user = {
         user_name: this.state.data.user_name,
         email: this.state.data.email,
         password: this.state.data.password
-      }
-      console.log(user);
+      };      
       userservice.create(user)
         .then(() => this.handleCancel('SAVE'))
         .catch((error) => {
           this.setState({
             messageOpen: true,
-            messageText: 'Erro ao salvar Usuário',
-            variantMessage: 'error'   
+            messageText: getErrosFromApi(error),
+            variantMessage: 'error'
           });
-          console.log(error.response)
         });
     }
   }    
@@ -125,7 +136,13 @@ class User extends Component {
   handleDelete = (key) => {
     userservice.remove(this.state.users[key]._id)
       .then(() => this.handleCancel('DELETE'))
-      .catch((error) => console.log(error));
+      .catch((error) => 
+        this.setState({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'error'
+        })
+      );
     
   }
 

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import MessageSnackbar from '../../components/common/MessageSnackbar';
 
 import EditClient from './EditClient';
@@ -11,6 +9,7 @@ import ViewClient from './ViewClient';
 import clientservice from '../../services/clientService';
 
 import { debounceTime } from '../../utils/operators';
+import { getErrosFromApi } from '../../utils/errorsHelper';
 
 const styles = theme => ({
   root: {
@@ -106,7 +105,13 @@ class Client extends Component {
             order: order,
         });            
       })
-      .catch(error => console.log(error));
+      .catch(error => 
+        this.setState({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'error'
+        })
+      );
   }
 
   handleCreate = () => {
@@ -166,19 +171,37 @@ class Client extends Component {
     if (this.state.inEdit){     
       clientservice.update(this.state.data)
         .then(() => this.handleCancel('SAVE'))
-        .catch((error) => console.log(error));
+        .catch((error) => 
+          this.setState({
+            messageOpen: true,
+            messageText: getErrosFromApi(error),
+            variantMessage: 'error'
+          })
+        );
     } else {
       this.state.data._id = undefined;      
       clientservice.create(this.state.data)
         .then(() => this.handleCancel('SAVE'))
-        .catch((error) => console.log(error));
+        .catch((error) => 
+          this.setState({
+            messageOpen: true,
+            messageText: getErrosFromApi(error),
+            variantMessage: 'error'
+          })
+        );
     }
   }    
 
   handleDelete = (key) => {
     clientservice.remove(this.state.clients[key]._id)
       .then(() => this.handleCancel('DELETE'))
-      .catch((error) => console.log(error));    
+      .catch((error) => {
+        this.setState({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'error'
+        })
+      });    
   }
 
   handleEdit = (key) => {

@@ -20,9 +20,11 @@ import Tab from '@material-ui/core/Tab';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import classNames from 'classnames';
+
 import { getDateToString , getNumberDecimalToString } from '../../utils/operators';
 import TextMaskCustom from '../../components/common/TextMaskCustom';
-import BillModal from '../billReceive/BillModal';
+import BillReceiveEditModal from '../billReceive/BillReceiveEditModal';
+import BillReceiveCreateModal from '../billReceive/BillReceiveCreateModal';
 
 
 
@@ -98,6 +100,9 @@ const styles = theme => ({
     padding: theme.spacing.unit * 4,
     outline: 'none',
   },
+  table: {
+    minWidth: 500,
+  },
 });
 
 
@@ -105,7 +110,8 @@ class EditClient extends Component {
   state = {
     tabValue: 'EDIT',    
     bills_receives: [],
-    openModal: false,
+    openEditModal: false,
+    openCreateModal: false,
   };
   
   rand() {
@@ -142,15 +148,19 @@ class EditClient extends Component {
   } 
 
   handleEditBillReceive = (key) => {
-
+    this.setState({ openEditModal: true });  
   }
   
-  handleCloseModal = () => {
-    this.setState({ openModal: false })
+  handleCloseEditModal = () => {
+    this.setState({ openEditModal: false })
+  }
+
+  handleCloseCreateModal = () => {
+    this.setState({ openCreateModal: false })
   }
         
   handleCreateBillReceive = () => {
-    this.setState({ openModal: true });  
+    this.setState({ openCreateModal: true })
   }  
   
   render() {
@@ -349,6 +359,7 @@ class EditClient extends Component {
                     onChange={handleValueChange('phone1')}
                     id="phone1"
                     inputComponent={TextMaskCustom}
+                    inputProps={ { mask : ['(', /[1-9]/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]} }
                   />
                 </FormControl>
               </Grid>
@@ -360,6 +371,7 @@ class EditClient extends Component {
                     onChange={handleValueChange('phone2')}
                     id="phone2"
                     inputComponent={TextMaskCustom}
+                    inputProps={ { mask : ['(', /[1-9]/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]} }
                   />
                 </FormControl>
               </Grid>
@@ -431,8 +443,8 @@ class EditClient extends Component {
                           <TableCell padding='checkbox'>{bills_receives[key].quota}</TableCell>                        
                           <TableCell padding='checkbox'>{getDateToString(bills_receives[key].due_date)}</TableCell>
                           <TableCell padding='checkbox'>{getDateToString(bills_receives[key].pay_date)}</TableCell>
-                          <TableCell padding='checkbox'>{getNumberDecimalToString(bills_receives[key].original_value["$numberDecimal"])}</TableCell>
-                          <TableCell padding='checkbox'>{getNumberDecimalToString(bills_receives[key].final_value["$numberDecimal"])}</TableCell>   
+                          <TableCell padding='checkbox'>{getNumberDecimalToString(bills_receives[key].original_value)}</TableCell>
+                          <TableCell padding='checkbox'>{getNumberDecimalToString(bills_receives[key].final_value)}</TableCell>   
                           <TableCell padding='none' align='right'>
                             <Fab 
                               color="primary" 
@@ -461,9 +473,14 @@ class EditClient extends Component {
             </Table>
           </div> 
           <br />
-          <BillModal
-            open={this.state.openModal}
-            handleClose={this.handleCloseModal}
+          <BillReceiveEditModal
+            open={this.state.openEditModal}
+            handleClose={this.handleCloseEditModal}
+          />
+          <BillReceiveCreateModal
+            open={this.state.openCreateModal}
+            handleClose={this.handleCloseCreateModal}
+            clientId={data._id}
           />
         </form>}
       </div>
