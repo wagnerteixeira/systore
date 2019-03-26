@@ -44,6 +44,7 @@ class BillReceiveEditModal extends React.Component {
       <ModalWrapped
         handleClose={handleClose}
         open={open}   
+        paperClass={classes.paper}
       >        
           <Grid className={classes.itens} container spacing={24}>
             <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >

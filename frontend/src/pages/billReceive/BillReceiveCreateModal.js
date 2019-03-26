@@ -26,7 +26,18 @@ import { getDateToString } from '../../utils/operators';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import billsReceiveService from '../../services/billsReceiveService';
 
-const styles = theme => ({  
+const styles = theme => ({
+  paper:{
+    position: 'absolute',    
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 2,    
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%,-50%)',
+    outline: 'none',
+    width: theme.spacing.unit * 60,
+  },
   margin: {
     margin: theme.spacing.unit
   },
@@ -127,7 +138,8 @@ class BillReceiveCreateModal extends React.Component {
     return (
       <ModalWrapped
         handleClose={handleClose}
-        open={open}   
+        open={open}
+        paperClass={classes.paper}   
       >        
           <Grid className={classes.itens} container spacing={24}>
             <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >
