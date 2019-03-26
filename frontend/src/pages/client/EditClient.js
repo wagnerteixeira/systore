@@ -112,6 +112,21 @@ class EditClient extends Component {
     bills_receives: [],
     openEditModal: false,
     openCreateModal: false,
+    bill: {
+      _id : '',
+      client: '',
+      code: '',
+      quota: '', 
+      original_value: 0,
+      interest: 0,
+      final_value: 0,
+      purchase_date: new Date(),
+      due_date: new Date(),
+      pay_date: new Date(),
+      days_delay: 0,
+      situation: "O",
+      vendor: "",
+    }
   };
   
   rand() {
@@ -147,8 +162,9 @@ class EditClient extends Component {
       .catch((error) => console.log(error));        
   } 
 
-  handleEditBillReceive = (key) => {
-    this.setState({ openEditModal: true });  
+  handleEditBillReceive = (bill_receive) => {
+    console.log(bill_receive);   
+    this.setState({ openEditModal: true, bill : bill_receive });  
   }
   
   handleCloseEditModal = () => {
@@ -162,6 +178,24 @@ class EditClient extends Component {
   handleCreateBillReceive = () => {
     this.setState({ openCreateModal: true })
   }  
+
+  handleValueChangeBill = name => event => {
+    this.setState({ bill: { ...this.state.bill, [name]: event.target.value}})
+  };  
+
+  handleValueChangeInterestBill = event => {
+    this.setState({ bill: { ...this.state.bill, interest: event.target.value, pay_value: parseFloat(this.state.bill.original_value) + parseFloat(event.target.value)}})
+  }
+
+  handleDateValueChangeBill = name => date => {
+    this.setState({ bill: { ...this.state.bill, [name]: date}});
+  }
+
+  handleSaveBillReceive = (data) => {
+    billsReceiveservice.update(data)
+      .then(() => this.setState({ openEditModal: false }))
+      .catch((error) => console.log(error))
+  }
   
   render() {
     const {
@@ -450,7 +484,7 @@ class EditClient extends Component {
                               color="primary" 
                               aria-label="Edit" 
                               className={classNames(classes.fab, classes.fabEdit)}                                
-                              onClick={() => this.handleEditBillReceive(key)}
+                              onClick={() => this.handleEditBillReceive(bills_receives[key])}
                               size="small"
                             >
                               <Icon fontSize="small">edit_icon</Icon>
@@ -475,7 +509,11 @@ class EditClient extends Component {
           <br />
           <BillReceiveEditModal
             open={this.state.openEditModal}
+            bill={this.state.bill}
             handleClose={this.handleCloseEditModal}
+            handleValueChangeBill={this.handleValueChangeBill}
+            handleValueChangeInterestBill={this.handleValueChangeInterestBill}
+            handleDateValueChangeBill={this.handleDateValueChangeBill}
           />
           <BillReceiveCreateModal
             open={this.state.openCreateModal}

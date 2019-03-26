@@ -4,20 +4,22 @@ import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
 const styles = theme => ({
-  paper: {
+  paper:{
     position: 'absolute',    
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,    
+    padding: theme.spacing.unit * 2,    
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%,-50%)'
-  },
+    transform: 'translate(-50%,-50%)',
+    outline: 'none',
+    width: theme.spacing.unit * 60,
+  },  
 });
 
 
 const ModalWrapped = props => {
-    const { paperClass, handleClose, open, children } = props;
+    const { classes, handleClose, open, children } = props;
     return (        
         <Modal
             aria-labelledby="simple-modal-title"
@@ -25,7 +27,7 @@ const ModalWrapped = props => {
             open={open}
             onClose={handleClose}
         >
-            <div className={paperClass}>            
+            <div className={classes.paper}>            
                 {children}            
             </div>
         </Modal>        
@@ -33,7 +35,6 @@ const ModalWrapped = props => {
 }
 
 ModalWrapped.propTypes = {
-  paperClass: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   children: PropTypes.node,

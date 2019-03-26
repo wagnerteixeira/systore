@@ -28,54 +28,22 @@ const styles = theme => ({
 
 class BillReceiveEditModal extends React.Component {
 
-  state = {
-    bill: {
-      _id : '',
-      client: '',
-      code: '',
-      quota: '', 
-      original_value: 0,
-      interest: 0,
-      final_value: 0,
-      purchase_date: null,
-      due_date: null,
-      pay_date: null,
-      days_delay: 0,
-      situation: "O",
-      vendor: "",
-    }
-  }
-
-  handleValueChange = name => event => {
-    this.setState({ bill: { ...this.state.bill, [name]: event.target.value}})
-  };  
-
-  handleValueChangeInterest = event => {
-    this.setState({ bill: { ...this.state.bill, interest: event.target.value, pay_value: parseFloat(this.state.bill.original_value) + parseFloat(event.target.value)}})
-  }
-
-  handleDateValueChange = name => date => {
-    this.setState({ bill: { ...this.state.bill, [name]: date}});
-  }
-
+  
   render() {
-
-    const {
-      bill,
-      labelAcao,
-    } = this.state
-
     const {
       open,
       handleClose,
-      classes
+      classes,
+      bill,
+      handleValueChangeBill,
+      handleValueChangeInterestBill,
+      handleDateValueChangeBill,
     } = this.props
 
     return (
       <ModalWrapped
         handleClose={handleClose}
         open={open}   
-        paperClass={classes.paper}
       >        
           <Grid className={classes.itens} container spacing={24}>
             <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >
@@ -88,10 +56,10 @@ class BillReceiveEditModal extends React.Component {
                   label="Data da venda"
                   className={classes.textField}
                   value={bill.purchase_date}
-                  onChange={this.handleDateValueChange('purchase_date')}
+                  onChange={handleDateValueChangeBill('purchase_date')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
-                  
+                  readOnly
                   fullWidth
                 />
               </Grid>
@@ -101,10 +69,10 @@ class BillReceiveEditModal extends React.Component {
                   label="Data de vencimento"
                   className={classes.textField}
                   value={bill.due_date}
-                  onChange={this.handleDateValueChange('due_date')}
+                  onChange={handleDateValueChangeBill('due_date')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
-                  
+                  readOnly
                   fullWidth
                 />
               </Grid>
@@ -114,7 +82,7 @@ class BillReceiveEditModal extends React.Component {
                   label="Data de Pagamento"
                   className={classes.textField}
                   value={bill.pay_date}
-                  onChange={this.handleDateValueChange('pay_date')}
+                  onChange={handleDateValueChangeBill('pay_date')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
                   fullWidth
@@ -127,9 +95,9 @@ class BillReceiveEditModal extends React.Component {
                 label="Nome do vendedor"
                 className={classes.textField}
                 value={bill.vendor}
-                onChange={this.handleValueChange('vendor')}
+                onChange={handleValueChangeBill('vendor')}
                 margin="normal"
-                readonly
+                readOnly
                 fullWidth
               />   
             </Grid>  
@@ -139,9 +107,9 @@ class BillReceiveEditModal extends React.Component {
                 label="Código"
                 className={classes.textField}
                 value={bill.code}
-                onChange={this.handleValueChange('code')}
+                onChange={handleValueChangeBill('code')}
                 margin="normal"
-                readonly
+                readOnly
                 fullWidth
               />
             </Grid>
@@ -151,9 +119,9 @@ class BillReceiveEditModal extends React.Component {
                 label="Parcela"
                 className={classes.textField}
                 value={bill.quota}
-                onChange={this.handleValueChange('quota')}
+                onChange={handleValueChangeBill('quota')}
                 margin="normal"
-                readonly
+                readOnly
                 fullWidth
               />
             </Grid>
@@ -162,10 +130,10 @@ class BillReceiveEditModal extends React.Component {
                 id="original_value"
                 label="Valor"
                 className={classes.textField}
-                value={bill.original_value}
-                onChange={this.handleValueChange('original_value')}
+                value={bill.original_value["$numberDecimal"]}
+                onChange={handleValueChangeBill('original_value')}
                 margin="normal"
-                readonly
+                readOnly
                 fullWidth
               />
             </Grid>
@@ -174,19 +142,19 @@ class BillReceiveEditModal extends React.Component {
                 id="interest"
                 label="Juros"
                 className={classes.textField}
-                value={bill.interest}
-                onChange={this.handleValueChangeInterest}
+                value={bill.interest["$numberDecimal"]}
+                onChange={handleValueChangeInterestBill}
                 margin="normal"
                 fullWidth
               />
             </Grid>
             <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
               <TextField
-                id="pay_value"
+                id="final_value"
                 label="Valor pago"
                 className={classes.textField}
-                value={bill.pay_value}
-                onChange={this.handleValueChange('pay_value')}
+                value={bill.final_value["$numberDecimal"]}
+                onChange={handleValueChangeBill('final_value')}
                 margin="normal"
                 fullWidth
               />
@@ -219,6 +187,10 @@ BillReceiveEditModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
+  bill: PropTypes.object.isRequired,
+  handleValueChangeBill: PropTypes.func.isRequired,
+  handleValueChangeInterestBill: PropTypes.func.isRequired,
+  handleDateValueChangeBill: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(BillReceiveEditModal);
