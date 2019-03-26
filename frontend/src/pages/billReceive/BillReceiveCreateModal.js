@@ -21,6 +21,7 @@ import ptLocale from "date-fns/locale/pt-BR";
 
 import NumberFormatCustom from '../../components/common/NumberFormatCustom';
 import ModalWrapped from '../../components/common/Modal';
+import MessageSnackbar from '../../components/common/MessageSnackbar';
 
 import { getDateToString } from '../../utils/operators';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
@@ -57,8 +58,16 @@ class BillReceiveCreateModal extends React.Component {
     original_value: 0.0,
     purchase_date: new Date(),
     vendor: '',      
+    messageOpen: false,
+    variantMessage: 'success',
+    messageText: '',
     bills_receives: [],
   }
+
+  handleMessageClose = () => {
+    this.setState({ messageOpen: false });
+  }
+
 
   handleValueChange = name => event => {
     this.setState({ [name]: event.target.value})
@@ -70,6 +79,23 @@ class BillReceiveCreateModal extends React.Component {
 
   handleDateValueChange = name => date => {
     this.setState({ [name]: date});
+  }
+
+  validadeSaveQuotas = () => {
+    console.log(this.state.bills_receives)
+    console.log(this.state.bills_receives.length)
+    let message = "";
+    if ((!this.state.original_value) || (this.state.original_value <= 0))
+      message += "Informe o valor!\n\n";
+    if ((!this.state.quotas) || (this.state.quotas <= 0))
+      message += "Informe as parcelas!\n\n";
+    if ((!this.state.bills_receives) || (this.state.bills_receives.length <= 0))
+      message += "Faça o cálculo das parcelas!\n\n";
+    if (!this.state.purchase_date)
+      message += "Informe a data da venda!\n\n";
+    if ((!this.state.vendor) || (this.state.vendor == ""))
+      message += "Informe o vendedor!\n\n";
+    return message    
   }
 
   handleGenerateQuotas = () => {
@@ -90,15 +116,30 @@ class BillReceiveCreateModal extends React.Component {
           due_date: new Date(due_date.getTime()),
           original_value: original_value
         })
-      }
-
+        this.setState({
+          bills_receives: quotas
+        })
+      }      
+    } else {
       this.setState({
-        bills_receives: quotas
+        messageOpen: true,
+        messageText: 'Informe o valor e a quantidade de parcelas!',
+        variantMessage: 'warning'
       })
     }
+
   }
 
   handleSaveQuotas = clientId => handleClose => () => {
+    let message = this.validadeSaveQuotas();
+    if (message != ""){
+      this.setState({
+        messageOpen: true,
+        messageText: message,
+        variantMessage: 'warning'
+      })
+      return;
+    }
     let data = {
       original_value: this.state.original_value,
       quotas: this.state.quotas,
@@ -137,7 +178,10 @@ class BillReceiveCreateModal extends React.Component {
       purchase_date,
       vendor,
       quotas,
-      bills_receives
+      bills_receives,
+      messageOpen,
+      variantMessage,
+      messageText,
     } = this.state;    
 
     let _original_value = parseFloat(original_value).toFixed(2).replace('.', ',');
@@ -147,6 +191,12 @@ class BillReceiveCreateModal extends React.Component {
         open={open}
         paperClass={classes.paper}   
       >        
+          <MessageSnackbar
+              handleClose={this.handleMessageClose}
+              open={messageOpen}
+              variant={variantMessage}
+              message={messageText}
+          />
           <Grid className={classes.itens} container spacing={24}>
             <Grid className={classes.item} item xs={12} sm={12} md={12} lg={12} xl={12} >
               <Typography align='center' variant='h6'>INCLUSÃO DE TÍTULOS</Typography>
