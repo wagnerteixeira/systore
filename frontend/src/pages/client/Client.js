@@ -304,9 +304,6 @@ class Client extends Component {
                 handleCancel={this.handleCancel}
                 handleSave={this.handleSave}    
                 handleDateValueChange={this.handleDateValueChange}
-                handleEditBillReceive={this.handleEditBillReceive}
-                handleDeleteBillReceive={this.handleDeleteBillReceive}
-                handleCreateBillReceive={this.handleCreateBillReceive}
             />}
       </div>
     );
