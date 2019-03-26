@@ -107,50 +107,40 @@ const styles = theme => ({
 
 
 class EditClient extends Component {
-  state = {
-    tabValue: 'EDIT',    
-    bills_receives: [],
-    openEditModal: false,
-    openCreateModal: false,
-    bill: {
-      _id : '',
-      client: '',
-      code: '',
-      quota: '', 
-      original_value: 0,
-      interest: 0,
-      final_value: 0,
-      purchase_date: new Date(),
-      due_date: new Date(),
-      pay_date: new Date(),
-      days_delay: 0,
-      situation: "O",
-      vendor: "",
-    }
-  };
-  
-  rand() {
-    return Math.round(Math.random() * 20) - 10;
-  }
-
-  getModalStyle() {
-    const top = 50 + this.rand();
-    const left = 50 + this.rand();
-  
-    return {
-      top: `${top}%`,
-      left: `${left}%`,
-      transform: `translate(-${top}%, -${left}%)`,
+  constructor(props) {
+    super(props);
+    console.log(props.data);
+    this.state = {
+      tabValue: 'EDIT',    
+      bills_receives: [],
+      openEditModal: false,
+      openCreateModal: false,
+      clientId: props.data._id,
+      bill: {
+        _id : '',
+        client: '',
+        code: '',
+        quota: '', 
+        original_value: 0,
+        interest: 0,
+        final_value: 0,
+        purchase_date: new Date(),
+        due_date: new Date(),
+        pay_date: new Date(),
+        days_delay: 0,
+        situation: "O",
+        vendor: "",
+      }
     };
-  }
-
-  fetchBillsReceive(_id) {
-    billsReceiveservice.getBillsReceiveServiceByClient(_id)
+  }  
+  
+  fetchBillsReceives = () => {
+    billsReceiveservice.getBillsReceiveServiceByClient(this.state.clientId)
       .then(res => this.setState({bills_receives : res.data}))
   }
 
-  handleTabChange = _id => (event, value) => {
-    this.fetchBillsReceive(_id);
+  handleTabChange = (event, value) => {
+    this.fetchBillsReceives();
     this.setState({ tabValue: value });
   };
 
@@ -171,8 +161,10 @@ class EditClient extends Component {
     this.setState({ openEditModal: false })
   }
 
-  handleCloseCreateModal = () => {
+  handleCloseCreateModal = (event, reason) => {
     this.setState({ openCreateModal: false })
+    if (reason = 'created')
+      this.fetchBillsReceives()
   }
         
   handleCreateBillReceive = () => {
@@ -204,19 +196,21 @@ class EditClient extends Component {
       handleValueChange,      
       handleSave,
       handleCancel,
-      handleDateValueChange,
+      handleDateValueChange,      
     } = this.props; 
 
     const { 
       tabValue,       
       bills_receives,
+      openCreateModal,
+      clientId
     } = this.state;   
 
     return (
       <div>        
         <Tabs 
           value={tabValue}           
-          onChange={this.handleTabChange(data._id)}
+          onChange={this.handleTabChange}
           indicatorColor='primary'
           textColor='primary'
         >
@@ -516,9 +510,9 @@ class EditClient extends Component {
             handleDateValueChangeBill={this.handleDateValueChangeBill}
           />
           <BillReceiveCreateModal
-            open={this.state.openCreateModal}
+            open={openCreateModal}
             handleClose={this.handleCloseCreateModal}
-            clientId={data._id}
+            clientId={clientId}
           />
         </form>}
       </div>

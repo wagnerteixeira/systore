@@ -10,7 +10,6 @@ function NumberFormatCustom(props) {
       {...other}
       getInputRef={inputRef}
       onValueChange={values => {
-        console.log(values)
         onChange({
           target: {
             value: values.value,

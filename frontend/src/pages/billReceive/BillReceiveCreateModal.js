@@ -61,7 +61,6 @@ class BillReceiveCreateModal extends React.Component {
   }
 
   handleValueChange = name => event => {
-    console.log(event.target.value);
     this.setState({ [name]: event.target.value})
   };  
 
@@ -80,11 +79,9 @@ class BillReceiveCreateModal extends React.Component {
       let i = 0;
 
       let due_date = new Date(this.state.purchase_date.getTime());
-      console.log(typeof due_date);
       for (i = 0; i < this.state.quotas; i++){
         let original_value = _quotaValue;
-        if (i == (this.state.quotas -1)){
-          console.log('ultima');
+        if (i == (this.state.quotas -1)){          
           original_value = parseFloat(this.state.original_value - parseFloat(((this.state.quotas -1) * _quotaValue)).toFixed(2)).toFixed(2)
         }
         due_date.setDate(due_date.getDate() + 30);
@@ -111,13 +108,23 @@ class BillReceiveCreateModal extends React.Component {
     }
 
     billsReceiveService.createQuotas(clientId, data)
-      .then(() => handleClose())
+      .then(() => {
+        this.setState({
+          code: '',
+          quotas: 0, 
+          original_value: 0.0,
+          purchase_date: new Date(),
+          vendor: '',      
+          bills_receives: [],
+        })
+        handleClose(null, 'created')
+      })
       .catch((error) => 
         console.log(error.response)
       );
   }
 
-  render() {
+  render() {    
     const {
       open,
       handleClose,
@@ -134,7 +141,6 @@ class BillReceiveCreateModal extends React.Component {
     } = this.state;    
 
     let _original_value = parseFloat(original_value).toFixed(2).replace('.', ',');
-    console.log(this.state);
     return (
       <ModalWrapped
         handleClose={handleClose}
@@ -245,7 +251,7 @@ class BillReceiveCreateModal extends React.Component {
                   variant="outlined"
                   color="secondary"
                   className={classes.button}
-                  onClick={handleClose}
+                  onClick={() => handleClose(null, 'cancel')}
                 >
                   Cancelar
                 </Button>

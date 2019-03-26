@@ -63,14 +63,16 @@ BillsReceive.route('client.:id([0-9a-fA-F]{0,24})', ['get'], (req, res, next) =>
       res.json(client.bills_receives);
     }   
   });*/
-  BillsReceive.find({client: req.params.id})
-  .exec((error, bills_receives) => {
-    if (error){
-      res.status(500).json({erros: [error]})
-    } else {
-      res.json(bills_receives);
-    }   
-  })
+  BillsReceive
+    .find({client: req.params.id})
+    .sort({code: 1, quota: 1})
+    .exec((error, bills_receives) => {
+      if (error){
+        res.status(500).json({erros: [error]})
+      } else {
+        res.json(bills_receives);
+      }   
+    })
 });
 
 BillsReceive.route('client.:id([0-9a-fA-F]{0,24}).paid', ['get'], (req, res, next) => {
@@ -88,14 +90,16 @@ BillsReceive.route('client.:id([0-9a-fA-F]{0,24}).paid', ['get'], (req, res, nex
       res.json(client.bills_receives);
     }   
   }); */ 
-  BillsReceive.find({client: req.params.id, situation : 'C'})
-  .exec((error, bills_receives) => {
-    if (error){
-      res.status(500).json({erros: [error]})
-    } else {
-      res.json(bills_receives);
-    }   
-  })
+  BillsReceive
+    .find({client: req.params.id, situation : 'C'})
+    .sort({code: 1, quota: 1})
+    .exec((error, bills_receives) => {
+      if (error){
+        res.status(500).json({erros: [error]})
+      } else {
+        res.json(bills_receives);
+      }   
+    })
 });
 
 BillsReceive.route('client.:id([0-9a-fA-F]{0,24}).no_paid', ['get'], (req, res, next) => {
@@ -113,14 +117,16 @@ BillsReceive.route('client.:id([0-9a-fA-F]{0,24}).no_paid', ['get'], (req, res, 
       res.json(client.bills_receives);
     }   
   }); */
-  BillsReceive.find({client: req.params.id, situation : 'O'})
-  .exec((error, bills_receives) => {
-    if (error){
-      res.status(500).json({erros: [error]})
-    } else {
-      res.json(bills_receives);
-    }   
-  })
+  BillsReceive
+    .find({client: req.params.id, situation : 'O'})
+    .sort({code: 1, quota: 1})
+    .exec((error, bills_receives) => {
+      if (error){
+        res.status(500).json({erros: [error]})
+      } else {
+        res.json(bills_receives);
+      }   
+    })
 });
 
 BillsReceive.route('next_code', ['get'], (req, res, next) => {
@@ -147,10 +153,9 @@ BillsReceive.route('create_quotas.:id([0-9a-fA-F]{0,24})', ['post'], (req, res, 
       console.log(doc);
       if (error)
         res.status(500).json({erros: [error]});
-      let nextCode = doc.code;
+      let nextCode = doc.code + 1;
       bills_receives = req.body.bills_receives;
       Object.values(bills_receives).forEach(bill_receive => {
-        nextCode++;
         const _bill_receive = new BillsReceive({
           client: req.params.id,
           code: nextCode,
