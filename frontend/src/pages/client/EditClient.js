@@ -109,7 +109,6 @@ const styles = theme => ({
 class EditClient extends Component {
   constructor(props) {
     super(props);
-    console.log(props.data);
     this.state = {
       tabValue: 'EDIT',    
       bills_receives: [],
@@ -163,8 +162,10 @@ class EditClient extends Component {
 
   handleCloseCreateModal = (event, reason) => {
     this.setState({ openCreateModal: false })
-    if (reason = 'created')
-      this.fetchBillsReceives()
+    if (reason = 'created') {
+      this.props.handleOpenMessage(true, 'success', 'Títulos criado com sucesso! ');
+      this.fetchBillsReceives();
+    }
   }
         
   handleCreateBillReceive = () => {
@@ -186,7 +187,7 @@ class EditClient extends Component {
   handleSaveBillReceive = (data) => {
     billsReceiveservice.update(data)
       .then(() => this.setState({ openEditModal: false }))
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error.response))
   }
   
   render() {
@@ -196,7 +197,7 @@ class EditClient extends Component {
       handleValueChange,      
       handleSave,
       handleCancel,
-      handleDateValueChange,      
+      handleDateValueChange,
     } = this.props; 
 
     const { 
@@ -527,6 +528,7 @@ EditClient.propTypes = {
   handleCancel: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   handleDateValueChange: PropTypes.func.isRequired,
+  handleOpenMessage: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EditClient);
