@@ -47,7 +47,10 @@ const styles = theme => ({
   },
   item: {
     padding: `${theme.spacing.unit}px !important`
-  }
+  },
+  button: {
+    margin: theme.spacing.unit,
+  }, 
 });
 
 class BillReceiveCreateModal extends React.Component {

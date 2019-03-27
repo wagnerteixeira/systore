@@ -10,7 +10,9 @@ import Button from '@material-ui/core/Button';
 
 import ptLocale from "date-fns/locale/pt-BR";
 
+import NumberFormatCustom from '../../components/common/NumberFormatCustom';
 import ModalWrapped from '../../components/common/Modal';
+import { getDateToString } from '../../utils/operators';
 
 const styles = theme => ({
   paper:{
@@ -24,21 +26,61 @@ const styles = theme => ({
     outline: 'none',
     width: theme.spacing.unit * 60,
   },  
+  button: {
+    margin: theme.spacing.unit,
+  }, 
 });
 
 class BillReceiveEditModal extends React.Component {
 
-  
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {
+        _id : props.bill._id,
+        client: props.bill.client,
+        code: props.bill.code,
+        quota: props.bill.quota, 
+        original_value: props.bill.original_value["$numberDecimal"],
+        interest: props.bill.interest["$numberDecimal"],
+        final_value: props.bill.final_value["$numberDecimal"],
+        purchase_date: props.bill.purchase_date,
+        due_date: props.bill.due_date,
+        pay_date: props.bill.pay_date,
+        days_delay: props.bill.days_delay,
+        situation: props.bill.situation,
+        vendor: props.bill.vendor,
+      }
+    }
+  }
+
+  handleValueChangeBill = name => event => {
+    this.setState({ data: { ...this.state.data, [name]: event.target.value}})
+  };  
+
+  handleValueChangeInterestBill = event => {
+    this.setState({ data: { ...this.state.data, interest: event.target.value, final_value: parseFloat(this.state.data.original_value) + parseFloat(event.target.value)}})
+  }
+
+  handleDateValueChangeBill = name => date => {
+    this.setState({ data: { ...this.state.data, [name]: date}});
+  }
+
   render() {
     const {
       open,
       handleClose,
-      classes,
-      bill,
-      handleValueChangeBill,
-      handleValueChangeInterestBill,
-      handleDateValueChangeBill,
+      handleSave,
+      classes,    
     } = this.props
+
+    const {
+      data,
+    } = this.state;
+
+    let _original_value = parseFloat(data.original_value).toFixed(2).replace('.', ',');
+    let _final_value = parseFloat(data.final_value).toFixed(2).replace('.', ',');
+    let _interest_value = parseFloat(data.interest).toFixed(2).replace('.', ',');
 
     return (
       <ModalWrapped
@@ -52,29 +94,29 @@ class BillReceiveEditModal extends React.Component {
             </Grid>         
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
               <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
-                <DatePicker
+                <TextField
                   id="purchase_date"
                   label="Data da venda"
                   className={classes.textField}
-                  value={bill.purchase_date}
-                  onChange={handleDateValueChangeBill('purchase_date')}
+                  value={getDateToString(data.purchase_date)}
                   margin="normal"
-                  format={"dd/MM/yyyy"}
-                  readOnly
                   fullWidth
-                />
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />                
               </Grid>
               <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
-                <DatePicker
+                <TextField
                   id="due_date"
                   label="Data de vencimento"
                   className={classes.textField}
-                  value={bill.due_date}
-                  onChange={handleDateValueChangeBill('due_date')}
+                  value={getDateToString(data.due_date)}
                   margin="normal"
-                  format={"dd/MM/yyyy"}
-                  readOnly
                   fullWidth
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
               <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
@@ -82,8 +124,8 @@ class BillReceiveEditModal extends React.Component {
                   id="pay_date"
                   label="Data de Pagamento"
                   className={classes.textField}
-                  value={bill.pay_date}
-                  onChange={handleDateValueChangeBill('pay_date')}
+                  value={data.pay_date}
+                  onChange={this.handleDateValueChangeBill('pay_date')}
                   margin="normal"
                   format={"dd/MM/yyyy"}
                   fullWidth
@@ -95,10 +137,12 @@ class BillReceiveEditModal extends React.Component {
                 id="vendor"
                 label="Nome do vendedor"
                 className={classes.textField}
-                value={bill.vendor}
-                onChange={handleValueChangeBill('vendor')}
+                value={data.vendor}
+                onChange={this.handleValueChangeBill('vendor')}
                 margin="normal"
-                readOnly
+                InputProps={{
+                  readOnly: true,
+                }}
                 fullWidth
               />   
             </Grid>  
@@ -107,10 +151,12 @@ class BillReceiveEditModal extends React.Component {
                 id="code"
                 label="Código"
                 className={classes.textField}
-                value={bill.code}
-                onChange={handleValueChangeBill('code')}
+                value={data.code}
+                onChange={this.handleValueChangeBill('code')}
                 margin="normal"
-                readOnly
+                InputProps={{
+                  readOnly: true,
+                }}
                 fullWidth
               />
             </Grid>
@@ -119,10 +165,12 @@ class BillReceiveEditModal extends React.Component {
                 id="quota"
                 label="Parcela"
                 className={classes.textField}
-                value={bill.quota}
-                onChange={handleValueChangeBill('quota')}
+                value={data.quota}
+                onChange={this.handleValueChangeBill('quota')}
                 margin="normal"
-                readOnly
+                InputProps={{
+                  readOnly: true,
+                }}
                 fullWidth
               />
             </Grid>
@@ -131,11 +179,14 @@ class BillReceiveEditModal extends React.Component {
                 id="original_value"
                 label="Valor"
                 className={classes.textField}
-                value={bill.original_value["$numberDecimal"]}
-                onChange={handleValueChangeBill('original_value')}
+                value={_original_value}
+                onChange={this.handleValueChangeBill('original_value')}
                 margin="normal"
-                readOnly
                 fullWidth
+                InputProps={{
+                  inputComponent: NumberFormatCustom,
+                  readOnly: true,
+                }}
               />
             </Grid>
             <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
@@ -143,10 +194,13 @@ class BillReceiveEditModal extends React.Component {
                 id="interest"
                 label="Juros"
                 className={classes.textField}
-                value={bill.interest["$numberDecimal"]}
-                onChange={handleValueChangeInterestBill}
+                value={_interest_value}
+                onChange={this.handleValueChangeInterestBill}
                 margin="normal"
                 fullWidth
+                InputProps={{
+                  inputComponent: NumberFormatCustom,
+                }}
               />
             </Grid>
             <Grid className={classes.item} item xs={12} sm={4} md={4} lg={4} xl={4} >
@@ -154,10 +208,13 @@ class BillReceiveEditModal extends React.Component {
                 id="final_value"
                 label="Valor pago"
                 className={classes.textField}
-                value={bill.final_value["$numberDecimal"]}
-                onChange={handleValueChangeBill('final_value')}
+                value={_final_value}
+                onChange={this.handleValueChangeBill('final_value')}
                 margin="normal"
                 fullWidth
+                InputProps={{
+                  inputComponent: NumberFormatCustom,
+                }}
               />
             </Grid>
           </Grid>
@@ -166,7 +223,7 @@ class BillReceiveEditModal extends React.Component {
                   variant="outlined"
                   color="primary"
                   className={classes.button}
-                  //onClick={handleSave}
+                  onClick={() => handleSave(this.state.data)}
                 >
                   Salvar
                 </Button>
@@ -188,10 +245,8 @@ BillReceiveEditModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
+  handleSave: PropTypes.func.isRequired,
   bill: PropTypes.object.isRequired,
-  handleValueChangeBill: PropTypes.func.isRequired,
-  handleValueChangeInterestBill: PropTypes.func.isRequired,
-  handleDateValueChangeBill: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(BillReceiveEditModal);

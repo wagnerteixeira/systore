@@ -26,8 +26,6 @@ import TextMaskCustom from '../../components/common/TextMaskCustom';
 import BillReceiveEditModal from '../billReceive/BillReceiveEditModal';
 import BillReceiveCreateModal from '../billReceive/BillReceiveCreateModal';
 
-
-
 import ptLocale from "date-fns/locale/pt-BR";
 
 import billsReceiveservice from '../../services/billsReceiveService';
@@ -109,7 +107,6 @@ const styles = theme => ({
 class EditClient extends Component {
   constructor(props) {
     super(props);
-    console.log(props.data);
     this.state = {
       tabValue: 'EDIT',    
       bills_receives: [],
@@ -153,7 +150,6 @@ class EditClient extends Component {
   } 
 
   handleEditBillReceive = (bill_receive) => {
-    console.log(bill_receive);   
     this.setState({ openEditModal: true, bill : bill_receive });  
   }
   
@@ -171,22 +167,26 @@ class EditClient extends Component {
     this.setState({ openCreateModal: true })
   }  
 
-  handleValueChangeBill = name => event => {
-    this.setState({ bill: { ...this.state.bill, [name]: event.target.value}})
-  };  
-
-  handleValueChangeInterestBill = event => {
-    this.setState({ bill: { ...this.state.bill, interest: event.target.value, pay_value: parseFloat(this.state.bill.original_value) + parseFloat(event.target.value)}})
-  }
-
-  handleDateValueChangeBill = name => date => {
-    this.setState({ bill: { ...this.state.bill, [name]: date}});
-  }
-
   handleSaveBillReceive = (data) => {
     billsReceiveservice.update(data)
-      .then(() => this.setState({ openEditModal: false }))
+      .then(() => {
+        this.setState({ openEditModal: false });
+        this.fetchBillsReceives();
+      })
       .catch((error) => console.log(error))
+  }
+
+  renderEditModal() {
+    if (this.state.openEditModal === true){
+      return (
+        <BillReceiveEditModal
+          open={this.state.openEditModal}
+          bill={this.state.bill}
+          handleClose={this.handleCloseEditModal}
+          handleSave={this.handleSaveBillReceive}
+        />
+      )
+    }
   }
   
   render() {
@@ -501,14 +501,7 @@ class EditClient extends Component {
             </Table>
           </div> 
           <br />
-          <BillReceiveEditModal
-            open={this.state.openEditModal}
-            bill={this.state.bill}
-            handleClose={this.handleCloseEditModal}
-            handleValueChangeBill={this.handleValueChangeBill}
-            handleValueChangeInterestBill={this.handleValueChangeInterestBill}
-            handleDateValueChangeBill={this.handleDateValueChangeBill}
-          />
+          {this.renderEditModal()}
           <BillReceiveCreateModal
             open={openCreateModal}
             handleClose={this.handleCloseCreateModal}
