@@ -159,8 +159,10 @@ class EditClient extends Component {
 
   handleCloseCreateModal = (event, reason) => {
     this.setState({ openCreateModal: false })
-    if (reason = 'created')
-      this.fetchBillsReceives()
+    if (reason = 'created') {
+      this.props.handleOpenMessage(true, 'success', 'Títulos criado com sucesso! ');
+      this.fetchBillsReceives();
+    }
   }
         
   handleCreateBillReceive = () => {
@@ -173,7 +175,7 @@ class EditClient extends Component {
         this.setState({ openEditModal: false });
         this.fetchBillsReceives();
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error.response))
   }
 
   renderEditModal() {
@@ -196,7 +198,7 @@ class EditClient extends Component {
       handleValueChange,      
       handleSave,
       handleCancel,
-      handleDateValueChange,      
+      handleDateValueChange,
     } = this.props; 
 
     const { 
@@ -520,6 +522,7 @@ EditClient.propTypes = {
   handleCancel: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   handleDateValueChange: PropTypes.func.isRequired,
+  handleOpenMessage: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EditClient);

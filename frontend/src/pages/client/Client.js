@@ -249,6 +249,14 @@ class Client extends Component {
     this.setState({ ...this.state, messageOpen: false });
   }
 
+  handleOpenMessage(messageOpen, variantMessage, messageText) {
+    this.setState({
+      messageOpen: messageOpen,
+      messageText: messageText,
+      variantMessage: variantMessage
+    })
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -304,6 +312,7 @@ class Client extends Component {
                 handleCancel={this.handleCancel}
                 handleSave={this.handleSave}    
                 handleDateValueChange={this.handleDateValueChange}
+                handleOpenMessage={this.handleOpenMessage}
             />}
       </div>
     );

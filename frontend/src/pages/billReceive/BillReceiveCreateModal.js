@@ -38,6 +38,9 @@ const styles = theme => ({
     transform: 'translate(-50%,-50%)',
     outline: 'none',
     width: theme.spacing.unit * 60,
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    maxHeight: '80%'
   },
   margin: {
     margin: theme.spacing.unit
@@ -54,7 +57,6 @@ const styles = theme => ({
 });
 
 class BillReceiveCreateModal extends React.Component {
-
   state = {  
     code: '',
     quotas: 0, 
@@ -96,7 +98,7 @@ class BillReceiveCreateModal extends React.Component {
       message += "Faça o cálculo das parcelas!\n\n";
     if (!this.state.purchase_date)
       message += "Informe a data da venda!\n\n";
-    if ((!this.state.vendor) || (this.state.vendor == ""))
+    if ((!this.state.vendor) || (this.state.vendor === ""))
       message += "Informe o vendedor!\n\n";
     return message    
   }
@@ -110,7 +112,7 @@ class BillReceiveCreateModal extends React.Component {
       let due_date = new Date(this.state.purchase_date.getTime());
       for (i = 0; i < this.state.quotas; i++){
         let original_value = _quotaValue;
-        if (i == (this.state.quotas -1)){          
+        if (i === (this.state.quotas -1)){          
           original_value = parseFloat(this.state.original_value - parseFloat(((this.state.quotas -1) * _quotaValue)).toFixed(2)).toFixed(2)
         }
         due_date.setDate(due_date.getDate() + 30);
@@ -135,7 +137,7 @@ class BillReceiveCreateModal extends React.Component {
 
   handleSaveQuotas = clientId => handleClose => () => {
     let message = this.validadeSaveQuotas();
-    if (message != ""){
+    if (message !== ""){
       this.setState({
         messageOpen: true,
         messageText: message,
@@ -168,6 +170,19 @@ class BillReceiveCreateModal extends React.Component {
       );
   }
 
+  handleCancel = () => {
+    this.setState({
+      code: '',
+      quotas: 0, 
+      original_value: 0.0,
+      purchase_date: new Date(),
+      vendor: '',      
+      bills_receives: [],
+    })
+
+    this.props.handleClose(null, 'cancel')
+  }
+
   render() {    
     const {
       open,
@@ -186,7 +201,7 @@ class BillReceiveCreateModal extends React.Component {
       variantMessage,
       messageText,
     } = this.state;    
-
+    console.log(this.state)
     let _original_value = parseFloat(original_value).toFixed(2).replace('.', ',');
     return (
       <ModalWrapped
@@ -304,7 +319,7 @@ class BillReceiveCreateModal extends React.Component {
                   variant="outlined"
                   color="secondary"
                   className={classes.button}
-                  onClick={() => handleClose(null, 'cancel')}
+                  onClick={this.handleCancel}
                 >
                   Cancelar
                 </Button>

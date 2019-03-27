@@ -18,7 +18,7 @@ function NumberFormatCustom(props) {
       }}
       //thousandSeparator='.'
       decimalSeparator=','
-      //decimalScale={2}
+      decimalScale={2}
       //fixedDecimalScale
     />
   );
