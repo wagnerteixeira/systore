@@ -5,29 +5,20 @@ const express = require('express');
 const server = express();
 const cors = require('cors');
 const queryParser = require('express-query-int');
+const methodOverride = require('method-override');
+const morgan = require('morgan');
 
-server.use(bodyParser.urlencoded({ extended : true}));
+server.use(morgan('dev'));
+server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
+server.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 server.use(cors());
 server.use(queryParser());
+server.use(methodOverride());
 
 server.listen(port, () => {
-    console.log(`BAKEND is running on port ${port}`)   
-    /*var promise = Product.create({ 
-        type: 1,
-        coast: 10.25,
-        daysOfValidity: 5,
-        Description: 'Teste',
-        Description2: 'Teste 2',
-        printPackingDate: true,
-        extraInfo: 'String',
-        extraInfo2: 'String',
-        extraInfo3: 'String',
-    })     
-    promise.then(() => {
-       console.log('Criou')
-    })*/
-    //console.log(app._router.stack)
+  console.log(`BAKEND is running on port ${port}\n`);
+  console.log('List of requests below\n');
 });
 
 module.exports = server;

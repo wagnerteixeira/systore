@@ -158,8 +158,9 @@ class EditClient extends Component {
   }
 
   handleCloseCreateModal = (event, reason) => {
+    console.log(reason);
     this.setState({ openCreateModal: false })
-    if (reason = 'created') {
+    if (reason === 'created') {
       this.props.handleOpenMessage(true, 'success', 'Títulos criado com sucesso! ');
       this.fetchBillsReceives();
     }

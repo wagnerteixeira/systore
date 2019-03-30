@@ -249,7 +249,7 @@ class Client extends Component {
     this.setState({ ...this.state, messageOpen: false });
   }
 
-  handleOpenMessage(messageOpen, variantMessage, messageText) {
+  handleOpenMessage = (messageOpen, variantMessage, messageText) => {
     this.setState({
       messageOpen: messageOpen,
       messageText: messageText,

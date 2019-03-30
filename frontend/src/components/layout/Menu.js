@@ -130,7 +130,7 @@ class Menu extends React.Component {
   constructor(props) {
     super(props);
     this.state = { user: {}, 
-                   logged: true, 
+                   logged: false, 
                    drawerOpen: false, 
                    headerText: props.initialheaderText,
                    userName: '',
