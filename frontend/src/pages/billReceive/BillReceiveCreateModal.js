@@ -52,7 +52,10 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit
-  }
+  },
+  table: {
+    margin: `${theme.spacing.unit}px`
+  },
 });
 
 class BillReceiveCreateModal extends React.Component {
@@ -279,10 +282,10 @@ class BillReceiveCreateModal extends React.Component {
               className={classes.item}
               item
               xs={12}
-              sm={4}
-              md={4}
-              lg={4}
-              xl={4}
+              sm={3}
+              md={3}
+              lg={3}
+              xl={3}
             >
               <TextField
                 className={classes.margin}
@@ -293,6 +296,25 @@ class BillReceiveCreateModal extends React.Component {
                 InputProps={{
                   inputComponent: NumberFormatCustom
                 }}
+              />
+            </Grid>
+            <Grid
+              className={classes.item}
+              item
+              xs={12}
+              sm={3}
+              md={3}
+              lg={3}
+              xl={3}
+            >
+              <TextField
+                id="quotas"
+                label="Parcelas"
+                className={classes.margin}
+                value={quotas}
+                onChange={this.handleValueChange('quotas')}
+                margin="normal"
+                fullWidth
               />
             </Grid>
             <Grid
@@ -321,34 +343,15 @@ class BillReceiveCreateModal extends React.Component {
                   <AttachMoneyIcon />
                 </Fab>
               </Tooltip>
-            </Grid>
+            </Grid>            
             <Grid
               className={classes.item}
               item
               xs={12}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={6}
-            >
-              <TextField
-                id="quotas"
-                label="Parcelas"
-                className={classes.margin}
-                value={quotas}
-                onChange={this.handleValueChange('quotas')}
-                margin="normal"
-                fullWidth
-              />
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={6}
+              sm={12}
+              md={12}
+              lg={12}
+              xl={12}
             >
               <TextField
                 id="vendor"
@@ -356,10 +359,10 @@ class BillReceiveCreateModal extends React.Component {
                 className={classes.margin}
                 value={vendor}
                 onChange={this.handleValueChange('vendor')}
-                margin="normal"
+                margin="0 1 2 3"
                 fullWidth
               />
-            </Grid>
+            </Grid>            
           </Grid>
           <Paper className={classes.root}>
             <Table className={classes.table}>

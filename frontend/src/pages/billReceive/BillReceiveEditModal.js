@@ -57,6 +57,7 @@ class BillReceiveEditModal extends React.Component {
         vendor: props.bill.vendor
       }
     };
+    this._handleKeyPress = this._handleKeyPress.bind(this);
   }
 
   handleMessageClose = () => {
@@ -113,6 +114,26 @@ class BillReceiveEditModal extends React.Component {
       })
       .catch(error => console.log(error.response));
   };
+
+  _handleKeyPress(e, field) {
+    // If enter key is pressed, focus next input field.
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      let next = this.refs[field.name].nextSibling;
+      if (next && next.tagName === "INPUT") {
+        this.refs[field.id].nextSibling.focus();
+      }
+    }
+  }
+    
+  componentDidMount() {
+    for (let x in this.refs) {
+      this.refs[x].onkeypress = (e) => 
+        this._handleKeyPress(e, this.refs[x]);
+    }    
+    //this.refs.pay_date.focus();
+  }
+  
 
   render() {
     const { open, handleClose, classes } = this.props;
@@ -216,6 +237,7 @@ class BillReceiveEditModal extends React.Component {
                 margin="normal"
                 format={'dd/MM/yyyy'}
                 fullWidth
+                ref="pay_date"
               />
             </Grid>
           </MuiPickersUtilsProvider>
@@ -328,6 +350,7 @@ class BillReceiveEditModal extends React.Component {
               InputProps={{
                 inputComponent: NumberFormatCustom
               }}
+              ref="interest"
             />
           </Grid>
           <Grid
@@ -350,6 +373,7 @@ class BillReceiveEditModal extends React.Component {
               InputProps={{
                 inputComponent: NumberFormatCustom
               }}
+              ref="final_value"
             />
           </Grid>
         </Grid>
