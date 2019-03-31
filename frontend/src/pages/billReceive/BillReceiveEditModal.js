@@ -57,6 +57,7 @@ class BillReceiveEditModal extends React.Component {
         vendor: props.bill.vendor
       }
     };
+    this._handleKeyPress = this._handleKeyPress.bind(this);
   }
 
   handleMessageClose = () => {
@@ -216,6 +217,7 @@ class BillReceiveEditModal extends React.Component {
                 margin="normal"
                 format={'dd/MM/yyyy'}
                 fullWidth
+                ref="pay_date"
               />
             </Grid>
           </MuiPickersUtilsProvider>
@@ -328,6 +330,7 @@ class BillReceiveEditModal extends React.Component {
               InputProps={{
                 inputComponent: NumberFormatCustom
               }}
+              ref="interest"
             />
           </Grid>
           <Grid
@@ -350,6 +353,7 @@ class BillReceiveEditModal extends React.Component {
               InputProps={{
                 inputComponent: NumberFormatCustom
               }}
+              ref="final_value"
             />
           </Grid>
         </Grid>
