@@ -1,6 +1,7 @@
 const BillsReceive = require('../../models/billsReceive');
 const Client = require('../../models/client');
 const errorHandler = require('../common/errorHandler');
+const { getDateToString } = require('../../utils/helpers');
 
 const sendErrorsFromDB = (res, dbErros) => {
   const errors = [];
@@ -28,9 +29,18 @@ BillsReceive.updateOptions({ new: true, runValidators: true });
 BillsReceive.after('post', errorHandler).after('put', errorHandler);
 //BillsReceive.after('post', refClient);
 
-Client.before('delete', (req, res, next) => {
-  if (req.params.id) next();
-  else return res.status(404).send({ errors: ['Título não encontrado'] });
+BillsReceive.before('delete', (req, res, next) => {
+  if (!req.params.id)
+    return res.status(404).send({ errors: ['Título não encontrado'] });
+  BillsReceive.findById(req.params.id, function(error, bill_receive) {
+    if (error) res.status(500).json({ erros: [error] });
+
+    if (bill_receive.due_date || parseFloat(bill_receive.final_value) > 0.0)
+      return res
+        .status(500)
+        .send({ errors: ['Título não pode ser excluído pois já está pago!'] });
+    else next();
+  });
 });
 
 BillsReceive.route('count', ['get'], (req, res, next) => {
@@ -143,16 +153,64 @@ BillsReceive.route('next_code', ['get'], (req, res, next) => {
     });
 });
 
+const validateQuotas = (original_value, bills_receives, purchase_date) => {
+  console.log(
+    `data ${getDateToString(new Date(purchase_date))} \n${JSON.stringify(
+      new Date(purchase_date)
+        .toISOString()
+        .substring(0, 10)
+        .split('-')
+        .reverse()
+        .reduce((el, acc) => el + acc + '/', '')
+        .substr(0, 10)
+    )} \n${new Date(purchase_date).toLocaleDateString()} \n${new Date(
+      purchase_date
+    ).toLocaleDateString('pt-BR')}  \n${new Date(
+      purchase_date
+    ).toUTCString()} \n${new Date(purchase_date).toString()}`
+  );
+  let error = '';
+  let sum_original_value = 0.0;
+  bills_receives.forEach(bill_receive => {
+    sum_original_value += parseFloat(bill_receive.original_value);
+    if (new Date(bill_receive.due_date) < new Date(purchase_date))
+      error += `A data de pagamento (${getDateToString(
+        new Date(bill_receive.due_date)
+      )}) da parcela ${
+        bill_receive.quota
+      } é menor que a data da compra (${getDateToString(
+        new Date(purchase_date)
+      )})\n`;
+  });
+
+  if (parseFloat(sum_original_value) !== parseFloat(original_value))
+    error += `A soma das parcelas (R$ ${parseFloat(sum_original_value)
+      .toFixed(2)
+      .replace('.', ',')}) difere do valor do título (R$ ${parseFloat(
+      original_value
+    )
+      .toFixed(2)
+      .replace('.', ',')})!\n`;
+
+  return error;
+};
+
 BillsReceive.route(
   'create_quotas.:id([0-9a-fA-F]{0,24})',
   ['post'],
   (req, res, next) => {
+    let validate = validateQuotas(
+      req.body.original_value,
+      req.body.bills_receives,
+      req.body.purchase_date
+    );
+    if (validate) return res.status(500).json({ erros: [validate] });
     let bills_receives = [];
     BillsReceive.findOne()
       .sort({ code: -1 })
       .exec((error, doc) => {
         //console.log(doc);
-        if (error) res.status(500).json({ erros: [error] });
+        if (error) return res.status(500).json({ erros: [error] });
         let nextCode = doc.code + 1;
         bills_receives = req.body.bills_receives;
         let results = Object.values(bills_receives).map(bill_receive => {

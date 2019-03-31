@@ -21,7 +21,7 @@ module.exports = function(server, headerLog, itemLog) {
   const protectedApi = express.Router();
   server.use('/api', protectedApi);
 
-  //protectedApi.use(auth);
+  protectedApi.use(auth);
 
   ProductService.register(protectedApi, '/product');
   UserService.register(protectedApi, '/user');

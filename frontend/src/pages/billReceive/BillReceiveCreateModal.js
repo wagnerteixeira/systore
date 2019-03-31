@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -74,7 +75,7 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleValueChange = name => event => {
-    this.setState({ [name]: event.target.value });
+    this.setState({ [name]: event.target.value.toUpperCase() });
   };
 
   handleValueChangeInterest = event => {

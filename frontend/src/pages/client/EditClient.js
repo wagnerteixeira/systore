@@ -32,6 +32,7 @@ import BillReceiveCreateModal from '../billReceive/BillReceiveCreateModal';
 import ptLocale from 'date-fns/locale/pt-BR';
 
 import billsReceiveservice from '../../services/billsReceiveService';
+import { getErrosFromApi } from '../../utils/errorsHelper';
 
 const styles = theme => ({
   container: {
@@ -150,7 +151,9 @@ class EditClient extends Component {
     billsReceiveservice
       .remove(this.state.bills_receives[key]._id)
       .then(() => this.setState({ bills_receives: copyBill }))
-      .catch(error => console.log(error));
+      .catch(error =>
+        this.props.handleOpenMessage(true, 'error', getErrosFromApi(error))
+      );
   };
 
   handleEditBillReceive = bill_receive => {
