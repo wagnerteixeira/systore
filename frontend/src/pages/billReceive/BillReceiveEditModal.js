@@ -115,26 +115,6 @@ class BillReceiveEditModal extends React.Component {
       .catch(error => console.log(error.response));
   };
 
-  _handleKeyPress(e, field) {
-    // If enter key is pressed, focus next input field.
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      let next = this.refs[field.name].nextSibling;
-      if (next && next.tagName === "INPUT") {
-        this.refs[field.id].nextSibling.focus();
-      }
-    }
-  }
-    
-  componentDidMount() {
-    for (let x in this.refs) {
-      this.refs[x].onkeypress = (e) => 
-        this._handleKeyPress(e, this.refs[x]);
-    }    
-    //this.refs.pay_date.focus();
-  }
-  
-
   render() {
     const { open, handleClose, classes } = this.props;
 
