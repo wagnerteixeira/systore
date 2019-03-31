@@ -25,6 +25,7 @@ import MessageSnackbar from '../../components/common/MessageSnackbar';
 
 import { getDateToString } from '../../utils/operators';
 import billsReceiveService from '../../services/billsReceiveService';
+import { getErrosFromApi } from '../../utils/errorsHelper';
 
 const styles = theme => ({
   paper: {
@@ -151,11 +152,16 @@ class BillReceiveCreateModal extends React.Component {
       return;
     }
     let data = {
-      original_value: this.state.original_value,
+      original_value: this.state.original_value.replace(',', '.'),
       quotas: this.state.quotas,
       vendor: this.state.vendor,
       purchase_date: this.state.purchase_date,
-      bills_receives: this.state.bills_receives
+      bills_receives: this.state.bills_receives.map(bills_receive => {
+        return {
+          ...bills_receive,
+          original_value: bills_receive.original_value.replace(',', '.')
+        };
+      })
     };
 
     billsReceiveService
@@ -171,7 +177,13 @@ class BillReceiveCreateModal extends React.Component {
         });
         handleClose(null, 'created');
       })
-      .catch(error => console.log(error.response));
+      .catch(error =>
+        this.setState({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'error'
+        })
+      );
   };
 
   handleCancel = () => {
