@@ -7,6 +7,10 @@ import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
+import moment from 'moment';
 
 import ptLocale from 'date-fns/locale/pt-BR';
 
@@ -57,7 +61,6 @@ class BillReceiveEditModal extends React.Component {
         vendor: props.bill.vendor
       }
     };
-    this._handleKeyPress = this._handleKeyPress.bind(this);
   }
 
   handleMessageClose = () => {
@@ -88,7 +91,8 @@ class BillReceiveEditModal extends React.Component {
     let message = '';
     if (!this.state.data.final_value || this.state.data.final_value <= 0)
       message += 'Informe o valor pago!\n\n';
-    if (!this.state.data.pay_date) message += 'Informe a data de pagamento!\n\n';
+    if (!this.state.data.pay_date)
+      message += 'Informe a data de pagamento!\n\n';
     return message;
   };
 
@@ -113,6 +117,26 @@ class BillReceiveEditModal extends React.Component {
         this.props.handleSave('saved');
       })
       .catch(error => console.log(error.response));
+  };
+
+  handleGenerateInterest = () => {
+    let days = moment(this.state.data.pay_date).diff(
+      this.state.data.due_date,
+      'days'
+    );
+    let p = 0;
+    if (days > 0) {
+      p = (0.07 / 30) * days;
+    }
+    let value = this.state.data.original_value * p;
+    this.setState({
+      data: {
+        ...this.state.data,
+        interest: value,
+        final_value:
+          parseFloat(this.state.data.original_value) + parseFloat(value)
+      }
+    });
   };
 
   render() {
@@ -247,10 +271,10 @@ class BillReceiveEditModal extends React.Component {
             className={classes.item}
             item
             xs={12}
-            sm={6}
-            md={6}
-            lg={6}
-            xl={6}
+            sm={10}
+            md={10}
+            lg={10}
+            xl={10}
           >
             <TextField
               id="code"
@@ -269,10 +293,10 @@ class BillReceiveEditModal extends React.Component {
             className={classes.item}
             item
             xs={12}
-            sm={6}
-            md={6}
-            lg={6}
-            xl={6}
+            sm={2}
+            md={2}
+            lg={2}
+            xl={2}
           >
             <TextField
               id="quota"
@@ -291,10 +315,10 @@ class BillReceiveEditModal extends React.Component {
             className={classes.item}
             item
             xs={12}
-            sm={4}
-            md={4}
-            lg={4}
-            xl={4}
+            sm={5}
+            md={5}
+            lg={5}
+            xl={5}
           >
             <TextField
               id="original_value"
@@ -314,10 +338,10 @@ class BillReceiveEditModal extends React.Component {
             className={classes.item}
             item
             xs={12}
-            sm={4}
-            md={4}
-            lg={4}
-            xl={4}
+            sm={5}
+            md={5}
+            lg={5}
+            xl={5}
           >
             <TextField
               id="interest"
@@ -334,13 +358,40 @@ class BillReceiveEditModal extends React.Component {
             />
           </Grid>
           <Grid
+            container
+            alignItems="center"
+            justify="center"
             className={classes.item}
             item
             xs={12}
-            sm={4}
-            md={4}
-            lg={4}
-            xl={4}
+            sm={2}
+            md={2}
+            lg={2}
+            xl={2}
+          >
+            <Tooltip
+              title="Calcular juros"
+              placement={'bottom-start'}
+              enterDelay={300}
+            >
+              <Fab
+                color="primary"
+                aria-label="Calcular juros"
+                size="small"
+                onClick={this.handleGenerateInterest}
+              >
+                <AttachMoneyIcon />
+              </Fab>
+            </Tooltip>
+          </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={5}
+            md={5}
+            lg={5}
+            xl={5}
           >
             <TextField
               id="final_value"

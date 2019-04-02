@@ -372,7 +372,6 @@ class BillReceiveCreateModal extends React.Component {
                 className={classes.margin}
                 value={vendor}
                 onChange={this.handleValueChange('vendor')}
-                margin="0 1 2 3"
                 fullWidth
               />
             </Grid>            
