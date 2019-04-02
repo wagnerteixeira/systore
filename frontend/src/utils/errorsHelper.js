@@ -15,7 +15,7 @@ export const getErrosFromApi = error => {
     } else return JSON.stringify(error.response);
   } else if (error) {
     if (error.message) {
-      if (error.message == 'Network Error')
+      if (error.message === 'Network Error')
         return 'Falha de conexão com o servidor, verifique sua conexão e tente novamente.';
       else return error.message;
     } else return JSON.stringify(error);

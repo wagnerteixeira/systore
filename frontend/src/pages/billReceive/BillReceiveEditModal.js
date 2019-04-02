@@ -57,7 +57,7 @@ class BillReceiveEditModal extends React.Component {
         vendor: props.bill.vendor
       }
     };
-    this._handleKeyPress = this._handleKeyPress.bind(this);
+    //this._handleKeyPress = this._handleKeyPress.bind(this);
   }
 
   handleMessageClose = () => {
@@ -88,7 +88,8 @@ class BillReceiveEditModal extends React.Component {
     let message = '';
     if (!this.state.data.final_value || this.state.data.final_value <= 0)
       message += 'Informe o valor pago!\n\n';
-    if (!this.state.data.pay_date) message += 'Informe a data de pagamento!\n\n';
+    if (!this.state.data.pay_date)
+      message += 'Informe a data de pagamento!\n\n';
     return message;
   };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -24,7 +23,6 @@ import NumberFormatCustom from '../../components/common/NumberFormatCustom';
 import ModalWrapped from '../../components/common/Modal';
 import MessageSnackbar from '../../components/common/MessageSnackbar';
 
-import { getDateToString } from '../../utils/operators';
 import billsReceiveService from '../../services/billsReceiveService';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 
@@ -57,7 +55,7 @@ const styles = theme => ({
   },
   table: {
     margin: `${theme.spacing.unit}px`
-  },
+  }
 });
 
 class BillReceiveCreateModal extends React.Component {
@@ -356,7 +354,7 @@ class BillReceiveCreateModal extends React.Component {
                   <AttachMoneyIcon />
                 </Fab>
               </Tooltip>
-            </Grid>            
+            </Grid>
             <Grid
               className={classes.item}
               item
@@ -375,7 +373,7 @@ class BillReceiveCreateModal extends React.Component {
                 margin="0 1 2 3"
                 fullWidth
               />
-            </Grid>            
+            </Grid>
           </Grid>
           <Paper className={classes.root}>
             <Table className={classes.table}>
