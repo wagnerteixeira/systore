@@ -20,16 +20,19 @@ import classNames from 'classnames';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { getLogs } from '../../services/logService';
+import { getDateTimeToString } from '../../utils/operators';
 
 const styles = theme => ({
   root: {
     width: `calc(100% - ${theme.spacing.unit * 6}px)`,
     margin: theme.spacing.unit * 3,
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing.unit * 2,
+    overflowX: 'auto'
   },
   itens: {
     paddingLeft: theme.spacing.unit,
-    marginTop: `${theme.spacing.unit * 1}px !important `
+    marginTop: `${theme.spacing.unit * 1}px !important `,
+    width: `calc(100% - ${theme.spacing.unit * 6}px)`
   },
   item: {
     paddingTop: `${theme.spacing.unit * 0.2}px !important `,
@@ -42,7 +45,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   table: {
-    minWidth: 700
+    minWidth: 500
   }
 });
 
@@ -55,8 +58,26 @@ class ViewLog extends Component {
 
   fetchLogs = () => {
     getLogs(this.state.initialDate, this.state.finalDate).then(res => {
-      console.log(res.data);
-      this.setState({ logs: res.data });
+      //console.log(res.data);
+      let logs = res.data.flatMap(log => {
+        return log.items.map(item => {
+          return {
+            collectionName: log.collectionName,
+            date: log.date,
+            operation:
+              log.operation == 'C'
+                ? 'Criação'
+                : log.operation == 'U'
+                ? 'Alteração'
+                : 'Exclusão',
+            user: log.user,
+            field: item.field,
+            newValue: item.newValue,
+            oldValue: item.oldValue
+          };
+        });
+      });
+      this.setState({ logs: logs });
     });
   };
 
@@ -70,6 +91,7 @@ class ViewLog extends Component {
 
   render() {
     const { classes } = this.props;
+    const { logs } = this.state;
     return (
       <Paper className={classes.root}>
         <Grid container className={classes.itens} spacing={24}>
@@ -92,12 +114,13 @@ class ViewLog extends Component {
                   id="initial_date"
                   label="Data Inicial"
                   className={classes.textField}
-                  value={this.state.finalDate}
-                  onChange={this.handleDateValue('finalDate')}
+                  value={this.state.initialDate}
+                  onChange={this.handleDateValue('initialDate')}
                   margin="normal"
-                  format={'dd/MM/yyyy hh:mm'}
+                  format={'dd/MM/yyyy HH:mm'}
                   fullWidth
                   keyboard
+                  ampm={false}
                   cancelLabel={'Cancelar'}
                   ref="initial_date"
                 />
@@ -121,12 +144,13 @@ class ViewLog extends Component {
                   id="final_date"
                   label="Data Final"
                   className={classes.textField}
-                  value={this.state.initialDate}
-                  onChange={this.handleDateValue('initialDate')}
+                  value={this.state.finalDate}
+                  onChange={this.handleDateValue('finalDate')}
                   margin="normal"
-                  format={'dd/MM/yyyy hh:mm'}
+                  format={'dd/MM/yyyy HH:mm'}
                   fullWidth
                   keyboard
+                  ampm={false}
                   cancelLabel={'Cancelar'}
                   ref="final_date"
                 />
@@ -150,6 +174,7 @@ class ViewLog extends Component {
                   color="primary"
                   aria-label="Pesquisar"
                   className={classNames(classes.fab, classes.searchIcon)}
+                  onClick={this.fetchLogs}
                   size="small"
                 >
                   <SearchIcon />
@@ -161,43 +186,29 @@ class ViewLog extends Component {
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">Data da venda</TableCell>
-              <TableCell padding="checkbox">Título</TableCell>
-              <TableCell padding="checkbox">Parcela</TableCell>
-              <TableCell padding="checkbox">Data de vencimento</TableCell>
-              <TableCell padding="checkbox">Data de pagamento</TableCell>
-              <TableCell padding="checkbox">Valor</TableCell>
-              <TableCell padding="checkbox">Valor pago</TableCell>
-              <TableCell className={classes.headerAcoes} align="right">
-                Ações
-              </TableCell>
+              <TableCell padding="checkbox">Usuário</TableCell>
+              <TableCell padding="checkbox">Tela</TableCell>
+              <TableCell padding="checkbox">Data</TableCell>
+              <TableCell padding="checkbox">Operação</TableCell>
+              <TableCell padding="checkbox">Campo</TableCell>
+              <TableCell padding="checkbox">Valor Anterior</TableCell>
+              <TableCell padding="checkbox">Valor Novo</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(clients).map(key => (
+            {Object.keys(logs).map(key => (
               <TableRow hover key={key}>
-                <TableCell padding="checkbox">{clients[key].name}</TableCell>
-                <TableCell padding="checkbox">{clients[key].cpf}</TableCell>
-                <TableCell padding="none" align="right">
-                  <Fab
-                    color="primary"
-                    aria-label="Edit"
-                    className={classNames(classes.fab, classes.fabEdit)}
-                    onClick={() => handleEdit(key)}
-                    size="small"
-                  >
-                    <Icon fontSize="small">edit_icon</Icon>
-                  </Fab>
-                  <Fab
-                    color="secondary"
-                    aria-label="Delete"
-                    className={classes.fab}
-                    onClick={() => handleDelete(key)}
-                    size="small"
-                  >
-                    <Icon fontSize="small">delete_icon</Icon>
-                  </Fab>
+                <TableCell padding="checkbox">{logs[key].user}</TableCell>
+                <TableCell padding="checkbox">
+                  {logs[key].collectionName}
                 </TableCell>
+                <TableCell padding="checkbox">
+                  {getDateTimeToString(logs[key].date)}
+                </TableCell>
+                <TableCell padding="checkbox">{logs[key].operation}</TableCell>
+                <TableCell padding="checkbox">{logs[key].field}</TableCell>
+                <TableCell padding="checkbox">{logs[key].oldValue}</TableCell>
+                <TableCell padding="checkbox">{logs[key].newValue}</TableCell>
               </TableRow>
             ))}
           </TableBody>
