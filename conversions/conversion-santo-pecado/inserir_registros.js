@@ -17,26 +17,27 @@ const buscarClientes = async () => {
   console.log(res.data);
 }
 
+
 const convertDate = (dateString) => {
- //Date("2015-03-25")
-//27/05/62
- //27/05/1962
-  try{
-    let year = dateString.slice(6, );
-    if (year.length === 2){
-      if (parseInt(year) < 50)
-        year = '20' + year;
-    }
-    let date = year + '-' + dateString.slice(3, 5)  + '-' + dateString.slice(0, 2);
-//    console.log(date)
-    return new Date(date);
-  }
-  catch(e){
-    console.log(e);
-    return null
-  }
-  
-}
+  //Date("2015-03-25")
+ //27/05/62
+  //27/05/1962
+   try{
+     let dateArray = dateString.split('/');    
+     let year = dateArray[2];
+     if (year.length === 2){
+       if (parseInt(year) < 50)
+         year = '20' + year;
+     }
+     return new Date(year, parseInt(dateArray[1]) - 1, dateArray[0]);
+   }
+   catch(e){
+     console.log(e);
+     return null
+   }
+   
+ }
+ 
 
 const findClient = (old_id) => (client) => {
   //console.log(client);
@@ -52,35 +53,40 @@ const inserirRegistros = async () => {
   
   for(i in arrayFileClient) {     
     let line = arrayFileClient[i].split('|');
-    console.log(`Inserindo cliente ${line[0]} - ${line[1]}`);
-    let client = {
-      name: line[1],
-      old_id: line[0],
-      registry_date: convertDate(line[2]),
-      date_of_birth: convertDate(line[3]),
-      address: line[4],
-      neighborhood: line[5],
-      city: line[6],
-      state: line[7],
-      postal_code: line[8].replace(/\D/g,''),
-      cpf: line[15],
-      seller: line[16],
-      job_name: line[17],
-      place_of_birth: line[36],
-      occupation: line[30],
-      spouse: line[18], //conjuge
-      note: line[19], //observações
-      phone1: '', //telefone 1
-      phone2: '', //telefone 2
-    }    
-    try {
-      const res = await axiosInstance.post('/api/client', client);    
-      clients.push(res.data);
+    if (line[1].length > 0){
+      console.log(`Inserindo cliente ${line[0]} - ${line[1]}`);
+      let client = {
+        name: line[1],
+        old_id: line[0],
+        registry_date: convertDate(line[2]),
+        date_of_birth: convertDate(line[3]),
+        address: line[4],
+        neighborhood: line[5],
+        city: line[6],
+        state: line[7],
+        postal_code: line[8].replace(/\D/g,''),
+        cpf: line[15],
+        seller: line[16],
+        job_name: line[17],
+        place_of_birth: line[36],
+        occupation: line[30],
+        spouse: line[18], //conjuge
+        note: line[19], //observações
+        phone1: '', //telefone 1
+        phone2: '', //telefone 2
+      }    
+      try {
+        const res = await axiosInstance.post('/api/client', client);    
+        clients.push(res.data);
+      }
+      catch(e)
+      {
+        problems.push(`Não foi possível inserir o cliente ${line[0]} - ${line[1]}`);
+        console.log(e.response.data.errors);
+      }
     }
-    catch(e)
-    {
-      problems.push(`Não foi possível inserir o cliente ${line[0]} - ${line[1]}`);
-      console.log(e.response.data.errors);
+    else{
+      problems.push(`Não foi possível inserir o cliente ${line[0]} - ${line[1]} pois o nome está vazio`);
     }
     //console.log(res.data);
     
