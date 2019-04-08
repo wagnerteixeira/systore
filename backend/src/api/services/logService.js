@@ -1,14 +1,14 @@
 module.exports = function(headerLog, itemLog) {
   const getHeaders = (req, res, next) => {
-    if (!req.body.dateGt || !req.body.dateGt) {
+    if (!req.body.initialDate || !req.body.finalDate) {
       return res
         .status(500)
         .json({ erros: ['Informe a data inicial e final para busca do log'] });
     }
 
-    let dateGt = new Date(req.body.dateGt);
-    let dateLt = new Date(req.body.dateLt);
-    if (dateGt > dateLt) {
+    let initialDate = new Date(req.body.initialDate);
+    let finalDate = new Date(req.body.finalDate);
+    if (initialDate > finalDate) {
       return res
         .status(500)
         .json({ erros: ['Data inicial maior que data final!'] });
@@ -19,7 +19,7 @@ module.exports = function(headerLog, itemLog) {
     //console.log(dateGt);
     //console.log(dateLt);
     headerLog
-      .find({ date: { $lte: dateLt, $gte: dateGt } })
+      .find({ date: { $gte: initialDate, $lte: finalDate } })
       .sort({ date: -1 })
       .populate({
         path: 'items',

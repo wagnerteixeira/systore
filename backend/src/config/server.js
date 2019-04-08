@@ -8,7 +8,11 @@ const queryParser = require('express-query-int');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
 
-server.use(morgan('dev'));
+server.use(
+  morgan(
+    ':method :url :status :response-time ms - content-length - :res[content-length] remote-addr - :remote-addr date(-3h) - [:date]'
+  )
+);
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 server.use(bodyParser.json({ type: 'application/vnd.api+json' }));

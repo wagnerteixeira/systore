@@ -25,92 +25,91 @@ import Grid from '@material-ui/core/Grid';
 
 import TablePaginationActions from '../../components/common/TablePaginationActions';
 
-
 const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit,
-    overflowX: 'auto',
+    overflowX: 'auto'
   },
   table: {
-    minWidth: 700,
+    minWidth: 700
   },
   fab: {
     marginRight: `${theme.spacing.unit}px !important`,
     color: theme.palette.common.white
   },
   fabEdit: {
-    backgroundColor: theme.palette.edit.main,     
+    backgroundColor: theme.palette.edit.main,
     '&:hover': {
-        backgroundColor: theme.palette.edit.dark,
-    },
+      backgroundColor: theme.palette.edit.dark
+    }
   },
   tableRowHover: {
     '&:hover': {
-      backgroundColor: theme.palette.primary.main,
-    },
+      backgroundColor: theme.palette.primary.main
+    }
   },
   headerAcoes: {
-      paddingRight: `${theme.spacing.unit * 4}px !important`
+    paddingRight: `${theme.spacing.unit * 4}px !important`
   },
   margin: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit
   },
   headerCpf: {
     paddingLeft: `${theme.spacing.unit * 5}px !important`
   },
   searchIcon: {
-    margin: `${theme.spacing.unit * 2}px 2px`,
+    margin: `${theme.spacing.unit * 2}px 2px`
   },
   itens: {
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
   },
   item: {
-    paddingTop: `${theme.spacing.unit * 0.2}px !important `, 
-    paddingBottom: `${theme.spacing.unit * 0.2}px !important `, 
+    paddingTop: `${theme.spacing.unit * 0.2}px !important `,
+    paddingBottom: `${theme.spacing.unit * 0.2}px !important `
   },
   gridSearch: {
-    paddingLeft: `${theme.spacing.unit * 0.2}px !important `, 
+    paddingLeft: `${theme.spacing.unit * 0.2}px !important `,
     [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing.unit,
-    },
+      marginLeft: theme.spacing.unit
+    }
   },
   gridIcon: {
-    paddingLeft: `${theme.spacing.unit * 2}px !important `, 
+    paddingLeft: `${theme.spacing.unit * 2}px !important `,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     [theme.breakpoints.down('md')]: {
-      marginRight: `${theme.spacing.unit * 3}px !important `, 
-    },
-    
+      marginRight: `${theme.spacing.unit * 3}px !important `
+    }
   }
 });
 
 function ViewClient(props) {
-  const { classes, 
-          handleEdit, 
-          handleDelete, 
-          clients, 
-          page, 
-          rowsPerPage,
-          handleChangePage,
-          handleChangeRowsPerPage,
-          countClients, 
-          handleSort,
-          order,
-          columnSort,
-          handleRequestSort,
-          search,
-          handleSearch,
-          handleChangeTextSearch,
-          handleCreate
-         } = props;
+  const {
+    classes,
+    handleEdit,
+    handleDelete,
+    clients,
+    page,
+    rowsPerPage,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    countClients,
+    handleSort,
+    order,
+    columnSort,
+    handleRequestSort,
+    search,
+    handleSearch,
+    handleChangeTextSearch,
+    handleCreate
+  } = props;
   return (
     <Paper className={classes.root}>
-      <Grid container className={classes.itens} container spacing={24}>
-        <Grid className={classes.item} item xs={12} sm={2} md={2} lg={2} xl={2} >
+      <Grid container className={classes.itens} spacing={24}>
+        <Grid className={classes.item} item xs={12} sm={2} md={2} lg={2} xl={2}>
           <FormControl fullWidth className={classes.margin}>
             <InputLabel htmlFor="sort">Pesquisar por</InputLabel>
             <Select
@@ -118,7 +117,7 @@ function ViewClient(props) {
               onChange={handleRequestSort}
               inputProps={{
                 name: 'sort',
-                id: 'sort',
+                id: 'sort'
               }}
             >
               <MenuItem value={'name'}>Nome</MenuItem>
@@ -126,38 +125,59 @@ function ViewClient(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid className={classNames(classes.item, classes.gridSearch)} item xs={12} sm={9} md={9} lg={8} xl={8} >
+        <Grid
+          className={classNames(classes.item, classes.gridSearch)}
+          item
+          xs={12}
+          sm={9}
+          md={9}
+          lg={8}
+          xl={8}
+        >
           <FormControl fullWidth className={classes.margin}>
             <InputLabel htmlFor="search">Digite a pesquisa</InputLabel>
-            <Input fid="search" value={search} onChange={handleChangeTextSearch} onKeyPress={(ev) => ev.key === 'Enter' ? handleSearch() : '' }/>
+            <Input
+              fid="search"
+              value={search}
+              onChange={handleChangeTextSearch}
+              onKeyPress={ev => (ev.key === 'Enter' ? handleSearch() : '')}
+            />
           </FormControl>
         </Grid>
-        <Grid className={classNames(classes.item, classes.gridIcon)} item xs={12} sm={12} md={12} lg={2} xl={2} >
+        <Grid
+          className={classNames(classes.item, classes.gridIcon)}
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={2}
+          xl={2}
+        >
           <Tooltip
-                title="Pesquisar"
-                placement={'bottom-start'}
-                enterDelay={300}
+            title="Pesquisar"
+            placement={'bottom-start'}
+            enterDelay={300}
           >
-            <Fab 
-              color="primary" 
-              aria-label="Pesquisar" 
-              className={classNames(classes.fab, classes.searchIcon)}      
-              onClick={handleSearch}                          
+            <Fab
+              color="primary"
+              aria-label="Pesquisar"
+              className={classNames(classes.fab, classes.searchIcon)}
+              onClick={handleSearch}
               size="small"
             >
               <SearchIcon />
             </Fab>
           </Tooltip>
           <Tooltip
-                title="Incluir Cliente"
-                placement={'bottom-start'}
-                enterDelay={300}
+            title="Incluir Cliente"
+            placement={'bottom-start'}
+            enterDelay={300}
           >
-            <Fab 
-              color="primary" 
-              aria-label="Pesquisar" 
-              className={classNames(classes.fab, classes.searchIcon)}      
-              onClick={handleCreate}                          
+            <Fab
+              color="primary"
+              aria-label="Pesquisar"
+              className={classNames(classes.fab, classes.searchIcon)}
+              onClick={handleCreate}
               size="small"
             >
               <AddIcon />
@@ -168,7 +188,7 @@ function ViewClient(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell padding='checkbox'>
+            <TableCell padding="checkbox">
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -184,7 +204,7 @@ function ViewClient(props) {
               </Tooltip>
             </TableCell>
             <TableCell className={classes.headerCpf}>
-            <Tooltip
+              <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
                 enterDelay={300}
@@ -197,41 +217,39 @@ function ViewClient(props) {
                   CPF
                 </TableSortLabel>
               </Tooltip>
-            </TableCell>            
-            <TableCell className={classes.headerAcoes} align='right'>Ações</TableCell>   
+            </TableCell>
+            <TableCell className={classes.headerAcoes} align="right">
+              Ações
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-            {Object.keys(clients).map(key => (
-                    <TableRow 
-                      hover
-                      key={key}
-                    >
-                        <TableCell padding='checkbox'>{clients[key].name}</TableCell>
-                        <TableCell padding='checkbox'>{clients[key].cpf}</TableCell>
-                        <TableCell padding='none' align='right'>
-                            <Fab 
-                              color="primary" 
-                              aria-label="Edit" 
-                              className={classNames(classes.fab, classes.fabEdit)}                                
-                              onClick={() => handleEdit(key)}
-                              size="small"
-                            >
-                              <Icon fontSize="small">edit_icon</Icon>
-                            </Fab>
-                            <Fab 
-                              color="secondary"
-                              aria-label="Delete" 
-                              className={classes.fab}
-                              onClick={() => handleDelete(key)}
-                              size="small"
-                            >
-                              <Icon fontSize="small">delete_icon</Icon>
-                            </Fab>                             
-                        </TableCell>     
-                    </TableRow>
-                ))
-            }
+          {Object.keys(clients).map(key => (
+            <TableRow hover key={key}>
+              <TableCell padding="checkbox">{clients[key].name}</TableCell>
+              <TableCell padding="checkbox">{clients[key].cpf}</TableCell>
+              <TableCell padding="none" align="right">
+                <Fab
+                  color="primary"
+                  aria-label="Edit"
+                  className={classNames(classes.fab, classes.fabEdit)}
+                  onClick={() => handleEdit(key)}
+                  size="small"
+                >
+                  <Icon fontSize="small">edit_icon</Icon>
+                </Fab>
+                <Fab
+                  color="secondary"
+                  aria-label="Delete"
+                  className={classes.fab}
+                  onClick={() => handleDelete(key)}
+                  size="small"
+                >
+                  <Icon fontSize="small">delete_icon</Icon>
+                </Fab>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
         <TableFooter>
           <TableRow>
@@ -241,10 +259,12 @@ function ViewClient(props) {
               count={countClients}
               rowsPerPage={rowsPerPage}
               page={page}
-              labelDisplayedRows={({ from, to, count }) => `Clientes ${from} até ${to} de ${count}`}
+              labelDisplayedRows={({ from, to, count }) =>
+                `Clientes ${from} até ${to} de ${count}`
+              }
               labelRowsPerPage={'Clientes por página:'}
               SelectProps={{
-                native: true,
+                native: true
               }}
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -261,19 +281,19 @@ ViewClient.propTypes = {
   classes: PropTypes.object.isRequired,
   clients: PropTypes.array.isRequired,
   handleEdit: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired, 
+  handleDelete: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
-  handleChangePage: PropTypes.func.isRequired, 
-  handleChangeRowsPerPage: PropTypes.func.isRequired, 
+  handleChangePage: PropTypes.func.isRequired,
+  handleChangeRowsPerPage: PropTypes.func.isRequired,
   countClients: PropTypes.number.isRequired,
-  handleSort: PropTypes.func.isRequired, 
+  handleSort: PropTypes.func.isRequired,
   order: PropTypes.string.isRequired,
   columnSort: PropTypes.string.isRequired,
   handleRequestSort: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleChangeTextSearch: PropTypes.func.isRequired,
-  handleCreate: PropTypes.func.isRequired,
+  handleCreate: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ViewClient);

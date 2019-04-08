@@ -17,7 +17,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     paddingLeft: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 3
-  },
+  }
 });
 
 class User extends Component {
@@ -28,12 +28,12 @@ class User extends Component {
 
   state = {
     stateData: 'LIST',
-    inEdit: false,    
+    inEdit: false,
     selectedIndex: '0',
     users: [],
     countUsers: 0,
     data: {
-      _id : '',
+      _id: '',
       user_name: '',
       email: '',
       password: ''
@@ -46,69 +46,86 @@ class User extends Component {
     messageOpen: false,
     variantMessage: 'success',
     messageText: '',
-    anchorEl: null,
+    anchorEl: null
   };
 
   componentWillMount() {
-    this.fetchUsers(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
+    this.fetchUsers(
+      this.state.page,
+      this.state.rowsPerPage,
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
   }
 
-  fetchUsers = (page, rowsPerPage, columnSort, order, filter) => {    
-    userservice.count(columnSort, filter).then(res => this.setState({ countUsers: res.data.value }));
-    const skip = page * rowsPerPage;  
-    userservice.getAll(skip, rowsPerPage, columnSort, order, filter)
-      .then(res => {                     
+  fetchUsers = (page, rowsPerPage, columnSort, order, filter) => {
+    userservice
+      .count(columnSort, filter)
+      .then(res => this.setState({ countUsers: res.data.value }));
+    const skip = page * rowsPerPage;
+    userservice
+      .getAll(skip, rowsPerPage, columnSort, order, filter)
+      .then(res => {
         this.setState({
-            stateData: 'LIST', 
-            inEdit: false,
-            selectedIndex: '0',
-            users: res.data,            
-            data: {
-              _id : '',
-              user_name: '',
-              email: '',
-              password: ''
-            },
-            page: page,
-            rowsPerPage: rowsPerPage,
-            columnSort: columnSort,
-            order: order,
-        });            
+          stateData: 'LIST',
+          inEdit: false,
+          selectedIndex: '0',
+          users: res.data,
+          data: {
+            _id: '',
+            user_name: '',
+            email: '',
+            password: '',
+            admin: false
+          },
+          page: page,
+          rowsPerPage: rowsPerPage,
+          columnSort: columnSort,
+          order: order
+        });
       })
-      .catch(error => 
+      .catch(error =>
         this.setState({
           messageOpen: true,
           messageText: getErrosFromApi(error),
           variantMessage: 'error'
         })
       );
-  }
+  };
 
   handleValueChange = name => event => {
-    this.setState({ data: { ...this.state.data, [name]: event.target.value}})
-  };  
+    this.setState({ data: { ...this.state.data, [name]: event.target.value } });
+  };
 
-  handleCancel = (previusOperation) => {
-    let nextState = { stateData: 'LIST'};
-    if (previusOperation === 'SAVE'){
+  handleCancel = previusOperation => {
+    let nextState = { stateData: 'LIST' };
+    if (previusOperation === 'SAVE') {
       nextState.messageOpen = true;
-      nextState.messageText = 'Usuário salvo com suceso!'; 
+      nextState.messageText = 'Usuário salvo com suceso!';
       nextState.variantMessage = 'success';
-    } else if (previusOperation === 'DELETE'){
+    } else if (previusOperation === 'DELETE') {
       nextState.messageOpen = true;
-      nextState.messageText = 'Usuário excluído com suceso!'; 
+      nextState.messageText = 'Usuário excluído com suceso!';
       nextState.variantMessage = 'success';
     }
     this.setState(nextState);
-    this.fetchUsers(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
-  }
+    this.fetchUsers(
+      this.state.page,
+      this.state.rowsPerPage,
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
+  };
 
-  handleSave = () => {   
+  handleSave = () => {
     console.log(this.state.data);
-    if (this.state.inEdit){     
-      userservice.update(this.state.data)
+    if (this.state.inEdit) {
+      userservice
+        .update(this.state.data)
         .then(() => this.handleCancel('SAVE'))
-        .catch((error) => 
+        .catch(error =>
           this.setState({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -119,11 +136,13 @@ class User extends Component {
       let user = {
         user_name: this.state.data.user_name,
         email: this.state.data.email,
-        password: this.state.data.password
-      };      
-      userservice.create(user)
+        password: this.state.data.password,
+        admin: false
+      };
+      userservice
+        .create(user)
         .then(() => this.handleCancel('SAVE'))
-        .catch((error) => {
+        .catch(error => {
           this.setState({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -131,50 +150,62 @@ class User extends Component {
           });
         });
     }
-  }    
+  };
 
-  handleDelete = (key) => {
-    userservice.remove(this.state.users[key]._id)
+  handleDelete = key => {
+    userservice
+      .remove(this.state.users[key]._id)
       .then(() => this.handleCancel('DELETE'))
-      .catch((error) => 
+      .catch(error =>
         this.setState({
           messageOpen: true,
           messageText: getErrosFromApi(error),
           variantMessage: 'error'
         })
       );
-    
-  }
+  };
 
-  handleEdit = (key) => {
-    console.log(this.state.users[key])
-    this.setState({    
-      stateData: 'EDIT_INSERT', 
+  handleEdit = key => {
+    console.log(this.state.users[key]);
+    this.setState({
+      stateData: 'EDIT_INSERT',
       selectedIndex: key,
       inEdit: true,
-      data: this.state.users[key],
-    });     
-  }
+      data: this.state.users[key]
+    });
+  };
 
   handleCreate = () => {
-    console.log('create')
-    this.setState({ 
+    console.log('create');
+    this.setState({
       stateData: 'EDIT_INSERT',
       data: {
-        _id : '',
+        _id: '',
         user_name: '',
         email: '',
-        password: '',
+        password: ''
       }
     });
   };
 
   handleChangePage = (event, page) => {
-    this.fetchUsers(page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
+    this.fetchUsers(
+      page,
+      this.state.rowsPerPage,
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
   };
 
   handleChangeRowsPerPage = event => {
-    this.fetchUsers(this.state.page, parseInt(event.target.value), this.state.columnSort, this.state.order, this.state.search);
+    this.fetchUsers(
+      this.state.page,
+      parseInt(event.target.value),
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
   };
 
   handleSort = property => event => {
@@ -182,8 +213,14 @@ class User extends Component {
     if (this.state.columnSort === property && this.state.order === 'asc') {
       order = 'desc';
     }
-    
-    this.fetchUsers(this.state.page, this.state.rowsPerPage, property, order, this.state.search);
+
+    this.fetchUsers(
+      this.state.page,
+      this.state.rowsPerPage,
+      property,
+      order,
+      this.state.search
+    );
   };
 
   handleRequestSort = event => {
@@ -193,22 +230,28 @@ class User extends Component {
 
   handleSearch = () => {
     if (this.state.search.length > 0)
-      this.fetchUsers(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
-  }
+      this.fetchUsers(
+        this.state.page,
+        this.state.rowsPerPage,
+        this.state.columnSort,
+        this.state.order,
+        this.state.search
+      );
+  };
 
-  handleChangeTextSearch = (event) => {
-    this.setState({ search: event.target.value.toUpperCase() });    
+  handleChangeTextSearch = event => {
+    this.setState({ search: event.target.value.toUpperCase() });
     this._searchDebounce();
-  }
+  };
 
   handleMessageClose = () => {
     this.setState({ ...this.state, messageOpen: false });
-  }
+  };
 
   render() {
     const { classes } = this.props;
-     
-    const { 
+
+    const {
       users,
       selectedIndex,
       data,
@@ -222,8 +265,8 @@ class User extends Component {
       variantMessage,
       messageText,
       stateData
-    } = this.state;   
-    return (        
+    } = this.state;
+    return (
       <div className={classes.root}>
         <MessageSnackbar
           handleClose={this.handleMessageClose}
@@ -231,41 +274,43 @@ class User extends Component {
           variant={variantMessage}
           message={messageText}
         />
-        {stateData === 'LIST' && 
-            <ViewUser 
-                selectedIndex={selectedIndex} 
-                handleClick={this.handleClick} 
-                users={users}
-                handleEdit={this.handleEdit}
-                handleDelete={this.handleDelete}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                handleChangePage={this.handleChangePage}
-                handleChangeRowsPerPage={this.handleChangeRowsPerPage}
-                countUsers={countUsers}
-                handleSort={this.handleSort}
-                order={order}
-                columnSort={columnSort}
-                handleRequestSort={this.handleRequestSort}
-                handleSearch={this.handleSearch}
-                handleChangeTextSearch={this.handleChangeTextSearch}       
-                search={search}
-                handleCreate={this.handleCreate}
-            />}
-        {stateData === 'EDIT_INSERT' && 
-            <EditUser 
-                handleValueChange={this.handleValueChange}
-                data={data}
-                handleCancel={this.handleCancel}
-                handleSave={this.handleSave}                    
-            />}
+        {stateData === 'LIST' && (
+          <ViewUser
+            selectedIndex={selectedIndex}
+            handleClick={this.handleClick}
+            users={users}
+            handleEdit={this.handleEdit}
+            handleDelete={this.handleDelete}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            handleChangePage={this.handleChangePage}
+            handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+            countUsers={countUsers}
+            handleSort={this.handleSort}
+            order={order}
+            columnSort={columnSort}
+            handleRequestSort={this.handleRequestSort}
+            handleSearch={this.handleSearch}
+            handleChangeTextSearch={this.handleChangeTextSearch}
+            search={search}
+            handleCreate={this.handleCreate}
+          />
+        )}
+        {stateData === 'EDIT_INSERT' && (
+          <EditUser
+            handleValueChange={this.handleValueChange}
+            data={data}
+            handleCancel={this.handleCancel}
+            handleSave={this.handleSave}
+          />
+        )}
       </div>
     );
   }
 }
 
 User.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(User);

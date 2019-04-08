@@ -16,14 +16,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ButtonBase from '@material-ui/core/ButtonBase';
 
 import MessageSnackbar from '../common/MessageSnackbar';
-import Login from '../../pages/user/Login';
 
 import IconListButton from '../common/IconListButton';
 
 import localStorageService from '../../localStorage/localStorageService';
-
-
-import axios from '../../axios';
 
 const drawerWidth = 300;
 
@@ -31,7 +27,7 @@ const styles = theme => ({
   root: {
     display: 'flex',
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
   mainContent: {
     width: '100%',
@@ -39,33 +35,33 @@ const styles = theme => ({
   },
   content: {
     top: theme.spacing.unit * 5,
-    paddingTop: theme.spacing.unit * 8,
+    paddingTop: theme.spacing.unit * 8
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+      duration: theme.transitions.duration.leavingScreen
+    })
   },
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+      duration: theme.transitions.duration.enteringScreen
+    })
   },
   menuButton: {
     [theme.breakpoints.down('xs')]: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   typographyDawerOpen: {
     marginLeft: theme.spacing.unit * 2,
     [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing.unit * 5,
-    },
+      marginLeft: theme.spacing.unit * 5
+    }
   },
   iconClassName: {
     fontSize: 35
@@ -75,35 +71,35 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       paddingLeft: theme.spacing.unit * 0.5,
       marginTop: -10
-    },
+    }
   },
   listItemTextClassName: {
     [theme.breakpoints.down('xs')]: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   hide: {
-    display: 'none',
+    display: 'none'
   },
   drawerPaper: {
     position: 'relative',
     whiteSpace: 'nowrap',
-    width: drawerWidth,    
+    width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+      duration: theme.transitions.duration.enteringScreen
+    })
   },
   drawerPaperClose: {
     overflowX: 'hidden',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.leavingScreen
     }),
     width: theme.spacing.unit * 5,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing.unit * 6,
-    },
+      width: theme.spacing.unit * 6
+    }
   },
   toolbar: {
     display: 'flex',
@@ -112,182 +108,93 @@ const styles = theme => ({
     padding: '0 8px',
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
-    ...theme.mixins.toolbar,
-  },  
+    ...theme.mixins.toolbar
+  },
   icon: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing.unit * 2
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   userText: {
     position: 'relative',
-    marginRight: theme.spacing.unit * 4,
+    marginRight: theme.spacing.unit * 4
   }
 });
 class Menu extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = { user: {}, 
-                   logged: false, 
-                   drawerOpen: false, 
-                   headerText: props.initialheaderText,
-                   userName: '',
-                   password:'',
-                   displayName: '',
-                   messageOpen: false,
-                   variantMessage: 'success',
-                   messageText: '',
-                   anchorEl: null,
-                  };
+    this.state = {
+      user: props.user,
+
+      drawerOpen: false,
+      headerText: '',
+      password: '',
+      userName: '',
+      messageOpen: false,
+      variantMessage: 'success',
+      messageText: '',
+      anchorEl: null
+    };
   }
 
   handleOpenMenu = event => {
-    this.setState({ ...this.state, anchorEl: event.currentTarget });
+    this.setState({ anchorEl: event.currentTarget });
   };
-
-  handleLogout = () => {    
-    localStorageService.setItem('user', '');
-  }
-
-  handleCloseMenu = () => {
-    this.handleLogout();
-    this.setState({ 
-      ...this.state, 
-      displayName: '', 
-      logged: false, 
-      anchorEl: null,
-      messageOpen: true, 
-      messageText: 'Usuário saiu do sistema.', 
-      variantMessage: 'success',
-    });
-  };
-
-  keyPress = (e) => {
-    if(e.keyCode === 13){
-      console.log(e.target.value)
-      this.handleLogin();
-    }
-  }
-
-  handleValueChange = name => event => {
-    this.setState({...this.state, [name]: event.target.value});
-  };
-
-  handleDrawer = (value) => {
-    this.setState({...this.state, drawerOpen: value });
-  }
-
-  handleHeaderText = (value)=> {
-    this.setState({...this.state, headerText: value });
-  }
-
-  handleLogin = async () => {
-    console.log(this.state);
-    let user = {
-      user_name: this.state.userName,
-      password: this.state.password
-    }
-
-    try {
-      const res = await axios.post('/oapi/login', user);
-      console.log(res);
-      if (res.data.errors) {
-        let errors = res.data.errors.join('\n');
-        this.setState({
-          user: {}, 
-          logged: false,
-          messageOpen: true, 
-          messageText: errors, 
-          variantMessage: 'error'
-         });
-      }
-      else { 
-        this.setState({
-          user: user, 
-          logged: true, 
-          displayName: user.user_name,
-          messageOpen: true, 
-          messageText: 'Usuário logado com sucesso!', 
-          variantMessage: 'success',
-          userName: '',
-          password: ''
-        })
-        localStorageService.setItem('user', user.user_name);
-        localStorageService.setItem('token', res.data.token);
-      }
-    }
-    catch(e){      
-      console.log(e);
-      let errors = e.response.data.errors ? e.response.data.errors.join('\n') : 'Verifique usuário e/ou senha!';
-      this.setState({...this.state, 
-                     user: {}, 
-                     logged: false,
-                     messageOpen: true, 
-                     messageText: errors, 
-                     variantMessage: 'error'
-                    });
-    }    
-  }
 
   handleMessageClose = () => {
-    this.setState({ ...this.state, messageOpen: false });
-  }
-  
+    this.setState({ messageOpen: false });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  /*handleCloseMenu = () => {
+    this.props.handleLogout();
+    this.setState({
+      anchorEl: null,
+      messageOpen: true,
+      messageText: 'Usuário saiu do sistema.',
+      variantMessage: 'success'
+    });
+  };*/
+
+  handleDrawer = value => {
+    this.setState({ drawerOpen: value });
+  };
+
+  handleHeaderText = value => {
+    this.setState({ headerText: value });
+  };
+
   render() {
-    const { classes } = this.props;     
-    const { logged, 
-            userName, 
-            password, 
-            displayName,
-            messageOpen,
-            variantMessage,
-            messageText,
-            anchorEl
-          } = this.state;
-    const open = Boolean(anchorEl);
-    
-    let _logged = logged;
-    let _displayName = displayName;
-    if (!_logged){
-      _displayName = localStorageService.getItem('user')
-      if ((_displayName != '') && (_displayName != null)){
-        _logged = true;
-      }
-      else
-        _displayName = '';
-    }
-    return (       
-      <div>
-        {!_logged ? <Login 
-                      userName={userName}
-                      handleLogin={this.handleLogin}
-                      password={password}
-                      handleValueChange={this.handleValueChange}
-                      handleMessageClose={this.handleMessageClose}
-                      messageOpen={messageOpen}
-                      variantMessage={variantMessage}
-                      messageText={messageText}
-                      keyPress={this.keyPress}
-                    /> :         
-        <div className={classes.root}>        
-          <Drawer 
-            variant="permanent"
-            classes={{
-              paper: classNames(classes.drawerPaper, 
-                              !this.state.drawerOpen && classes.drawerPaperClose),
-            }}
-            open={this.state.drawerOpen}
-          >
-            <div className={classes.toolbar}>
-              <IconButton onClick={() => this.handleDrawer(false)} color="inherit">
-                <ChevronLeft />
-              </IconButton>
-            </div>
-            <Divider />            
-            <List>              
-              {/*<IconListButton 
+    const { classes, handleLogout } = this.props;
+    const { messageOpen, variantMessage, messageText, anchorEl } = this.state;
+
+    return (
+      <div className={classes.root}>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: classNames(
+              classes.drawerPaper,
+              !this.state.drawerOpen && classes.drawerPaperClose
+            )
+          }}
+          open={this.state.drawerOpen}
+        >
+          <div className={classes.toolbar}>
+            <IconButton
+              onClick={() => this.handleDrawer(false)}
+              color="inherit"
+            >
+              <ChevronLeft />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            {/*<IconListButton 
                 linkTo={process.env.REACT_APP_PUBLIC_URL + '/'}
                 iconType='attach_money'               
                 primaryText='Títulos'    
@@ -296,84 +203,98 @@ class Menu extends React.Component {
                 iconClassName={classes.iconClassName}
                 listItemTextClassName={classes.listItemTextClassName}
               />*/}
-              <IconListButton 
-                linkTo={process.env.REACT_APP_PUBLIC_URL + '/client'}
-                iconType='assignment_ind'                
-                primaryText='Clientes' 
-                onClickButton={() => this.handleHeaderText('Clientes')}
-                listItemClassName={classes.listItemClassName} 
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/client'}
+              iconType="assignment_ind"
+              primaryText="Clientes"
+              onClickButton={() => this.handleHeaderText('Clientes')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/user'}
+              iconType="accessibility_new"
+              primaryText="Usuários"
+              onClickButton={() => this.handleHeaderText('Usuários')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
+            {this.state.user.admin && (
+              <IconListButton
+                linkTo={process.env.REACT_APP_PUBLIC_URL + '/log'}
+                iconType="assignment"
+                primaryText="Auditoria"
+                onClickButton={() => this.handleHeaderText('Auditoria')}
+                listItemClassName={classes.listItemClassName}
                 iconClassName={classes.iconClassName}
                 listItemTextClassName={classes.listItemTextClassName}
-              />             
-              <IconListButton 
-                linkTo={process.env.REACT_APP_PUBLIC_URL + '/user'}
-                iconType='accessibility_new'                
-                primaryText='Usuários' 
-                onClickButton={() => this.handleHeaderText('Usuários')}
-                listItemClassName={classes.listItemClassName} 
-                iconClassName={classes.iconClassName}
-                listItemTextClassName={classes.listItemTextClassName}
-              />              
-            </List>          
-          </Drawer>             
-          <div className={classes.mainContent}>
-            <AppBar
-              className={classNames(classes.appBar, this.state.drawerOpen && classes.appBarShift)}
-            >
-              <Toolbar disableGutters={!this.state.drawerOpen}>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={() => this.handleDrawer(true)}
-                  className={classNames(classes.menuButton, this.state.drawerOpen && classes.hide)}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Typography 
-                  className={classes.typographyDawerOpen} 
-                  variant="h6" 
-                  color="inherit" 
-                  noWrap
-                >
-                  {this.state.headerText}
-                </Typography>
-                <div className={classes.grow} />
-                <div>
-                  <ButtonBase
-                    onClick={this.handleOpenMenu}
+              />
+            )}
+          </List>
+        </Drawer>
+        <div className={classes.mainContent}>
+          <AppBar
+            className={classNames(
+              classes.appBar,
+              this.state.drawerOpen && classes.appBarShift
+            )}
+          >
+            <Toolbar disableGutters={!this.state.drawerOpen}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => this.handleDrawer(true)}
+                className={classNames(
+                  classes.menuButton,
+                  this.state.drawerOpen && classes.hide
+                )}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                className={classes.typographyDawerOpen}
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
+                {this.state.headerText}
+              </Typography>
+              <div className={classes.grow} />
+              <div>
+                <ButtonBase aria-haspopup="true" onClick={this.handleOpenMenu}>
+                  <Typography
+                    variant="h6"
+                    color="inherit"
+                    className={classes.userText}
                   >
-                    <Typography 
-                      variant="h6" 
-                      color="inherit" 
-                      className={classes.userText}
-                    >
-                      { _displayName }
-                    </Typography> 
-                  </ButtonBase>
-                  <MaterialMenu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={open}
-                    onClose={this.handleClose}
-                  >
-                    <MenuItem onClick={this.handleCloseMenu}>&nbsp;&nbsp;&nbsp;&nbsp;Sair&nbsp;&nbsp;&nbsp;&nbsp;</MenuItem>
-                  </MaterialMenu>                
-                </div>
-              </Toolbar>
-            </AppBar>    
-            <div className={classes.content}>
-              {this.props.children}
-            </div>
-          </div>
-        </div>}
+                    {this.state.user.user_name}
+                  </Typography>
+                </ButtonBase>
+                <MaterialMenu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem onClick={handleLogout}>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Sair&nbsp;&nbsp;&nbsp;&nbsp;
+                  </MenuItem>
+                </MaterialMenu>
+              </div>
+            </Toolbar>
+          </AppBar>
+          <div className={classes.content}>{this.props.children}</div>
+        </div>
         <MessageSnackbar
           handleClose={this.handleMessageClose}
           open={messageOpen}
@@ -388,6 +309,8 @@ class Menu extends React.Component {
 Menu.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  handleLogout: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(Menu);

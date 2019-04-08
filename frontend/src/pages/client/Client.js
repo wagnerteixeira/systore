@@ -17,7 +17,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     paddingLeft: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 3
-  },
+  }
 });
 
 class Client extends Component {
@@ -27,15 +27,15 @@ class Client extends Component {
   }
   state = {
     stateData: 'LIST',
-    inEdit: false,    
+    inEdit: false,
     selectedIndex: '0',
     clients: [],
     countClients: 0,
     data: {
-      _id : '',
+      _id: '',
       name: '',
       cpf: '',
-      registry_date: null, 
+      registry_date: null,
       date_of_birth: null,
       place_of_birth: '',
       address: '',
@@ -50,7 +50,7 @@ class Client extends Component {
       phone1: '',
       phone2: '',
       note: '',
-      bills_receives: [],
+      bills_receives: []
     },
     page: 0,
     rowsPerPage: 5,
@@ -60,68 +60,76 @@ class Client extends Component {
     messageOpen: false,
     variantMessage: 'success',
     messageText: '',
-    anchorEl: null,
+    anchorEl: null
   };
 
   componentWillMount() {
-    this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
+    this.fetchClients(
+      this.state.page,
+      this.state.rowsPerPage,
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
   }
 
   fetchClients = (page, rowsPerPage, columnSort, order, filter) => {
-    
-    clientservice.count(columnSort, filter).then(res => this.setState({ countClients: res.data.value }));
-    const skip = page * rowsPerPage;  
-    clientservice.getAll(skip, rowsPerPage, columnSort, order, filter)
-      .then(res => {                 
+    clientservice
+      .count(columnSort, filter)
+      .then(res => this.setState({ countClients: res.data.value }));
+    const skip = page * rowsPerPage;
+    clientservice
+      .getAll(skip, rowsPerPage, columnSort, order, filter)
+      .then(res => {
         this.setState({
-            stateData: 'LIST', 
-            inEdit: false,
-            selectedIndex: '0',
-            clients: res.data,            
-            data: {
-              _id : '',
-              name: '',
-              cpf: '',
-              registry_date: new Date(), 
-              date_of_birth: null,
-              place_of_birth: '',
-              address: '',
-              neighborhood: '',
-              city: '',
-              state: '',
-              postal_code: '',
-              seller: '',
-              job_name: '',
-              occupation: '',
-              spouse: '',
-              phone1: '',
-              phone2: '',
-              note: '',
-              bills_receives: [],
-            },
-            page: page,
-            rowsPerPage: rowsPerPage,
-            columnSort: columnSort,
-            order: order,
-        });            
+          stateData: 'LIST',
+          inEdit: false,
+          selectedIndex: '0',
+          clients: res.data,
+          data: {
+            _id: '',
+            name: '',
+            cpf: '',
+            registry_date: new Date(),
+            date_of_birth: null,
+            place_of_birth: '',
+            address: '',
+            neighborhood: '',
+            city: '',
+            state: '',
+            postal_code: '',
+            seller: '',
+            job_name: '',
+            occupation: '',
+            spouse: '',
+            phone1: '',
+            phone2: '',
+            note: '',
+            bills_receives: []
+          },
+          page: page,
+          rowsPerPage: rowsPerPage,
+          columnSort: columnSort,
+          order: order
+        });
       })
-      .catch(error => 
+      .catch(error =>
         this.setState({
           messageOpen: true,
           messageText: getErrosFromApi(error),
           variantMessage: 'error'
         })
       );
-  }
+  };
 
   handleCreate = () => {
-    this.setState({ 
+    this.setState({
       stateData: 'EDIT_INSERT',
       data: {
-        _id : '',
+        _id: '',
         name: '',
         cpf: '',
-        registry_date: new Date(), 
+        registry_date: new Date(),
         date_of_birth: null,
         place_of_birth: '',
         address: '',
@@ -136,42 +144,52 @@ class Client extends Component {
         phone1: '',
         phone2: '',
         note: '',
-        bills_receives: [],
+        bills_receives: []
       }
-     });
+    });
   };
 
   handleValueChange = name => event => {
-    this.setState({ data: { ...this.state.data, [name]: event.target.value}})
-  };  
+    this.setState({ data: { ...this.state.data, [name]: event.target.value } });
+  };
 
   handleDateValueChange = name => date => {
-    this.setState({ data: { ...this.state.data, [name]: date}});
-  }
+    this.setState({ data: { ...this.state.data, [name]: date } });
+  };
 
-  handleCancel = (previusOperation) => {
-    let nextState = { stateData: 'LIST'};
-    if (previusOperation === 'SAVE'){
+  handleCancel = previusOperation => {
+    let nextState = { stateData: 'LIST' };
+    if (previusOperation === 'SAVE') {
       nextState.messageOpen = true;
-      nextState.messageText = 'Cliente salvo com suceso!'; 
+      nextState.messageText = 'Cliente salvo com suceso!';
       nextState.variantMessage = 'success';
-    } else if (previusOperation === 'DELETE'){
+    } else if (previusOperation === 'DELETE') {
       nextState.messageOpen = true;
-      nextState.messageText = 'Cliente excluído com suceso!'; 
+      nextState.messageText = 'Cliente excluído com suceso!';
       nextState.variantMessage = 'success';
     }
     this.setState(nextState);
-    this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
-  }
+    this.fetchClients(
+      this.state.page,
+      this.state.rowsPerPage,
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
+  };
 
-  handleSave = () => {   
-    console.log(this.state.data);
-    this.state.data.phone1 = this.state.data.phone1.replace(/\D/g, '');
-    this.state.data.phone2 = this.state.data.phone2.replace(/\D/g, '');
-    if (this.state.inEdit){     
-      clientservice.update(this.state.data)
+  handleSave = () => {
+    //console.log(this.state.data);
+    if (this.state.inEdit) {
+      let _data = {
+        ...this.state.data,
+        phone1: this.state.data.phone1.replace(/\D/g, ''),
+        phone2: this.state.data.phone2.replace(/\D/g, '')
+      };
+      clientservice
+        .update(_data)
         .then(() => this.handleCancel('SAVE'))
-        .catch((error) => 
+        .catch(error =>
           this.setState({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -179,10 +197,16 @@ class Client extends Component {
           })
         );
     } else {
-      this.state.data._id = undefined;      
-      clientservice.create(this.state.data)
+      let _data = {
+        ...this.state.data,
+        _id: undefined,
+        phone1: this.state.data.phone1.replace(/\D/g, ''),
+        phone2: this.state.data.phone2.replace(/\D/g, '')
+      };
+      clientservice
+        .create(_data)
         .then(() => this.handleCancel('SAVE'))
-        .catch((error) => 
+        .catch(error =>
           this.setState({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -190,35 +214,48 @@ class Client extends Component {
           })
         );
     }
-  }    
+  };
 
-  handleDelete = (key) => {
-    clientservice.remove(this.state.clients[key]._id)
+  handleDelete = key => {
+    clientservice
+      .remove(this.state.clients[key]._id)
       .then(() => this.handleCancel('DELETE'))
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           messageOpen: true,
           messageText: getErrosFromApi(error),
           variantMessage: 'error'
-        })
-      });    
-  }
+        });
+      });
+  };
 
-  handleEdit = (key) => {
-    this.setState({    
-      stateData: 'EDIT_INSERT', 
+  handleEdit = key => {
+    this.setState({
+      stateData: 'EDIT_INSERT',
       selectedIndex: key,
       inEdit: true,
-      data: this.state.clients[key],      
-    });   
-  }
+      data: this.state.clients[key]
+    });
+  };
 
   handleChangePage = (event, page) => {
-    this.fetchClients(page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
+    this.fetchClients(
+      page,
+      this.state.rowsPerPage,
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
   };
 
   handleChangeRowsPerPage = event => {
-    this.fetchClients(this.state.page, parseInt(event.target.value), this.state.columnSort, this.state.order, this.state.search);
+    this.fetchClients(
+      this.state.page,
+      parseInt(event.target.value),
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
   };
 
   handleSort = property => event => {
@@ -226,8 +263,14 @@ class Client extends Component {
     if (this.state.columnSort === property && this.state.order === 'asc') {
       order = 'desc';
     }
-    
-    this.fetchClients(this.state.page, this.state.rowsPerPage, property, order, this.state.search);
+
+    this.fetchClients(
+      this.state.page,
+      this.state.rowsPerPage,
+      property,
+      order,
+      this.state.search
+    );
   };
 
   handleRequestSort = event => {
@@ -237,32 +280,36 @@ class Client extends Component {
 
   handleSearch = () => {
     if (this.state.search.length > 0)
-      this.fetchClients(this.state.page, this.state.rowsPerPage, this.state.columnSort, this.state.order, this.state.search);
-  }
+      this.fetchClients(
+        this.state.page,
+        this.state.rowsPerPage,
+        this.state.columnSort,
+        this.state.order,
+        this.state.search
+      );
+  };
 
-  handleChangeTextSearch = (event) => {
-    this.setState({ search: event.target.value.toUpperCase() });    
+  handleChangeTextSearch = event => {
+    this.setState({ search: event.target.value.toUpperCase() });
     this._searchDebounce();
-  }
+  };
 
   handleMessageClose = () => {
     this.setState({ ...this.state, messageOpen: false });
-  }
+  };
 
   handleOpenMessage = (messageOpen, variantMessage, messageText) => {
     this.setState({
       messageOpen: messageOpen,
       messageText: messageText,
       variantMessage: variantMessage
-    })
-  }
-
+    });
+  };
 
   render() {
     const { classes } = this.props;
-    const { 
-      stateData, 
-      inEdit,       
+    const {
+      stateData,
       clients,
       selectedIndex,
       data,
@@ -274,9 +321,9 @@ class Client extends Component {
       search,
       messageOpen,
       variantMessage,
-      messageText,
-    } = this.state;   
-    return (        
+      messageText
+    } = this.state;
+    return (
       <div className={classes.root}>
         <MessageSnackbar
           handleClose={this.handleMessageClose}
@@ -284,43 +331,45 @@ class Client extends Component {
           variant={variantMessage}
           message={messageText}
         />
-        {stateData === 'LIST' && 
-            <ViewClient 
-                selectedIndex={selectedIndex} 
-                handleClick={this.handleClick} 
-                clients={clients}
-                handleEdit={this.handleEdit}
-                handleDelete={this.handleDelete}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                handleChangePage={this.handleChangePage}
-                handleChangeRowsPerPage={this.handleChangeRowsPerPage}
-                countClients={countClients}
-                handleSort={this.handleSort}
-                order={order}
-                columnSort={columnSort}
-                handleRequestSort={this.handleRequestSort}
-                handleSearch={this.handleSearch}
-                handleChangeTextSearch={this.handleChangeTextSearch}     
-                search={search}
-                handleCreate={this.handleCreate}
-            />}
-        {stateData === 'EDIT_INSERT' && 
-            <EditClient 
-                handleValueChange={this.handleValueChange}
-                data={data}
-                handleCancel={this.handleCancel}
-                handleSave={this.handleSave}    
-                handleDateValueChange={this.handleDateValueChange}
-                handleOpenMessage={this.handleOpenMessage}
-            />}
+        {stateData === 'LIST' && (
+          <ViewClient
+            selectedIndex={selectedIndex}
+            handleClick={this.handleClick}
+            clients={clients}
+            handleEdit={this.handleEdit}
+            handleDelete={this.handleDelete}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            handleChangePage={this.handleChangePage}
+            handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+            countClients={countClients}
+            handleSort={this.handleSort}
+            order={order}
+            columnSort={columnSort}
+            handleRequestSort={this.handleRequestSort}
+            handleSearch={this.handleSearch}
+            handleChangeTextSearch={this.handleChangeTextSearch}
+            search={search}
+            handleCreate={this.handleCreate}
+          />
+        )}
+        {stateData === 'EDIT_INSERT' && (
+          <EditClient
+            handleValueChange={this.handleValueChange}
+            data={data}
+            handleCancel={this.handleCancel}
+            handleSave={this.handleSave}
+            handleDateValueChange={this.handleDateValueChange}
+            handleOpenMessage={this.handleOpenMessage}
+          />
+        )}
       </div>
     );
   }
 }
 
 Client.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Client);
