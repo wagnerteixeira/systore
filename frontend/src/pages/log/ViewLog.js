@@ -65,9 +65,9 @@ class ViewLog extends Component {
             collectionName: log.collectionName,
             date: log.date,
             operation:
-              log.operation == 'C'
+              log.operation === 'C'
                 ? 'Criação'
-                : log.operation == 'U'
+                : log.operation === 'U'
                 ? 'Alteração'
                 : 'Exclusão',
             user: log.user,

@@ -52,7 +52,6 @@ class App extends Component {
       user: {},
       userName: '',
       password: '',
-      messageOpen: false,
       logged: false,
       messageOpen: false,
       variantMessage: 'success',

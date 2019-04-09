@@ -19,8 +19,6 @@ import MessageSnackbar from '../common/MessageSnackbar';
 
 import IconListButton from '../common/IconListButton';
 
-import localStorageService from '../../localStorage/localStorageService';
-
 const drawerWidth = 300;
 
 const styles = theme => ({

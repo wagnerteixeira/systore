@@ -3,7 +3,7 @@ const mongoose = restful.mongoose;
 
 const clientSchema = new mongoose.Schema({
   name: { type: String }, //Nome
-  old_id: { type: Number }, //Id no sistema antigo
+  code: { type: Number, unique: true }, //Id no sistema antigo
   registry_date: { type: Date }, //Data de inclusão
   date_of_birth: { type: Date }, //Data de aniversário
   address: { type: String }, //Endereço

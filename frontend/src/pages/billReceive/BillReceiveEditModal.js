@@ -124,6 +124,7 @@ class BillReceiveEditModal extends React.Component {
       this.state.data.due_date,
       'days'
     );
+    console.log('dias atraso:' + days);
     let p = 0;
     if (days > 0) {
       p = (0.07 / 30) * days;

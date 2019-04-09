@@ -65,7 +65,7 @@ class User extends Component {
       .then(res => this.setState({ countUsers: res.data.value }));
     const skip = page * rowsPerPage;
     userservice
-      .getAll(skip, rowsPerPage, columnSort, order, filter)
+      .getAll(skip, rowsPerPage, columnSort, order, 'rg', filter)
       .then(res => {
         this.setState({
           stateData: 'LIST',
@@ -229,14 +229,13 @@ class User extends Component {
   };
 
   handleSearch = () => {
-    if (this.state.search.length > 0)
-      this.fetchUsers(
-        this.state.page,
-        this.state.rowsPerPage,
-        this.state.columnSort,
-        this.state.order,
-        this.state.search
-      );
+    this.fetchUsers(
+      this.state.page,
+      this.state.rowsPerPage,
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
   };
 
   handleChangeTextSearch = event => {

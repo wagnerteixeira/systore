@@ -23,7 +23,7 @@ const styles = theme => ({
 class Client extends Component {
   constructor(props) {
     super(props);
-    this._searchDebounce = debounceTime(500, this.handleSearch);
+    //this._searchDebounce = debounceTime(500, this.handleSearch);
   }
   state = {
     stateData: 'LIST',
@@ -34,6 +34,7 @@ class Client extends Component {
     data: {
       _id: '',
       name: '',
+      code: 0,
       cpf: '',
       registry_date: null,
       date_of_birth: null,
@@ -78,8 +79,11 @@ class Client extends Component {
       .count(columnSort, filter)
       .then(res => this.setState({ countClients: res.data.value }));
     const skip = page * rowsPerPage;
+    let filterType = '';
+    if (columnSort === 'code') filterType = 'eq';
+    else filterType = 'rg';
     clientservice
-      .getAll(skip, rowsPerPage, columnSort, order, filter)
+      .getAll(skip, rowsPerPage, columnSort, order, filterType, filter)
       .then(res => {
         this.setState({
           stateData: 'LIST',
@@ -279,19 +283,18 @@ class Client extends Component {
   };
 
   handleSearch = () => {
-    if (this.state.search.length > 0)
-      this.fetchClients(
-        this.state.page,
-        this.state.rowsPerPage,
-        this.state.columnSort,
-        this.state.order,
-        this.state.search
-      );
+    this.fetchClients(
+      this.state.page,
+      this.state.rowsPerPage,
+      this.state.columnSort,
+      this.state.order,
+      this.state.search
+    );
   };
 
   handleChangeTextSearch = event => {
     this.setState({ search: event.target.value.toUpperCase() });
-    this._searchDebounce();
+    //this._searchDebounce();
   };
 
   handleMessageClose = () => {

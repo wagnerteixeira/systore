@@ -120,6 +120,7 @@ function ViewClient(props) {
                 id: 'sort'
               }}
             >
+              <MenuItem value={'code'}>Código</MenuItem>
               <MenuItem value={'name'}>Nome</MenuItem>
               <MenuItem value={'cpf'}>Cpf</MenuItem>
             </Select>
@@ -195,6 +196,21 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
+                  active={columnSort === 'code'}
+                  direction={order}
+                  onClick={handleSort('code')}
+                >
+                  Código
+                </TableSortLabel>
+              </Tooltip>
+            </TableCell>
+            <TableCell padding="checkbox">
+              <Tooltip
+                title="Ordenar"
+                placement={'bottom-start'}
+                enterDelay={300}
+              >
+                <TableSortLabel
                   active={columnSort === 'name'}
                   direction={order}
                   onClick={handleSort('name')}
@@ -226,6 +242,7 @@ function ViewClient(props) {
         <TableBody>
           {Object.keys(clients).map(key => (
             <TableRow hover key={key}>
+              <TableCell padding="checkbox">{clients[key].code}</TableCell>
               <TableCell padding="checkbox">{clients[key].name}</TableCell>
               <TableCell padding="checkbox">{clients[key].cpf}</TableCell>
               <TableCell padding="none" align="right">
