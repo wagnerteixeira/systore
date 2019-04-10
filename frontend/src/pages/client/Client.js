@@ -8,7 +8,7 @@ import ViewClient from './ViewClient';
 
 import clientservice from '../../services/clientService';
 
-import { debounceTime } from '../../utils/operators';
+//import { debounceTime } from '../../utils/operators';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 
 const styles = theme => ({
@@ -21,10 +21,10 @@ const styles = theme => ({
 });
 
 class Client extends Component {
-  constructor(props) {
+  /*constructor(props) {
     super(props);
     //this._searchDebounce = debounceTime(500, this.handleSearch);
-  }
+  }*/
   state = {
     stateData: 'LIST',
     inEdit: false,

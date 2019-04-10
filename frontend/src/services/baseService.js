@@ -50,15 +50,16 @@ export default route => {
   };
 
   const createRegexFromFilter = filterValue => {
-    let regexString = '^';
-    if (filterValue.charAt(0) !== '%') regexString = '^' + filterValue;
+    let regexString = '^' + filterValue;
+    /*if (filterValue.charAt(0) !== '%') regexString = '^' + filterValue;
     else regexString = filterValue.substr(1);
 
     if (regexString.charAt(regexString.length - 1) !== '%')
       regexString = regexString + '$';
-    else regexString = regexString.substr(0, regexString.length - 1);
+    else regexString = regexString.substr(0, regexString.length - 1);*/
 
     regexString = regexString.replace(new RegExp('%', 'g'), '.*');
+    console.log(regexString);
     return regexString;
   };
 

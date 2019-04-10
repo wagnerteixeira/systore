@@ -33,9 +33,9 @@ const convertDate = dateString => {
   }
 };
 
-const findClient = old_id => client => {
+const findClient = code => client => {
   //console.log(client);
-  return parseInt(old_id) === parseInt(client.old_id);
+  return parseInt(code) === parseInt(client.code);
 };
 
 const inserirRegistros = async () => {
