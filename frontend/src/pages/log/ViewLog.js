@@ -58,7 +58,6 @@ class ViewLog extends Component {
 
   fetchLogs = () => {
     getLogs(this.state.initialDate, this.state.finalDate).then(res => {
-      //console.log(res.data);
       let logs = res.data.flatMap(log => {
         return log.items.map(item => {
           return {

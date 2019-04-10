@@ -133,8 +133,6 @@ class BillReceiveEditModal extends React.Component {
     billsReceiveservice
       .update(data)
       .then(res => {
-        console.log(res.data);
-        console.log(this.props.clientData);
         if (this.state.printQuota)
           printBillsReceiveis(this.props.clientData, [{ ...res.data }]);
         this.setState({

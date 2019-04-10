@@ -59,7 +59,6 @@ export default route => {
     else regexString = regexString.substr(0, regexString.length - 1);*/
 
     regexString = regexString.replace(new RegExp('%', 'g'), '.*');
-    console.log(regexString);
     return regexString;
   };
 

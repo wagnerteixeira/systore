@@ -120,7 +120,6 @@ class User extends Component {
   };
 
   handleSave = () => {
-    console.log(this.state.data);
     if (this.state.inEdit) {
       userservice
         .update(this.state.data)
@@ -166,7 +165,6 @@ class User extends Component {
   };
 
   handleEdit = key => {
-    console.log(this.state.users[key]);
     this.setState({
       stateData: 'EDIT_INSERT',
       selectedIndex: key,
@@ -176,7 +174,6 @@ class User extends Component {
   };
 
   handleCreate = () => {
-    console.log('create');
     this.setState({
       stateData: 'EDIT_INSERT',
       data: {

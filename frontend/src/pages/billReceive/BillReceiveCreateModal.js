@@ -92,8 +92,6 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   validadeSaveQuotas = () => {
-    console.log(this.state.bills_receives);
-    console.log(this.state.bills_receives.length);
     let message = '';
     if (!this.state.original_value || this.state.original_value <= 0)
       message += 'Informe o valor!\n\n';
@@ -235,7 +233,6 @@ class BillReceiveCreateModal extends React.Component {
       variantMessage,
       messageText
     } = this.state;
-    //console.log(this.state);
     let _original_value = parseFloat(original_value)
       .toFixed(2)
       .replace('.', ',');

@@ -172,7 +172,6 @@ class EditClient extends Component {
   };
 
   handleCloseCreateModal = (event, reason) => {
-    console.log(reason);
     this.setState({ openCreateModal: false });
     if (reason === 'created') {
       this.props.handleOpenMessage(
@@ -222,7 +221,6 @@ class EditClient extends Component {
 
   handlePrintBillReceiveGroupByCode = key => {
     let code = this.state.bills_receives[key].code;
-    let pages = [];
     const { clientData } = this.state;
 
     let billReceives = this.state.bills_receives.filter(
@@ -245,7 +243,6 @@ class EditClient extends Component {
     const { tabValue, bills_receives, openCreateModal, clientId } = this.state;
 
     const dateCurrent = getCurrentDate();
-    console.log(dateCurrent);
     return (
       <div>
         <Tabs

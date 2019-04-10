@@ -1,10 +1,6 @@
 export const getErrosFromApi = error => {
   console.log(error);
-  console.log(error.response);
-  console.log(error.message);
   if (error.response) {
-    console.log(error.response.status);
-    console.log(typeof error.response.data);
     if (error.response.data) {
       if (error.response.data.message) return error.response.data.message;
       else

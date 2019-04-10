@@ -4,7 +4,6 @@ import { getDateToString, getNumberDecimalToString } from '../utils/operators';
 
 const createPageForPrint = (clientData, billReceive) => {
   let items = [];
-  console.log(billReceive);
   //linha 1
   items.push({
     text: `${billReceive.code}/${billReceive.quota}`,
@@ -56,7 +55,7 @@ const createPageForPrint = (clientData, billReceive) => {
   }
   //linha 5
   let final_value = getNumberDecimalToString(billReceive.final_value);
-  if (final_value != '0,00') {
+  if (final_value !== '0,00') {
     items.push({
       text: final_value,
       x: 44,
@@ -84,16 +83,11 @@ const printBillsReceiveis = (clientData, billsReceive) => {
   doc.setFontSize(12);
 
   pages.forEach(page => {
-    console.log(page);
-    console.log(page.items);
     doc.addPage(page.width, page.height);
     page.items.forEach(item => {
-      console.log(`${item.text} ${item.x} ${item.y}`);
       doc.text(item.text + '', item.x, item.y);
     });
   });
-  console.log('autoPrint');
-  console.log(doc);
   doc.autoPrint();
   window.open(doc.output('bloburl'), '_blank');
 };

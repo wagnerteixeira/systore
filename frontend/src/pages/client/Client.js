@@ -183,7 +183,6 @@ class Client extends Component {
   };
 
   handleSave = () => {
-    //console.log(this.state.data);
     if (this.state.inEdit) {
       let _data = {
         ...this.state.data,

@@ -70,7 +70,6 @@ class App extends Component {
   };
 
   handleLogin = async () => {
-    console.log(this.state);
     let user = {
       user_name: this.state.userName,
       password: this.state.password
@@ -87,7 +86,6 @@ class App extends Component {
           variantMessage: 'error'
         });
       } else {
-        console.log(res.data.user);
         this.setState({
           logged: true,
           messageOpen: true,
@@ -119,7 +117,6 @@ class App extends Component {
 
   keyPress = e => {
     if (e.keyCode === 13) {
-      console.log(e.target.value);
       this.handleLogin();
     }
   };
