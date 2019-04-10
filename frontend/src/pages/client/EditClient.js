@@ -23,7 +23,11 @@ import classNames from 'classnames';
 
 import {
   getDateToString,
-  getNumberDecimalToString
+  getCurrentDate,
+  getDelayedDays,
+  getNumberDecimalToString,
+  getNumberToString,
+  getValueWithInterest
 } from '../../utils/operators';
 import TextMaskCustom from '../../components/common/TextMaskCustom';
 import BillReceiveEditModal from '../billReceive/BillReceiveEditModal';
@@ -205,7 +209,7 @@ class EditClient extends Component {
       );
     }
   }
-
+  
   render() {
     const {
       classes,
@@ -218,6 +222,8 @@ class EditClient extends Component {
 
     const { tabValue, bills_receives, openCreateModal, clientId } = this.state;
 
+    const dateCurrent = getCurrentDate();
+    console.log(dateCurrent);
     return (
       <div>
         <Tabs
@@ -657,7 +663,8 @@ class EditClient extends Component {
                     <TableCell padding="checkbox">Data de vencimento</TableCell>
                     <TableCell padding="checkbox">Data de pagamento</TableCell>
                     <TableCell padding="checkbox">Valor</TableCell>
-                    <TableCell padding="checkbox">Valor pago</TableCell>
+                    <TableCell padding="checkbox">Valor pago/atual</TableCell>
+                    <TableCell padding="checkbox">Dias em atraso</TableCell>
                     <TableCell className={classes.headerAcoes} align="right">
                       Ações
                     </TableCell>
@@ -688,9 +695,18 @@ class EditClient extends Component {
                           )}
                         </TableCell>
                         <TableCell padding="checkbox">
-                          {getNumberDecimalToString(
-                            bills_receives[key].final_value
+                          {getNumberToString(
+                            (
+                              (bills_receives[key].pay_date != null) ? 
+                              bills_receives[key].final_value['$numberDecimal'] : 
+                              (getValueWithInterest(bills_receives[key].original_value['$numberDecimal'], 
+                                                    bills_receives[key].due_date, 
+                                                    dateCurrent) + bills_receives[key].original_value['$numberDecimal'])
+                            )
                           )}
+                        </TableCell>
+                        <TableCell padding="checkbox">
+                          {((bills_receives[key].pay_date != null) ? "" : getDelayedDays(bills_receives[key].due_date, dateCurrent))}
                         </TableCell>
                         <TableCell padding="none" align="right">
                           <Fab
