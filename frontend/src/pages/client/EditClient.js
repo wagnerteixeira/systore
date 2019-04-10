@@ -25,7 +25,7 @@ import {
   getDateToString,
   getCurrentDate,
   getDelayedDays,
-  getNumberDecimalToString,
+  getNumberDecimalToStringCurrency,
   getNumberToString,
   getValueWithInterest
 } from '../../utils/operators';
@@ -37,6 +37,8 @@ import ptLocale from 'date-fns/locale/pt-BR';
 
 import billsReceiveservice from '../../services/billsReceiveService';
 import { getErrosFromApi } from '../../utils/errorsHelper';
+
+import { printBillsReceiveis } from '../../services/printService';
 
 const styles = theme => ({
   container: {
@@ -120,6 +122,7 @@ class EditClient extends Component {
       openEditModal: false,
       openCreateModal: false,
       clientId: props.data._id,
+      clientData: props.data,
       bill: {
         _id: '',
         client: '',
@@ -205,11 +208,30 @@ class EditClient extends Component {
           bill={this.state.bill}
           handleClose={this.handleCloseEditModal}
           handleSave={this.handleSaveBillReceive}
+          clientData={this.state.clientData}
         />
       );
     }
   }
-  
+
+  handlePrintBillReceive = key => {
+    let billReceive = this.state.bills_receives[key];
+    const { clientData } = this.state;
+    printBillsReceiveis(clientData, [billReceive]);
+  };
+
+  handlePrintBillReceiveGroupByCode = key => {
+    let code = this.state.bills_receives[key].code;
+    let pages = [];
+    const { clientData } = this.state;
+
+    let billReceives = this.state.bills_receives.filter(
+      item => item.code === code
+    );
+
+    printBillsReceiveis(clientData, billReceives);
+  };
+
   render() {
     const {
       classes,
@@ -690,25 +712,57 @@ class EditClient extends Component {
                           {getDateToString(bills_receives[key].pay_date)}
                         </TableCell>
                         <TableCell padding="checkbox">
-                          {getNumberDecimalToString(
+                          {getNumberDecimalToStringCurrency(
                             bills_receives[key].original_value
                           )}
                         </TableCell>
                         <TableCell padding="checkbox">
                           {getNumberToString(
-                            (
-                              (bills_receives[key].pay_date != null) ? 
-                              bills_receives[key].final_value['$numberDecimal'] : 
-                              (getValueWithInterest(bills_receives[key].original_value['$numberDecimal'], 
-                                                    bills_receives[key].due_date, 
-                                                    dateCurrent) + bills_receives[key].original_value['$numberDecimal'])
-                            )
+                            bills_receives[key].pay_date != null
+                              ? bills_receives[key].final_value[
+                                  '$numberDecimal'
+                                ]
+                              : getValueWithInterest(
+                                  bills_receives[key].original_value[
+                                    '$numberDecimal'
+                                  ],
+                                  bills_receives[key].due_date,
+                                  dateCurrent
+                                ) +
+                                  bills_receives[key].original_value[
+                                    '$numberDecimal'
+                                  ]
                           )}
                         </TableCell>
                         <TableCell padding="checkbox">
-                          {((bills_receives[key].pay_date != null) ? "" : getDelayedDays(bills_receives[key].due_date, dateCurrent))}
+                          {bills_receives[key].pay_date != null
+                            ? ''
+                            : getDelayedDays(
+                                bills_receives[key].due_date,
+                                dateCurrent
+                              )}
                         </TableCell>
                         <TableCell padding="none" align="right">
+                          <Fab
+                            color="secondary"
+                            aria-label="Delete"
+                            className={classNames(classes.fab, classes.fabEdit)}
+                            onClick={() =>
+                              this.handlePrintBillReceiveGroupByCode(key)
+                            }
+                            size="small"
+                          >
+                            <Icon fontSize="small">event_note</Icon>
+                          </Fab>
+                          <Fab
+                            color="secondary"
+                            aria-label="Delete"
+                            className={classNames(classes.fab, classes.fabEdit)}
+                            onClick={() => this.handlePrintBillReceive(key)}
+                            size="small"
+                          >
+                            <Icon fontSize="small">local_printshop</Icon>
+                          </Fab>
                           <Fab
                             color="primary"
                             aria-label="Edit"

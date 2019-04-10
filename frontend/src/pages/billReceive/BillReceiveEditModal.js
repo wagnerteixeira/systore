@@ -10,15 +10,24 @@ import Button from '@material-ui/core/Button';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import ptLocale from 'date-fns/locale/pt-BR';
 
 import MessageSnackbar from '../../components/common/MessageSnackbar';
 import NumberFormatCustom from '../../components/common/NumberFormatCustom';
 import ModalWrapped from '../../components/common/Modal';
-import { getDateToString, getCurrentDate, getValueInterest, getValueWithInterest } from '../../utils/operators';
+import {
+  getDateToString,
+  getCurrentDate,
+  getValueInterest,
+  getValueWithInterest
+} from '../../utils/operators';
 
 import billsReceiveservice from '../../services/billsReceiveService';
+
+import { printBillsReceiveis } from '../../services/printService';
 
 const styles = theme => ({
   paper: {
@@ -44,24 +53,39 @@ class BillReceiveEditModal extends React.Component {
       messageOpen: false,
       variantMessage: 'success',
       messageText: '',
+      printQuota: false,
       data: {
         _id: props.bill._id,
         client: props.bill.client,
         code: props.bill.code,
         quota: props.bill.quota,
         original_value: props.bill.original_value['$numberDecimal'],
-        interest: ((props.bill.pay_date != null) ? props.bill.interest['$numberDecimal'] : getValueInterest(props.bill.original_value['$numberDecimal'], props.bill.due_date, getCurrentDate())),
-        final_value: ((props.bill.pay_date != null) ? props.bill.final_value['$numberDecimal'] : getValueWithInterest(props.bill.original_value['$numberDecimal'], props.bill.due_date, getCurrentDate())),
+        interest:
+          props.bill.pay_date != null
+            ? props.bill.interest['$numberDecimal']
+            : getValueInterest(
+                props.bill.original_value['$numberDecimal'],
+                props.bill.due_date,
+                getCurrentDate()
+              ),
+        final_value:
+          props.bill.pay_date != null
+            ? props.bill.final_value['$numberDecimal']
+            : getValueWithInterest(
+                props.bill.original_value['$numberDecimal'],
+                props.bill.due_date,
+                getCurrentDate()
+              ),
         purchase_date: props.bill.purchase_date,
         due_date: props.bill.due_date,
-        pay_date: ((props.bill.pay_date != null) ? props.bill.pay_date : getCurrentDate()),
+        pay_date:
+          props.bill.pay_date != null ? props.bill.pay_date : getCurrentDate(),
         days_delay: props.bill.days_delay,
         situation: props.bill.situation,
         vendor: props.bill.vendor
       }
     };
   }
-
 
   handleMessageClose = () => {
     this.setState({ messageOpen: false });
@@ -108,7 +132,11 @@ class BillReceiveEditModal extends React.Component {
     }
     billsReceiveservice
       .update(data)
-      .then(() => {
+      .then(res => {
+        console.log(res.data);
+        console.log(this.props.clientData);
+        if (this.state.printQuota)
+          printBillsReceiveis(this.props.clientData, [{ ...res.data }]);
         this.setState({
           messageOpen: true,
           messageText: 'Titulo pago com sucesso!',
@@ -119,8 +147,16 @@ class BillReceiveEditModal extends React.Component {
       .catch(error => console.log(error.response));
   };
 
-  handleGenerateInterest = () => {    
-    let value = getValueInterest(this.state.data.original_value, this.state.data.due_date, this.state.data.pay_date);
+  handleChangeCheckBox = name => event => {
+    this.setState({ [name]: event.target.checked });
+  };
+
+  handleGenerateInterest = () => {
+    let value = getValueInterest(
+      this.state.data.original_value,
+      this.state.data.due_date,
+      this.state.data.pay_date
+    );
     this.setState({
       data: {
         ...this.state.data,
@@ -134,7 +170,13 @@ class BillReceiveEditModal extends React.Component {
   render() {
     const { open, handleClose, classes } = this.props;
 
-    const { data, messageOpen, variantMessage, messageText } = this.state;
+    const {
+      data,
+      messageOpen,
+      variantMessage,
+      messageText,
+      printQuota
+    } = this.state;
 
     let _original_value = parseFloat(data.original_value)
       .toFixed(2)
@@ -399,6 +441,27 @@ class BillReceiveEditModal extends React.Component {
               ref="final_value"
             />
           </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={5}
+            md={5}
+            lg={5}
+            xl={5}
+          >
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={printQuota}
+                  onChange={this.handleChangeCheckBox('printQuota')}
+                  value="printQuota"
+                  color="primary"
+                />
+              }
+              label="Imprimir parcela"
+            />
+          </Grid>
         </Grid>
         <div>
           <Button
@@ -428,7 +491,8 @@ BillReceiveEditModal.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
-  bill: PropTypes.object.isRequired
+  bill: PropTypes.object.isRequired,
+  clientData: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(BillReceiveEditModal);
