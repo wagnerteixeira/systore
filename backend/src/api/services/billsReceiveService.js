@@ -70,7 +70,7 @@ BillsReceive.route(
       res.json(client.bills_receives);
     }   
   });*/
-    BillsReceive.find({ client: req.params.id })
+    /*  BillsReceive.find({ client: req.params.id })
       .sort({ code: 1, quota: 1 })
       .exec((error, bills_receives) => {
         if (error) {
@@ -78,7 +78,37 @@ BillsReceive.route(
         } else {
           res.json(bills_receives);
         }
-      });
+      });*/
+
+    let billsReceivesNoPaid = BillsReceive.find({
+      client: req.params.id,
+      situation: 'O'
+    }).sort({ purchase_date: 1, quota: 1 });
+    let billsReceivesPaid = BillsReceive.find({
+      client: req.params.id,
+      situation: 'C'
+    }).sort({ purchase_date: -1, quota: 1 });
+
+    Promise.all([billsReceivesNoPaid, billsReceivesPaid]).then(values => {
+      let billsReceives = [];
+      billsReceives.push(...values[0]);
+      billsReceives.push(...values[1]);
+      res.json(billsReceives);
+      //console.log(values[0]);
+      //console.log(values[1]);
+    });
+
+    //return res.status(200).json('OK');*/
+
+    /*BillsReceive.find({ client: req.params.id })
+      .sort({ code: 1, quota: 1 })
+      .exec((error, bills_receives) => {
+        if (error) {
+          res.status(500).json({ erros: [error] });
+        } else {
+          res.json(bills_receives);
+        }
+      });*/
   }
 );
 

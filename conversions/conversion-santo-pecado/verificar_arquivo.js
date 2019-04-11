@@ -1,8 +1,8 @@
 var fs = require('fs');
 
 
-var path_clientes='titulo_03-04_.txt';
-//var path_clientes_alterado = 'emitente_alterado.txt';
+//var path_clientes='titulo_11-04.txt';
+var path_clientes = 'emitente_11-04.txt';
 var path_titulos='titulo_teste.txt';
 
 var countFields = 0;

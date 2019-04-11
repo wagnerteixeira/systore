@@ -110,6 +110,9 @@ const styles = theme => ({
   },
   table: {
     minWidth: 500
+  },
+  openRow: {
+    backgroundColor: theme.palette.secondary.light
   }
 });
 
@@ -682,6 +685,9 @@ class EditClient extends Component {
                     <TableCell padding="checkbox">Data de vencimento</TableCell>
                     <TableCell padding="checkbox">Data de pagamento</TableCell>
                     <TableCell padding="checkbox">Valor</TableCell>
+                    <TableCell padding="checkbox" align="left">
+                      Situação
+                    </TableCell>
                     <TableCell padding="checkbox">Valor pago/atual</TableCell>
                     <TableCell padding="checkbox">Dias em atraso</TableCell>
                     <TableCell className={classes.headerAcoes} align="right">
@@ -692,7 +698,13 @@ class EditClient extends Component {
                 <TableBody>
                   {Object.keys(bills_receives).map(key => {
                     return (
-                      <TableRow hover key={key}>
+                      <TableRow
+                        className={
+                          bills_receives[key].situation === 'O' &&
+                          classes.openRow
+                        }
+                        key={key}
+                      >
                         <TableCell padding="checkbox">
                           {getDateToString(bills_receives[key].purchase_date)}
                         </TableCell>
@@ -712,6 +724,11 @@ class EditClient extends Component {
                           {getNumberDecimalToStringCurrency(
                             bills_receives[key].original_value
                           )}
+                        </TableCell>
+                        <TableCell padding="checkbox" align="left">
+                          {bills_receives[key].situation === 'C'
+                            ? 'QUITADO'
+                            : 'ABERTO'}
                         </TableCell>
                         <TableCell padding="checkbox">
                           {getNumberToString(

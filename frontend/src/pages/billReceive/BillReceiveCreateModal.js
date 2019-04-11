@@ -107,22 +107,22 @@ class BillReceiveCreateModal extends React.Component {
 
   handleGenerateQuotas = () => {
     if (this.state.original_value > 0 && this.state.quotas > 0) {
-      let _quotaValue = parseFloat(
+      let v = parseFloat(
         this.state.original_value / this.state.quotas
-      ).toFixed(2);
+      ).formatFloat(1);
+      let _quotaValue = parseFloat(v).formatFloat(2);
       let quotas = [];
       let i = 0;
-
       let due_date = new Date(this.state.purchase_date.getTime());
       for (i = 0; i < this.state.quotas; i++) {
         let original_value = _quotaValue;
         if (i === this.state.quotas - 1) {
           original_value = parseFloat(
             this.state.original_value -
-              parseFloat((this.state.quotas - 1) * _quotaValue).toFixed(2)
-          ).toFixed(2);
+              parseFloat((this.state.quotas - 1) * _quotaValue).formatFloat(2)
+          ).formatFloat(2);
         }
-        due_date.setDate(due_date.getDate() + 30);
+        due_date.setMonth(due_date.getMonth() + 1);
         quotas.push({
           quota: i + 1,
           due_date: new Date(due_date.getTime()),
@@ -212,7 +212,7 @@ class BillReceiveCreateModal extends React.Component {
     bills_receives[key] = {
       ...bills_receives[key],
       [name]: parseFloat(event.target.value)
-        .toFixed(2)
+        .formatFloat(2)
         .replace('.', ',')
     };
     this.setState({
@@ -234,7 +234,7 @@ class BillReceiveCreateModal extends React.Component {
       messageText
     } = this.state;
     let _original_value = parseFloat(original_value)
-      .toFixed(2)
+      .formatFloat(2)
       .replace('.', ',');
     return (
       <ModalWrapped

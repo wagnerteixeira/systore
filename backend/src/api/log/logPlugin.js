@@ -70,7 +70,7 @@ module.exports = function(connection, HeaderLog, ItemLog) {
     });
   };
 
-  //restful.mongoose.plugin(plugin);
+  restful.mongoose.plugin(plugin);
   //console.log(restful.mongoose);
 };
 
