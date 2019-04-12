@@ -103,6 +103,9 @@ const inserirRegistros = async () => {
     console.log(`Inserindo título ${line[1]} - ${line[2]}`);
     let client = clients.find(findClient(line[0]));
     if (client) {
+      let final_value =
+        parseFloat(line[3].replace(',', '.')) +
+        parseFloat(line[6].replace(',', '.'));
       let situation = line[15] === 'QUITADO' ? 'C' : 'O';
       let billReceive = {
         client: client._id,
@@ -110,7 +113,7 @@ const inserirRegistros = async () => {
         quota: line[2],
         original_value: line[3].replace(',', '.'),
         interest: line[6].replace(',', '.'),
-        final_value: line[3].replace(',', '.'),
+        final_value: final_value,
         purchase_date: convertDate(line[9]),
         due_date: convertDate(line[10]),
         pay_date: convertDate(line[12]),

@@ -697,6 +697,14 @@ class EditClient extends Component {
                 </TableHead>
                 <TableBody>
                   {Object.keys(bills_receives).map(key => {
+                    let _daysDelay = bills_receives[key].pay_date != null
+                            ? bills_receives[key].days_delay
+                            : getDelayedDays(
+                                bills_receives[key].due_date,
+                              dateCurrent
+                            );
+                    if (parseInt(_daysDelay) <= 0)
+                      _daysDelay = '';
                     return (
                       <TableRow
                         className={
@@ -746,12 +754,7 @@ class EditClient extends Component {
                           )}
                         </TableCell>
                         <TableCell padding="checkbox">
-                          {bills_receives[key].pay_date != null
-                            ? ''
-                            : getDelayedDays(
-                                bills_receives[key].due_date,
-                                dateCurrent
-                              )}
+                          { _daysDelay }
                         </TableCell>
                         <TableCell padding="none" align="right">
                           <Fab
