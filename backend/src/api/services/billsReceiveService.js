@@ -34,8 +34,7 @@ BillsReceive.before('delete', (req, res, next) => {
     return res.status(404).send({ errors: ['Título não encontrado'] });
   BillsReceive.findById(req.params.id, function(error, bill_receive) {
     if (error) res.status(500).json({ erros: [error] });
-
-    if (bill_receive.due_date || parseFloat(bill_receive.final_value) > 0.0)
+    if (bill_receive.pay_date || bill_receive.situation === 'C')
       return res
         .status(500)
         .send({ errors: ['Título não pode ser excluído pois já está pago!'] });

@@ -156,11 +156,13 @@ class EditClient extends Component {
   };
 
   handleDeleteBillReceive = key => {
-    let copyBill = this.state.bills_receives.slice();
-    copyBill.splice(key, 1);
     billsReceiveservice
       .remove(this.state.bills_receives[key]._id)
-      .then(() => this.setState({ bills_receives: copyBill }))
+      .then(() => {
+        let copyBill = this.state.bills_receives.slice();
+        copyBill.splice(key, 1);
+        this.setState({ bills_receives: copyBill });
+      })
       .catch(error =>
         this.props.handleOpenMessage(true, 'error', getErrosFromApi(error))
       );
@@ -697,14 +699,14 @@ class EditClient extends Component {
                 </TableHead>
                 <TableBody>
                   {Object.keys(bills_receives).map(key => {
-                    let _daysDelay = bills_receives[key].pay_date != null
-                            ? bills_receives[key].days_delay
-                            : getDelayedDays(
-                                bills_receives[key].due_date,
-                              dateCurrent
-                            );
-                    if (parseInt(_daysDelay) <= 0)
-                      _daysDelay = '';
+                    let _daysDelay =
+                      bills_receives[key].pay_date != null
+                        ? bills_receives[key].days_delay
+                        : getDelayedDays(
+                            bills_receives[key].due_date,
+                            dateCurrent
+                          );
+                    if (parseInt(_daysDelay) <= 0) _daysDelay = '';
                     return (
                       <TableRow
                         className={
@@ -744,18 +746,18 @@ class EditClient extends Component {
                               ? bills_receives[key].final_value[
                                   '$numberDecimal'
                                 ]
-                              : parseFloat(getValueWithInterest(
-                                  bills_receives[key].original_value[
-                                    '$numberDecimal'
-                                  ],
-                                  bills_receives[key].due_date,
-                                  dateCurrent
-                                ))
+                              : parseFloat(
+                                  getValueWithInterest(
+                                    bills_receives[key].original_value[
+                                      '$numberDecimal'
+                                    ],
+                                    bills_receives[key].due_date,
+                                    dateCurrent
+                                  )
+                                )
                           )}
                         </TableCell>
-                        <TableCell padding="checkbox">
-                          { _daysDelay }
-                        </TableCell>
+                        <TableCell padding="checkbox">{_daysDelay}</TableCell>
                         <TableCell padding="none" align="right">
                           <Fab
                             color="secondary"
