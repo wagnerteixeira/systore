@@ -55,10 +55,12 @@ export const getValueWithInterest = (value, due_date, pay_date) => {
   let p = 0;
   if (days > 0) {
     p = (0.07 / 30) * days;
+  
+    let interest = value * p;
+    return parseFloat(value) + parseFloat(interest);
+  } else {
+    return value;
   }
-
-  let interest = value * p;
-  return parseFloat(value) + parseFloat(interest);
 };
 
 export const getValueInterest = (value, due_date, pay_date) => {
@@ -66,10 +68,13 @@ export const getValueInterest = (value, due_date, pay_date) => {
   let p = 0;
   if (days > 0) {
     p = (0.07 / 30) * days;
+  
+    let interest = value * p;
+    return interest;
   }
-
-  let interest = value * p;
-  return interest;
+  else {
+    return 0;
+  }
 };
 
 export const getCurrentDate = () => {

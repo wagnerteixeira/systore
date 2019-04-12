@@ -736,16 +736,13 @@ class EditClient extends Component {
                               ? bills_receives[key].final_value[
                                   '$numberDecimal'
                                 ]
-                              : getValueWithInterest(
+                              : parseFloat(getValueWithInterest(
                                   bills_receives[key].original_value[
                                     '$numberDecimal'
                                   ],
                                   bills_receives[key].due_date,
                                   dateCurrent
-                                ) +
-                                  bills_receives[key].original_value[
-                                    '$numberDecimal'
-                                  ]
+                                ))
                           )}
                         </TableCell>
                         <TableCell padding="checkbox">
