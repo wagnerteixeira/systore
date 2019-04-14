@@ -240,7 +240,7 @@ BillsReceive.route(
       .exec((error, doc) => {
         //console.log(doc);
         if (error) return res.status(500).json({ erros: [error] });
-        let nextCode = doc.code + 1;
+        let nextCode = doc ? doc.code + 1 : 1;
         bills_receives = req.body.bills_receives;
         let results = Object.values(bills_receives).map(bill_receive => {
           const _bill_receive = new BillsReceive({

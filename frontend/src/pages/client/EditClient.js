@@ -39,6 +39,7 @@ import billsReceiveservice from '../../services/billsReceiveService';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 
 import { printBillsReceiveis } from '../../services/printService';
+import { bold } from 'ansi-colors';
 
 const styles = theme => ({
   container: {
@@ -113,7 +114,16 @@ const styles = theme => ({
   },
   openRow: {
     backgroundColor: theme.palette.secondary.light
-  }
+  },
+  tableRowData: {
+    fontWeight: 'bold',
+  },
+  '@global': {
+    'tr > td': {
+      fontWeight: '600 !important',
+      fontSize: '1.1em !important'
+    },
+  },
 });
 
 class EditClient extends Component {
@@ -715,7 +725,7 @@ class EditClient extends Component {
                         }
                         key={key}
                       >
-                        <TableCell padding="checkbox">
+                        <TableCell  padding="checkbox">
                           {getDateToString(bills_receives[key].purchase_date)}
                         </TableCell>
                         <TableCell padding="checkbox">
