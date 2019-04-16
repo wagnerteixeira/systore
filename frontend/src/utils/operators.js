@@ -13,6 +13,14 @@ export const getDateToString = date => {
   else return '';
 };
 
+export const getDateToStringYearTwoDigits = date => {
+  if (date){
+    let _date = new Date(date);
+     return `${_date.getDate().toString().padStart(2, '0')}/${(_date.getMonth() + 1).toString().padStart(2, '0')}/${_date.getFullYear().toString().substr(-2)}`;
+  }
+  else return '';
+};
+
 export const getDateTimeToString = date => {
   if (date) return new Date(date).toLocaleString('pt-BR');
   else return '';

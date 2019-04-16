@@ -1,8 +1,8 @@
 import jsPDF from 'jspdf';
 
-import { getDateToString, getNumberDecimalToString, getDateToStringYearTwoDigits } from '../utils/operators';
+import { getDateToString, getNumberDecimalToString } from '../utils/operators';
 
-const createPageForPrintLX300 = (clientData, billReceive) => {
+const createPageForPrint = (clientData, billReceive) => {
   let items = [];
   //linha 1
   items.push({
@@ -72,86 +72,13 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
   return { width: 1630, height: 300, items: items };
 };
 
-const createPageForPrintFX890 = (clientData, billReceive) => {
-  let items = [];
-  //linha 1
-  items.push({
-    text: `${billReceive.code}/${billReceive.quota}`,
-    x: 8,
-    y: 23
-  }); //numero_compra
-  items.push({ text: clientData.code, x: 40, y: 23 }); //cod_cliente
-  items.push({ text: clientData.name, x: 74, y: 23 }); //nome_cliente
-  //linha 2
-  items.push({ text: billReceive.vendor, x: 8, y: 34 }); //vendedor
-  items.push({ text: getDateToStringYearTwoDigits(billReceive.due_date), x: 40, y: 34 }); //data_vencimento
-  items.push({
-    text: `${billReceive.code}/${billReceive.quota}`,
-    x: 74,
-    y: 34
-  }); //numero_compra
-  items.push({ text: clientData.code, x: 97, y: 34 }); //cod_cliente
-  items.push({ text: getDateToString(billReceive.due_date), x: 128, y: 34 }); //data_vencimento
-  //linha 3
-  items.push({
-    text: getNumberDecimalToString(billReceive.original_value),
-    x: 44,
-    y: 48
-  }); //valor
-  items.push({
-    text: getDateToStringYearTwoDigits(billReceive.purchase_date),
-    x: 74,
-    y: 46
-  }); //data_compra
-  items.push({ text: billReceive.vendor, x: 97, y: 45 }); //vendedor
-  items.push({
-    text: getNumberDecimalToString(billReceive.original_value),
-    x: 133,
-    y: 47
-  }); //valor
-  //linha 4
-  let interest = getNumberDecimalToString(billReceive.interest);
-  if (interest !== '0,00') {
-    items.push({
-      text: interest,
-      x: 44,
-      y: 61
-    }); //juros
-    items.push({
-      text: interest,
-      x: 133,
-      y: 60
-    }); //juros
-  }
-  //linha 5
-  let final_value = getNumberDecimalToString(billReceive.final_value);
-  if (final_value !== '0,00') {
-    items.push({
-      text: final_value,
-      x: 44,
-      y: 72
-    }); //total
-    items.push({
-      text: final_value,
-      x: 133,
-      y: 72
-    }); //total
-  }
-  items.push({ text: 'AV. 1º DE JUNHO, 366', x: 75, y: 72 }); //pague_sua_prestacao
-
-  return { width: 1630, height: 300, items: items };
-};
-
-
 const printBillsReceiveis = (clientData, billsReceive) => {
   let pages = [];
   billsReceive.forEach(billReceive =>
-    pages.push(createPageForPrintFX890(clientData, billReceive))
+    pages.push(createPageForPrint(clientData, billReceive))
   );
 
   let doc = new jsPDF();
-  console.log(doc.getFontList());
-  //doc.setFontType("bold");
   doc.deletePage(1);
   doc.setFontSize(12);
 
