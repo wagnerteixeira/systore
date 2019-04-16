@@ -33,7 +33,6 @@ Client.before('delete', (req, res, next) => {
 
 Client.before('post', (req, res, next) => {
   if (!req.body.code) {
-    console.log('buscou código');
     Counter.findOneAndUpdate(
       { _id: 'client_code' },
       { $inc: { seq: 1 } },
@@ -47,19 +46,22 @@ Client.before('post', (req, res, next) => {
 });
 
 Client.route('count', ['get'], (req, res, next) => {
-  const query = req.query || '';
   let filterQuery = {};
-  Object.keys(req.query).forEach((value, index, arr) => {
-    if (value.includes('__regex')) {
-      let valueRegex = req.query[value];
-      if (valueRegex.charAt(0) === '/') valueRegex = valueRegex.substr(1);
-      if (valueRegex.charAt(valueRegex.length - 1) === '/')
-        valueRegex = valueRegex.substr(0, valueRegex.length - 1);
-      filterQuery = {
-        [value.replace('__regex', '')]: new RegExp(valueRegex, 'i')
-      };
-    }
-  });
+  if (Object.keys(req.query).some(value => value.includes('__regex'))) {
+    Object.keys(req.query).forEach((value, index, arr) => {
+      if (value.includes('__regex')) {
+        let valueRegex = req.query[value];
+        if (valueRegex.charAt(0) === '/') valueRegex = valueRegex.substr(1);
+        if (valueRegex.charAt(valueRegex.length - 1) === '/')
+          valueRegex = valueRegex.substr(0, valueRegex.length - 1);
+        filterQuery = {
+          [value.replace('__regex', '')]: new RegExp(valueRegex, 'i')
+        };
+      }
+    });
+  } else {
+    filterQuery = req.query;
+  }
 
   Client.countDocuments(filterQuery, (error, value) => {
     if (error) {

@@ -65,26 +65,45 @@ class Client extends Component {
   };
 
   componentWillMount() {
-    this.fetchClients(
+    /*this.fetchClients(
       this.state.page,
       this.state.rowsPerPage,
       this.state.columnSort,
       this.state.order,
       this.state.search
-    );
+    );*/
   }
 
   fetchClients = (page, rowsPerPage, columnSort, order, filter) => {
-    clientservice
-      .count(columnSort, filter)
-      .then(res => this.setState({ countClients: res.data.value }));
-    const skip = page * rowsPerPage;
+    console.log(`${columnSort} ${filter}`);
+    if (columnSort === 'code' && /\D/.test(filter)) {
+      this.setState({
+        messageOpen: true,
+        messageText: 'Informe somente números na pesquisa por código.',
+        variantMessage: 'warning'
+      });
+      return;
+    }
+
     let filterType = '';
     if (columnSort === 'code') filterType = 'eq';
     else filterType = 'rg';
+
+    clientservice.count(columnSort, filterType, filter).then(res => {
+      if (filter !== '' && parseInt(res.data.value) === 0) {
+        this.setState({
+          messageOpen: true,
+          messageText: 'Não foi encontrado nenhum cliente com o filtro.',
+          variantMessage: 'warning'
+        });
+      }
+      this.setState({ countClients: res.data.value });
+    });
+    const skip = page * rowsPerPage;
     clientservice
       .getAll(skip, rowsPerPage, columnSort, order, filterType, filter)
       .then(res => {
+        console.log(`antes state ${page}`);
         this.setState({
           stateData: 'LIST',
           inEdit: false,
@@ -173,6 +192,7 @@ class Client extends Component {
       nextState.variantMessage = 'success';
     }
     this.setState(nextState);
+    console.log('');
     this.fetchClients(
       this.state.page,
       this.state.rowsPerPage,
@@ -242,6 +262,7 @@ class Client extends Component {
   };
 
   handleChangePage = (event, page) => {
+    console.log(page);
     this.fetchClients(
       page,
       this.state.rowsPerPage,
@@ -252,6 +273,7 @@ class Client extends Component {
   };
 
   handleChangeRowsPerPage = event => {
+    console.log('');
     this.fetchClients(
       this.state.page,
       parseInt(event.target.value),
@@ -262,17 +284,18 @@ class Client extends Component {
   };
 
   handleSort = property => event => {
+    console.log('handleSort');
     let order = 'asc';
     if (this.state.columnSort === property && this.state.order === 'asc') {
       order = 'desc';
     }
-
+    console.log('antes');
     this.fetchClients(
       this.state.page,
       this.state.rowsPerPage,
       property,
       order,
-      this.state.search
+      ''
     );
   };
 
@@ -282,6 +305,7 @@ class Client extends Component {
   };
 
   handleSearch = () => {
+    console.log('');
     this.fetchClients(
       this.state.page,
       this.state.rowsPerPage,
