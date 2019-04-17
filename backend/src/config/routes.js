@@ -9,6 +9,10 @@ const BillsReceiveService = require('../api/services/billsReceiveService');
 
 const AuthService = require('../api/services/authService');
 const { active } = require('../api/services/activeService');
+const {
+  setPrintData,
+  getPrintData
+} = require('../api/services/printDataService');
 
 module.exports = function(server, headerLog, itemLog) {
   /*
@@ -18,6 +22,9 @@ module.exports = function(server, headerLog, itemLog) {
   const logService = require('../api/services/logService')(headerLog, itemLog);
 
   server.get('/', active);
+  server.get('/printdata', getPrintData);
+  server.post('/printdata', setPrintData);
+
   const protectedApi = express.Router();
   server.use('/api', protectedApi);
 
