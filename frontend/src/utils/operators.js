@@ -14,11 +14,18 @@ export const getDateToString = date => {
 };
 
 export const getDateToStringYearTwoDigits = date => {
-  if (date){
+  if (date) {
     let _date = new Date(date);
-     return `${_date.getDate().toString().padStart(2, '0')}/${(_date.getMonth() + 1).toString().padStart(2, '0')}/${_date.getFullYear().toString().substr(-2)}`;
-  }
-  else return '';
+    return `${_date
+      .getDate()
+      .toString()
+      .padStart(2, '0')}/${(_date.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}/${_date
+      .getFullYear()
+      .toString()
+      .substr(-2)}`;
+  } else return '';
 };
 
 export const getDateTimeToString = date => {
@@ -53,6 +60,15 @@ export const getNumberToString = number => {
   else return 'R$ 0,00';
 };
 
+export const getNumberToString2 = number => {
+  if (number)
+    return `${parseFloat(number).toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+  else return '0,00';
+};
+
 export const getDelayedDays = (due_date, pay_date) => {
   let days = moment(pay_date).diff(due_date, 'days');
   return days;
@@ -63,7 +79,7 @@ export const getValueWithInterest = (value, due_date, pay_date) => {
   let p = 0;
   if (days > 0) {
     p = (0.07 / 30) * days;
-  
+
     let interest = value * p;
     return parseFloat(value) + parseFloat(interest);
   } else {
@@ -76,11 +92,10 @@ export const getValueInterest = (value, due_date, pay_date) => {
   let p = 0;
   if (days > 0) {
     p = (0.07 / 30) * days;
-  
+
     let interest = value * p;
     return interest;
-  }
-  else {
+  } else {
     return 0;
   }
 };
