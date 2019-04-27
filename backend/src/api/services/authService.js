@@ -47,8 +47,8 @@ const login = (req, res, next) => {
 const validateToken = (req, res, next) => {
   const token = req.body.token || '';
   jwt.verify(token, process.env.AUTH_SECRET, function(err, decoded) {
-    //console.log(err);
-    console.log(decoded);
+    if (err) console.log(err);
+    //console.log(decoded);
     const { admin, user_name } = decoded.user;
     return res.status(200).send({ valid: !err, user: { user_name, admin } });
   });
