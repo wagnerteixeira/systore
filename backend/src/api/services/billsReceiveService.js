@@ -199,9 +199,11 @@ const validateQuotas = (original_value, bills_receives, purchase_date) => {
     ).toUTCString()} \n${new Date(purchase_date).toString()}`
   );
   let error = '';
-  let sum_original_value = 0.0;
+  let sum_original_value = 0.00;
+  let sum_temp = 0;
   bills_receives.forEach(bill_receive => {
-    sum_original_value += parseFloat(bill_receive.original_value);
+    sum_original_value = (((sum_temp * 10) + (parseFloat(bill_receive.original_value) * 10)) / 10);
+    sum_temp = sum_original_value;
     if (new Date(bill_receive.due_date) < new Date(purchase_date))
       error += `A data de pagamento (${getDateToString(
         new Date(bill_receive.due_date)
@@ -214,12 +216,9 @@ const validateQuotas = (original_value, bills_receives, purchase_date) => {
 
   if (parseFloat(sum_original_value) !== parseFloat(original_value))
     error += `A soma das parcelas (R$ ${parseFloat(sum_original_value)
-      .toFixed(2)
-      .replace('.', ',')}) difere do valor do título (R$ ${parseFloat(
+      }) difere do valor do título (R$ ${parseFloat(
       original_value
-    )
-      .toFixed(2)
-      .replace('.', ',')})!\n`;
+    )})!\n`;
 
   return error;
 };
