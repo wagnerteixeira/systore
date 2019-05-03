@@ -19,12 +19,12 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import ptLocale from 'date-fns/locale/pt-BR';
 
-import NumberFormatCustom from '../../components/common/NumberFormatCustom';
-import ModalWrapped from '../../components/common/Modal';
-import MessageSnackbar from '../../components/common/MessageSnackbar';
+import NumberFormatCustom from '../../../components/common/NumberFormatCustom';
+import ModalWrapped from '../../../components/common/Modal';
+import MessageSnackbar from '../../../components/common/MessageSnackbar';
 
-import billsReceiveService from '../../services/billsReceiveService';
-import { getErrosFromApi } from '../../utils/errorsHelper';
+import billsReceiveService from '../../../services/billsReceiveService';
+import { getErrosFromApi } from '../../../utils/errorsHelper';
 
 const styles = theme => ({
   paper: {

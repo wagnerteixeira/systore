@@ -30,8 +30,8 @@ import {
   getValueWithInterest
 } from '../../utils/operators';
 import TextMaskCustom from '../../components/common/TextMaskCustom';
-import BillReceiveEditModal from '../billReceive/BillReceiveEditModal';
-import BillReceiveCreateModal from '../billReceive/BillReceiveCreateModal';
+import BillReceiveEditModal from './modals/BillReceiveEditModal';
+import BillReceiveCreateModal from './modals/BillReceiveCreateModal';
 
 import ptLocale from 'date-fns/locale/pt-BR';
 
@@ -52,6 +52,15 @@ const styles = theme => ({
     flexWrap: 'wrap',
     flexDirection: 'column',
     padding: theme.spacing.unit * 2,
+    borderColor: '#C0C0C0',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    width: '98%'
+  },
+  backBill: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'column',
     borderColor: '#C0C0C0',
     borderStyle: 'solid',
     borderWidth: '1px',
@@ -122,6 +131,9 @@ const styles = theme => ({
       fontWeight: '600 !important',
       fontSize: '1.1em !important'
     }
+  },
+  headerAcoes: {
+    minWidth: '130px'
   }
 });
 
@@ -686,7 +698,7 @@ class EditClient extends Component {
                 Cancelar
               </Button>
             </div>
-            <div className={classes.back}>
+            <div className={classes.backBill}>
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>
