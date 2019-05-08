@@ -10,35 +10,14 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Fab from '@material-ui/core/Fab';
-import Icon from '@material-ui/core/Icon';
-import classNames from 'classnames';
 
-import {
-  getDateToString,
-  getCurrentDate,
-  getDelayedDays,
-  getNumberDecimalToStringCurrency,
-  getNumberToString,
-  getValueWithInterest
-} from '../../utils/operators';
 import TextMaskCustom from '../../components/common/TextMaskCustom';
-import BillReceiveEditModal from '../billReceive/BillReceiveEditModal';
-import BillReceiveCreateModal from '../billReceive/BillReceiveCreateModal';
+
+import BillReceive from '../billReceive/BillReceive';
 
 import ptLocale from 'date-fns/locale/pt-BR';
-
-import billsReceiveservice from '../../services/billsReceiveService';
-import { getErrosFromApi } from '../../utils/errorsHelper';
-
-import { printBillsReceiveis } from '../../services/printService';
 
 const styles = theme => ({
   container: {
@@ -130,118 +109,13 @@ class EditClient extends Component {
     super(props);
     this.state = {
       tabValue: 'EDIT',
-      bills_receives: [],
-      openEditModal: false,
-      openCreateModal: false,
       clientId: props.data._id,
-      clientData: props.data,
-      bill: {
-        _id: '',
-        client: '',
-        code: '',
-        quota: '',
-        original_value: 0,
-        interest: 0,
-        final_value: 0,
-        purchase_date: new Date(),
-        due_date: new Date(),
-        pay_date: new Date(),
-        days_delay: 0,
-        situation: 'O',
-        vendor: ''
-      }
+      clientData: props.data
     };
   }
 
-  fetchBillsReceives = () => {
-    billsReceiveservice
-      .getBillsReceiveServiceByClient(this.state.clientId)
-      .then(res => this.setState({ bills_receives: res.data }));
-  };
-
   handleTabChange = (event, value) => {
-    this.fetchBillsReceives();
     this.setState({ tabValue: value });
-  };
-
-  handleDeleteBillReceive = key => {
-    billsReceiveservice
-      .remove(this.state.bills_receives[key]._id)
-      .then(() => {
-        let copyBill = this.state.bills_receives.slice();
-        copyBill.splice(key, 1);
-        this.setState({ bills_receives: copyBill });
-      })
-      .catch(error =>
-        this.props.handleOpenMessage(true, 'error', getErrosFromApi(error))
-      );
-  };
-
-  handleEditBillReceive = bill_receive => {
-    this.setState({ openEditModal: true, bill: bill_receive });
-  };
-
-  handleCloseEditModal = () => {
-    this.setState({ openEditModal: false });
-  };
-
-  handleCloseCreateModal = (event, reason) => {
-    this.setState({ openCreateModal: false });
-    if (reason === 'created') {
-      this.props.handleOpenMessage(
-        true,
-        'success',
-        'Títulos criado com sucesso! '
-      );
-      this.fetchBillsReceives();
-    }
-  };
-
-  handleCreateBillReceive = () => {
-    this.setState({ openCreateModal: true });
-  };
-
-  handleSaveBillReceive = reason => {
-    if (reason === 'saved') {
-      this.setState({ openEditModal: false });
-      this.props.handleOpenMessage(
-        true,
-        'success',
-        'Título pago com sucesso! '
-      );
-      this.fetchBillsReceives();
-    }
-  };
-
-  renderEditModal() {
-    if (this.state.openEditModal === true) {
-      return (
-        <BillReceiveEditModal
-          open={this.state.openEditModal}
-          bill={this.state.bill}
-          handleClose={this.handleCloseEditModal}
-          handleSave={this.handleSaveBillReceive}
-          clientData={this.state.clientData}
-        />
-      );
-    }
-  }
-
-  handlePrintBillReceive = key => {
-    let billReceive = this.state.bills_receives[key];
-    const { clientData } = this.state;
-    printBillsReceiveis(clientData, [billReceive]);
-  };
-
-  handlePrintBillReceiveGroupByCode = key => {
-    let code = this.state.bills_receives[key].code;
-    const { clientData } = this.state;
-
-    let billReceives = this.state.bills_receives.filter(
-      item => item.code === code
-    );
-
-    printBillsReceiveis(clientData, billReceives);
   };
 
   render() {
@@ -254,9 +128,8 @@ class EditClient extends Component {
       handleDateValueChange
     } = this.props;
 
-    const { tabValue, bills_receives, openCreateModal, clientId } = this.state;
+    const { tabValue } = this.state;
 
-    const dateCurrent = getCurrentDate();
     return (
       <div>
         <Tabs
@@ -667,162 +540,11 @@ class EditClient extends Component {
           </form>
         )}
         {tabValue === 'LIST' && (
-          <form className={classes.container} noValidate autoComplete="off">
-            <div className={classes.divRow}>
-              <Button
-                variant="outlined"
-                color="primary"
-                className={classes.button}
-                onClick={this.handleCreateBillReceive}
-              >
-                INCLUIR
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                className={classes.button}
-                onClick={handleCancel}
-              >
-                Cancelar
-              </Button>
-            </div>
-            <div className={classes.back}>
-              <Table className={classes.table}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox">Data da venda</TableCell>
-                    <TableCell padding="checkbox">Título</TableCell>
-                    <TableCell padding="checkbox">Parcela</TableCell>
-                    <TableCell padding="checkbox">Data de vencimento</TableCell>
-                    <TableCell padding="checkbox">Data de pagamento</TableCell>
-                    <TableCell padding="checkbox">Valor</TableCell>
-                    <TableCell padding="checkbox" align="left">
-                      Situação
-                    </TableCell>
-                    <TableCell padding="checkbox">Valor pago/atual</TableCell>
-                    <TableCell padding="checkbox">Dias em atraso</TableCell>
-                    <TableCell className={classes.headerAcoes} align="right">
-                      Ações
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {Object.keys(bills_receives).map(key => {
-                    let _daysDelay =
-                      bills_receives[key].pay_date != null
-                        ? bills_receives[key].days_delay
-                        : getDelayedDays(
-                            bills_receives[key].due_date,
-                            dateCurrent
-                          );
-                    if (parseInt(_daysDelay) <= 0) _daysDelay = '';
-                    return (
-                      <TableRow
-                        className={
-                          bills_receives[key].situation === 'O' &&
-                          classes.openRow
-                        }
-                        key={key}
-                      >
-                        <TableCell padding="checkbox">
-                          {getDateToString(bills_receives[key].purchase_date)}
-                        </TableCell>
-                        <TableCell padding="checkbox">
-                          {bills_receives[key].code}
-                        </TableCell>
-                        <TableCell padding="checkbox">
-                          {bills_receives[key].quota}
-                        </TableCell>
-                        <TableCell padding="checkbox">
-                          {getDateToString(bills_receives[key].due_date)}
-                        </TableCell>
-                        <TableCell padding="checkbox">
-                          {getDateToString(bills_receives[key].pay_date)}
-                        </TableCell>
-                        <TableCell padding="checkbox">
-                          {getNumberDecimalToStringCurrency(
-                            bills_receives[key].original_value
-                          )}
-                        </TableCell>
-                        <TableCell padding="checkbox" align="left">
-                          {bills_receives[key].situation === 'C'
-                            ? 'QUITADO'
-                            : 'ABERTO'}
-                        </TableCell>
-                        <TableCell padding="checkbox">
-                          {getNumberToString(
-                            bills_receives[key].pay_date != null
-                              ? bills_receives[key].final_value[
-                                  '$numberDecimal'
-                                ]
-                              : parseFloat(
-                                  getValueWithInterest(
-                                    bills_receives[key].original_value[
-                                      '$numberDecimal'
-                                    ],
-                                    bills_receives[key].due_date,
-                                    dateCurrent
-                                  )
-                                )
-                          )}
-                        </TableCell>
-                        <TableCell padding="checkbox">{_daysDelay}</TableCell>
-                        <TableCell padding="none" align="right">
-                          <Fab
-                            color="secondary"
-                            aria-label="Delete"
-                            className={classNames(classes.fab, classes.fabEdit)}
-                            onClick={() =>
-                              this.handlePrintBillReceiveGroupByCode(key)
-                            }
-                            size="small"
-                          >
-                            <Icon fontSize="small">event_note</Icon>
-                          </Fab>
-                          <Fab
-                            color="secondary"
-                            aria-label="Delete"
-                            className={classNames(classes.fab, classes.fabEdit)}
-                            onClick={() => this.handlePrintBillReceive(key)}
-                            size="small"
-                          >
-                            <Icon fontSize="small">local_printshop</Icon>
-                          </Fab>
-                          <Fab
-                            color="primary"
-                            aria-label="Edit"
-                            className={classNames(classes.fab, classes.fabEdit)}
-                            onClick={() =>
-                              this.handleEditBillReceive(bills_receives[key])
-                            }
-                            size="small"
-                          >
-                            <Icon fontSize="small">edit_icon</Icon>
-                          </Fab>
-                          <Fab
-                            color="secondary"
-                            aria-label="Delete"
-                            className={classes.fab}
-                            onClick={() => this.handleDeleteBillReceive(key)}
-                            size="small"
-                          >
-                            <Icon fontSize="small">delete_icon</Icon>
-                          </Fab>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-            <br />
-            {this.renderEditModal()}
-            <BillReceiveCreateModal
-              open={openCreateModal}
-              handleClose={this.handleCloseCreateModal}
-              clientId={clientId}
-            />
-          </form>
+          <BillReceive
+            clientId={this.state.clientId}
+            clientData={this.state.clientData}
+            handleOpenMessage={this.props.handleOpenMessage}
+          />
         )}
       </div>
     );
