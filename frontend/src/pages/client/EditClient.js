@@ -15,7 +15,7 @@ import Tab from '@material-ui/core/Tab';
 
 import TextMaskCustom from '../../components/common/TextMaskCustom';
 
-import BillReceive from '../billReceive/BillReceive';
+import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
 
 import ptLocale from 'date-fns/locale/pt-BR';
 
@@ -540,7 +540,7 @@ class EditClient extends Component {
           </form>
         )}
         {tabValue === 'LIST' && (
-          <BillReceive
+          <BillReceiveTable
             clientId={this.state.clientId}
             clientData={this.state.clientData}
             handleOpenMessage={this.props.handleOpenMessage}

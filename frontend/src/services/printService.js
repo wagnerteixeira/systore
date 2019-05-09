@@ -194,6 +194,8 @@ const printBillsReceiveis = (clientData, billsReceive) => {
 
   let doc = new jsPDF();
   //doc.setFontType("bold");
+  doc.setFont('courier');
+  doc.setFontType('normal');
   doc.deletePage(1);
   doc.setFontSize(12);
 

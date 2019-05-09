@@ -192,15 +192,15 @@ class Menu extends React.Component {
           </div>
           <Divider />
           <List>
-            {/*<IconListButton 
-                linkTo={process.env.REACT_APP_PUBLIC_URL + '/'}
-                iconType='attach_money'               
-                primaryText='Títulos'    
-                onClickButton={() => this.handleHeaderText('Títulos')}
-                listItemClassName={classes.listItemClassName} 
-                iconClassName={classes.iconClassName}
-                listItemTextClassName={classes.listItemTextClassName}
-              />*/}
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/billsReceive'}
+              iconType="attach_money"
+              primaryText="Títulos"
+              onClickButton={() => this.handleHeaderText('Títulos')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
             <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/client'}
               iconType="assignment_ind"

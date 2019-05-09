@@ -15,9 +15,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import ptLocale from 'date-fns/locale/pt-BR';
 
-import MessageSnackbar from '../../components/common/MessageSnackbar';
-import NumberFormatCustom from '../../components/common/NumberFormatCustom';
-import ModalWrapped from '../../components/common/Modal';
+import MessageSnackbar from '../common/MessageSnackbar';
+import NumberFormatCustom from '../common/NumberFormatCustom';
+import ModalWrapped from '../common/Modal';
 import {
   getDateToString,
   getCurrentDate,

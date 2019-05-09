@@ -8,6 +8,14 @@ export const debounceTime = (milliseconds, fn) => {
   };
 };
 
+export const debounceTimeWithParams = (milliseconds, fn) => {
+  let timer = 0;
+  return (...params) => {
+    clearTimeout(timer);
+    timer = setTimeout(fn, milliseconds, ...params);
+  };
+};
+
 export const getDateToString = date => {
   if (date) return new Date(date).toLocaleString('pt-BR').substring(0, 10);
   else return '';

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import { blue, red, green } from '@material-ui/core/colors';
@@ -9,6 +9,7 @@ import { axiosOApi } from './services/axios';
 
 import MessageSnackbar from './components/common/MessageSnackbar';
 
+import BillsReceive from './pages/billReceive/BillReceive';
 import Client from './pages/client/Client';
 import User from './pages/user/User';
 import ViewLog from './pages/log/ViewLog';
@@ -169,11 +170,11 @@ class App extends Component {
               initialheaderText="Clientes"
             >
               <Switch>
-                <Route path="/" exact component={Client} />
-                {/*<Route path='/billsReceive' component={BillsReceive} />*/}
+                <Route path="/billsReceive" component={BillsReceive} />
                 <Route path="/client" component={Client} />
                 <Route path="/user" component={User} />
                 {user.admin && <Route path="/log" component={ViewLog} />}
+                <Redirect from="*" to="/billsReceive" />
               </Switch>
             </Menu>
           )}
