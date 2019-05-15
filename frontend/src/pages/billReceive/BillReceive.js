@@ -250,14 +250,12 @@ function BillReceive(props) {
         value={single}
         onFocus={() => console.log('focus')}
         openMenuOnFocus
-      />
-      {single && (
-        <BillReceiveTable
-          clientId={single.value}
-          clientData={null}
-          handleOpenMessage={handleOpenMessage}
-        />
-      )}
+      />      
+      <BillReceiveTable
+        clientId={single ? single.value : 0}
+        clientData={null}
+        handleOpenMessage={handleOpenMessage}
+      />      
       <MessageSnackbar
         handleClose={() => setMessageData({ messageOpen: false })}
         open={messageData.messageOpen}

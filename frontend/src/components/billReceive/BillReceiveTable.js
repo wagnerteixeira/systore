@@ -7,9 +7,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import classNames from 'classnames';
+
+
 
 import {
   getDateToString,
@@ -29,6 +33,8 @@ import billsReceiveservice from '../../services/billsReceiveService';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 import clientService from '../../services/clientService';
 
+import TablePaginationActions from '../common/TablePaginationActions';
+
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;
   console.log(clientId);
@@ -38,12 +44,19 @@ function BillReceiveTable(props) {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [billReceive, setBillReceive] = useState({});
   const [billsReceive, setbillsReceive] = useState([]);
+  const [billsReceiveComplete, setbillsReceiveComplete] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(1);
   useEffect(
     () => {
       fetchBillsReceive();
     },
     [clientId]
   );
+
+  useEffect(() => {
+    handleChangePage(null, 0);
+  }, [billsReceiveComplete])
 
   function handleSaveBillReceive(reason) {
     if (reason === 'saved') {
@@ -101,9 +114,15 @@ function BillReceiveTable(props) {
 
   function fetchBillsReceive() {
     console.log('fetch');
-    billsReceiveservice
-      .getBillsReceiveServiceByClient(clientId)
-      .then(res => setbillsReceive(res.data));
+    if (clientId){
+      billsReceiveservice
+        .getBillsReceiveServiceByClient(clientId)
+        .then(res => {
+          setbillsReceiveComplete(res.data);          
+        });
+      }
+      else
+        setbillsReceive([]);
   }
 
   function handleCloseCreateModal(event, reason) {
@@ -113,6 +132,20 @@ function BillReceiveTable(props) {
       fetchBillsReceive();
     }
   }
+
+  function handleChangePage(event, _page){
+    setPage(_page);    
+    let start = _page * rowsPerPage + 1;
+    let end = start + rowsPerPage;        
+    setbillsReceive(billsReceiveComplete.slice(start, end));    
+  }
+
+  function handleChangeRowsPerPage(event){
+    setRowsPerPage(parseInt(event.target.value));    
+    let start = page * parseInt(event.target.value) + 1;
+    let end = start + parseInt(event.target.value);
+    setbillsReceive(billsReceiveComplete.slice(start, end));    
+  } 
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -239,6 +272,27 @@ function BillReceiveTable(props) {
               );
             })}
           </TableBody>
+          <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              colSpan={3}
+              count={billsReceiveComplete.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              labelDisplayedRows={({ from, to, count }) =>
+                `Títulos ${from} até ${to} de ${count}`
+              }
+              labelRowsPerPage={'Títulos por página:'}
+              SelectProps={{
+                native: true
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+        </TableFooter>
         </Table>
       </div>
       <br />
