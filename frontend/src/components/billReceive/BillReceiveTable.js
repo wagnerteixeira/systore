@@ -14,7 +14,6 @@ import Icon from '@material-ui/core/Icon';
 import classNames from 'classnames';
 
 
-
 import {
   getDateToString,
   getDelayedDays,
@@ -34,6 +33,7 @@ import { getErrosFromApi } from '../../utils/errorsHelper';
 import clientService from '../../services/clientService';
 
 import TablePaginationActions from '../common/TablePaginationActions';
+import submit from '../common/confirmAlert';
 
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;
@@ -47,6 +47,7 @@ function BillReceiveTable(props) {
   const [billsReceiveComplete, setbillsReceiveComplete] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
+    
   useEffect(
     () => {
       fetchBillsReceive();
@@ -102,6 +103,7 @@ function BillReceiveTable(props) {
   }
 
   function handleDeleteBillReceive(key) {
+    submit(() => 
     billsReceiveservice
       .remove(billsReceive[key]._id)
       .then(() => {
@@ -109,7 +111,7 @@ function BillReceiveTable(props) {
         copyBill.splice(key, 1);
         setbillsReceive(copyBill);
       })
-      .catch(error => handleOpenMessage(true, 'error', getErrosFromApi(error)));
+      .catch(error => handleOpenMessage(true, 'error', getErrosFromApi(error))));
   }
 
   function fetchBillsReceive() {
@@ -227,7 +229,7 @@ function BillReceiveTable(props) {
                               dateCurrent
                             )
                           )
-                    )}
+                            )}
                   </TableCell>
                   <TableCell padding="checkbox">{_daysDelay}</TableCell>
                   <TableCell padding="none" align="right">
