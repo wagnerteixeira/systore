@@ -39,7 +39,8 @@ const styles = theme => ({
     height: '100vh',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit,
-    overflowX: 'auto'
+    overflowX: 'auto',
+    padding: theme.spacing.unit * 2,
   },
   input: {
     display: 'flex',
@@ -69,7 +70,10 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     left: 0,
     right: 0
-  }
+  },
+  select: {
+    maxWidth: '95%'
+  },
 });
 
 async function fetchClients(inputValue, callback) {
@@ -235,6 +239,7 @@ function BillReceive(props) {
   return (
     <Paper className={classes.root}>
       <AsyncSelect
+        className={classes.select}
         classes={classes}
         styles={selectStyles}
         components={components}

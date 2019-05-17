@@ -309,7 +309,8 @@ function BillReceiveTable(props) {
 const styles = theme => ({
   container: {
     marginTop: theme.spacing.unit * 3,
-    display: 'block'
+    display: 'block',
+    maxWidth: '95%'
   },
   back: {
     marginLeft: theme.spacing.unit,
