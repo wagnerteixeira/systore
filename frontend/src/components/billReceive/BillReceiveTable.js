@@ -33,7 +33,7 @@ import { getErrosFromApi } from '../../utils/errorsHelper';
 import clientService from '../../services/clientService';
 
 import TablePaginationActions from '../common/TablePaginationActions';
-import Submit from '../common/confirmAlert';
+import Confirm from '../common/confirmAlert';
 
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;
@@ -104,7 +104,7 @@ function BillReceiveTable(props) {
 
   function handleDeleteBillReceive(key) {
     
-    Submit(() => 
+    Confirm('Atenção', 'Confirma a exclusão?', () => 
     billsReceiveservice
       .remove(billsReceive[key]._id)
       .then(() => {

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
-import { blue, red, green } from '@material-ui/core/colors';
 import './App.css';
 
 import { axiosOApi } from './services/axios';
 
 import MessageSnackbar from './components/common/MessageSnackbar';
+import Menu from './components/layout/Menu';
+
+import MuiTheme from './config/theme';
 
 import BillsReceive from './pages/billReceive/BillReceive';
 import Client from './pages/client/Client';
@@ -17,34 +18,7 @@ import Login from './pages/user/Login';
 
 import localStorageService from './localStorage/localStorageService';
 
-import Menu from './components/layout/Menu';
-
-const muiTheme = createMuiTheme({
-  typography: {
-    useNextVariants: true
-  },
-  fontFamily: 'Roboto, sans-serif',
-  palette: {
-    primary: {
-      light: blue[500],
-      main: blue[600],
-      dark: blue[700],
-      contrastText: '#fff'
-    },
-    secondary: {
-      light: red[600],
-      main: red[700],
-      dark: red[800],
-      contrastText: '#000'
-    },
-    edit: {
-      light: green[500],
-      main: green[600],
-      dark: green[700],
-      contrastText: '#fff'
-    }
-  }
-});
+const theme = MuiTheme;
 
 class App extends Component {
   constructor(props) {
@@ -149,7 +123,7 @@ class App extends Component {
     }
     return (
       <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>
-        <MuiThemeProvider theme={muiTheme}>
+        <MuiThemeProvider theme={theme}>
           {!logged ? (
             <Login
               handleLogin={this.handleLogin}
@@ -164,7 +138,7 @@ class App extends Component {
             />
           ) : (
             <Menu
-              theme={muiTheme}
+              theme={theme}
               user={user}
               handleLogout={this.handleLogout}
               initialheaderText="Clientes"
