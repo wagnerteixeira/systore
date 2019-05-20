@@ -8,6 +8,7 @@ import ViewUser from './ViewUser';
 
 import userservice from '../../services/userService';
 
+import Confirm from '../../components/common/confirmAlert';
 import { debounceTime } from '../../utils/operators';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 
@@ -152,16 +153,18 @@ class User extends Component {
   };
 
   handleDelete = key => {
-    userservice
-      .remove(this.state.users[key]._id)
-      .then(() => this.handleCancel('DELETE'))
-      .catch(error =>
-        this.setState({
-          messageOpen: true,
-          messageText: getErrosFromApi(error),
-          variantMessage: 'error'
-        })
-      );
+    Confirm('Atenção', 'Confirma a exclusão?', () => 
+      userservice
+        .remove(this.state.users[key]._id)
+        .then(() => this.handleCancel('DELETE'))
+        .catch(error =>
+          this.setState({
+            messageOpen: true,
+            messageText: getErrosFromApi(error),
+            variantMessage: 'error'
+          })
+        )        
+    );
   };
 
   handleEdit = key => {

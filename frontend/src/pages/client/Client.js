@@ -7,8 +7,7 @@ import EditClient from './EditClient';
 import ViewClient from './ViewClient';
 
 import clientservice from '../../services/clientService';
-
-//import { debounceTime } from '../../utils/operators';
+import Confirm from '../../components/common/confirmAlert';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 
 const styles = theme => ({
@@ -240,16 +239,18 @@ class Client extends Component {
   };
 
   handleDelete = key => {
-    clientservice
-      .remove(this.state.clients[key]._id)
-      .then(() => this.handleCancel('DELETE'))
-      .catch(error => {
-        this.setState({
-          messageOpen: true,
-          messageText: getErrosFromApi(error),
-          variantMessage: 'error'
-        });
-      });
+    Confirm('Atenção', 'Confirma a exclusão?', () => 
+      clientservice
+        .remove(this.state.clients[key]._id)
+        .then(() => this.handleCancel('DELETE'))
+        .catch(error => {
+          this.setState({
+            messageOpen: true,
+            messageText: getErrosFromApi(error),
+            variantMessage: 'error'
+          });
+        })
+    );
   };
 
   handleEdit = key => {
