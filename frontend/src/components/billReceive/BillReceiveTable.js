@@ -33,7 +33,7 @@ import { getErrosFromApi } from '../../utils/errorsHelper';
 import clientService from '../../services/clientService';
 
 import TablePaginationActions from '../common/TablePaginationActions';
-import Confirm from '../common/confirmAlert';
+import Confirm from '../common/ConfirmAlert';
 
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;

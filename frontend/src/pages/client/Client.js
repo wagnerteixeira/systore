@@ -7,7 +7,7 @@ import EditClient from './EditClient';
 import ViewClient from './ViewClient';
 
 import clientservice from '../../services/clientService';
-import Confirm from '../../components/common/confirmAlert';
+import Confirm from '../../components/common/ConfirmAlert';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 
 const styles = theme => ({

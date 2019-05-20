@@ -8,7 +8,7 @@ import ViewUser from './ViewUser';
 
 import userservice from '../../services/userService';
 
-import Confirm from '../../components/common/confirmAlert';
+import Confirm from '../../components/common/ConfirmAlert';
 import { debounceTime } from '../../utils/operators';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 

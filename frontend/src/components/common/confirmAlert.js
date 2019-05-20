@@ -36,7 +36,14 @@ function Message(props) {
   return (
     <Paper className={classes.container}  elevation={1}>
       <Typography className={classes.title} variant="h5" component="h3">{props.title}</Typography>
-      <Typography component="p">{props.message}</Typography>          
+      <Typography component="p">{
+        props.message.split('<br/>').map((line, index) => {
+          return(
+            <>
+              {line} <br/>
+            </>
+          )
+        }) }</Typography>               
       <Button
         className={classes.button}
         variant="outlined"
