@@ -2,6 +2,7 @@ import './config/polyfills';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
