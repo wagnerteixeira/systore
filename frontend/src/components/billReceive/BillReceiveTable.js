@@ -111,10 +111,10 @@ function BillReceiveTable(props) {
     Confirm('Atenção', 'Confirma a exclusão?', () => 
     billsReceiveservice
       .remove(billsReceive[key]._id)
-      .then(() => {
-        let copyBill = billsReceive.slice();
-        copyBill.splice(key, 1);
-        setbillsReceive(copyBill);
+      .then(() => {        
+        let copyBillComplete = billsReceiveComplete.slice();
+        copyBillComplete.splice(key, 1);
+        setbillsReceiveComplete(copyBillComplete);
       })
       .catch(error => { console.log(error.response); handleOpenMessage(true, 'error', getErrosFromApi(error))}));
   }
