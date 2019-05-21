@@ -88,7 +88,8 @@ async function fetchClients(inputValue, callback) {
   );
   let _clients = result.data.map(client => ({
     value: client._id,
-    label: `Código: ${client.code} Nome: ${client.name} Cpf: ${client.cpf}`
+    label: `Código: ${client.code} Nome: ${client.name} Cpf: ${client.cpf}`,
+    clientData: client,
   }));
   callback(_clients);
 }
@@ -202,6 +203,7 @@ const components = {
 function BillReceive(props) {
   const { classes } = props;
   const [single, setSingle] = React.useState(null);
+  const [prevSingle, setPrevSingle] = React.useState(null);
   //const [inputValue, setIputValue] = React.useState('');
   const [messageData, setMessageData] = React.useState({
     messageOpen: false,
@@ -210,10 +212,12 @@ function BillReceive(props) {
   });
 
   function handleChangeSingle(value) {
+
     setSingle(value);
   }
 
   function loadOptions(inputValue, callback) {
+    console.log('loadOptions');
     fetchClientsDebounce(inputValue, callback);
   }
 
@@ -236,6 +240,20 @@ function BillReceive(props) {
     })
   };
 
+  function handleBlurAsyncSelect() {
+    if ((!single) && (prevSingle)){
+      setSingle(prevSingle);
+      setPrevSingle(null);
+    }
+  }
+
+  function handleMenuOpenAsyncSelect() {    
+    if (single) {
+      setPrevSingle(single)
+      setSingle(null);
+    }
+  }
+
   return (
     <Paper className={classes.root}>
       <AsyncSelect
@@ -249,16 +267,15 @@ function BillReceive(props) {
         placeholder="Digite o nome do cliente"
         loadingMessage={() => 'Buscando clientes'}
         noOptionsMessage={() => 'Nenhum cliente encontrado'}
-        onMenuOpen={() => {
-          if (single) setSingle(null);
-        }}
+        onBlur={handleBlurAsyncSelect}
+        onMenuOpen={handleMenuOpenAsyncSelect}
         value={single}
         onFocus={() => console.log('focus')}
         openMenuOnFocus
       />      
       <BillReceiveTable
         clientId={single ? single.value : 0}
-        clientData={null}
+        clientData={single ? single.clientData : {}}
         handleOpenMessage={handleOpenMessage}
       />      
       <MessageSnackbar

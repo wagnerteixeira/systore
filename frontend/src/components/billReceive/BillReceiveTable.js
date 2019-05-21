@@ -35,6 +35,8 @@ import clientService from '../../services/clientService';
 import TablePaginationActions from '../common/TablePaginationActions';
 import Confirm from '../common/ConfirmAlert';
 
+import PrintContainer from '../common/PrintContainer';
+
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;
   console.log(clientId);
@@ -47,6 +49,8 @@ function BillReceiveTable(props) {
   const [billsReceiveComplete, setbillsReceiveComplete] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
+  const [open, setOpen] = useState(false);  
+  const [srcIframe, setSrcIframe] = useState('');
     
   useEffect(
     () => {
@@ -67,15 +71,17 @@ function BillReceiveTable(props) {
     }
   }
 
-  async function handlePrintBillReceiveGroupByCode(key) {
-    let code = billsReceive[key].code;
-
-    let billReceives = billsReceive.filter(item => item.code === code);
-
+  async function internalPrintBillReceives(billReceives){
     let _clientData = clientData;
     if (!clientData) _clientData = await clientService.get(clientId);
 
-    printBillsReceiveis(_clientData, billReceives);
+    let blobUrl = printBillsReceiveis(_clientData, billReceives);   
+    setSrcIframe(blobUrl);
+    setOpen(true);    
+  }
+
+  function handlePrintBillReceiveGroupByCode(key) {
+    internalPrintBillReceives(billsReceive.filter(item => item.code === billsReceive[key].code));
   }
 
   function renderEditModal(bill) {
@@ -92,9 +98,8 @@ function BillReceiveTable(props) {
     }
   }
 
-  function handlePrintBillReceive(key) {
-    let billReceive = billsReceive[key];
-    printBillsReceiveis(clientData, [billReceive]);
+  function handlePrintBillReceive(key) {    
+    internalPrintBillReceives([billsReceive[key]]);
   }
 
   function handleEditBillReceive(bill_receive) {
@@ -123,9 +128,9 @@ function BillReceiveTable(props) {
         .then(res => {
           setbillsReceiveComplete(res.data);          
         });
-      }
+    }/*
       else
-        setbillsReceive([]);
+        setbillsReceive([]);*/
   }
 
   function handleCloseCreateModal(event, reason) {
@@ -305,6 +310,7 @@ function BillReceiveTable(props) {
         handleClose={handleCloseCreateModal}
         clientId={clientId}
       />
+      <PrintContainer open={open} setOpen={setOpen}  src={srcIframe} />
     </form>
   );
 }

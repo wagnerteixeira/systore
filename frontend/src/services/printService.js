@@ -205,8 +205,9 @@ const printBillsReceiveis = (clientData, billsReceive) => {
       doc.text(item.text + '', item.x, item.y);
     });
   });
-  doc.autoPrint();
-  window.open(doc.output('bloburl'), '_blank');
+  doc.autoPrint();    
+  //window.open(doc.output('bloburl'), '_blank');
+  return doc.output('bloburl');
 };
 
 export { printBillsReceiveis };
