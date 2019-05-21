@@ -44,9 +44,9 @@ function BillReceiveTable(props) {
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [billReceive, setBillReceive] = useState({});
-  const [billsReceive, setbillsReceive] = useState([]);
-  const [billsReceiveComplete, setbillsReceiveComplete] = useState([]);
+  const [billReceive, setBillReceive] = useState({}); //Contém o título que está sendo editado
+  const [billsReceive, setbillsReceive] = useState([]); //Contém os títulos do cliente que estão sendo exibidos na página
+  const [billsReceiveComplete, setbillsReceiveComplete] = useState([]); //Contém todos os títulos do cliente
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);  
@@ -90,7 +90,7 @@ function BillReceiveTable(props) {
         <BillReceiveEditModal
           open={openEditModal}
           bill={bill}
-          handleClose={() => setOpenEditModal(false)}
+          onClose={() => setOpenEditModal(false)}
           handleSave={handleSaveBillReceive}
           clientData={clientData}
         />
@@ -107,8 +107,7 @@ function BillReceiveTable(props) {
     setOpenEditModal(true);
   }
 
-  function handleDeleteBillReceive(key) {
-    
+  function handleDeleteBillReceive(key) {    
     Confirm('Atenção', 'Confirma a exclusão?', () => 
     billsReceiveservice
       .remove(billsReceive[key]._id)
@@ -117,7 +116,7 @@ function BillReceiveTable(props) {
         copyBill.splice(key, 1);
         setbillsReceive(copyBill);
       })
-      .catch(error => handleOpenMessage(true, 'error', getErrosFromApi(error))));
+      .catch(error => { console.log(error.response); handleOpenMessage(true, 'error', getErrosFromApi(error))}));
   }
 
   function fetchBillsReceive() {
@@ -126,6 +125,7 @@ function BillReceiveTable(props) {
       billsReceiveservice
         .getBillsReceiveServiceByClient(clientId)
         .then(res => {
+          console.log(res.data);
           setbillsReceiveComplete(res.data);          
         });
     }/*
@@ -133,7 +133,7 @@ function BillReceiveTable(props) {
         setbillsReceive([]);*/
   }
 
-  function handleCloseCreateModal(event, reason) {
+  function onCloseCreateModal(event, reason) {
     setOpenCreateModal(false);
     if (reason === 'created') {
       handleOpenMessage(true, 'success', 'Títulos criado com sucesso! ');
@@ -143,14 +143,14 @@ function BillReceiveTable(props) {
 
   function handleChangePage(event, _page){
     setPage(_page);    
-    let start = _page * rowsPerPage + 1;
+    let start = _page * rowsPerPage;
     let end = start + rowsPerPage;        
     setbillsReceive(billsReceiveComplete.slice(start, end));    
   }
 
   function handleChangeRowsPerPage(event){
     setRowsPerPage(parseInt(event.target.value));    
-    let start = page * parseInt(event.target.value) + 1;
+    let start = page * parseInt(event.target.value);
     let end = start + parseInt(event.target.value);
     setbillsReceive(billsReceiveComplete.slice(start, end));    
   } 
@@ -162,6 +162,7 @@ function BillReceiveTable(props) {
           variant="outlined"
           color="primary"
           className={classes.button}
+          disabled={(clientId === 0) || (clientId === '')}
           onClick={() => setOpenCreateModal(true)}
         >
           INCLUIR
@@ -188,7 +189,7 @@ function BillReceiveTable(props) {
           <TableBody>
             {Object.keys(billsReceive).map(key => {
               let _daysDelay =
-                billsReceive[key].pay_date != null
+              billsReceive[key].pay_date != null
                   ? billsReceive[key].days_delay
                   : getDelayedDays(billsReceive[key].due_date, dateCurrent);
               if (parseInt(_daysDelay) <= 0) _daysDelay = '';
@@ -307,7 +308,7 @@ function BillReceiveTable(props) {
       {renderEditModal(billReceive)}
       <BillReceiveCreateModal
         open={openCreateModal}
-        handleClose={handleCloseCreateModal}
+        onClose={onCloseCreateModal}
         clientId={clientId}
       />
       <PrintContainer open={open} setOpen={setOpen}  src={srcIframe} />

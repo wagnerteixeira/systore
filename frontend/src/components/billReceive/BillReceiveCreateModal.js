@@ -141,7 +141,7 @@ class BillReceiveCreateModal extends React.Component {
     }
   };
 
-  handleSaveQuotas = clientId => handleClose => () => {
+  handleSaveQuotas = clientId => onClose => () => {
     let message = this.validadeSaveQuotas();
     if (message !== '') {
       this.setState({
@@ -175,7 +175,7 @@ class BillReceiveCreateModal extends React.Component {
           vendor: '',
           bills_receives: []
         });
-        handleClose(null, 'created');
+        onClose(null, 'created');
       })
       .catch(error =>
         this.setState({
@@ -196,7 +196,7 @@ class BillReceiveCreateModal extends React.Component {
       bills_receives: []
     });
 
-    this.props.handleClose(null, 'cancel');
+    this.props.onClose(null, 'cancel');
   };
 
   handleChangeDateInGrid = key => date => {
@@ -221,7 +221,7 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   render() {
-    const { open, handleClose, classes, clientId } = this.props;
+    const { open, onClose, classes, clientId } = this.props;
 
     const {
       original_value,
@@ -238,12 +238,12 @@ class BillReceiveCreateModal extends React.Component {
       .replace('.', ',');
     return (
       <ModalWrapped
-        handleClose={handleClose}
+        onClose={onClose}
         open={open}
         paperClass={classes.paper}
       >
         <MessageSnackbar
-          handleClose={this.handleMessageClose}
+          onClose={this.handleMessageClose}
           open={messageOpen}
           variant={variantMessage}
           message={messageText}
@@ -425,7 +425,7 @@ class BillReceiveCreateModal extends React.Component {
               variant="outlined"
               color="primary"
               className={classes.button}
-              onClick={this.handleSaveQuotas(clientId)(handleClose)}
+              onClick={this.handleSaveQuotas(clientId)(onClose)}
             >
               Salvar
             </Button>
@@ -447,7 +447,7 @@ class BillReceiveCreateModal extends React.Component {
 BillReceiveCreateModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   clientId: PropTypes.string.isRequired
 };
 

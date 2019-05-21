@@ -19,13 +19,13 @@ const styles = theme => ({
 
 
 const ModalWrapped = props => {
-    const { paperClass, handleClose, open, children } = props;
+    const { paperClass, onClose, open, children } = props;
     return (        
         <Modal
             aria-labelledby="simple-modal-title"
             aria-describedby="simple-modal-description"
             open={open}
-            onClose={handleClose}
+            onClose={onClose}
         >
             <div className={paperClass}>            
                 {children}            
@@ -37,7 +37,7 @@ const ModalWrapped = props => {
 ModalWrapped.propTypes = {
   paperClass: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   children: PropTypes.node,
 };
 

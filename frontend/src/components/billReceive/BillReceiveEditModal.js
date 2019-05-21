@@ -130,6 +130,7 @@ class BillReceiveEditModal extends React.Component {
       });
       return;
     }
+    data.situation = 'C';
     billsReceiveservice
       .update(data)
       .then(res => {
@@ -166,7 +167,7 @@ class BillReceiveEditModal extends React.Component {
   };
 
   render() {
-    const { open, handleClose, classes } = this.props;
+    const { open, onClose, classes } = this.props;
 
     const {
       data,
@@ -188,12 +189,12 @@ class BillReceiveEditModal extends React.Component {
 
     return (
       <ModalWrapped
-        handleClose={handleClose}
+        onClose={onClose}
         open={open}
         paperClass={classes.paper}
       >
         <MessageSnackbar
-          handleClose={this.handleMessageClose}
+          onClose={this.handleMessageClose}
           open={messageOpen}
           variant={variantMessage}
           message={messageText}
@@ -474,7 +475,7 @@ class BillReceiveEditModal extends React.Component {
             variant="outlined"
             color="secondary"
             className={classes.button}
-            onClick={handleClose}
+            onClick={onClose}
           >
             Cancelar
           </Button>
@@ -487,7 +488,7 @@ class BillReceiveEditModal extends React.Component {
 BillReceiveEditModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
   bill: PropTypes.object.isRequired,
   clientData: PropTypes.object.isRequired

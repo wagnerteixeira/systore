@@ -23,7 +23,7 @@ const styles = theme => ({
 
 function PrintContainer(props) {  
   const { classes, open, setOpen } = props;
-  function handleClose() {
+  function onClose() {
     setOpen(false);
   }
 
@@ -32,13 +32,13 @@ function PrintContainer(props) {
       fullScreen 
       scroll='body' 
       open={open} 
-      onClose={handleClose} 
+      onClose={onClose} 
       aria-labelledby="Impressão"
     >          
       <DialogActions 
         disableActionSpacing
         className={classes.actions}>
-        <Button className={classes.buttonClose} onClick={handleClose} color="primary">
+        <Button className={classes.buttonClose} onClick={onClose} color="primary">
           Voltar
         </Button>        
       </DialogActions>

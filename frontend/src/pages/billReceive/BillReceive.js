@@ -213,7 +213,7 @@ function BillReceive(props) {
 
   function handleChangeSingle(value) {
 
-    setSingle(value);
+    setSingle(value);    
   }
 
   function loadOptions(inputValue, callback) {
@@ -279,7 +279,7 @@ function BillReceive(props) {
         handleOpenMessage={handleOpenMessage}
       />      
       <MessageSnackbar
-        handleClose={() => setMessageData({ messageOpen: false })}
+        onClose={() => setMessageData({ messageOpen: false, messageText: '', variantMessage: 'success' })}
         open={messageData.messageOpen}
         variant={messageData.variantMessage}
         message={messageData.messageText}

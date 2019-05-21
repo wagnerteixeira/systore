@@ -54,7 +54,7 @@ const internalHandleClose = props => (event, reason) => {
       return;
   }
 
-  props.handleClose();
+  props.onClose();
 };
 
 function MessageSnackbar(props) {
@@ -98,7 +98,7 @@ function MessageSnackbar(props) {
 
 MessageSnackbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  handleClose: PropTypes.func,
+  onClose: PropTypes.func,
   teste: PropTypes.func,
   open: PropTypes.bool.isRequired, 
   variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,

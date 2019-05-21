@@ -153,7 +153,7 @@ class App extends Component {
             </Menu>
           )}
           <MessageSnackbar
-            handleClose={this.handleMessageClose}
+            onClose={this.handleMessageClose}
             open={messageOpen}
             variant={variantMessage}
             message={messageText}

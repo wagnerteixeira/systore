@@ -353,7 +353,7 @@ class Client extends Component {
     return (
       <div className={classes.root}>
         <MessageSnackbar
-          handleClose={this.handleMessageClose}
+          onClose={this.handleMessageClose}
           open={messageOpen}
           variant={variantMessage}
           message={messageText}

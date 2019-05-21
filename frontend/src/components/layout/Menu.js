@@ -144,11 +144,11 @@ class Menu extends React.Component {
     this.setState({ messageOpen: false });
   };
 
-  handleClose = () => {
+  onClose = () => {
     this.setState({ anchorEl: null });
   };
 
-  /*handleCloseMenu = () => {
+  /*onCloseMenu = () => {
     this.props.handleLogout();
     this.setState({
       anchorEl: null,
@@ -282,7 +282,7 @@ class Menu extends React.Component {
                     horizontal: 'right'
                   }}
                   open={Boolean(anchorEl)}
-                  onClose={this.handleClose}
+                  onClose={this.onClose}
                 >
                   <MenuItem onClick={handleLogout}>
                     &nbsp;&nbsp;&nbsp;&nbsp;Sair&nbsp;&nbsp;&nbsp;&nbsp;
@@ -294,7 +294,7 @@ class Menu extends React.Component {
           <div className={classes.content}>{this.props.children}</div>
         </div>
         <MessageSnackbar
-          handleClose={this.handleMessageClose}
+          onClose={this.handleMessageClose}
           open={messageOpen}
           variant={variantMessage}
           message={messageText}
