@@ -274,7 +274,7 @@ function BillReceive(props) {
         openMenuOnFocus
       />      
       <BillReceiveTable
-        clientId={single ? single.value : 0}
+        clientId={single ? single.value : prevSingle ? prevSingle.value : 0}
         clientData={single ? single.clientData : {}}
         handleOpenMessage={handleOpenMessage}
       />      

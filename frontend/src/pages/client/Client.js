@@ -74,7 +74,6 @@ class Client extends Component {
   }
 
   fetchClients = (page, rowsPerPage, columnSort, order, filter) => {
-    console.log(`${columnSort} ${filter}`);
     if (columnSort === 'code' && /\D/.test(filter)) {
       this.setState({
         messageOpen: true,
