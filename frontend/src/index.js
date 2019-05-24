@@ -1,4 +1,5 @@
 import './config/polyfills';
+import './config/accounting';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

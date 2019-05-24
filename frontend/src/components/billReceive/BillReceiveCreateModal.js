@@ -19,6 +19,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import ptLocale from 'date-fns/locale/pt-BR';
 
+import accounting from 'accounting';
+
 import NumberFormatCustom from '../common/NumberFormatCustom';
 import ModalWrapped from '../common/Modal';
 import MessageSnackbar from '../common/MessageSnackbar';
@@ -79,6 +81,10 @@ class BillReceiveCreateModal extends React.Component {
     this.setState({ [name]: event.target.value.toUpperCase() });
   };
 
+  handleOriginalValueChange = event => {
+    this.setState({ original_value: event.target.value });
+  };
+
   handleValueChangeInterest = event => {
     this.setState({
       interest: event.target.value,
@@ -107,26 +113,20 @@ class BillReceiveCreateModal extends React.Component {
 
   handleGenerateQuotas = () => {
     if (this.state.original_value > 0 && this.state.quotas > 0) {
-      let v = parseFloat(
-        this.state.original_value / this.state.quotas
-      ).formatFloat(1);
-      let _quotaValue = parseFloat(v).formatFloat(2);
+      let _quotaValue = accounting.unformat(accounting.formatNumber(this.state.original_value / this.state.quotas, 1));       
       let quotas = [];
       let i = 0;
       let due_date = new Date(this.state.purchase_date.getTime());
       for (i = 0; i < this.state.quotas; i++) {
-        let original_value = _quotaValue;
+        let original_value = accounting.formatNumber(_quotaValue);
         if (i === this.state.quotas - 1) {
-          original_value = parseFloat(
-            this.state.original_value -
-              parseFloat((this.state.quotas - 1) * _quotaValue).formatFloat(2)
-          ).formatFloat(2);
+          original_value = accounting.formatNumber(this.state.original_value - (this.state.quotas - 1) * _quotaValue);
         }
         due_date.setMonth(due_date.getMonth() + 1);
         quotas.push({
           quota: i + 1,
           due_date: new Date(due_date.getTime()),
-          original_value: original_value.replace('.', ',')
+          original_value: original_value
         });
       }
       this.setState({
@@ -152,14 +152,14 @@ class BillReceiveCreateModal extends React.Component {
       return;
     }
     let data = {
-      original_value: this.state.original_value.replace(',', '.'),
+      original_value: this.state.original_value,
       quotas: this.state.quotas,
       vendor: this.state.vendor,
       purchase_date: this.state.purchase_date,
       bills_receives: this.state.bills_receives.map(bills_receive => {
         return {
           ...bills_receive,
-          original_value: bills_receive.original_value.replace(',', '.')
+          original_value: bills_receive.original_value
         };
       })
     };
@@ -211,9 +211,7 @@ class BillReceiveCreateModal extends React.Component {
     let bills_receives = [...this.state.bills_receives];
     bills_receives[key] = {
       ...bills_receives[key],
-      [name]: parseFloat(event.target.value)
-        .formatFloat(2)
-        .replace('.', ',')
+      [name]: accounting.formatNumber(accounting.unformat(event.target.value.replace('.', ',')))
     };
     this.setState({
       bills_receives: bills_receives
@@ -233,9 +231,11 @@ class BillReceiveCreateModal extends React.Component {
       variantMessage,
       messageText
     } = this.state;
-    let _original_value = parseFloat(original_value)
-      .formatFloat(2)
-      .replace('.', ',');
+    let _original_value = ''
+    if (typeof original_value == 'string')
+      _original_value = accounting.formatNumber(accounting.unformat(original_value.replace('.', ',')));
+    else
+     _original_value = accounting.formatNumber(original_value);
     return (
       <ModalWrapped
         onClose={onClose}
@@ -299,7 +299,7 @@ class BillReceiveCreateModal extends React.Component {
                 className={classes.margin}
                 label="Valor"
                 value={_original_value}
-                onChange={this.handleValueChange('original_value')}
+                onChange={this.handleOriginalValueChange}
                 id="original_value"
                 InputProps={{
                   inputComponent: NumberFormatCustom

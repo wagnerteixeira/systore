@@ -77,7 +77,6 @@ const styles = theme => ({
 });
 
 async function fetchClients(inputValue, callback) {
-  console.log('get');
   let result = await clientService.getAll(
     0,
     10,
@@ -217,7 +216,6 @@ function BillReceive(props) {
   }
 
   function loadOptions(inputValue, callback) {
-    console.log('loadOptions');
     fetchClientsDebounce(inputValue, callback);
   }
 
@@ -270,11 +268,11 @@ function BillReceive(props) {
         onBlur={handleBlurAsyncSelect}
         onMenuOpen={handleMenuOpenAsyncSelect}
         value={single}
-        onFocus={() => console.log('focus')}
+        //onFocus={() => console.log('focus')}
         openMenuOnFocus
       />      
       <BillReceiveTable
-        clientId={single ? single.value : prevSingle ? prevSingle.value : 0}
+        clientId={single ? single.value : prevSingle ? prevSingle.value : "0"}
         clientData={single ? single.clientData : {}}
         handleOpenMessage={handleOpenMessage}
       />      

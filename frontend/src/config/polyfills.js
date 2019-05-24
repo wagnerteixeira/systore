@@ -22,7 +22,7 @@ if (!String.prototype.padStart) {
 }
 
 // eslint-disable-next-line
-Number.prototype.formatFloat = function(
+/*Number.prototype.formatFloat = function(
   decimalPlaces,
   decSeparator = '.',
   thouSeparator = ' '
@@ -46,4 +46,4 @@ Number.prototype.formatFloat = function(
           .slice(2)
       : '');
   return result;
-};
+};*/

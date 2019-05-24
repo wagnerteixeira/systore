@@ -52,10 +52,8 @@ function BillReceiveTable(props) {
   const [srcIframe, setSrcIframe] = useState('');
     
   useEffect(
-    () => {
-      
+    () => {      
       fetchBillsReceive();
-      console.log(`use efect ${clientId}`)
     },
     [clientId]
   );
@@ -121,7 +119,6 @@ function BillReceiveTable(props) {
   }
 
   function fetchBillsReceive() {
-    console.log('fetch');
     if (clientId){
       billsReceiveservice
         .getBillsReceiveServiceByClient(clientId)
@@ -162,7 +159,7 @@ function BillReceiveTable(props) {
           variant="outlined"
           color="primary"
           className={classes.button}
-          disabled={(clientId === 0) || (clientId === '')}
+          disabled={(clientId === "0") || (clientId === '')}
           onClick={() => setOpenCreateModal(true)}
         >
           INCLUIR
