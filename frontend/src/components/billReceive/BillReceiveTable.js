@@ -40,7 +40,6 @@ import PrintContainer from '../common/PrintContainer';
 
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;
-  console.log(clientId);
   const dateCurrent = getCurrentDate();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -55,7 +54,9 @@ function BillReceiveTable(props) {
 
   useEffect(
     () => {
+      
       fetchBillsReceive();
+      console.log(`use efect ${clientId}`)
     },
     [clientId]
   );
@@ -126,7 +127,6 @@ function BillReceiveTable(props) {
       billsReceiveservice
         .getBillsReceiveServiceByClient(clientId)
         .then(res => {
-          console.log(res.data);
           setbillsReceiveComplete(res.data);          
         });
     }/*
