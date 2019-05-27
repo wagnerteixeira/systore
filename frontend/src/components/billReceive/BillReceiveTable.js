@@ -12,8 +12,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import classNames from 'classnames';
-import MaterialTable from 'material-table';
-
 
 import {
   getDateToString,
@@ -40,6 +38,7 @@ import PrintContainer from '../common/PrintContainer';
 
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;
+  console.log(clientId);
   const dateCurrent = getCurrentDate();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -53,7 +52,7 @@ function BillReceiveTable(props) {
   const [srcIframe, setSrcIframe] = useState('');  
 
   useEffect(
-    () => {      
+    () => {
       fetchBillsReceive();
     },
     [clientId]
@@ -120,10 +119,12 @@ function BillReceiveTable(props) {
   }
 
   function fetchBillsReceive() {
+    console.log('fetch');
     if (clientId){
       billsReceiveservice
         .getBillsReceiveServiceByClient(clientId)
         .then(res => {
+          console.log(res.data);
           setbillsReceiveComplete(res.data);          
         });
     }/*
@@ -160,14 +161,14 @@ function BillReceiveTable(props) {
           variant="outlined"
           color="primary"
           className={classes.button}
-          disabled={(clientId === "0") || (clientId === '')}
+          disabled={(clientId === 0) || (clientId === '')}
           onClick={() => setOpenCreateModal(true)}
         >
           INCLUIR
         </Button>
       </div>
       <div className={classes.back}>
-        {/*<Table className={classes.table}>
+        <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">Data da venda</TableCell>
@@ -300,85 +301,7 @@ function BillReceiveTable(props) {
             />
           </TableRow>
         </TableFooter>
-            </Table> */}
-
-        <MaterialTable
-        title='Títulos'
-        localization={{
-          pagination: {
-              labelDisplayedRows: '{from}-{to} de {count}',
-              labelRowsSelect:'Linhas'
-          },
-          toolbar: {
-              nRowsSelected: '{0} registro(s) selecionados',            
-              searchTooltip: 'Procurar' ,
-              exportTitle:  'Gerar arquivo CSV dos dados da tela'             
-          },
-          header: {
-              actions: 'Ações'
-          },
-          body: {
-              emptyDataSourceMessage: 'Nenhum título encontrado',
-              filterRow: {
-                  filterTooltip: 'Filtro'
-              }
-          }
-        }} 
-          options={{            
-            actionsColumnIndex: -1,
-            rowStyle: rowData => ({ backgroundColor: rowData.situation == 'O' ?  'red' : 'white'}) ,
-            
-            headerStyle: {              
-              fontSize: '16px'
-            }
-          }}
-          columns={[
-            { title: 'Data da venda', field: 'purchase_date', type:'string', render: rowData => getDateToString(rowData.purchase_date), cellStyle: { fontWeight: 'bold', fontSize: '16px'}},
-            { title: 'Título', field: 'code', cellStyle: { fontWeight: 'bold', fontSize: '16px'} },
-            { title: 'Parcela', field: 'quota', cellStyle: { fontWeight: 'bold', fontSize: '16px'} },
-            { title: 'Data de vencimento', field: 'due_date', type:'string', render: rowData => getDateToString(rowData.due_date), cellStyle: { fontWeight: 'bold', fontSize: '16px'}},
-            { title: 'Data de pagamento', field: 'pay_date', type:'string', render: rowData => getDateToString(rowData.pay_date), cellStyle: { fontWeight: 'bold', fontSize: '16px'}},
-            { title: 'Situação', field: 'situation', tpe: 'string', render: rowData => rowData.situation === 'O' ? 'ABERTO' : 'QUITADO', cellStyle: { fontWeight: 'bold', fontSize: '16px'}},
-            { title: 'Valor pago/atual', field: `original_value['$numberDecimal']` , type: 'currency', cellStyle: { fontWeight: 'bold', fontSize: '16px'}},
-            { title: 'Dias em atraso', field: 'due_date', render: rowData => rowData.pay_date != null ? rowData.days_delay : (parseInt(getDelayedDays(rowData.due_date, dateCurrent)) <= 0 ? '' : getDelayedDays(rowData.due_date, dateCurrent)), cellStyle: { fontWeight: 'bold', fontSize: '16px'}}
-          ]}
-          data={billsReceiveComplete}
-          actions={[
-            {
-              icon: 'event_note',
-              iconProps:{                
-                style:{ fontSize: 25 , color: 'white'}              
-              },
-              tooltip: 'Imprimir todas as parcelas',
-              onClick: (event, rowData) => handlePrintBillReceiveGroupByCode(rowData),              
-            },
-            {
-              icon: 'local_printshop',
-              iconProps:{
-                style:{ fontSize: 25 }
-              },
-              tooltip: 'Imprimir esta parcela',
-              onClick: (event, rowData) => handlePrintBillReceive(rowData),              
-            },
-            {
-              icon: 'edit_icon',
-              iconProps:{
-                style:{ fontSize: 25 }
-              },
-              tooltip: 'Pagar',
-              onClick: (event, rowData) => handleEditBillReceive(rowData),              
-            },
-            {
-              icon: 'delete_outline',
-              iconProps:{
-                style:{ fontSize: 25 }               
-              },
-              tooltip: 'Excluir',
-              onClick: (event, rowData) => handleDeleteBillReceive(rowData),              
-            },
-          ]}
-           
-        />
+            </Table>         
       </div>
       <br />
       {renderEditModal(billReceive)}
