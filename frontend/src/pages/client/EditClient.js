@@ -95,13 +95,7 @@ const styles = theme => ({
   },
   tableRowData: {
     fontWeight: 'bold'
-  },
-  '@global': {
-    'tr > td': {
-      fontWeight: '600 !important',
-      fontSize: '1.1em !important'
-    }
-  }
+  },  
 });
 
 class EditClient extends Component {

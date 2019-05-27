@@ -214,7 +214,7 @@ function BillReceiveTable(props) {
                   <TableCell padding="checkbox">
                     {getDateToString(billsReceive[key].pay_date)}
                   </TableCell>
-                  <TableCell padding="checkbox">
+                  <TableCell padding="checkbox" className={classes.cellValue}>
                     {getNumberDecimalToStringCurrency(
                       billsReceive[key].original_value
                     )}
@@ -222,7 +222,7 @@ function BillReceiveTable(props) {
                   <TableCell padding="checkbox" align="left">
                     {billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
                   </TableCell>
-                  <TableCell padding="checkbox">
+                  <TableCell padding="checkbox" className={classes.cellValue}>
                     {getNumberToString(
                       billsReceive[key].pay_date != null
                         ? billsReceive[key].final_value['$numberDecimal']
@@ -238,7 +238,7 @@ function BillReceiveTable(props) {
                             )}
                   </TableCell>
                   <TableCell padding="checkbox">{_daysDelay}</TableCell>
-                  <TableCell padding="none" align="right">
+                  <TableCell padding="none" align="right" className={classes.cellActions}>
                     <Fab
                       color="secondary"
                       aria-label="Delete"
@@ -351,6 +351,12 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit
+  },
+  cellValue: {
+    minWidth: '100px'
+  },
+  cellActions: {
+    minWidth: '200px'
   }
 });
 
