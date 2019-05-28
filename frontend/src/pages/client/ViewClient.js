@@ -189,7 +189,7 @@ function ViewClient(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell padding="checkbox">
+            <TableCell size="small">
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -204,7 +204,7 @@ function ViewClient(props) {
                 </TableSortLabel>
               </Tooltip>
             </TableCell>
-            <TableCell padding="checkbox">
+            <TableCell size="small">
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -242,9 +242,9 @@ function ViewClient(props) {
         <TableBody>
           {Object.keys(clients).map(key => (
             <TableRow hover key={key}>
-              <TableCell padding="checkbox">{clients[key].code}</TableCell>
-              <TableCell padding="checkbox">{clients[key].name}</TableCell>
-              <TableCell padding="checkbox">{clients[key].cpf}</TableCell>
+              <TableCell size="small">{clients[key].code}</TableCell>
+              <TableCell size="small">{clients[key].name}</TableCell>
+              <TableCell size="small">{clients[key].cpf}</TableCell>
               <TableCell padding="none" align="right">
                 <Fab
                   color="primary"
