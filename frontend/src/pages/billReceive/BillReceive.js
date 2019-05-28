@@ -26,7 +26,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
 import MessageSnackbar from '../../components/common/MessageSnackbar';
@@ -44,35 +44,35 @@ const styles = theme => ({
   },
   input: {
     display: 'flex',
-    padding: 0
+    padding: 0,
   },
   valueContainer: {
     display: 'flex',
     flexWrap: 'wrap',
     flex: 1,
     alignItems: 'center',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   noOptionsMessage: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
   loadingMessage: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
   placeholder: {
     position: 'absolute',
     left: 2,
-    fontSize: 16
+    fontSize: 16,
   },
   paper: {
     position: 'absolute',
     zIndex: 1,
     marginTop: theme.spacing.unit,
     left: 0,
-    right: 0
+    right: 0,
   },
   select: {
-    maxWidth: '95%'
+    maxWidth: '95%',
   },
 });
 
@@ -121,8 +121,8 @@ function Control(props) {
           className: props.selectProps.classes.input,
           inputRef: props.innerRef,
           children: props.children,
-          ...props.innerProps
-        }
+          ...props.innerProps,
+        },
       }}
       {...props.selectProps.textFieldProps}
     />
@@ -136,7 +136,7 @@ function Option(props) {
       selected={props.isFocused}
       component="div"
       style={{
-        fontWeight: props.isSelected ? 500 : 400
+        fontWeight: props.isSelected ? 500 : 400,
       }}
       {...props.innerProps}
     >
@@ -196,7 +196,7 @@ const components = {
   Option,
   Placeholder,
   ValueContainer,
-  LoadingMessage
+  LoadingMessage,
 };
 
 function BillReceive(props) {
@@ -207,12 +207,11 @@ function BillReceive(props) {
   const [messageData, setMessageData] = React.useState({
     messageOpen: false,
     messageText: '',
-    variantMessage: 'success'
+    variantMessage: 'success',
   });
 
   function handleChangeSingle(value) {
-
-    setSingle(value);    
+    setSingle(value);
   }
 
   function loadOptions(inputValue, callback) {
@@ -233,21 +232,21 @@ function BillReceive(props) {
       ...base,
       color: 'primary',
       '& input': {
-        font: 'inherit'
-      }
-    })
+        font: 'inherit',
+      },
+    }),
   };
 
   function handleBlurAsyncSelect() {
-    if ((!single) && (prevSingle)){
+    if (!single && prevSingle) {
       setSingle(prevSingle);
       setPrevSingle(null);
     }
   }
 
-  function handleMenuOpenAsyncSelect() {    
+  function handleMenuOpenAsyncSelect() {
     if (single) {
-      setPrevSingle(single)
+      setPrevSingle(single);
       setSingle(null);
     }
   }
@@ -270,14 +269,20 @@ function BillReceive(props) {
         value={single}
         //onFocus={() => console.log('focus')}
         openMenuOnFocus
-      />      
+      />
       <BillReceiveTable
-        clientId={single ? single.value : prevSingle ? prevSingle.value : "0"}
+        clientId={single ? single.value : prevSingle ? prevSingle.value : '0'}
         clientData={single ? single.clientData : {}}
         handleOpenMessage={handleOpenMessage}
-      />      
+      />
       <MessageSnackbar
-        onClose={() => setMessageData({ messageOpen: false, messageText: '', variantMessage: 'success' })}
+        onClose={() =>
+          setMessageData({
+            messageOpen: false,
+            messageText: '',
+            variantMessage: 'success',
+          })
+        }
         open={messageData.messageOpen}
         variant={messageData.variantMessage}
         message={messageData.messageText}
@@ -287,7 +292,7 @@ function BillReceive(props) {
 }
 
 BillReceive.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(BillReceive);

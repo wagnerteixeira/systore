@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -13,8 +12,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import ptLocale from 'date-fns/locale/pt-BR';
-
 import MessageSnackbar from '../common/MessageSnackbar';
 import NumberFormatCustom from '../common/NumberFormatCustom';
 import ModalWrapped from '../common/Modal';
@@ -22,7 +19,7 @@ import {
   getDateToString,
   getCurrentDate,
   getValueInterest,
-  getValueWithInterest
+  getValueWithInterest,
 } from '../../utils/operators';
 
 import billsReceiveservice from '../../services/billsReceiveService';
@@ -39,11 +36,11 @@ const styles = theme => ({
     left: '50%',
     transform: 'translate(-50%,-50%)',
     outline: 'none',
-    width: theme.spacing.unit * 60
+    width: theme.spacing.unit * 60,
   },
   button: {
-    margin: theme.spacing.unit
-  }
+    margin: theme.spacing.unit,
+  },
 });
 
 class BillReceiveEditModal extends React.Component {
@@ -82,8 +79,8 @@ class BillReceiveEditModal extends React.Component {
           props.bill.pay_date != null ? props.bill.pay_date : getCurrentDate(),
         days_delay: props.bill.days_delay,
         situation: props.bill.situation,
-        vendor: props.bill.vendor
-      }
+        vendor: props.bill.vendor,
+      },
     };
   }
 
@@ -102,8 +99,8 @@ class BillReceiveEditModal extends React.Component {
         interest: event.target.value,
         final_value:
           parseFloat(this.state.data.original_value) +
-          parseFloat(event.target.value)
-      }
+          parseFloat(event.target.value),
+      },
     });
   };
 
@@ -126,7 +123,7 @@ class BillReceiveEditModal extends React.Component {
       this.setState({
         messageOpen: true,
         messageText: message,
-        variantMessage: 'warning'
+        variantMessage: 'warning',
       });
       return;
     }
@@ -139,7 +136,7 @@ class BillReceiveEditModal extends React.Component {
         this.setState({
           messageOpen: true,
           messageText: 'Titulo pago com sucesso!',
-          variantMessage: 'warning'
+          variantMessage: 'warning',
         });
         this.props.handleSave('saved');
       })
@@ -161,8 +158,8 @@ class BillReceiveEditModal extends React.Component {
         ...this.state.data,
         interest: value,
         final_value:
-          parseFloat(this.state.data.original_value) + parseFloat(value)
-      }
+          parseFloat(this.state.data.original_value) + parseFloat(value),
+      },
     });
   };
 
@@ -174,7 +171,7 @@ class BillReceiveEditModal extends React.Component {
       messageOpen,
       variantMessage,
       messageText,
-      printQuota
+      printQuota,
     } = this.state;
 
     let _original_value = parseFloat(data.original_value)
@@ -188,11 +185,7 @@ class BillReceiveEditModal extends React.Component {
       .replace('.', ',');
 
     return (
-      <ModalWrapped
-        onClose={onClose}
-        open={open}
-        paperClass={classes.paper}
-      >
+      <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
         <MessageSnackbar
           onClose={this.handleMessageClose}
           open={messageOpen}
@@ -213,71 +206,69 @@ class BillReceiveEditModal extends React.Component {
               PAGAMENTO DE TÍTULO
             </Typography>
           </Grid>
-          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={4}
-              md={4}
-              lg={4}
-              xl={4}
-            >
-              <TextField
-                id="purchase_date"
-                label="Data da venda"
-                className={classes.textField}
-                value={getDateToString(data.purchase_date)}
-                margin="normal"
-                fullWidth
-                InputProps={{
-                  readOnly: true
-                }}
-              />
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={4}
-              md={4}
-              lg={4}
-              xl={4}
-            >
-              <TextField
-                id="due_date"
-                label="Data de vencimento"
-                className={classes.textField}
-                value={getDateToString(data.due_date)}
-                margin="normal"
-                fullWidth
-                InputProps={{
-                  readOnly: true
-                }}
-              />
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={4}
-              md={4}
-              lg={4}
-              xl={4}
-            >
-              <DatePicker
-                id="pay_date"
-                label="Data de Pagamento"
-                className={classes.textField}
-                value={data.pay_date}
-                onChange={this.handleDateValueChangeBill('pay_date')}
-                margin="normal"
-                format={'dd/MM/yyyy'}
-                fullWidth
-                ref="pay_date"
-              />
-            </Grid>
-          </MuiPickersUtilsProvider>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={4}
+            md={4}
+            lg={4}
+            xl={4}
+          >
+            <TextField
+              id="purchase_date"
+              label="Data da venda"
+              className={classes.textField}
+              value={getDateToString(data.purchase_date)}
+              margin="normal"
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={4}
+            md={4}
+            lg={4}
+            xl={4}
+          >
+            <TextField
+              id="due_date"
+              label="Data de vencimento"
+              className={classes.textField}
+              value={getDateToString(data.due_date)}
+              margin="normal"
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={4}
+            md={4}
+            lg={4}
+            xl={4}
+          >
+            <KeyboardDatePicker
+              id="pay_date"
+              label="Data de Pagamento"
+              className={classes.textField}
+              value={data.pay_date}
+              onChange={this.handleDateValueChangeBill('pay_date')}
+              margin="normal"
+              format={'dd/MM/yyyy'}
+              fullWidth
+              ref="pay_date"
+            />
+          </Grid>
           <Grid
             className={classes.item}
             item
@@ -295,7 +286,7 @@ class BillReceiveEditModal extends React.Component {
               onChange={this.handleValueChangeBill('vendor')}
               margin="normal"
               InputProps={{
-                readOnly: true
+                readOnly: true,
               }}
               fullWidth
             />
@@ -317,7 +308,7 @@ class BillReceiveEditModal extends React.Component {
               onChange={this.handleValueChangeBill('code')}
               margin="normal"
               InputProps={{
-                readOnly: true
+                readOnly: true,
               }}
               fullWidth
             />
@@ -339,7 +330,7 @@ class BillReceiveEditModal extends React.Component {
               onChange={this.handleValueChangeBill('quota')}
               margin="normal"
               InputProps={{
-                readOnly: true
+                readOnly: true,
               }}
               fullWidth
             />
@@ -363,7 +354,7 @@ class BillReceiveEditModal extends React.Component {
               fullWidth
               InputProps={{
                 inputComponent: NumberFormatCustom,
-                readOnly: true
+                readOnly: true,
               }}
             />
           </Grid>
@@ -385,7 +376,7 @@ class BillReceiveEditModal extends React.Component {
               margin="normal"
               fullWidth
               InputProps={{
-                inputComponent: NumberFormatCustom
+                inputComponent: NumberFormatCustom,
               }}
               ref="interest"
             />
@@ -435,12 +426,12 @@ class BillReceiveEditModal extends React.Component {
               margin="normal"
               fullWidth
               InputProps={{
-                inputComponent: NumberFormatCustom
+                inputComponent: NumberFormatCustom,
               }}
               ref="final_value"
             />
           </Grid>
-          <Grid
+          {/*<Grid
             className={classes.item}
             item
             xs={12}
@@ -460,7 +451,7 @@ class BillReceiveEditModal extends React.Component {
               }
               label="Imprimir parcela"
             />
-          </Grid>
+            </Grid>*/}
         </Grid>
         <div>
           <Button
@@ -491,7 +482,7 @@ BillReceiveEditModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
   bill: PropTypes.object.isRequired,
-  clientData: PropTypes.object.isRequired
+  clientData: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(BillReceiveEditModal);

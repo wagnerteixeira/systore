@@ -30,50 +30,50 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit,
-    overflowX: 'auto'
+    overflowX: 'auto',
   },
   table: {
-    minWidth: 700
+    minWidth: 700,
   },
   fab: {
     marginRight: `${theme.spacing.unit}px !important`,
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
   },
   fabEdit: {
     backgroundColor: theme.palette.edit.main,
     '&:hover': {
-      backgroundColor: theme.palette.edit.dark
-    }
+      backgroundColor: theme.palette.edit.dark,
+    },
   },
   tableRowHover: {
     '&:hover': {
-      backgroundColor: theme.palette.primary.main
-    }
+      backgroundColor: theme.palette.primary.main,
+    },
   },
   headerAcoes: {
-    paddingRight: `${theme.spacing.unit * 4}px !important`
+    paddingRight: `${theme.spacing.unit * 4}px !important`,
   },
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   headerCpf: {
-    paddingLeft: `${theme.spacing.unit * 5}px !important`
+    paddingLeft: `${theme.spacing.unit * 5}px !important`,
   },
   searchIcon: {
-    margin: `${theme.spacing.unit * 2}px 2px`
+    margin: `${theme.spacing.unit * 2}px 2px`,
   },
   itens: {
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing.unit * 2,
   },
   item: {
     paddingTop: `${theme.spacing.unit * 0.2}px !important `,
-    paddingBottom: `${theme.spacing.unit * 0.2}px !important `
+    paddingBottom: `${theme.spacing.unit * 0.2}px !important `,
   },
   gridSearch: {
     paddingLeft: `${theme.spacing.unit * 0.2}px !important `,
     [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing.unit
-    }
+      marginLeft: theme.spacing.unit,
+    },
   },
   gridIcon: {
     paddingLeft: `${theme.spacing.unit * 2}px !important `,
@@ -81,9 +81,9 @@ const styles = theme => ({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     [theme.breakpoints.down('md')]: {
-      marginRight: `${theme.spacing.unit * 3}px !important `
-    }
-  }
+      marginRight: `${theme.spacing.unit * 3}px !important `,
+    },
+  },
 });
 
 function ViewClient(props) {
@@ -104,7 +104,7 @@ function ViewClient(props) {
     search,
     handleSearch,
     handleChangeTextSearch,
-    handleCreate
+    handleCreate,
   } = props;
   return (
     <Paper className={classes.root}>
@@ -117,7 +117,7 @@ function ViewClient(props) {
               onChange={handleRequestSort}
               inputProps={{
                 name: 'sort',
-                id: 'sort'
+                id: 'sort',
               }}
             >
               <MenuItem value={'code'}>Código</MenuItem>
@@ -281,7 +281,7 @@ function ViewClient(props) {
               }
               labelRowsPerPage={'Clientes por página:'}
               SelectProps={{
-                native: true
+                native: true,
               }}
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -310,7 +310,7 @@ ViewClient.propTypes = {
   handleRequestSort: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleChangeTextSearch: PropTypes.func.isRequired,
-  handleCreate: PropTypes.func.isRequired
+  handleCreate: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ViewClient);

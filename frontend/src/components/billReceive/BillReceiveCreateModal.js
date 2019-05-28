@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
@@ -16,8 +15,6 @@ import Paper from '@material-ui/core/Paper';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
-
-import ptLocale from 'date-fns/locale/pt-BR';
 
 import accounting from 'accounting';
 
@@ -41,23 +38,23 @@ const styles = theme => ({
     width: theme.spacing.unit * 60,
     overflowY: 'auto',
     overflowX: 'hidden',
-    maxHeight: '80%'
+    maxHeight: '80%',
   },
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   fab: {
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
   },
   item: {
-    padding: `${theme.spacing.unit}px !important`
+    padding: `${theme.spacing.unit}px !important`,
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   table: {
-    margin: `${theme.spacing.unit}px`
-  }
+    margin: `${theme.spacing.unit}px`,
+  },
 });
 
 class BillReceiveCreateModal extends React.Component {
@@ -70,7 +67,7 @@ class BillReceiveCreateModal extends React.Component {
     messageOpen: false,
     variantMessage: 'success',
     messageText: '',
-    bills_receives: []
+    bills_receives: [],
   };
 
   handleMessageClose = () => {
@@ -89,7 +86,7 @@ class BillReceiveCreateModal extends React.Component {
     this.setState({
       interest: event.target.value,
       pay_value:
-        parseFloat(this.state.original_value) + parseFloat(event.target.value)
+        parseFloat(this.state.original_value) + parseFloat(event.target.value),
     });
   };
 
@@ -113,30 +110,37 @@ class BillReceiveCreateModal extends React.Component {
 
   handleGenerateQuotas = () => {
     if (this.state.original_value > 0 && this.state.quotas > 0) {
-      let _quotaValue = accounting.unformat(accounting.formatNumber(this.state.original_value / this.state.quotas, 1));       
+      let _quotaValue = accounting.unformat(
+        accounting.formatNumber(
+          this.state.original_value / this.state.quotas,
+          1
+        )
+      );
       let quotas = [];
       let i = 0;
       let due_date = new Date(this.state.purchase_date.getTime());
       for (i = 0; i < this.state.quotas; i++) {
         let original_value = accounting.formatNumber(_quotaValue);
         if (i === this.state.quotas - 1) {
-          original_value = accounting.formatNumber(this.state.original_value - (this.state.quotas - 1) * _quotaValue);
+          original_value = accounting.formatNumber(
+            this.state.original_value - (this.state.quotas - 1) * _quotaValue
+          );
         }
         due_date.setMonth(due_date.getMonth() + 1);
         quotas.push({
           quota: i + 1,
           due_date: new Date(due_date.getTime()),
-          original_value: original_value
+          original_value: original_value,
         });
       }
       this.setState({
-        bills_receives: quotas
+        bills_receives: quotas,
       });
     } else {
       this.setState({
         messageOpen: true,
         messageText: 'Informe o valor e a quantidade de parcelas!',
-        variantMessage: 'warning'
+        variantMessage: 'warning',
       });
     }
   };
@@ -147,7 +151,7 @@ class BillReceiveCreateModal extends React.Component {
       this.setState({
         messageOpen: true,
         messageText: message,
-        variantMessage: 'warning'
+        variantMessage: 'warning',
       });
       return;
     }
@@ -159,9 +163,9 @@ class BillReceiveCreateModal extends React.Component {
       bills_receives: this.state.bills_receives.map(bills_receive => {
         return {
           ...bills_receive,
-          original_value: bills_receive.original_value
+          original_value: bills_receive.original_value,
         };
-      })
+      }),
     };
 
     billsReceiveService
@@ -173,7 +177,7 @@ class BillReceiveCreateModal extends React.Component {
           original_value: 0.0,
           purchase_date: new Date(),
           vendor: '',
-          bills_receives: []
+          bills_receives: [],
         });
         onClose(null, 'created');
       })
@@ -181,7 +185,7 @@ class BillReceiveCreateModal extends React.Component {
         this.setState({
           messageOpen: true,
           messageText: getErrosFromApi(error),
-          variantMessage: 'error'
+          variantMessage: 'error',
         })
       );
   };
@@ -193,7 +197,7 @@ class BillReceiveCreateModal extends React.Component {
       original_value: 0.0,
       purchase_date: new Date(),
       vendor: '',
-      bills_receives: []
+      bills_receives: [],
     });
 
     this.props.onClose(null, 'cancel');
@@ -203,7 +207,7 @@ class BillReceiveCreateModal extends React.Component {
     let bills_receives = [...this.state.bills_receives];
     bills_receives[key] = { ...bills_receives[key], due_date: date };
     this.setState({
-      bills_receives: bills_receives
+      bills_receives: bills_receives,
     });
   };
 
@@ -211,10 +215,12 @@ class BillReceiveCreateModal extends React.Component {
     let bills_receives = [...this.state.bills_receives];
     bills_receives[key] = {
       ...bills_receives[key],
-      [name]: accounting.formatNumber(accounting.unformat(event.target.value.replace('.', ',')))
+      [name]: accounting.formatNumber(
+        accounting.unformat(event.target.value.replace('.', ','))
+      ),
     };
     this.setState({
-      bills_receives: bills_receives
+      bills_receives: bills_receives,
     });
   };
 
@@ -229,216 +235,211 @@ class BillReceiveCreateModal extends React.Component {
       bills_receives,
       messageOpen,
       variantMessage,
-      messageText
+      messageText,
     } = this.state;
-    let _original_value = ''
+    let _original_value = '';
     if (typeof original_value == 'string')
-      _original_value = accounting.formatNumber(accounting.unformat(original_value.replace('.', ',')));
-    else
-     _original_value = accounting.formatNumber(original_value);
+      _original_value = accounting.formatNumber(
+        accounting.unformat(original_value.replace('.', ','))
+      );
+    else _original_value = accounting.formatNumber(original_value);
     return (
-      <ModalWrapped
-        onClose={onClose}
-        open={open}
-        paperClass={classes.paper}
-      >
+      <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
         <MessageSnackbar
           onClose={this.handleMessageClose}
           open={messageOpen}
           variant={variantMessage}
           message={messageText}
         />
-        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-          <Grid className={classes.itens} container spacing={24}>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              xl={12}
-            >
-              <Typography align="center" variant="h6">
-                INCLUSÃO DE TÍTULOS
-              </Typography>
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={4}
-              md={4}
-              lg={4}
-              xl={4}
-            >
-              <DatePicker
-                id="purchase_date"
-                label="Data da venda"
-                className={classes.margin}
-                value={purchase_date}
-                onChange={this.handleDateValueChange('purchase_date')}
-                margin="normal"
-                format={'dd/MM/yyyy'}
-                fullWidth
-                cancelLabel={'Cancelar'}
-                showTodayButton
-                todayLabel={'Hoje'}
-              />
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
-            >
-              <TextField
-                className={classes.margin}
-                label="Valor"
-                value={_original_value}
-                onChange={this.handleOriginalValueChange}
-                id="original_value"
-                InputProps={{
-                  inputComponent: NumberFormatCustom
-                }}
-              />
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
-            >
-              <TextField
-                id="quotas"
-                label="Parcelas"
-                className={classes.margin}
-                value={quotas}
-                onChange={this.handleValueChange('quotas')}
-                margin="normal"
-                fullWidth
-              />
-            </Grid>
-            <Grid
-              container
-              alignItems="center"
-              justify="center"
-              className={classes.item}
-              item
-              xs={12}
-              sm={2}
-              md={2}
-              lg={2}
-              xl={2}
-            >
-              <Tooltip
-                title="Gerar parcelas"
-                placement={'bottom-start'}
-                enterDelay={300}
-              >
-                <Fab
-                  color="primary"
-                  aria-label="Gerar parcelas"
-                  size="small"
-                  onClick={this.handleGenerateQuotas}
-                >
-                  <AttachMoneyIcon />
-                </Fab>
-              </Tooltip>
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              xl={12}
-            >
-              <TextField
-                id="vendor"
-                label="Nome do vendedor"
-                className={classes.margin}
-                value={vendor}
-                onChange={this.handleValueChange('vendor')}
-                fullWidth
-              />
-            </Grid>
+        <Grid className={classes.itens} container spacing={24}>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            xl={12}
+          >
+            <Typography align="center" variant="h6">
+              INCLUSÃO DE TÍTULOS
+            </Typography>
           </Grid>
-          <Paper className={classes.root}>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Parcela</TableCell>
-                  <TableCell align="left">Vencimento</TableCell>
-                  <TableCell align="left">Valor</TableCell>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={4}
+            md={4}
+            lg={4}
+            xl={4}
+          >
+            <KeyboardDatePicker
+              id="purchase_date"
+              label="Data da venda"
+              className={classes.margin}
+              value={purchase_date}
+              onChange={this.handleDateValueChange('purchase_date')}
+              margin="normal"
+              format={'dd/MM/yyyy'}
+              fullWidth
+              cancelLabel={'Cancelar'}
+              showTodayButton
+              todayLabel={'Hoje'}
+            />
+          </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={3}
+            md={3}
+            lg={3}
+            xl={3}
+          >
+            <TextField
+              className={classes.margin}
+              label="Valor"
+              value={_original_value}
+              onChange={this.handleOriginalValueChange}
+              id="original_value"
+              InputProps={{
+                inputComponent: NumberFormatCustom,
+              }}
+            />
+          </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={3}
+            md={3}
+            lg={3}
+            xl={3}
+          >
+            <TextField
+              id="quotas"
+              label="Parcelas"
+              className={classes.margin}
+              value={quotas}
+              onChange={this.handleValueChange('quotas')}
+              margin="normal"
+              fullWidth
+            />
+          </Grid>
+          <Grid
+            container
+            alignItems="center"
+            justify="center"
+            className={classes.item}
+            item
+            xs={12}
+            sm={2}
+            md={2}
+            lg={2}
+            xl={2}
+          >
+            <Tooltip
+              title="Gerar parcelas"
+              placement={'bottom-start'}
+              enterDelay={300}
+            >
+              <Fab
+                color="primary"
+                aria-label="Gerar parcelas"
+                size="small"
+                onClick={this.handleGenerateQuotas}
+              >
+                <AttachMoneyIcon />
+              </Fab>
+            </Tooltip>
+          </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            xl={12}
+          >
+            <TextField
+              id="vendor"
+              label="Nome do vendedor"
+              className={classes.margin}
+              value={vendor}
+              onChange={this.handleValueChange('vendor')}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Parcela</TableCell>
+                <TableCell align="left">Vencimento</TableCell>
+                <TableCell align="left">Valor</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Object.keys(bills_receives).map(key => (
+                <TableRow hover key={key}>
+                  <TableCell component="th" scope="row">
+                    {bills_receives[key].quota}
+                  </TableCell>
+                  <TableCell align="left">
+                    <KeyboardDatePicker
+                      id="purchase_date"
+                      className={classes.margin}
+                      value={bills_receives[key].due_date}
+                      onChange={this.handleChangeDateInGrid(key)}
+                      margin="normal"
+                      format={'dd/MM/yyyy'}
+                      fullWidth
+                      cancelLabel={'Cancelar'}
+                      showTodayButton
+                      todayLabel={'Hoje'}
+                    />
+                  </TableCell>
+                  <TableCell align="left">
+                    <TextField
+                      className={classes.margin}
+                      value={bills_receives[key].original_value}
+                      onChange={this.handleValueChangeInGrig(
+                        key,
+                        'original_value'
+                      )}
+                      id="original_value"
+                      InputProps={{
+                        inputComponent: NumberFormatCustom,
+                      }}
+                    />
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {Object.keys(bills_receives).map(key => (
-                  <TableRow hover key={key}>
-                    <TableCell component="th" scope="row">
-                      {bills_receives[key].quota}
-                    </TableCell>
-                    <TableCell align="left">
-                      <DatePicker
-                        id="purchase_date"
-                        className={classes.margin}
-                        value={bills_receives[key].due_date}
-                        onChange={this.handleChangeDateInGrid(key)}
-                        margin="normal"
-                        format={'dd/MM/yyyy'}
-                        fullWidth
-                        cancelLabel={'Cancelar'}
-                        showTodayButton
-                        todayLabel={'Hoje'}
-                      />
-                    </TableCell>
-                    <TableCell align="left">
-                      <TextField
-                        className={classes.margin}
-                        value={bills_receives[key].original_value}
-                        onChange={this.handleValueChangeInGrig(
-                          key,
-                          'original_value'
-                        )}
-                        id="original_value"
-                        InputProps={{
-                          inputComponent: NumberFormatCustom
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
 
-          <div>
-            <Button
-              variant="outlined"
-              color="primary"
-              className={classes.button}
-              onClick={this.handleSaveQuotas(clientId)(onClose)}
-            >
-              Salvar
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              className={classes.button}
-              onClick={this.handleCancel}
-            >
-              Cancelar
-            </Button>
-          </div>
-        </MuiPickersUtilsProvider>
+        <div>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.button}
+            onClick={this.handleSaveQuotas(clientId)(onClose)}
+          >
+            Salvar
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            className={classes.button}
+            onClick={this.handleCancel}
+          >
+            Cancelar
+          </Button>
+        </div>
       </ModalWrapped>
     );
   }
@@ -448,7 +449,7 @@ BillReceiveCreateModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  clientId: PropTypes.string.isRequired
+  clientId: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(BillReceiveCreateModal);

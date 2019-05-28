@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import ptLocale from 'date-fns/locale/pt-BR';
 import './App.css';
 
 import { axiosOApi } from './services/axios';
@@ -30,7 +33,7 @@ class App extends Component {
       logged: false,
       messageOpen: false,
       variantMessage: 'success',
-      messageText: ''
+      messageText: '',
     };
   }
 
@@ -40,14 +43,14 @@ class App extends Component {
       logged: false,
       messageOpen: true,
       messageText: 'Usuário saiu do sistema.',
-      variantMessage: 'success'
+      variantMessage: 'success',
     });
   };
 
   handleLogin = async () => {
     let user = {
       user_name: this.state.userName,
-      password: this.state.password
+      password: this.state.password,
     };
 
     try {
@@ -58,7 +61,7 @@ class App extends Component {
           logged: false,
           messageOpen: true,
           messageText: errors,
-          variantMessage: 'error'
+          variantMessage: 'error',
         });
       } else {
         this.setState({
@@ -68,7 +71,7 @@ class App extends Component {
           variantMessage: 'success',
           userName: '',
           password: '',
-          user: res.data.user
+          user: res.data.user,
         });
         localStorageService.setItem('token', res.data.token);
       }
@@ -81,7 +84,7 @@ class App extends Component {
         logged: false,
         messageOpen: true,
         messageText: errors,
-        variantMessage: 'error'
+        variantMessage: 'error',
       });
     }
   };
@@ -108,7 +111,7 @@ class App extends Component {
       messageText,
       variantMessage,
       logged,
-      user
+      user,
     } = this.state;
 
     if (!logged) {
@@ -122,44 +125,46 @@ class App extends Component {
       }
     }
     return (
-      <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>
-        <MuiThemeProvider theme={theme}>
-          {!logged ? (
-            <Login
-              handleLogin={this.handleLogin}
-              handleValueChange={this.handleValueChange}
-              handleMessageClose={this.handleMessageClose}
-              keyPress={this.keyPress}
-              password={password}
-              userName={userName}
-              messageOpen={messageOpen}
-              variantMessage={variantMessage}
-              messageText={messageText}
+      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
+        <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>
+          <MuiThemeProvider theme={theme}>
+            {!logged ? (
+              <Login
+                handleLogin={this.handleLogin}
+                handleValueChange={this.handleValueChange}
+                handleMessageClose={this.handleMessageClose}
+                keyPress={this.keyPress}
+                password={password}
+                userName={userName}
+                messageOpen={messageOpen}
+                variantMessage={variantMessage}
+                messageText={messageText}
+              />
+            ) : (
+              <Menu
+                theme={theme}
+                user={user}
+                handleLogout={this.handleLogout}
+                initialheaderText="Clientes"
+              >
+                <Switch>
+                  <Route path="/billsReceive" component={BillsReceive} />
+                  <Route path="/client" component={Client} />
+                  <Route path="/user" component={User} />
+                  {user.admin && <Route path="/log" component={ViewLog} />}
+                  <Redirect from="*" to="/billsReceive" />
+                </Switch>
+              </Menu>
+            )}
+            <MessageSnackbar
+              onClose={this.handleMessageClose}
+              open={messageOpen}
+              variant={variantMessage}
+              message={messageText}
             />
-          ) : (
-            <Menu
-              theme={theme}
-              user={user}
-              handleLogout={this.handleLogout}
-              initialheaderText="Clientes"
-            >
-              <Switch>
-                <Route path="/billsReceive" component={BillsReceive} />
-                <Route path="/client" component={Client} />
-                <Route path="/user" component={User} />
-                {user.admin && <Route path="/log" component={ViewLog} />}
-                <Redirect from="*" to="/billsReceive" />
-              </Switch>
-            </Menu>
-          )}
-          <MessageSnackbar
-            onClose={this.handleMessageClose}
-            open={messageOpen}
-            variant={variantMessage}
-            message={messageText}
-          />
-        </MuiThemeProvider>
-      </BrowserRouter>
+          </MuiThemeProvider>
+        </BrowserRouter>
+      </MuiPickersUtilsProvider>
     );
   }
 }

@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import ptLocale from 'date-fns/locale/pt-BR';
-
+import { KeyboardTimePicker } from '@material-ui/pickers';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -27,33 +24,33 @@ const styles = theme => ({
     width: `calc(100% - ${theme.spacing.unit * 6}px)`,
     margin: theme.spacing.unit * 3,
     paddingTop: theme.spacing.unit * 2,
-    overflowX: 'auto'
+    overflowX: 'auto',
   },
   itens: {
     paddingLeft: theme.spacing.unit,
     marginTop: `${theme.spacing.unit * 1}px !important `,
-    width: `calc(100% - ${theme.spacing.unit * 6}px)`
+    width: `calc(100% - ${theme.spacing.unit * 6}px)`,
   },
   item: {
     paddingTop: `${theme.spacing.unit * 0.2}px !important `,
-    paddingBottom: `${theme.spacing.unit * 0.2}px !important `
+    paddingBottom: `${theme.spacing.unit * 0.2}px !important `,
   },
   textField: {
     marginTop: '0px',
     marginBotton: theme.spacing.unit,
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
   },
   table: {
-    minWidth: 500
-  }
+    minWidth: 500,
+  },
 });
 
 class ViewLog extends Component {
   state = {
     logs: [],
     initialDate: new Date(),
-    finalDate: new Date()
+    finalDate: new Date(),
   };
 
   fetchLogs = () => {
@@ -72,7 +69,7 @@ class ViewLog extends Component {
             user: log.user,
             field: item.field,
             newValue: item.newValue,
-            oldValue: item.oldValue
+            oldValue: item.oldValue,
           };
         });
       });
@@ -94,93 +91,91 @@ class ViewLog extends Component {
     return (
       <Paper className={classes.root}>
         <Grid container className={classes.itens} spacing={24}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={3}
+            md={3}
+            lg={3}
+            xl={3}
+          >
+            <Tooltip
+              title="Data inicial"
+              placement={'bottom-start'}
+              enterDelay={300}
             >
-              <Tooltip
-                title="Data inicial"
-                placement={'bottom-start'}
-                enterDelay={300}
-              >
-                <DateTimePicker
-                  id="initial_date"
-                  label="Data Inicial"
-                  className={classes.textField}
-                  value={this.state.initialDate}
-                  onChange={this.handleDateValue('initialDate')}
-                  margin="normal"
-                  format={'dd/MM/yyyy HH:mm'}
-                  fullWidth
-                  keyboard
-                  ampm={false}
-                  cancelLabel={'Cancelar'}
-                  ref="initial_date"
-                />
-              </Tooltip>
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
+              <KeyboardTimePicker
+                id="initial_date"
+                label="Data Inicial"
+                className={classes.textField}
+                value={this.state.initialDate}
+                onChange={this.handleDateValue('initialDate')}
+                margin="normal"
+                format={'dd/MM/yyyy HH:mm'}
+                fullWidth
+                keyboard
+                ampm={false}
+                cancelLabel={'Cancelar'}
+                ref="initial_date"
+              />
+            </Tooltip>
+          </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={3}
+            md={3}
+            lg={3}
+            xl={3}
+          >
+            <Tooltip
+              title="Data final"
+              placement={'bottom-start'}
+              enterDelay={300}
             >
-              <Tooltip
-                title="Data final"
-                placement={'bottom-start'}
-                enterDelay={300}
-              >
-                <DateTimePicker
-                  id="final_date"
-                  label="Data Final"
-                  className={classes.textField}
-                  value={this.state.finalDate}
-                  onChange={this.handleDateValue('finalDate')}
-                  margin="normal"
-                  format={'dd/MM/yyyy HH:mm'}
-                  fullWidth
-                  keyboard
-                  ampm={false}
-                  cancelLabel={'Cancelar'}
-                  ref="final_date"
-                />
-              </Tooltip>
-            </Grid>
-            <Grid
-              className={classNames(classes.item, classes.gridIcon)}
-              item
-              xs={12}
-              sm={4}
-              md={4}
-              lg={2}
-              xl={2}
+              <KeyboardTimePicker
+                id="final_date"
+                label="Data Final"
+                className={classes.textField}
+                value={this.state.finalDate}
+                onChange={this.handleDateValue('finalDate')}
+                margin="normal"
+                format={'dd/MM/yyyy HH:mm'}
+                fullWidth
+                keyboard
+                ampm={false}
+                cancelLabel={'Cancelar'}
+                ref="final_date"
+              />
+            </Tooltip>
+          </Grid>
+          <Grid
+            className={classNames(classes.item, classes.gridIcon)}
+            item
+            xs={12}
+            sm={4}
+            md={4}
+            lg={2}
+            xl={2}
+          >
+            <Tooltip
+              title="Pesquisar"
+              placement={'bottom-start'}
+              enterDelay={300}
             >
-              <Tooltip
-                title="Pesquisar"
-                placement={'bottom-start'}
-                enterDelay={300}
+              <Fab
+                color="primary"
+                aria-label="Pesquisar"
+                className={classNames(classes.fab, classes.searchIcon)}
+                onClick={this.fetchLogs}
+                size="small"
               >
-                <Fab
-                  color="primary"
-                  aria-label="Pesquisar"
-                  className={classNames(classes.fab, classes.searchIcon)}
-                  onClick={this.fetchLogs}
-                  size="small"
-                >
-                  <SearchIcon />
-                </Fab>
-              </Tooltip>
-            </Grid>
-          </MuiPickersUtilsProvider>
+                <SearchIcon />
+              </Fab>
+            </Tooltip>
+          </Grid>
         </Grid>
         <Table className={classes.table}>
           <TableHead>
@@ -220,5 +215,5 @@ class ViewLog extends Component {
 export default withStyles(styles)(ViewLog);
 
 ViewLog.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };

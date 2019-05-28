@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 import MessageSnackbar from '../../components/common/MessageSnackbar';
 
 import EditClient from './EditClient';
@@ -15,8 +16,8 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3
-  }
+    paddingRight: theme.spacing.unit * 3,
+  },
 });
 
 class Client extends Component {
@@ -50,7 +51,7 @@ class Client extends Component {
       phone1: '',
       phone2: '',
       note: '',
-      bills_receives: []
+      bills_receives: [],
     },
     page: 0,
     rowsPerPage: 5,
@@ -60,7 +61,7 @@ class Client extends Component {
     messageOpen: false,
     variantMessage: 'success',
     messageText: '',
-    anchorEl: null
+    anchorEl: null,
   };
 
   componentWillMount() {
@@ -78,7 +79,7 @@ class Client extends Component {
       this.setState({
         messageOpen: true,
         messageText: 'Informe somente números na pesquisa por código.',
-        variantMessage: 'warning'
+        variantMessage: 'warning',
       });
       return;
     }
@@ -92,7 +93,7 @@ class Client extends Component {
         this.setState({
           messageOpen: true,
           messageText: 'Não foi encontrado nenhum cliente com o filtro.',
-          variantMessage: 'warning'
+          variantMessage: 'warning',
         });
       }
       this.setState({ countClients: res.data.value });
@@ -126,19 +127,19 @@ class Client extends Component {
             phone1: '',
             phone2: '',
             note: '',
-            bills_receives: []
+            bills_receives: [],
           },
           page: page,
           rowsPerPage: rowsPerPage,
           columnSort: columnSort,
-          order: order
+          order: order,
         });
       })
       .catch(error =>
         this.setState({
           messageOpen: true,
           messageText: getErrosFromApi(error),
-          variantMessage: 'error'
+          variantMessage: 'error',
         })
       );
   };
@@ -165,13 +166,44 @@ class Client extends Component {
         phone1: '',
         phone2: '',
         note: '',
-        bills_receives: []
-      }
+        bills_receives: [],
+      },
     });
   };
 
   handleValueChange = name => event => {
     this.setState({ data: { ...this.state.data, [name]: event.target.value } });
+  };
+
+  handleCepChange = event => {
+    this.setState({
+      data: { ...this.state.data, postal_code: event.target.value },
+    });
+    if (event.target.value.length === 8) {
+      axios
+        .get(`https://viacep.com.br/ws/${event.target.value}/json/`)
+        .then(res => {
+          if (res.data.erro) return;
+          this.setState({
+            data: {
+              ...this.state.data,
+              neighborhood: res.data.bairro,
+              city: res.data.localidade,
+              address: res.data.logradouro,
+              state: res.data.uf,
+            },
+          });
+        });
+      // bairro: "Vila Espírito Santo"
+      // cep: "35500-260"
+      // complemento: ""
+      // gia: ""
+      // ibge: "3122306"
+      // localidade: "Divinópolis"
+      // logradouro: "Rua Itaguara"
+      // uf: "MG"
+      // unidade: ""
+    }
   };
 
   handleDateValueChange = name => date => {
@@ -205,7 +237,7 @@ class Client extends Component {
       let _data = {
         ...this.state.data,
         phone1: this.state.data.phone1.replace(/\D/g, ''),
-        phone2: this.state.data.phone2.replace(/\D/g, '')
+        phone2: this.state.data.phone2.replace(/\D/g, ''),
       };
       clientservice
         .update(_data)
@@ -214,7 +246,7 @@ class Client extends Component {
           this.setState({
             messageOpen: true,
             messageText: getErrosFromApi(error),
-            variantMessage: 'error'
+            variantMessage: 'error',
           })
         );
     } else {
@@ -222,7 +254,7 @@ class Client extends Component {
         ...this.state.data,
         _id: undefined,
         phone1: this.state.data.phone1.replace(/\D/g, ''),
-        phone2: this.state.data.phone2.replace(/\D/g, '')
+        phone2: this.state.data.phone2.replace(/\D/g, ''),
       };
       clientservice
         .create(_data)
@@ -231,14 +263,14 @@ class Client extends Component {
           this.setState({
             messageOpen: true,
             messageText: getErrosFromApi(error),
-            variantMessage: 'error'
+            variantMessage: 'error',
           })
         );
     }
   };
 
   handleDelete = key => {
-    Confirm('Atenção', 'Confirma a exclusão?', () => 
+    Confirm('Atenção', 'Confirma a exclusão?', () =>
       clientservice
         .remove(this.state.clients[key]._id)
         .then(() => this.handleCancel('DELETE'))
@@ -246,7 +278,7 @@ class Client extends Component {
           this.setState({
             messageOpen: true,
             messageText: getErrosFromApi(error),
-            variantMessage: 'error'
+            variantMessage: 'error',
           });
         })
     );
@@ -257,7 +289,7 @@ class Client extends Component {
       stateData: 'EDIT_INSERT',
       selectedIndex: key,
       inEdit: true,
-      data: this.state.clients[key]
+      data: this.state.clients[key],
     });
   };
 
@@ -328,7 +360,7 @@ class Client extends Component {
     this.setState({
       messageOpen: messageOpen,
       messageText: messageText,
-      variantMessage: variantMessage
+      variantMessage: variantMessage,
     });
   };
 
@@ -347,7 +379,7 @@ class Client extends Component {
       search,
       messageOpen,
       variantMessage,
-      messageText
+      messageText,
     } = this.state;
     return (
       <div className={classes.root}>
@@ -387,6 +419,7 @@ class Client extends Component {
             handleSave={this.handleSave}
             handleDateValueChange={this.handleDateValueChange}
             handleOpenMessage={this.handleOpenMessage}
+            handleCepChange={this.handleCepChange}
           />
         )}
       </div>
@@ -395,7 +428,7 @@ class Client extends Component {
 }
 
 Client.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Client);

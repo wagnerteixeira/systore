@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -17,12 +16,10 @@ import TextMaskCustom from '../../components/common/TextMaskCustom';
 
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
 
-import ptLocale from 'date-fns/locale/pt-BR';
-
 const styles = theme => ({
   container: {
     marginTop: theme.spacing.unit * 3,
-    display: 'block'
+    display: 'block',
   },
   back: {
     marginLeft: theme.spacing.unit,
@@ -34,50 +31,49 @@ const styles = theme => ({
     borderColor: '#C0C0C0',
     borderStyle: 'solid',
     borderWidth: '1px',
-    width: '98%'
+    width: '98%',
   },
   textField: {
     marginTop: '0px',
     marginBotton: theme.spacing.unit,
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
   },
   textFieldInput: {
-    padding: '0px'
+    padding: '0px',
   },
   inputFile: {
-    display: 'none'
+    display: 'none',
   },
   formControl: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   divPhone: {
     display: 'flex',
-    flexDirection: 'wrap'
+    flexDirection: 'wrap',
   },
   img: {
     height: theme.spacing.unit * 25,
-    width: theme.spacing.unit * 40
+    width: theme.spacing.unit * 40,
   },
   itens: {
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing.unit * 2,
   },
   item: {
-    paddingTop: `${theme.spacing.unit * 0.2}px !important `,
-    paddingBottom: `${theme.spacing.unit * 0.2}px !important `
+    padding: `${theme.spacing.unit * 0.2}px !important `,
   },
   fab: {
     marginRight: theme.spacing.unit * 0.5,
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
   },
   fabEdit: {
     backgroundColor: theme.palette.edit.main,
     '&:hover': {
-      backgroundColor: theme.palette.edit.dark
-    }
+      backgroundColor: theme.palette.edit.dark,
+    },
   },
   paper: {
     position: 'absolute',
@@ -85,23 +81,23 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
-    outline: 'none'
+    outline: 'none',
   },
   table: {
-    minWidth: 500
+    minWidth: 500,
   },
   openRow: {
-    backgroundColor: theme.palette.secondary.light
+    backgroundColor: theme.palette.secondary.light,
   },
   tableRowData: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   '@global': {
     'tr > td': {
       fontWeight: '600 !important',
-      fontSize: '1.1em !important'
-    }
-  }
+      fontSize: '1.1em !important',
+    },
+  },
 });
 
 class EditClient extends Component {
@@ -110,7 +106,7 @@ class EditClient extends Component {
     this.state = {
       tabValue: 'EDIT',
       clientId: props.data._id,
-      clientData: props.data
+      clientData: props.data,
     };
   }
 
@@ -125,7 +121,8 @@ class EditClient extends Component {
       handleValueChange,
       handleSave,
       handleCancel,
-      handleDateValueChange
+      handleDateValueChange,
+      handleCepChange,
     } = this.props;
 
     const { tabValue } = this.state;
@@ -183,48 +180,46 @@ class EditClient extends Component {
                     fullWidth
                   />
                 </Grid>
-                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-                  <Grid
-                    className={classes.item}
-                    item
-                    xs={12}
-                    sm={4}
-                    md={4}
-                    lg={3}
-                    xl={3}
-                  >
-                    <DatePicker
-                      id="registry_date"
-                      label="Data de Registro"
-                      className={classes.textField}
-                      value={data.registry_date}
-                      onChange={handleDateValueChange('registry_date')}
-                      margin="normal"
-                      format={'dd/MM/yyyy'}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid
-                    className={classes.item}
-                    item
-                    xs={12}
-                    sm={4}
-                    md={4}
-                    lg={3}
-                    xl={3}
-                  >
-                    <DatePicker
-                      id="date_of_birth"
-                      label="Data de Aniversário"
-                      className={classes.textField}
-                      value={data.date_of_birth}
-                      onChange={handleDateValueChange('date_of_birth')}
-                      margin="normal"
-                      format={'dd/MM/yyyy'}
-                      fullWidth
-                    />
-                  </Grid>
-                </MuiPickersUtilsProvider>
+                <Grid
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={4}
+                  md={4}
+                  lg={3}
+                  xl={3}
+                >
+                  <KeyboardDatePicker
+                    id="registry_date"
+                    label="Data de Registro"
+                    className={classes.textField}
+                    value={data.registry_date}
+                    onChange={handleDateValueChange('registry_date')}
+                    margin="normal"
+                    format={'dd/MM/yyyy'}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={4}
+                  md={4}
+                  lg={3}
+                  xl={3}
+                >
+                  <KeyboardDatePicker
+                    id="date_of_birth"
+                    label="Data de Aniversário"
+                    className={classes.textField}
+                    value={data.date_of_birth}
+                    onChange={handleDateValueChange('date_of_birth')}
+                    margin="normal"
+                    format={'dd/MM/yyyy'}
+                    fullWidth
+                  />
+                </Grid>
                 <Grid
                   className={classes.item}
                   item
@@ -334,7 +329,7 @@ class EditClient extends Component {
                     label="CEP"
                     className={classes.textField}
                     value={data.postal_code}
-                    onChange={handleValueChange('postal_code')}
+                    onChange={handleCepChange}
                     margin="normal"
                     fullWidth
                   />
@@ -449,8 +444,8 @@ class EditClient extends Component {
                           /\d/,
                           /\d/,
                           /\d/,
-                          /\d/
-                        ]
+                          /\d/,
+                        ],
                       }}
                     />
                   </FormControl>
@@ -489,8 +484,8 @@ class EditClient extends Component {
                           /\d/,
                           /\d/,
                           /\d/,
-                          /\d/
-                        ]
+                          /\d/,
+                        ],
                       }}
                     />
                   </FormControl>
@@ -558,7 +553,7 @@ EditClient.propTypes = {
   handleCancel: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   handleDateValueChange: PropTypes.func.isRequired,
-  handleOpenMessage: PropTypes.func.isRequired
+  handleOpenMessage: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EditClient);
