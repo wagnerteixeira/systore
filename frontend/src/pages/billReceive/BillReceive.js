@@ -74,6 +74,12 @@ const styles = theme => ({
   select: {
     maxWidth: '95%',
   },
+  '@global': {
+    'tr > td': {
+      fontWeight: '600 !important',
+      fontSize: '1.1em !important'
+    }
+  }
 });
 
 async function fetchClients(inputValue, callback) {

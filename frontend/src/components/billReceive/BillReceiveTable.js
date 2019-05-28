@@ -301,7 +301,7 @@ function BillReceiveTable(props) {
                   <TableCell size="small">
                     {getDateToString(billsReceive[key].pay_date)}
                   </TableCell>
-                  <TableCell padding="dense">
+                  <TableCell size="small" className={classes.cellValue}>
                     {getNumberDecimalToStringCurrency(
                       billsReceive[key].original_value
                     )}
@@ -309,7 +309,7 @@ function BillReceiveTable(props) {
                   <TableCell size="small" align="left">
                     {billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
                   </TableCell>
-                  <TableCell size="small">
+                  <TableCell size="small" className={classes.cellValue}>
                     {getNumberToString(
                       billsReceive[key].pay_date != null
                         ? billsReceive[key].final_value['$numberDecimal']
@@ -325,7 +325,7 @@ function BillReceiveTable(props) {
                     )}
                   </TableCell>
                   <TableCell size="small">{_daysDelay}</TableCell>
-                  <TableCell size="small" align="left">
+                  <TableCell size="small" align="left"> className={classes.cellActions}>
                     <Fab
                       color="primary"
                       aria-label="Delete"
@@ -447,6 +447,12 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
+  },
+  cellValue: {
+    minWidth: '100px',
+  },
+  cellActions: {
+    minWidth: '200px',
   },
   '@global': {
     'tr > td': {

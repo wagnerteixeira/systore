@@ -90,7 +90,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.light,
   },
   tableRowData: {
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   '@global': {
     'tr > td': {
