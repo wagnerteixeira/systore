@@ -325,7 +325,7 @@ function BillReceiveTable(props) {
                     )}
                   </TableCell>
                   <TableCell size="small">{_daysDelay}</TableCell>
-                  <TableCell size="small" align="left"> className={classes.cellActions}>
+                  <TableCell size="small" align="left">
                     <Fab
                       color="primary"
                       aria-label="Delete"
