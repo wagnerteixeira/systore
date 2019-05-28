@@ -7,16 +7,16 @@ import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
   container: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     display: 'block'
   },
   back: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     display: 'flex',
     flexWrap: 'wrap',
     flexDirection: 'column',
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     borderColor: '#C0C0C0',
     borderStyle: 'solid',
     borderWidth: '1px',
@@ -24,9 +24,9 @@ const styles = theme => ({
   },
   textField: {
     marginTop: '0px',
-    marginBotton: theme.spacing.unit,
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginBotton: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   textFieldInput: {
     padding: '0px'
@@ -35,25 +35,25 @@ const styles = theme => ({
     display: 'none'
   },
   formControl: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   divPhone: {
     display: 'flex',
     flexDirection: 'wrap'
   },
   img: {
-    height: theme.spacing.unit * 25,
-    width: theme.spacing.unit * 40
+    height: theme.spacing(25),
+    width: theme.spacing(40)
   },
   itens: {
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2)
   },
   item: {
-    paddingTop: `${theme.spacing.unit * 0.2}px !important `,
-    paddingBottom: `${theme.spacing.unit * 0.2}px !important `
+    paddingTop: `${theme.spacing(0.2)}px !important `,
+    paddingBottom: `${theme.spacing(0.2)}px !important `
   }
 });
 
@@ -63,7 +63,7 @@ function EditUser(props) {
     <div>
       <form className={classes.container} noValidate autoComplete="off">
         <div className={classes.back}>
-          <Grid className={classes.itens} container spacing={24}>
+          <Grid className={classes.itens} container spacing={3}>
             <Grid
               className={classes.item}
               item

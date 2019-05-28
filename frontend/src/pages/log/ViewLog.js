@@ -21,25 +21,25 @@ import { getDateTimeToString } from '../../utils/operators';
 
 const styles = theme => ({
   root: {
-    width: `calc(100% - ${theme.spacing.unit * 6}px)`,
-    margin: theme.spacing.unit * 3,
-    paddingTop: theme.spacing.unit * 2,
+    width: `calc(100% - ${theme.spacing(6)}px)`,
+    margin: theme.spacing(3),
+    paddingTop: theme.spacing(2),
     overflowX: 'auto',
   },
   itens: {
-    paddingLeft: theme.spacing.unit,
-    marginTop: `${theme.spacing.unit * 1}px !important `,
-    width: `calc(100% - ${theme.spacing.unit * 6}px)`,
+    paddingLeft: theme.spacing(1),
+    marginTop: `${theme.spacing(1)}px !important `,
+    width: `calc(100% - ${theme.spacing(6)}px)`,
   },
   item: {
-    paddingTop: `${theme.spacing.unit * 0.2}px !important `,
-    paddingBottom: `${theme.spacing.unit * 0.2}px !important `,
+    paddingTop: `${theme.spacing(0.2)}px !important `,
+    paddingBottom: `${theme.spacing(0.2)}px !important `,
   },
   textField: {
     marginTop: '0px',
-    marginBotton: theme.spacing.unit,
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginBotton: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   },
   table: {
     minWidth: 500,

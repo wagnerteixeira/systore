@@ -16,8 +16,8 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3)
   }
 });
 

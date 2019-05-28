@@ -38,10 +38,9 @@ import TablePaginationActions from '../common/TablePaginationActions';
 import Confirm from '../common/ConfirmAlert';
 
 import PrintContainer from '../common/PrintContainer';
+import billsReceiveService from '../../services/billsReceiveService';
 
 function MenuAcoes(props) {
-  console.log(props);
-  
   const {
     handleCloseMenuAcoes,
     anchorElMenuAcoes,
@@ -50,6 +49,7 @@ function MenuAcoes(props) {
     handleEditBillReceive,
     handleDeleteBillReceive,
     billReceiveKey,
+    situation
   } = props;
   return (
     <Menu
@@ -58,23 +58,23 @@ function MenuAcoes(props) {
       open={Boolean(anchorElMenuAcoes)}
       onClose={handleCloseMenuAcoes}
     >
-      <MenuItem onClick={() => {
+      {situation === "O" && (<MenuItem onClick={() => {
         handleEditBillReceive(billReceiveKey);
         handleCloseMenuAcoes();
       }}>
         Efetuar pagamento
-      </MenuItem>
+      </MenuItem>)}
       <MenuItem onClick={() => {
         handlePrintBillReceiveGroupByCode(billReceiveKey);
         handleCloseMenuAcoes();
         }}>
-        Imprimir Todas os títulos da venda
+        Imprimir todos os títulos da venda
       </MenuItem>
       <MenuItem onClick={() => {
         handlePrintBillReceive(billReceiveKey);
         handleCloseMenuAcoes();
         }}>
-        Imprimir o título
+        Imprimir este título
       </MenuItem>
       <MenuItem onClick={() => {
         handleDeleteBillReceive(billReceiveKey);
@@ -94,11 +94,11 @@ MenuAcoes.propTypes = {
   handleEditBillReceive: PropTypes.func.isRequired,
   handleDeleteBillReceive: PropTypes.func.isRequired,
   billReceiveKey: PropTypes.string.isRequired,
+  situation: PropTypes.string.isRequired, 
 };
 
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;
-  //console.log(clientId);
   const dateCurrent = getCurrentDate();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -111,8 +111,7 @@ function BillReceiveTable(props) {
   const [open, setOpen] = useState(false);
   const [srcIframe, setSrcIframe] = useState('');
 
-  const [dadosMenuAcoes, setDadosMenuAcoes] = useState({ anchorEl: null, billReceiveKey: '' });
-  console.log(dadosMenuAcoes);
+  const [dadosMenuAcoes, setDadosMenuAcoes] = useState({ anchorEl: null, billReceiveKey: '', situation: 'O' });
 
   useEffect(() => {
     fetchBillsReceive();
@@ -124,21 +123,23 @@ function BillReceiveTable(props) {
     // eslint-disable-next-line
   }, [billsReceiveComplete]);  
 
-  const handleOpenMenuAcoes = billReceiveKey => event => {
-    console.log(billReceiveKey);
-    setDadosMenuAcoes({ anchorEl: event.currentTarget, billReceiveKey: billReceiveKey });
-    //setkeyMenuAcoes(key);
-    //setAnchorElMenuAcoes(event.currentTarget);
+  const handleOpenMenuAcoes = (billReceiveKey, situation) => event => {
+    setDadosMenuAcoes({ anchorEl: event.currentTarget, billReceiveKey, situation });    
   }
 
   function handleCloseMenuAcoes() {
     setDadosMenuAcoes({ anchorEl: null, billReceiveKey: '' });
   }
 
-  function handleSaveBillReceive(reason) {
+  function handleSaveBillReceive(reason, print, clientData, billReceive) {
     if (reason === 'saved') {
       setOpenEditModal(false);
       handleOpenMessage(true, 'success', 'Título pago com sucesso! ');
+      if (print) {
+        let blobUrl = printBillsReceiveis(clientData, billReceive);
+        setSrcIframe(blobUrl);
+        setOpen(true);
+      }
       fetchBillsReceive();
     }
   }
@@ -159,7 +160,6 @@ function BillReceiveTable(props) {
   }
 
   function renderEditModal(bill) {
-     //console.log(bill);
     if (openEditModal) {
       return (
         <BillReceiveEditModal
@@ -198,11 +198,9 @@ function BillReceiveTable(props) {
     );
   }
 
-  function fetchBillsReceive() {
-    //console.log('fetch');    
+  function fetchBillsReceive() {  
     if (clientId) {
       billsReceiveservice.getBillsReceiveServiceByClient(clientId).then(res => {
-        //console.log(res.data);
         setbillsReceiveComplete(res.data);
       });
     } /*
@@ -244,6 +242,7 @@ function BillReceiveTable(props) {
         handleEditBillReceive={handleEditBillReceive}
         handleDeleteBillReceive={handleDeleteBillReceive}
         billReceiveKey={dadosMenuAcoes.billReceiveKey}
+        situation={dadosMenuAcoes.situation}
       />
       <div>
         <Button
@@ -282,7 +281,7 @@ function BillReceiveTable(props) {
                 billsReceive[key].pay_date != null
                   ? billsReceive[key].days_delay
                   : getDelayedDays(billsReceive[key].due_date, dateCurrent);
-              if (parseInt(_daysDelay) <= 0) _daysDelay = '';              
+              if (parseInt(_daysDelay) <= 0) _daysDelay = '';
               return (
                 <TableRow
                   className={
@@ -330,7 +329,7 @@ function BillReceiveTable(props) {
                       color="primary"
                       aria-label="Delete"
                       className={classes.fab}
-                      onClick={handleOpenMenuAcoes(key)}
+                      onClick={handleOpenMenuAcoes(key, billsReceive[key].situation)}
                       size="small"
                     >
                       <TouchApp fontSize="small" />
@@ -413,17 +412,17 @@ function BillReceiveTable(props) {
 
 const styles = theme => ({
   container: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     display: 'block',
     maxWidth: '95%',
   },
   back: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     display: 'flex',
     flexWrap: 'wrap',
     flexDirection: 'column',
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     borderColor: '#C0C0C0',
     borderStyle: 'solid',
     borderWidth: '1px',
@@ -436,7 +435,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.light,
   },
   fab: {
-    marginRight: theme.spacing.unit * 0.5,
+    marginRight: theme.spacing(0.5),
     color: theme.palette.common.white,
   },
   fabEdit: {
@@ -446,7 +445,7 @@ const styles = theme => ({
     },
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   cellValue: {
     minWidth: '100px',

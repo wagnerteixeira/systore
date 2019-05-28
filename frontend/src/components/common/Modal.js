@@ -8,12 +8,12 @@ const styles = theme => ({
     position: 'absolute',    
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 2,    
+    padding: theme.spacing(2),    
     top: '50%',
     left: '50%',
     transform: 'translate(-50%,-50%)',
     outline: 'none',
-    width: theme.spacing.unit * 60,
+    width: theme.spacing(60),
   },  
 });
 

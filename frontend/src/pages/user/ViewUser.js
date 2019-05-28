@@ -28,15 +28,15 @@ import TablePaginationActions from '../../components/common/TablePaginationActio
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(1),
     overflowX: 'auto'
   },
   table: {
     minWidth: 700
   },
   fab: {
-    marginRight: `${theme.spacing.unit}px !important`,
+    marginRight: `${theme.spacing(1)}px !important`,
     color: theme.palette.common.white
   },
   fabEdit: {
@@ -51,34 +51,34 @@ const styles = theme => ({
     }
   },
   headerAcoes: {
-    paddingRight: `${theme.spacing.unit * 4}px !important`
+    paddingRight: `${theme.spacing(4)}px !important`
   },
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   searchIcon: {
-    margin: `${theme.spacing.unit * 2}px 2px`
+    margin: `${theme.spacing(2)}px 2px`
   },
   itens: {
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2)
   },
   item: {
-    paddingTop: `${theme.spacing.unit * 0.2}px !important `,
-    paddingBottom: `${theme.spacing.unit * 0.2}px !important `
+    paddingTop: `${theme.spacing(0.2)}px !important `,
+    paddingBottom: `${theme.spacing(0.2)}px !important `
   },
   gridSearch: {
-    paddingLeft: `${theme.spacing.unit * 0.2}px !important `,
+    paddingLeft: `${theme.spacing(0.2)}px !important `,
     [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing.unit
+      marginLeft: theme.spacing(1)
     }
   },
   gridIcon: {
-    paddingLeft: `${theme.spacing.unit * 2}px !important `,
+    paddingLeft: `${theme.spacing(2)}px !important `,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     [theme.breakpoints.down('md')]: {
-      marginRight: `${theme.spacing.unit * 3}px !important `
+      marginRight: `${theme.spacing(3)}px !important `
     }
   }
 });

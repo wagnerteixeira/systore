@@ -16,18 +16,18 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 300
   },
   grow: {
     flexGrow: 1,
   },
   divPadding: {
-    paddingTop: theme.spacing.unit * 15
+    paddingTop: theme.spacing(15)
   }
 
 });

@@ -32,8 +32,8 @@ const styles = theme => ({
     height: '100%'
   },
   content: {
-    top: theme.spacing.unit * 5,
-    paddingTop: theme.spacing.unit * 8
+    top: theme.spacing(5),
+    paddingTop: theme.spacing(8)
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -56,18 +56,18 @@ const styles = theme => ({
     }
   },
   typographyDawerOpen: {
-    marginLeft: theme.spacing.unit * 2,
+    marginLeft: theme.spacing(2),
     [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing.unit * 5
+      marginLeft: theme.spacing(5)
     }
   },
   iconClassName: {
     fontSize: 35
   },
   listItemClassName: {
-    paddingLeft: theme.spacing.unit * 1,
+    paddingLeft: theme.spacing(1),
     [theme.breakpoints.down('xs')]: {
-      paddingLeft: theme.spacing.unit * 0.5,
+      paddingLeft: theme.spacing(0.5),
       marginTop: -10
     }
   },
@@ -94,9 +94,9 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    width: theme.spacing.unit * 5,
+    width: theme.spacing(5),
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing.unit * 6
+      width: theme.spacing(6)
     }
   },
   toolbar: {
@@ -109,14 +109,14 @@ const styles = theme => ({
     ...theme.mixins.toolbar
   },
   icon: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   grow: {
     flexGrow: 1
   },
   userText: {
     position: 'relative',
-    marginRight: theme.spacing.unit * 4
+    marginRight: theme.spacing(4)
   }
 });
 class Menu extends React.Component {

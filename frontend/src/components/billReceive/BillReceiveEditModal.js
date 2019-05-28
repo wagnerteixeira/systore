@@ -31,15 +31,15 @@ const styles = theme => ({
     position: 'absolute',
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     top: '50%',
     left: '50%',
     transform: 'translate(-50%,-50%)',
     outline: 'none',
-    width: theme.spacing.unit * 60,
+    width: theme.spacing(60),
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
 });
 
@@ -130,15 +130,8 @@ class BillReceiveEditModal extends React.Component {
     data.situation = 'C';
     billsReceiveservice
       .update(data)
-      .then(res => {
-        if (this.state.printQuota)
-          printBillsReceiveis(this.props.clientData, [{ ...res.data }]);
-        this.setState({
-          messageOpen: true,
-          messageText: 'Titulo pago com sucesso!',
-          variantMessage: 'warning',
-        });
-        this.props.handleSave('saved');
+      .then(res => {                       
+        this.props.handleSave('saved', this.state.printQuota, this.props.clientData, [{ ...res.data }]);        
       })
       .catch(error => console.log(error.response));
   };
@@ -192,7 +185,7 @@ class BillReceiveEditModal extends React.Component {
           variant={variantMessage}
           message={messageText}
         />
-        <Grid className={classes.itens} container spacing={24}>
+        <Grid className={classes.itens} container spacing={3}>
           <Grid
             className={classes.item}
             item
@@ -431,7 +424,7 @@ class BillReceiveEditModal extends React.Component {
               ref="final_value"
             />
           </Grid>
-          {/*<Grid
+          <Grid
             className={classes.item}
             item
             xs={12}
@@ -451,7 +444,7 @@ class BillReceiveEditModal extends React.Component {
               }
               label="Imprimir parcela"
             />
-            </Grid>*/}
+            </Grid>
         </Grid>
         <div>
           <Button
