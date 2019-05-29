@@ -26,7 +26,7 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
   items.push({ text: billReceive.vendor, x: _x, y: 26 }); //vendedor
   items.push({
     text: getDateToStringYearTwoDigits(billReceive.due_date),
-    x: _x + 32,
+    x: _x + 30,
     y: 27
   }); //data_vencimento
   items.push({
@@ -193,11 +193,13 @@ const printBillsReceiveis = (clientData, billsReceive) => {
   );
 
   let doc = new jsPDF();
-  //doc.setFontType("bold");
-  doc.setFont('courier');
+  //doc.setFontType('bold');
+  doc.setFont('Helvetica');
   doc.setFontType('normal');
   doc.deletePage(1);
   doc.setFontSize(12);
+
+  console.log(doc.getFontList());
 
   pages.forEach(page => {
     doc.addPage(page.width, page.height);
@@ -205,7 +207,7 @@ const printBillsReceiveis = (clientData, billsReceive) => {
       doc.text(item.text + '', item.x, item.y);
     });
   });
-  doc.autoPrint();    
+  doc.autoPrint();
   //window.open(doc.output('bloburl'), '_blank');
   return doc.output('bloburl');
 };
