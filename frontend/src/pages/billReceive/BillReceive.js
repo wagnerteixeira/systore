@@ -37,10 +37,10 @@ const styles = theme => ({
   root: {
     width: '100%',
     height: '100vh',
-    marginTop: theme.spacing.unit * 3,
-    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(1),
     overflowX: 'auto',
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
   input: {
     display: 'flex',
@@ -54,10 +54,10 @@ const styles = theme => ({
     overflow: 'hidden',
   },
   noOptionsMessage: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
   },
   loadingMessage: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
   },
   placeholder: {
     position: 'absolute',
@@ -67,7 +67,7 @@ const styles = theme => ({
   paper: {
     position: 'absolute',
     zIndex: 1,
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
     left: 0,
     right: 0,
   },

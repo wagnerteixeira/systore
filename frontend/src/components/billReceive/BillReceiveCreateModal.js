@@ -30,30 +30,30 @@ const styles = theme => ({
     position: 'absolute',
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     top: '50%',
     left: '50%',
     transform: 'translate(-50%,-50%)',
     outline: 'none',
-    width: theme.spacing.unit * 60,
+    width: theme.spacing(60),
     overflowY: 'auto',
     overflowX: 'hidden',
     maxHeight: '80%',
   },
   margin: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   fab: {
     color: theme.palette.common.white,
   },
   item: {
-    padding: `${theme.spacing.unit}px !important`,
+    padding: `${theme.spacing(1)}px !important`,
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   table: {
-    margin: `${theme.spacing.unit}px`,
+    margin: `${theme.spacing(1)}px`,
   },
 });
 
@@ -251,7 +251,7 @@ class BillReceiveCreateModal extends React.Component {
           variant={variantMessage}
           message={messageText}
         />
-        <Grid className={classes.itens} container spacing={24}>
+        <Grid className={classes.itens} container spacing={3}>
           <Grid
             className={classes.item}
             item

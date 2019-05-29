@@ -187,6 +187,8 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
 };*/
 
 const printBillsReceiveis = (clientData, billsReceive) => {
+  console.log(clientData);
+  console.log(billsReceive);
   let pages = [];
   billsReceive.forEach(billReceive =>
     pages.push(createPageForPrintLX300(clientData, billReceive))

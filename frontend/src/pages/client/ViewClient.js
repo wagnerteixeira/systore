@@ -28,15 +28,15 @@ import TablePaginationActions from '../../components/common/TablePaginationActio
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(1),
     overflowX: 'auto',
   },
   table: {
     minWidth: 700,
   },
   fab: {
-    marginRight: `${theme.spacing.unit}px !important`,
+    marginRight: `${theme.spacing(1)}px !important`,
     color: theme.palette.common.white,
   },
   fabEdit: {
@@ -51,37 +51,37 @@ const styles = theme => ({
     },
   },
   headerAcoes: {
-    paddingRight: `${theme.spacing.unit * 4}px !important`,
+    paddingRight: `${theme.spacing(4)}px !important`,
   },
   margin: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   headerCpf: {
-    paddingLeft: `${theme.spacing.unit * 5}px !important`,
+    paddingLeft: `${theme.spacing(5)}px !important`,
   },
   searchIcon: {
-    margin: `${theme.spacing.unit * 2}px 2px`,
+    margin: `${theme.spacing(2)}px 2px`,
   },
   itens: {
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
   },
   item: {
-    paddingTop: `${theme.spacing.unit * 0.2}px !important `,
-    paddingBottom: `${theme.spacing.unit * 0.2}px !important `,
+    paddingTop: `${theme.spacing(0.2)}px !important `,
+    paddingBottom: `${theme.spacing(0.2)}px !important `,
   },
   gridSearch: {
-    paddingLeft: `${theme.spacing.unit * 0.2}px !important `,
+    paddingLeft: `${theme.spacing(0.2)}px !important `,
     [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing.unit,
+      marginLeft: theme.spacing(1),
     },
   },
   gridIcon: {
-    paddingLeft: `${theme.spacing.unit * 2}px !important `,
+    paddingLeft: `${theme.spacing(2)}px !important `,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     [theme.breakpoints.down('md')]: {
-      marginRight: `${theme.spacing.unit * 3}px !important `,
+      marginRight: `${theme.spacing(3)}px !important `,
     },
   },
 });
@@ -189,7 +189,7 @@ function ViewClient(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell padding="checkbox">
+            <TableCell size="small">
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -204,7 +204,7 @@ function ViewClient(props) {
                 </TableSortLabel>
               </Tooltip>
             </TableCell>
-            <TableCell padding="checkbox">
+            <TableCell size="small">
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -242,9 +242,9 @@ function ViewClient(props) {
         <TableBody>
           {Object.keys(clients).map(key => (
             <TableRow hover key={key}>
-              <TableCell padding="checkbox">{clients[key].code}</TableCell>
-              <TableCell padding="checkbox">{clients[key].name}</TableCell>
-              <TableCell padding="checkbox">{clients[key].cpf}</TableCell>
+              <TableCell size="small">{clients[key].code}</TableCell>
+              <TableCell size="small">{clients[key].name}</TableCell>
+              <TableCell size="small">{clients[key].cpf}</TableCell>
               <TableCell padding="none" align="right">
                 <Fab
                   color="primary"

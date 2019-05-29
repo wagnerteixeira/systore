@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 
 const styles = theme => ({
   icon: {
-    paddingTop: theme.spacing.unit * 0.5,      
+    paddingTop: theme.spacing(0.5),      
   }, 
 });
 

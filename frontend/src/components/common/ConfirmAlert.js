@@ -13,20 +13,20 @@ const theme = muiTheme;
 
 const styles = theme => ({
   container: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     display: 'block',
-    padding: theme.spacing.unit * 5,
-    width: theme.spacing.unit * 70,
+    padding: theme.spacing(5),
+    width: theme.spacing(70),
    /* borderStyle: 'solid',
     borderWidth: '1px',
     borderColor: theme.palette.primary.main,*/
   },
   title:{
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     marginLeft: 0,
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     marginLeft: 0,
   }
 });
