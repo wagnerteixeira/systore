@@ -94,9 +94,9 @@ class BillReceiveCreateModal extends React.Component {
     this.setState({ [name]: date });
   };
 
-  validadeSaveQuotas = () => {
+  validadeSaveQuotas = original_value => {
     let message = '';
-    if (!this.state.original_value || this.state.original_value <= 0)
+    if (!original_value || original_value <= 0)
       message += 'Informe o valor!\n\n';
     if (!this.state.quotas || this.state.quotas <= 0)
       message += 'Informe as parcelas!\n\n';
@@ -109,28 +109,23 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleGenerateQuotas = () => {
-    if (this.state.original_value > 0 && this.state.quotas > 0) {
+    let _original_value = accounting.unformat(this.state.original_value.replace('.',','))
+    if (_original_value > 0 && this.state.quotas > 0) {
       let _quotaValue = accounting.unformat(
-        accounting.formatNumber(
-          this.state.original_value / this.state.quotas,
-          1
-        )
+        accounting.formatNumber(_original_value / this.state.quotas, 1)
       );
       let quotas = [];
       let i = 0;
       let due_date = new Date(this.state.purchase_date.getTime());
       for (i = 0; i < this.state.quotas; i++) {
-        let original_value = accounting.formatNumber(_quotaValue);
-        if (i === this.state.quotas - 1) {
-          original_value = accounting.formatNumber(
-            this.state.original_value - (this.state.quotas - 1) * _quotaValue
-          );
-        }
+        let original_value_quota = _quotaValue;
+        if (i === this.state.quotas - 1)
+          original_value_quota = _original_value - (this.state.quotas - 1) * _quotaValue;
         due_date.setMonth(due_date.getMonth() + 1);
         quotas.push({
           quota: i + 1,
           due_date: new Date(due_date.getTime()),
-          original_value: original_value,
+          original_value: accounting.formatNumber(original_value_quota),
         });
       }
       this.setState({
@@ -146,7 +141,8 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleSaveQuotas = clientId => onClose => () => {
-    let message = this.validadeSaveQuotas();
+    let _original_value = accounting.unformat(this.state.original_value.replace('.',','))
+    let message = this.validadeSaveQuotas(_original_value);
     if (message !== '') {
       this.setState({
         messageOpen: true,
@@ -156,14 +152,14 @@ class BillReceiveCreateModal extends React.Component {
       return;
     }
     let data = {
-      original_value: this.state.original_value,
+      original_value: _original_value,
       quotas: this.state.quotas,
       vendor: this.state.vendor,
       purchase_date: this.state.purchase_date,
       bills_receives: this.state.bills_receives.map(bills_receive => {
         return {
           ...bills_receive,
-          original_value: bills_receive.original_value,
+          original_value: accounting.unformat(bills_receive.original_value),
         };
       }),
     };

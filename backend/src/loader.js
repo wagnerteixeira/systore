@@ -1,4 +1,5 @@
 const result = require('dotenv').config();
+require('./config/accounting');
 
 if (result.error) {
   throw result.error;

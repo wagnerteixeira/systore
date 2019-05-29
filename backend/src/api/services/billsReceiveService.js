@@ -2,7 +2,7 @@ const BillsReceive = require('../../models/billsReceive');
 const Client = require('../../models/client');
 const errorHandler = require('../common/errorHandler');
 const { getDateToString } = require('../../utils/helpers');
-
+const accounting = require('accounting');
 const sendErrorsFromDB = (res, dbErros) => {
   const errors = [];
   _.forIn(dbErros.errors, error => errors.push(error.message));
@@ -199,10 +199,10 @@ const validateQuotas = (original_value, bills_receives, purchase_date) => {
     ).toUTCString()} \n${new Date(purchase_date).toString()}`
   );
   let error = '';
-  let sum_original_value = 0.00;
-  let sum_temp = 0;
+  let sum_original_value = 0.0;
+  let sum_temp = 0.0;
   bills_receives.forEach(bill_receive => {
-    sum_original_value = (((sum_temp * 10) + (parseFloat(bill_receive.original_value) * 10)) / 10);
+    sum_original_value = (((sum_temp * 10) + (accounting.unformat(bill_receive.original_value) * 10.0)) / 10.0);
     sum_temp = sum_original_value;
     if (new Date(bill_receive.due_date) < new Date(purchase_date))
       error += `A data de pagamento (${getDateToString(
@@ -214,7 +214,7 @@ const validateQuotas = (original_value, bills_receives, purchase_date) => {
       )})\n`;
   });
 
-  if (parseFloat(sum_original_value) !== parseFloat(original_value))
+  if (accounting.unformat(accounting.formatNumber(sum_original_value)) !== accounting.unformat(original_value))
     error += `A soma das parcelas (R$ ${parseFloat(sum_original_value)
       }) difere do valor do título (R$ ${parseFloat(
       original_value
