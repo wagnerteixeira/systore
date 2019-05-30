@@ -19,27 +19,29 @@ import MessageSnackbar from '../common/MessageSnackbar';
 
 import IconListButton from '../common/IconListButton';
 
+import config from '../../config/config.json';
+
 const drawerWidth = 300;
 
 const styles = theme => ({
   root: {
     display: 'flex',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   mainContent: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   content: {
     top: theme.spacing(5),
-    paddingTop: theme.spacing(8)
+    paddingTop: theme.spacing(8),
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     })
   },
   appBarShift: {
@@ -47,37 +49,37 @@ const styles = theme => ({
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
+      duration: theme.transitions.duration.enteringScreen,
     })
   },
   menuButton: {
     [theme.breakpoints.down('xs')]: {
-      display: 'none'
-    }
+      display: 'none',
+    },
   },
   typographyDawerOpen: {
     marginLeft: theme.spacing(2),
     [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing(5)
-    }
+      marginLeft: theme.spacing(5),
+    },
   },
   iconClassName: {
-    fontSize: 35
+    fontSize: 35,
   },
   listItemClassName: {
     paddingLeft: theme.spacing(1),
     [theme.breakpoints.down('xs')]: {
       paddingLeft: theme.spacing(0.5),
-      marginTop: -10
-    }
+      marginTop: -10,
+    },
   },
   listItemTextClassName: {
     [theme.breakpoints.down('xs')]: {
-      display: 'none'
+      display: 'none',
     }
   },
   hide: {
-    display: 'none'
+    display: 'none',
   },
   drawerPaper: {
     position: 'relative',
@@ -85,19 +87,19 @@ const styles = theme => ({
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   drawerPaperClose: {
     overflowX: 'hidden',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     width: theme.spacing(5),
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(6)
-    }
+      width: theme.spacing(6),
+    },
   },
   toolbar: {
     display: 'flex',
@@ -106,18 +108,25 @@ const styles = theme => ({
     padding: '0 8px',
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
-    ...theme.mixins.toolbar
+    ...theme.mixins.toolbar,
   },
   icon: {
-    margin: theme.spacing(2)
+    margin: theme.spacing(2),
+  },
+  marginRight: {
+    marginRight: theme.spacing(2),
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   userText: {
     position: 'relative',
-    marginRight: theme.spacing(4)
-  }
+    marginRight: theme.spacing(4),
+  },
+  headerToolbar: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
 });
 class Menu extends React.Component {
   constructor(props) {
@@ -132,8 +141,25 @@ class Menu extends React.Component {
       messageOpen: false,
       variantMessage: 'success',
       messageText: '',
-      anchorEl: null
+      anchorEl: null,
+      date: new Date().toLocaleString(),
+      interval: 0,
     };
+
+    
+  }
+
+  componentWillMount(){
+    let _interval = setInterval(
+      () => this.setState({ date: new Date().toLocaleString() }),
+      1000
+    );
+
+    this.setState({ interval: _interval });
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.state.interval);
   }
 
   handleOpenMenu = event => {
@@ -239,7 +265,10 @@ class Menu extends React.Component {
               this.state.drawerOpen && classes.appBarShift
             )}
           >
-            <Toolbar disableGutters={!this.state.drawerOpen}>
+            <Toolbar
+              className={classes.headerToolbar}
+              disableGutters={!this.state.drawerOpen}
+            >
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -260,7 +289,20 @@ class Menu extends React.Component {
                 {this.state.headerText}
               </Typography>
               <div className={classes.grow} />
-              <div>
+              <Typography
+                variant="subtitle2"
+                color="inherit"                
+                className={classes.marginRight}   
+              >
+                {this.state.date}
+              </Typography>
+              <Typography
+                variant="caption"  
+                className={classes.marginRight}              
+              >
+                {config.version}
+              </Typography>
+              <div className={classes.userMenu}>
                 <ButtonBase aria-haspopup="true" onClick={this.handleOpenMenu}>
                   <Typography
                     variant="h6"
@@ -308,7 +350,7 @@ Menu.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   handleLogout: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(Menu);

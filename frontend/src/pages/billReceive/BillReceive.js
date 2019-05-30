@@ -36,7 +36,7 @@ import { debounceTimeWithParams } from '../../utils/operators';
 const styles = theme => ({
   root: {
     width: '100%',
-    height: '100vh',
+    height: `calc(100vh - ${theme.spacing(16)}px)`,
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(1),
     overflowX: 'auto',
@@ -78,8 +78,8 @@ const styles = theme => ({
     'tr > td': {
       fontWeight: '600 !important',
       fontSize: '1.1em !important'
-    }
-  }
+    },
+  },
 });
 
 async function fetchClients(inputValue, callback) {
