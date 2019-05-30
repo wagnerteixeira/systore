@@ -349,28 +349,20 @@ function BillReceiveTable(props) {
               let _daysDelay =
                 billsReceive[key].pay_date != null
                   ? billsReceive[key].days_delay
-                  : getDelayedDays(
-                      billsReceive[key].due_date,
-                      dateCurrent
-                    );
+                  : getDelayedDays(billsReceive[key].due_date, dateCurrent);
               if (parseInt(_daysDelay) <= 0) _daysDelay = '';
               return (
                 <TableRow
                   className={
-                    billsReceive[key].situation === 'O' &&
-                    classes.openRow
+                    billsReceive[key].situation === 'O' && classes.openRow
                   }
                   key={key}
                 >
                   <TableCell size="small">
                     {getDateToString(billsReceive[key].purchase_date)}
                   </TableCell>
-                  <TableCell size="small">
-                    {billsReceive[key].code}
-                  </TableCell>
-                  <TableCell size="small">
-                    {billsReceive[key].quota}
-                  </TableCell>
+                  <TableCell size="small">{billsReceive[key].code}</TableCell>
+                  <TableCell size="small">{billsReceive[key].quota}</TableCell>
                   <TableCell>
                     {getDateToString(billsReceive[key].due_date)}
                   </TableCell>
@@ -383,16 +375,12 @@ function BillReceiveTable(props) {
                     )}
                   </TableCell>
                   <TableCell size="small" align="left">
-                    {billsReceive[key].situation === 'C'
-                      ? 'QUITADO'
-                      : 'ABERTO'}
+                    {billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
                   </TableCell>
                   <TableCell size="small" className={classes.cellValue}>
                     {getNumberToString(
                       billsReceive[key].pay_date != null
-                        ? billsReceive[key].final_value[
-                            '$numberDecimal'
-                          ]
+                        ? billsReceive[key].final_value['$numberDecimal']
                         : parseFloat(
                             getValueWithInterest(
                               billsReceive[key].original_value[

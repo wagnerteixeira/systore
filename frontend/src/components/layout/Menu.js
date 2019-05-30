@@ -42,7 +42,7 @@ const styles = theme => ({
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
-    })
+    }),
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -50,7 +50,7 @@ const styles = theme => ({
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
-    })
+    }),
   },
   menuButton: {
     [theme.breakpoints.down('xs')]: {
@@ -76,7 +76,7 @@ const styles = theme => ({
   listItemTextClassName: {
     [theme.breakpoints.down('xs')]: {
       display: 'none',
-    }
+    },
   },
   hide: {
     display: 'none',
@@ -145,11 +145,9 @@ class Menu extends React.Component {
       date: new Date().toLocaleString(),
       interval: 0,
     };
-
-    
   }
 
-  componentWillMount(){
+  componentWillMount() {
     let _interval = setInterval(
       () => this.setState({ date: new Date().toLocaleString() }),
       1000
@@ -158,7 +156,7 @@ class Menu extends React.Component {
     this.setState({ interval: _interval });
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     clearInterval(this.state.interval);
   }
 
@@ -204,7 +202,7 @@ class Menu extends React.Component {
             paper: classNames(
               classes.drawerPaper,
               !this.state.drawerOpen && classes.drawerPaperClose
-            )
+            ),
           }}
           open={this.state.drawerOpen}
         >
@@ -291,15 +289,12 @@ class Menu extends React.Component {
               <div className={classes.grow} />
               <Typography
                 variant="subtitle2"
-                color="inherit"                
-                className={classes.marginRight}   
+                color="inherit"
+                className={classes.marginRight}
               >
                 {this.state.date}
               </Typography>
-              <Typography
-                variant="caption"  
-                className={classes.marginRight}              
-              >
+              <Typography variant="caption" className={classes.marginRight}>
                 {config.version}
               </Typography>
               <div className={classes.userMenu}>
@@ -317,11 +312,11 @@ class Menu extends React.Component {
                   anchorEl={anchorEl}
                   anchorOrigin={{
                     vertical: 'top',
-                    horizontal: 'right'
+                    horizontal: 'right',
                   }}
                   transformOrigin={{
                     vertical: 'top',
-                    horizontal: 'right'
+                    horizontal: 'right',
                   }}
                   open={Boolean(anchorEl)}
                   onClose={this.onClose}

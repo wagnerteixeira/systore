@@ -77,7 +77,7 @@ const styles = theme => ({
   '@global': {
     'tr > td': {
       fontWeight: '600 !important',
-      fontSize: '1.1em !important'
+      fontSize: '1.1em !important',
     },
   },
 });
