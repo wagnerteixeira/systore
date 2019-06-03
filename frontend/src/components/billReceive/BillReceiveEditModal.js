@@ -140,12 +140,12 @@ class BillReceiveEditModal extends React.Component {
     this.setState({ [name]: event.target.checked });
   };
 
-  handleGenerateInterest = () => {
+  handleGenerateInterest = () => {    
     let value = getValueInterest(
       this.state.data.original_value,
       this.state.data.due_date,
       this.state.data.pay_date
-    );
+    );    
     this.setState({
       data: {
         ...this.state.data,

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import accounting from 'accounting';
 
 export const debounceTime = (milliseconds, fn) => {
   let timer = 0;
@@ -78,17 +79,17 @@ export const getNumberToString2 = number => {
 };
 
 export const getDelayedDays = (due_date, pay_date) => {
-  let days = moment(pay_date).diff(due_date, 'days');
+  let days = moment(pay_date).startOf('day').diff(moment(due_date).startOf('day'), 'days');
   return days;
 };
 
 export const getValueWithInterest = (value, due_date, pay_date) => {
   let days = getDelayedDays(due_date, pay_date);
   let p = 0;
-  if (days > 0) {
+  if (days >= 5) {
     p = (0.07 / 30) * days;
 
-    let interest = value * p;
+    let interest = accounting.unformat(value * p);
     return parseFloat(value) + parseFloat(interest);
   } else {
     return value;
@@ -97,12 +98,13 @@ export const getValueWithInterest = (value, due_date, pay_date) => {
 
 export const getValueInterest = (value, due_date, pay_date) => {
   let days = getDelayedDays(due_date, pay_date);
+  console.log(days);
   let p = 0;
-  if (days > 0) {
+  if (days >= 5) {
     p = (0.07 / 30) * days;
 
-    let interest = value * p;
-    return interest;
+    let interest = accounting.unformat(value * p);
+    return parseFloat(interest);
   } else {
     return 0;
   }
