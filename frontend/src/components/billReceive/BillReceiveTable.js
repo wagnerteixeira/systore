@@ -43,7 +43,7 @@ const styles = theme => ({
   container: {
     marginTop: theme.spacing(3),
     display: 'block',
-    maxWidth: '95%',
+    maxWidth: '98.5%',
     height: `calc(100vh - ${theme.spacing(22)}px)`,
     overflowY: 'scroll',
     overflowX: 'hidden',
