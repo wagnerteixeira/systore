@@ -270,7 +270,7 @@ function BillReceiveTable(props) {
   }
 
   function fetchBillsReceive() {
-    if (clientId) {
+    if (clientId && clientId !== '0') {
       billsReceiveservice.getBillsReceiveServiceByClient(clientId).then(res => {
         setbillsReceiveComplete(res.data);
       });
