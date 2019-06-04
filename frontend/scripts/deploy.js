@@ -40,7 +40,7 @@ async function main() {
   console.log('deleting old files from server');
   //remove files from server
   result = await exec(
-    `sshpass -p ${process.env.SSH_PASS} ssh -o StrictHostKeyChecking=no ${process.env.SSH_USER}@${process.env.SSH_ADDRESS} "cd /var/www/systore_conv && mv -f build build_bkp"`
+    `sshpass -p ${process.env.SSH_PASS} ssh -o StrictHostKeyChecking=no ${process.env.SSH_USER}@${process.env.SSH_ADDRESS} "cd /var/www/systore_conv && rm -rf build_bkp && mv -f build build_bkp"`
   );
 
   if (result.stderr) {
