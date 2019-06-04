@@ -41,7 +41,7 @@ import PrintContainer from '../common/PrintContainer';
 
 const styles = theme => ({
   container: {
-    marginTop: theme.spacing(3),
+    //marginTop: theme.spacing(3),
     display: 'block',
     maxWidth: '98.5%',
     height: `calc(100vh - ${theme.spacing(22)}px)`,
@@ -270,6 +270,10 @@ function BillReceiveTable(props) {
   }
 
   function fetchBillsReceive() {
+    console.log(clientId);
+    if (clientId === 'clean') {
+      setbillsReceiveComplete([]);
+    }
     if (clientId && clientId !== '0') {
       billsReceiveservice.getBillsReceiveServiceByClient(clientId).then(res => {
         setbillsReceiveComplete(res.data);

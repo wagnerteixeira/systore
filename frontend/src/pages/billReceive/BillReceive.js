@@ -25,6 +25,11 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
+import Grid from '@material-ui/core/Grid';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import classNames from 'classnames';
 
 import AsyncSelect from 'react-select/async';
 
@@ -37,7 +42,7 @@ const styles = theme => ({
   root: {
     width: '100%',
     height: `calc(100vh - ${theme.spacing(16)}px)`,
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     overflowX: 'auto',
     padding: theme.spacing(2),
@@ -72,7 +77,14 @@ const styles = theme => ({
     right: 0,
   },
   select: {
+    paddingTop: theme.spacing(1) * 1.65,
     maxWidth: '95%',
+  },
+  gridSearch: {
+    paddingLeft: `${theme.spacing(0.2)}px !important `,
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: theme.spacing(1),
+    },
   },
   '@global': {
     'tr > td': {
@@ -82,13 +94,32 @@ const styles = theme => ({
   },
 });
 
-async function fetchClients(inputValue, callback) {
+async function fetchClients(
+  inputValue,
+  columnSearch,
+  callback,
+  handleOpenMessage
+) {
+  if (columnSearch === 'code' && /\D/.test(inputValue)) {
+    handleOpenMessage(
+      true,
+      'warning',
+      'Informe somente números na pesquisa por código.'
+    );
+    callback([]);
+    return;
+  }
+
+  let filterType = '';
+  if (columnSearch === 'code') filterType = 'eq';
+  else filterType = 'rg';
+
   let result = await clientService.getAll(
     0,
     10,
-    'name',
+    columnSearch,
     'asc',
-    'rg',
+    filterType,
     inputValue
   );
   let _clients = result.data.map(client => ({
@@ -216,12 +247,18 @@ function BillReceive(props) {
     variantMessage: 'success',
   });
 
+  const [columnSearch, setColumnSearch] = React.useState('name');
+
   function handleChangeSingle(value) {
     setSingle(value);
   }
 
   function loadOptions(inputValue, callback) {
-    fetchClientsDebounce(inputValue, callback);
+    fetchClientsDebounce(inputValue, columnSearch, callback, handleOpenMessage);
+    /*inputValue,
+  columnSearch,
+  callback,
+  handleOpenMessage*/
   }
 
   function handleInputChangeAsync(newValue, action) {
@@ -257,25 +294,81 @@ function BillReceive(props) {
     }
   }
 
+  function handleChangeColumnSearch(event) {
+    if (columnSearch !== event.target.value) {
+      setColumnSearch(event.target.value);
+      //setPrevSingle(null);
+      setSingle({ value: 'clean' });
+      setTimeout(() => setSingle(null), 80);
+    }
+  }
+
+  let textPlaceHolder = '';
+  switch (columnSearch) {
+    case 'code':
+      textPlaceHolder = 'código';
+      break;
+    case 'name':
+      textPlaceHolder = 'nome';
+      break;
+    case 'cpf':
+      textPlaceHolder = 'cpf';
+      break;
+    default:
+      textPlaceHolder = 'nome';
+  }
+
+  console.log(single);
+
   return (
     <Paper className={classes.root}>
-      <AsyncSelect
-        className={classes.select}
-        classes={classes}
-        styles={selectStyles}
-        components={components}
-        loadOptions={loadOptions}
-        onChange={handleChangeSingle}
-        onInputChange={handleInputChangeAsync}
-        placeholder="Digite o nome do cliente"
-        loadingMessage={() => 'Buscando clientes'}
-        noOptionsMessage={() => 'Nenhum cliente encontrado'}
-        onBlur={handleBlurAsyncSelect}
-        onMenuOpen={handleMenuOpenAsyncSelect}
-        value={single}
-        //onFocus={() => console.log('focus')}
-        openMenuOnFocus
-      />
+      <Grid container spacing={24}>
+        <Grid className={classes.item} item xs={12} sm={1} md={1} lg={1} xl={1}>
+          <FormControl fullWidth>
+            <Select
+              value={columnSearch}
+              onChange={handleChangeColumnSearch}
+              inputProps={{
+                name: 'sort',
+                id: 'sort',
+              }}
+            >
+              <MenuItem value={'code'}>Código</MenuItem>
+              <MenuItem value={'name'}>Nome</MenuItem>
+              <MenuItem value={'cpf'}>Cpf</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid
+          className={classes.gridSearch}
+          item
+          xs={12}
+          sm={11}
+          md={11}
+          lg={11}
+          xl={11}
+        >
+          <FormControl fullWidth>
+            <AsyncSelect
+              className={classes.select}
+              classes={classes}
+              styles={selectStyles}
+              components={components}
+              loadOptions={loadOptions}
+              onChange={handleChangeSingle}
+              onInputChange={handleInputChangeAsync}
+              placeholder={`Digite o ${textPlaceHolder} do cliente`}
+              loadingMessage={() => 'Buscando clientes'}
+              noOptionsMessage={() => 'Nenhum cliente encontrado'}
+              onBlur={handleBlurAsyncSelect}
+              onMenuOpen={handleMenuOpenAsyncSelect}
+              value={single}
+              //onFocus={() => console.log('focus')}
+              openMenuOnFocus
+            />
+          </FormControl>
+        </Grid>
+      </Grid>
       <BillReceiveTable
         clientId={single ? single.value : prevSingle ? prevSingle.value : '0'}
         clientData={single ? single.clientData : {}}
