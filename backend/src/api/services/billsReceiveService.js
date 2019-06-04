@@ -256,6 +256,7 @@ BillsReceive.route(
             situation: 'O',
             vendor: req.body.vendor
           });
+          _bill_receive['$__']._user = req.body._user;
           return _bill_receive.save();
         });
         Promise.all(results)
