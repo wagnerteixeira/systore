@@ -90,10 +90,18 @@ const styles = theme => ({
       fontWeight: '600 !important',
       fontSize: '1.1em !important',
     },
-  },
+  },  
 });
 
-function MenuAcoes(props) {
+
+const stylesMenu = theme => ({
+  iconPadding: {
+    paddingRight: theme.spacing(1),
+  }
+});
+
+
+function _MenuAcoes(props) {
   const {
     handleCloseMenuAcoes,
     anchorElMenuAcoes,
@@ -103,6 +111,7 @@ function MenuAcoes(props) {
     handleDeleteBillReceive,
     billReceiveKey,
     situation,
+    classes,
   } = props;
   return (
     <Menu
@@ -118,7 +127,8 @@ function MenuAcoes(props) {
             handleCloseMenuAcoes();
           }}
         >
-          Efetuar pagamento
+          <Icon className={classes.iconPadding}>attach_money</Icon>
+          Baixar parcela
         </MenuItem>
       )}
       <MenuItem
@@ -127,7 +137,8 @@ function MenuAcoes(props) {
           handleCloseMenuAcoes();
         }}
       >
-        Imprimir todos os títulos da venda
+        <Icon className={classes.iconPadding}>print</Icon>
+        Imprimir carnê
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -135,7 +146,8 @@ function MenuAcoes(props) {
           handleCloseMenuAcoes();
         }}
       >
-        Imprimir este título
+        <Icon className={classes.iconPadding}>print </Icon>
+        Imprimir parcela
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -143,13 +155,16 @@ function MenuAcoes(props) {
           handleCloseMenuAcoes();
         }}
       >
-        Deletar título
+        <Icon className={classes.iconPadding}>delete_forever</Icon>
+        Excluir carnê
       </MenuItem>
     </Menu>
   );
 }
 
-MenuAcoes.propTypes = {
+
+_MenuAcoes.propTypes = {
+  classes: PropTypes.object.isRequired,
   handleCloseMenuAcoes: PropTypes.func.isRequired,
   anchorElMenuAcoes: PropTypes.object.isRequired,
   handlePrintBillReceiveGroupByCode: PropTypes.func.isRequired,
@@ -159,6 +174,8 @@ MenuAcoes.propTypes = {
   billReceiveKey: PropTypes.string.isRequired,
   situation: PropTypes.string.isRequired,
 };
+
+const MenuAcoes = withStyles(stylesMenu)(_MenuAcoes);
 
 function BillReceiveTable(props) {
   const { classes, clientId, clientData, handleOpenMessage } = props;

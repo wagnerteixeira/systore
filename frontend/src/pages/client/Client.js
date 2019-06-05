@@ -57,6 +57,7 @@ class Client extends Component {
     rowsPerPage: 5,
     order: 'asc',
     columnSort: 'name',
+    columnSearch: 'name',
     search: '',
     messageOpen: false,
     variantMessage: 'success',
@@ -74,8 +75,8 @@ class Client extends Component {
     );*/
   }
 
-  fetchClients = (page, rowsPerPage, columnSort, order, filter) => {
-    if (columnSort === 'code' && /\D/.test(filter)) {
+  fetchClients = (page, rowsPerPage, columnSearch, columnSort, order, filter) => {
+    if (columnSearch === 'code' && /\D/.test(filter)) {
       this.setState({
         messageOpen: true,
         messageText: 'Informe somente números na pesquisa por código.',
@@ -85,10 +86,10 @@ class Client extends Component {
     }
 
     let filterType = '';
-    if (columnSort === 'code') filterType = 'eq';
+    if (columnSearch === 'code') filterType = 'eq';
     else filterType = 'rg';
 
-    clientservice.count(columnSort, filterType, filter).then(res => {
+    clientservice.count(columnSearch, filterType, filter).then(res => {
       if (filter !== '' && parseInt(res.data.value) === 0) {
         this.setState({
           messageOpen: true,
@@ -100,9 +101,8 @@ class Client extends Component {
     });
     const skip = page * rowsPerPage;
     clientservice
-      .getAll(skip, rowsPerPage, columnSort, order, filterType, filter)
-      .then(res => {
-        console.log(`antes state ${page}`);
+      .getAll(skip, rowsPerPage, columnSearch, columnSort, order, filterType, filter)
+      .then(res => {        
         this.setState({
           stateData: 'LIST',
           inEdit: false,
@@ -132,6 +132,7 @@ class Client extends Component {
           page: page,
           rowsPerPage: rowsPerPage,
           columnSort: columnSort,
+          columnSearch: columnSearch,
           order: order,
         });
       })
@@ -222,10 +223,10 @@ class Client extends Component {
       nextState.variantMessage = 'success';
     }
     this.setState(nextState);
-    console.log('');
     this.fetchClients(
       this.state.page,
       this.state.rowsPerPage,
+      this.state.columnSearch,
       this.state.columnSort,
       this.state.order,
       this.state.search
@@ -294,10 +295,10 @@ class Client extends Component {
   };
 
   handleChangePage = (event, page) => {
-    console.log(page);
     this.fetchClients(
       page,
       this.state.rowsPerPage,
+      this.state.columnSearch,
       this.state.columnSort,
       this.state.order,
       this.state.search
@@ -305,10 +306,10 @@ class Client extends Component {
   };
 
   handleChangeRowsPerPage = event => {
-    console.log('');
     this.fetchClients(
       this.state.page,
       parseInt(event.target.value),
+      this.state.columnSearch,
       this.state.columnSort,
       this.state.order,
       this.state.search
@@ -316,31 +317,39 @@ class Client extends Component {
   };
 
   handleSort = property => event => {
-    console.log('handleSort');
     let order = 'asc';
     if (this.state.columnSort === property && this.state.order === 'asc') {
       order = 'desc';
     }
-    console.log('antes');
     this.fetchClients(
       this.state.page,
       this.state.rowsPerPage,
+      this.state.columnSearch,
       property,
       order,
-      ''
+      this.state.search
     );
   };
 
-  handleRequestSort = event => {
-    if (this.state.columnSort !== event.target.value)
-      this.handleSort(event.target.value)(event);
+
+  handleRequestSearch = event => {
+    if (this.state.columnSearch !== event.target.value){      
+      this.fetchClients(
+        this.state.page,
+        this.state.rowsPerPage,
+        event.target.value,
+        this.state.columnSort,
+        this.state.order,
+        this.state.search
+      );
+    }
   };
 
   handleSearch = () => {
-    console.log('');
     this.fetchClients(
       this.state.page,
       this.state.rowsPerPage,
+      this.state.columnSearch,
       this.state.columnSort,
       this.state.order,
       this.state.search
@@ -375,6 +384,7 @@ class Client extends Component {
       rowsPerPage,
       countClients,
       order,
+      columnSearch,
       columnSort,
       search,
       messageOpen,
@@ -403,8 +413,9 @@ class Client extends Component {
             countClients={countClients}
             handleSort={this.handleSort}
             order={order}
+            columnSearch={columnSearch}
             columnSort={columnSort}
-            handleRequestSort={this.handleRequestSort}
+            handleRequestSearch={this.handleRequestSearch}
             handleSearch={this.handleSearch}
             handleChangeTextSearch={this.handleChangeTextSearch}
             search={search}

@@ -118,6 +118,7 @@ async function fetchClients(
     0,
     10,
     columnSearch,
+    columnSearch,
     'asc',
     filterType,
     inputValue

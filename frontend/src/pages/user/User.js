@@ -66,7 +66,7 @@ class User extends Component {
       .then(res => this.setState({ countUsers: res.data.value }));
     const skip = page * rowsPerPage;
     userservice
-      .getAll(skip, rowsPerPage, columnSort, order, 'rg', filter)
+      .getAll(skip, rowsPerPage, columnSort, columnSort, order, 'rg', filter)
       .then(res => {
         this.setState({
           stateData: 'LIST',

@@ -32,8 +32,8 @@ const styles = theme => ({
     width: `calc(100% - ${theme.spacing(6)}px)`,
   },
   item: {
-    paddingTop: `${theme.spacing(0.2)}px !important `,
-    paddingBottom: `${theme.spacing(0.2)}px !important `,
+    paddingTop: `${theme.spacing(1)}px !important `,
+    paddingBottom: `${theme.spacing(2)}px !important `,
   },
   textField: {
     marginTop: '0px',
@@ -90,7 +90,7 @@ class ViewLog extends Component {
     const { logs } = this.state;
     return (
       <Paper className={classes.root}>
-        <Grid container className={classes.itens} spacing={24}>
+        <Grid container className={classes.itens} spacing={3}>
           <Grid
             className={classes.item}
             item
