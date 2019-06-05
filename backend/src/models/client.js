@@ -19,7 +19,14 @@ const clientSchema = new mongoose.Schema({
   spouse: { type: String }, //Cônjuge
   note: { type: String }, //Observações
   phone1: { type: String }, //Telefone 1
-  phone2: { type: String } //Telefone 2
+  phone2: { type: String }, //Telefone 2
+  address_number: { type: String }, //Número do endereço
+  rg: { type: String }, // rg
+  complement: { type: String }, // complemento
+  admission_date: { type: Date }, //Data de admissao
+  civil_status: { type: String }, //estado civil,
+  father_name: { type: String }, // Nome do pai
+  mother_name: { type: String }, // Nome da mae
 
   /*bills_receives: [{ 
       type: mongoose.Schema.Types.Object, 
