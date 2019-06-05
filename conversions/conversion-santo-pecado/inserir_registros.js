@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const _ = require('lodash');
 
-const path_clientes = 'emitente_11-04.txt';
+const path_clientes = 'EMITENTE_03_06_2019_18_08';
 var path_titulos = 'titulo_11-04.txt';
 
 const axiosInstance = axios.create({
@@ -20,6 +20,8 @@ const convertDate = dateString => {
   //Date("2015-03-25")
   //27/05/62
   //27/05/1962
+  if (dateString === "?")
+    return null;
   try {
     let dateArray = dateString.split('/');
     let year = dateArray[2];
@@ -49,8 +51,33 @@ const inserirRegistros = async () => {
     .split('\n');
   for (i in arrayFileClient) {
     let line = arrayFileClient[i].split('|');
-    if (line[1].length > 0) {
-      console.log(`Inserindo cliente ${line[0]} - ${line[1]}`);
+    if (line[1].length > 0) {   
+      let civil_status = 0;
+      //1-SOLTEIRO(A) 2-CASADO(A) 3-DIVORCIADO(A) 4-SEPARADO(A) 5-VIÚVO(A)
+      switch (line[57]) {
+        case '':
+          civil_status = 0;
+          break;
+        case 'SOLTEIRO(A)':
+            civil_status = 1;
+            break;
+        case 'CASADO(A)':
+            civil_status = 2;
+            break;
+        case 'DIVORCIADO(A)':
+            civil_status = 3;
+            break;
+        case 'SEPARADO(A)':
+            civil_status = 4;
+            break;
+        case 'VI�VO(A)':
+            civil_status = 5;
+            break;
+        default:
+            civil_status = 0;
+      }     
+
+      console.log(`Inserindo cliente ${line[0]} - ${line[1]}`);    
       let client = {
         name: line[1],
         code: line[0],
@@ -69,7 +96,14 @@ const inserirRegistros = async () => {
         spouse: line[18], //conjuge
         note: line[19], //observações
         phone1: '', //telefone 1
-        phone2: '' //telefone 2
+        phone2: '', //telefone 2
+        address_number: line[100], //Número do endereço
+        rg: line[14], // rg
+        complement: line[101], // complemento
+        admission_date: convertDate(line[37]), //Data de admissao
+        civil_status: civil_status, //estado civil,
+        father_name: '', // Nome do pai
+        mother_name: '', // Nome da mae
       };
       try {
         const res = await axiosInstance.post('/api/client', client);
