@@ -24,7 +24,10 @@ const clientSchema = new mongoose.Schema({
   rg: { type: String }, // rg
   complement: { type: String }, // complemento
   admission_date: { type: Date }, //Data de admissao
-  civil_status: { type: String }, //estado civil,
+  civil_status: { 
+    type: Number,
+    enum: [0, 1, 2, 3, 4, 5] //0-vazio 1-SOLTEIRO(A) 2-CASADO(A) 3-DIVORCIADO(A) 4-SEPARADO(A) 5-VIÚVO(A)
+  }, //estado civil,
   father_name: { type: String }, // Nome do pai
   mother_name: { type: String }, // Nome da mae
 
