@@ -12,7 +12,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import TouchApp from '@material-ui/icons/TouchApp';
-import classNames from 'classnames';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 

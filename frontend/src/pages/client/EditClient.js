@@ -13,7 +13,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import TextMaskCustom from '../../components/common/TextMaskCustom';
-
+import SelectGeneric from '../../components/common/SelectGeneric';
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
 
 const styles = theme => ({
@@ -100,6 +100,13 @@ const styles = theme => ({
   },
 });
 
+const menuCivilStatus = [{ value: 0, description: '' }, 
+                         { value: 1, description: '1-SOLTEIRO(A)' },
+                         { value: 2, description: '2-CASADO(A)' },
+                         { value: 3, description: '3-DIVORCIADO(A)' },
+                         { value: 4, description: '4-SEPARADO(A)' },
+                         { value: 5, description: '5-VIÚVO(A)' }]
+
 class EditClient extends Component {
   constructor(props) {
     super(props);
@@ -165,10 +172,10 @@ class EditClient extends Component {
                   className={classes.item}
                   item
                   xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                  xl={4}
+                  sm={6}
+                  md={3}
+                  lg={2}
+                  xl={2}
                 >
                   <TextField
                     id="cpf"
@@ -184,8 +191,27 @@ class EditClient extends Component {
                   className={classes.item}
                   item
                   xs={12}
-                  sm={4}
-                  md={4}
+                  sm={6}
+                  md={3}
+                  lg={2}
+                  xl={2}
+                >
+                  <TextField
+                    id="rg"
+                    label="RG"
+                    className={classes.textField}
+                    value={data.rg}
+                    onChange={handleValueChange('rg')}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
                   lg={3}
                   xl={3}
                 >
@@ -204,8 +230,8 @@ class EditClient extends Component {
                   className={classes.item}
                   item
                   xs={12}
-                  sm={4}
-                  md={4}
+                  sm={6}
+                  md={3}
                   lg={3}
                   xl={3}
                 >
@@ -243,7 +269,7 @@ class EditClient extends Component {
                   className={classes.item}
                   item
                   xs={12}
-                  sm={8}
+                  sm={12}
                   md={8}
                   lg={8}
                   xl={8}
@@ -254,6 +280,44 @@ class EditClient extends Component {
                     className={classes.textField}
                     value={data.address}
                     onChange={handleValueChange('address')}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={6}
+                  md={2}
+                  lg={2}
+                  xl={2}
+                >
+                  <TextField
+                    id="address_number"
+                    label="Número"
+                    className={classes.textField}
+                    value={data.address_number}
+                    onChange={handleValueChange('address_number')}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={6}
+                  md={2}
+                  lg={2}
+                  xl={2}
+                >
+                  <TextField
+                    id="complement"
+                    label="Complemento"
+                    className={classes.textField}
+                    value={data.complement}
+                    onChange={handleValueChange('complement')}
                     margin="normal"
                     fullWidth
                   />
@@ -338,10 +402,10 @@ class EditClient extends Component {
                   className={classes.item}
                   item
                   xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
+                  sm={8}
+                  md={8}
+                  lg={8}
+                  xl={8}
                 >
                   <TextField
                     id="seller"
@@ -357,10 +421,10 @@ class EditClient extends Component {
                   className={classes.item}
                   item
                   xs={12}
-                  sm={12}
-                  md={12}
-                  lg={6}
-                  xl={6}
+                  sm={8}
+                  md={8}
+                  lg={10}
+                  xl={10}
                 >
                   <TextField
                     id="job_name"
@@ -369,6 +433,26 @@ class EditClient extends Component {
                     value={data.job_name}
                     onChange={handleValueChange('job_name')}
                     margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={4}
+                  md={4}
+                  lg={2}
+                  xl={2}
+                >
+                  <KeyboardDatePicker
+                    id="admission_date"
+                    label="Data de Admissão"
+                    className={classes.textField}
+                    value={data.admission_date}
+                    onChange={handleDateValueChange('admission_date')}
+                    margin="normal"
+                    format={'dd/MM/yyyy'}
                     fullWidth
                   />
                 </Grid>
@@ -391,6 +475,16 @@ class EditClient extends Component {
                     fullWidth
                   />
                 </Grid>
+                <Grid  
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={6}
+                  xl={6}>
+                  <SelectGeneric description="Estado civil" showEmpty={false} value={data.civil_status} onChange={handleValueChange('civil_status')} itens={menuCivilStatus}/>
+                </Grid>
                 <Grid
                   className={classes.item}
                   item
@@ -406,6 +500,44 @@ class EditClient extends Component {
                     className={classes.textField}
                     value={data.spouse}
                     onChange={handleValueChange('spouse')}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={12}
+                  md={6}
+                  lg={6}
+                  xl={6}
+                >
+                  <TextField
+                    id="father_name"
+                    label="Pai"
+                    className={classes.textField}
+                    value={data.father_name}
+                    onChange={handleValueChange('father_name')}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={12}
+                  md={6}
+                  lg={6}
+                  xl={6}
+                >
+                  <TextField
+                    id="mother_name"
+                    label="Mãe"
+                    className={classes.textField}
+                    value={data.mother_name}
+                    onChange={handleValueChange('mother_name')}
                     margin="normal"
                     fullWidth
                   />

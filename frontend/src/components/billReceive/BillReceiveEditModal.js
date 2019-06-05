@@ -24,8 +24,6 @@ import {
 
 import billsReceiveservice from '../../services/billsReceiveService';
 
-import { printBillsReceiveis } from '../../services/printService';
-
 const styles = theme => ({
   paper: {
     position: 'absolute',

@@ -27,9 +27,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import classNames from 'classnames';
 
 import AsyncSelect from 'react-select/async';
 
