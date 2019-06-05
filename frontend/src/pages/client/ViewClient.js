@@ -24,6 +24,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 
 import TablePaginationActions from '../../components/common/TablePaginationActions';
+import { getDateToString } from '../../utils/operators';
 
 const styles = theme => ({
   root: {
@@ -99,8 +100,9 @@ function ViewClient(props) {
     countClients,
     handleSort,
     order,
+    columnSearch,
     columnSort,
-    handleRequestSort,
+    handleRequestSearch,
     search,
     handleSearch,
     handleChangeTextSearch,
@@ -113,8 +115,8 @@ function ViewClient(props) {
           <FormControl fullWidth className={classes.margin}>
             <InputLabel htmlFor="sort">Pesquisar por</InputLabel>
             <Select
-              value={columnSort}
-              onChange={handleRequestSort}
+              value={columnSearch}
+              onChange={handleRequestSearch}
               inputProps={{
                 name: 'sort',
                 id: 'sort',
@@ -123,6 +125,7 @@ function ViewClient(props) {
               <MenuItem value={'code'}>Código</MenuItem>
               <MenuItem value={'name'}>Nome</MenuItem>
               <MenuItem value={'cpf'}>Cpf</MenuItem>
+              <MenuItem value={'date_of_birth'}>Data de nascimento</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -234,6 +237,21 @@ function ViewClient(props) {
                 </TableSortLabel>
               </Tooltip>
             </TableCell>
+            <TableCell >
+              <Tooltip
+                title="Ordenar"
+                placement={'bottom-start'}
+                enterDelay={300}
+              >
+                <TableSortLabel
+                  active={columnSort === 'date_of_birth'}
+                  direction={order}
+                  onClick={handleSort('date_of_birth')}
+                >
+                  Data de nascimento
+                </TableSortLabel>
+              </Tooltip>
+            </TableCell>            
             <TableCell className={classes.headerAcoes} align="right">
               Ações
             </TableCell>
@@ -245,6 +263,7 @@ function ViewClient(props) {
               <TableCell size="small">{clients[key].code}</TableCell>
               <TableCell size="small">{clients[key].name}</TableCell>
               <TableCell size="small">{clients[key].cpf}</TableCell>
+              <TableCell size="small">{getDateToString(clients[key].date_of_birth)}</TableCell>
               <TableCell padding="none" align="right">
                 <Fab
                   color="primary"
@@ -306,8 +325,9 @@ ViewClient.propTypes = {
   countClients: PropTypes.number.isRequired,
   handleSort: PropTypes.func.isRequired,
   order: PropTypes.string.isRequired,
+  columnSearch: PropTypes.string.isRequired,
   columnSort: PropTypes.string.isRequired,
-  handleRequestSort: PropTypes.func.isRequired,
+  handleRequestSearch: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleChangeTextSearch: PropTypes.func.isRequired,
   handleCreate: PropTypes.func.isRequired,
