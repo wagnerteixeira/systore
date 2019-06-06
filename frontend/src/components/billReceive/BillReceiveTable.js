@@ -286,9 +286,9 @@ function BillReceiveTable(props) {
   }
 
   function fetchBillsReceive() {
-    console.log(clientId);
     if (clientId === 'clean') {
       setbillsReceiveComplete([]);
+      return;
     }
     if (clientId && clientId !== '0') {
       billsReceiveservice.getBillsReceiveServiceByClient(clientId).then(res => {
