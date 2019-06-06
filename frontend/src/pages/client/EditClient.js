@@ -90,7 +90,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.light,
   },
   tableRowData: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   '@global': {
     'tr > td': {
@@ -100,12 +100,14 @@ const styles = theme => ({
   },
 });
 
-const menuCivilStatus = [{ value: 0, description: '' }, 
-                         { value: 1, description: '1-SOLTEIRO(A)' },
-                         { value: 2, description: '2-CASADO(A)' },
-                         { value: 3, description: '3-DIVORCIADO(A)' },
-                         { value: 4, description: '4-SEPARADO(A)' },
-                         { value: 5, description: '5-VIÚVO(A)' }]
+const menuCivilStatus = [
+  { value: 0, description: '' },
+  { value: 1, description: 'SOLTEIRO(A)' },
+  { value: 2, description: 'CASADO(A)' },
+  { value: 3, description: 'DIVORCIADO(A)' },
+  { value: 4, description: 'SEPARADO(A)' },
+  { value: 5, description: 'VIÚVO(A)' },
+];
 
 class EditClient extends Component {
   constructor(props) {
@@ -475,15 +477,22 @@ class EditClient extends Component {
                     fullWidth
                   />
                 </Grid>
-                <Grid  
+                <Grid
                   className={classes.item}
                   item
                   xs={12}
                   sm={12}
                   md={12}
                   lg={6}
-                  xl={6}>
-                  <SelectGeneric description="Estado civil" showEmpty={false} value={data.civil_status} onChange={handleValueChange('civil_status')} itens={menuCivilStatus}/>
+                  xl={6}
+                >
+                  <SelectGeneric
+                    description="Estado civil"
+                    showEmpty={false}
+                    value={data.civil_status}
+                    onChange={handleValueChange('civil_status')}
+                    itens={menuCivilStatus}
+                  />
                 </Grid>
                 <Grid
                   className={classes.item}

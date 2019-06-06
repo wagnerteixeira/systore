@@ -109,24 +109,37 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleGenerateQuotas = () => {
-    let _original_value = accounting.unformat(this.state.original_value.replace('.',','))
+    let _original_value = accounting.unformat(
+      this.state.original_value.replace('.', ',')
+    );
     if (_original_value > 0 && this.state.quotas > 0) {
       let _quotaValue = accounting.unformat(
         accounting.formatNumber(_original_value / this.state.quotas, 1)
       );
+      let quotaOfAdjustment =
+        _original_value - (this.state.quotas - 1) * _quotaValue;
       let quotas = [];
       let i = 0;
       let due_date = new Date(this.state.purchase_date.getTime());
       for (i = 0; i < this.state.quotas; i++) {
         let original_value_quota = _quotaValue;
-        if (i === this.state.quotas - 1)
-          original_value_quota = _original_value - (this.state.quotas - 1) * _quotaValue;
         due_date.setMonth(due_date.getMonth() + 1);
-        quotas.push({
-          quota: i + 1,
-          due_date: new Date(due_date.getTime()),
-          original_value: accounting.formatNumber(original_value_quota),
-        });
+        if (
+          (i === 0 && quotaOfAdjustment > _quotaValue) ||
+          (i === this.state.quotas - 1 && quotaOfAdjustment < _quotaValue)
+        ) {
+          quotas.push({
+            quota: i + 1,
+            due_date: new Date(due_date.getTime()),
+            original_value: accounting.formatNumber(quotaOfAdjustment),
+          });
+        } else {
+          quotas.push({
+            quota: i + 1,
+            due_date: new Date(due_date.getTime()),
+            original_value: accounting.formatNumber(original_value_quota),
+          });
+        }
       }
       this.setState({
         bills_receives: quotas,
@@ -141,7 +154,9 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleSaveQuotas = clientId => onClose => () => {
-    let _original_value = accounting.unformat(this.state.original_value.replace('.',','))
+    let _original_value = accounting.unformat(
+      this.state.original_value.replace('.', ',')
+    );
     let message = this.validadeSaveQuotas(_original_value);
     if (message !== '') {
       this.setState({
