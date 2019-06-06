@@ -181,7 +181,8 @@ class BillReceiveCreateModal extends React.Component {
 
     billsReceiveService
       .createQuotas(clientId, data)
-      .then(() => {
+      .then(res => {
+        console.log(res.data);
         this.setState({
           code: '',
           quotas: 0,
@@ -190,7 +191,7 @@ class BillReceiveCreateModal extends React.Component {
           vendor: '',
           bills_receives: [],
         });
-        onClose(null, 'created');
+        onClose(res.data, 'created');
       })
       .catch(error =>
         this.setState({

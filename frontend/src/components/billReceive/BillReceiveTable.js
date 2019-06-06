@@ -302,7 +302,8 @@ function BillReceiveTable(props) {
   function onCloseCreateModal(event, reason) {
     setOpenCreateModal(false);
     if (reason === 'created') {
-      handleOpenMessage(true, 'success', 'Títulos criado com sucesso! ');
+      handleOpenMessage(false, 'success', '');
+      internalPrintBillReceives(event);
       fetchBillsReceive();
     }
   }
