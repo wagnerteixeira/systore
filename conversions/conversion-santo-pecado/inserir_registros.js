@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const _ = require('lodash');
 
-const path_clientes = 'EMITENTE_03_06_2019_18_08';
+const path_clientes = 'emitente.d2';
 var path_titulos = 'titulo_11-04.txt';
 
 const axiosInstance = axios.create({
@@ -54,7 +54,7 @@ const inserirRegistros = async () => {
     if (line[1].length > 0) {   
       let civil_status = 0;
       //1-SOLTEIRO(A) 2-CASADO(A) 3-DIVORCIADO(A) 4-SEPARADO(A) 5-VIÚVO(A)
-      switch (line[57]) {
+      switch (line[71]) { //ok
         case '':
           civil_status = 0;
           break;
@@ -79,31 +79,31 @@ const inserirRegistros = async () => {
 
       console.log(`Inserindo cliente ${line[0]} - ${line[1]}`);    
       let client = {
-        name: line[1],
-        code: line[0],
-        registry_date: convertDate(line[2]),
-        date_of_birth: convertDate(line[3]),
-        address: line[4],
-        neighborhood: line[5],
-        city: line[6],
-        state: line[7],
-        postal_code: line[8].replace(/\D/g, ''),
-        cpf: line[15],
-        seller: line[16],
-        job_name: line[17],
-        place_of_birth: line[36],
-        occupation: line[30],
-        spouse: line[18], //conjuge
-        note: line[19], //observações
-        phone1: '', //telefone 1
-        phone2: '', //telefone 2
-        address_number: line[100], //Número do endereço
+        name: line[1], //ok
+        code: line[0], //ok
+        registry_date: convertDate(line[2]), //ok
+        date_of_birth: convertDate(line[3]), //ok
+        address: line[4], //ok
+        neighborhood: line[5], //ok
+        city: line[6], //ok
+        state: line[7], //ok
+        postal_code: line[8].replace(/\D/g, ''), //ok
+        cpf: line[15], //ok
+        seller: line[16], //ok
+        job_name: line[17], //ok
+        place_of_birth: line[50], //conferir ok
+        occupation: line[44], //ok
+        spouse: line[18], //conjuge //ok
+        note: line[31], //observações conferir
+        phone1: line[19], //telefone 1
+        phone2: line[20], //telefone 2
+        address_number: line[116], //Número do endereço ok
         rg: line[14], // rg
-        complement: line[101], // complemento
-        admission_date: convertDate(line[37]), //Data de admissao
+        complement: line[117], // complemento ok
+        admission_date: convertDate(line[51]), //Data de admissao
         civil_status: civil_status, //estado civil,
-        father_name: '', // Nome do pai
-        mother_name: '', // Nome da mae
+        father_name: line[32], // Nome do pai //ok
+        mother_name: line[33], // Nome da mae //ok
       };
       try {
         const res = await axiosInstance.post('/api/client', client);
@@ -123,7 +123,7 @@ const inserirRegistros = async () => {
     }
     //console.log(res.data);
   }
-
+  
   /*for(i in clients) { 
     console.log(clients[i]);
   }*/
