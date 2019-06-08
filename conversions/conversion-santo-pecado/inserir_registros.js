@@ -40,6 +40,36 @@ const findClient = code => client => {
   return parseInt(code) === parseInt(client.code);
 };
 
+const inserirUsuarios = async () => {
+  let user = {
+    user_name: 'ROSE',
+    password: '1234'
+  };
+
+  try {
+    let res = await axiosInstance.post('/api/user', user);
+    console.log(res.data);
+  } catch (e) {
+    console.log(`Não foi possível inserir o usuário ${user.user_name}`);
+    console.log(e.response.data.errors);
+    return;
+  }  
+
+  user = {
+    user_name: 'IZAQUE',
+    password: '1234'
+  };
+
+  try {
+    let res = await axiosInstance.post('/api/user', user);
+    console.log(res.data);
+  } catch (e) {
+    console.log(`Não foi possível inserir o usuário ${user.user_name}`);
+    console.log(e.response.data.errors);
+    return;
+  }  
+}
+
 const inserirRegistros = async () => {
   let clients = [];
   let billReceives = [];
@@ -180,7 +210,7 @@ const inserirRegistros = async () => {
     /*for(i in billReceives) { 
       console.log(billReceives[i]);
     }*/
-  }
+  }  
 
   problems.push(
     `ultimo código de cliente: ${
@@ -203,4 +233,6 @@ var d4 = convertDate('27/05/62');
 console.log(d4);
 var d = new Date();
 console.log(d);*/
+inserirUsuarios();
 inserirRegistros();
+
