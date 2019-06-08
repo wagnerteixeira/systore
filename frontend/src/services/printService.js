@@ -81,18 +81,18 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
       x: _x + 125,
       y: 59
     }); //juros
+    //linha 5
+    items.push({
+      text: getNumberToString2(totalValue),
+      x: _x + 36,
+      y: 73
+    }); //total
+    items.push({
+      text: getNumberToString2(totalValue),
+      x: _x + 125,
+      y: 73
+    }); //total
   }
-  //linha 5
-  items.push({
-    text: getNumberToString2(totalValue),
-    x: _x + 36,
-    y: 73
-  }); //total
-  items.push({
-    text: getNumberToString2(totalValue),
-    x: _x + 125,
-    y: 73
-  }); //total
 
   items.push({ text: 'AV. 1º DE JUNHO, 366', x: _x + 67, y: 73 }); //pague_sua_prestacao
 

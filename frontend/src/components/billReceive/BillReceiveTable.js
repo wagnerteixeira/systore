@@ -350,6 +350,7 @@ function BillReceiveTable(props) {
           <TableHead>
             <TableRow>
               <TableCell size="small">Data da venda</TableCell>
+              <TableCell size="small">Vendedor</TableCell>
               <TableCell size="small">Título</TableCell>
               <TableCell size="small">Parcela</TableCell>
               <TableCell size="small">Data de vencimento</TableCell>
@@ -367,6 +368,7 @@ function BillReceiveTable(props) {
           </TableHead>
           <TableBody>
             {Object.keys(billsReceive).map(key => {
+              console.log(billsReceive[key]);
               let _daysDelay =
                 billsReceive[key].pay_date != null
                   ? billsReceive[key].days_delay
@@ -382,7 +384,8 @@ function BillReceiveTable(props) {
                   <TableCell size="small">
                     {getDateToString(billsReceive[key].purchase_date)}
                   </TableCell>
-                  <TableCell size="small">{billsReceive[key].code}</TableCell>
+                  <TableCell size="small">{billsReceive[key].vendor}</TableCell>
+                  <TableCell size="small">{billsReceive[key].code}</TableCell>                  
                   <TableCell size="small">{billsReceive[key].quota}</TableCell>
                   <TableCell>
                     {getDateToString(billsReceive[key].due_date)}
