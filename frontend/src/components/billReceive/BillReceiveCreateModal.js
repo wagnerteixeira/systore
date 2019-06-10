@@ -124,10 +124,7 @@ class BillReceiveCreateModal extends React.Component {
       for (i = 0; i < this.state.quotas; i++) {
         let original_value_quota = _quotaValue;
         due_date.setMonth(due_date.getMonth() + 1);
-        if (
-          (i === 0 && quotaOfAdjustment > _quotaValue) ||
-          (i === this.state.quotas - 1 && quotaOfAdjustment < _quotaValue)
-        ) {
+        if (i === 0) {
           quotas.push({
             quota: i + 1,
             due_date: new Date(due_date.getTime()),
