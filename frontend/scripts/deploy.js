@@ -8,8 +8,8 @@ const exec = util.promisify(require('child_process').exec);
 
 console.log(result.parsed);
 
-let new_version = '101';
-let old_version = '100';
+let new_version = '102';
+let old_version = '101';
 
 /*console.log(process.env.SSH_PASS);
 
