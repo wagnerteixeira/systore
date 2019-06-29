@@ -32,17 +32,15 @@ Client.before('delete', (req, res, next) => {
 });
 
 Client.before('post', (req, res, next) => {
-  if (!req.body.code) {
-    Counter.findOneAndUpdate(
-      { _id: 'client_code' },
-      { $inc: { seq: 1 } },
-      (error, counter) => {
-        if (error) return next(error);
-        req.body.code = counter.seq;
-        next();
-      }
-    );
-  } else next();
+  Counter.findOneAndUpdate(
+    { _id: 'client_code' },
+    { $inc: { seq: 1 } },
+    (error, counter) => {
+      if (error) return next(error);
+      req.body.code = counter.seq;
+      next();
+    }
+  );
 });
 
 Client.route('count', ['get'], (req, res, next) => {
