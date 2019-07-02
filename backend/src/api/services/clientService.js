@@ -31,7 +31,16 @@ Client.before('delete', (req, res, next) => {
   });
 });
 
-Client.before('post', (req, res, next) => {
+Client.before('post', async (req, res, next) => {
+  let _client = await Client.findOne({ cpf: req.body.cpf });
+  if (_client)
+    return res
+      .status(412)
+      .json({
+        erros: [
+          `Já existe um cliente com o CPF ${_client.cpf}, ${_client.name} `
+        ]
+      });
   Counter.findOneAndUpdate(
     { _id: 'client_code' },
     { $inc: { seq: 1 } },
