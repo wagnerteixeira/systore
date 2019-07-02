@@ -272,11 +272,12 @@ function BillReceiveTable(props) {
   function handleDeleteBillReceive(key) {
     Confirm('Atenção', 'Confirma a exclusão?', () =>
       billsReceiveservice
-        .remove(billsReceive[key]._id)
+        .remove(billsReceive[key].code)
         .then(() => {
-          let copyBillComplete = billsReceiveComplete.slice();
-          copyBillComplete.splice(key, 1);
-          setbillsReceiveComplete(copyBillComplete);
+          let billsReceiveCompleteWithoutDeleted = billsReceiveComplete.filter(
+            billReceive => billReceive.code !== billsReceive[key].code
+          );
+          setbillsReceiveComplete(billsReceiveCompleteWithoutDeleted);
         })
         .catch(error => {
           console.log(error.response);

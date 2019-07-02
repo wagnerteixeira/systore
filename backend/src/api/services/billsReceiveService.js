@@ -23,24 +23,11 @@ const refClient = async (req, res, next) => {
   } else next();
 };
 
-BillsReceive.methods(['get', 'post', 'put', 'delete']);
+BillsReceive.methods(['get', 'post', 'put']);
 
 BillsReceive.updateOptions({ new: true, runValidators: true });
 BillsReceive.after('post', errorHandler).after('put', errorHandler);
 //BillsReceive.after('post', refClient);
-
-BillsReceive.before('delete', (req, res, next) => {
-  if (!req.params.id)
-    return res.status(404).send({ errors: ['Título não encontrado'] });
-  BillsReceive.findById(req.params.id, function(error, bill_receive) {
-    if (error) res.status(500).json({ erros: [error] });
-    if (bill_receive.pay_date || bill_receive.situation === 'C')
-      return res
-        .status(500)
-        .send({ errors: ['Título não pode ser excluído pois já está pago!'] });
-    else next();
-  });
-});
 
 BillsReceive.route('count', ['get'], (req, res, next) => {
   BillsReceive.countDocuments((error, value) => {
@@ -202,7 +189,10 @@ const validateQuotas = (original_value, bills_receives, purchase_date) => {
   let sum_original_value = 0.0;
   let sum_temp = 0.0;
   bills_receives.forEach(bill_receive => {
-    sum_original_value = (((sum_temp * 10) + (accounting.unformat(bill_receive.original_value) * 10.0)) / 10.0);
+    sum_original_value =
+      (sum_temp * 10 +
+        accounting.unformat(bill_receive.original_value) * 10.0) /
+      10.0;
     sum_temp = sum_original_value;
     if (new Date(bill_receive.due_date) < new Date(purchase_date))
       error += `A data de pagamento (${getDateToString(
@@ -214,11 +204,13 @@ const validateQuotas = (original_value, bills_receives, purchase_date) => {
       )})\n`;
   });
 
-  if (accounting.unformat(accounting.formatNumber(sum_original_value)) !== accounting.unformat(original_value))
-    error += `A soma das parcelas (R$ ${parseFloat(sum_original_value)
-      }) difere do valor do título (R$ ${parseFloat(
-      original_value
-    )})!\n`;
+  if (
+    accounting.unformat(accounting.formatNumber(sum_original_value)) !==
+    accounting.unformat(original_value)
+  )
+    error += `A soma das parcelas (R$ ${parseFloat(
+      sum_original_value
+    )}) difere do valor do título (R$ ${parseFloat(original_value)})!\n`;
 
   return error;
 };
@@ -269,5 +261,43 @@ BillsReceive.route(
       });
   }
 );
+
+BillsReceive.before('delete', async (req, res, next) => {
+  if (!req.params.code)
+    return res.status(404).send({ errors: ['Título não encontrado'] });
+  console.log('oi');
+  let billsReceives = await BillsReceive.find({ code: req.params.code });
+  if (billsReceives.some(billsReceive => billsReceive.situation === 'C')) {
+    return res
+      .status(500)
+      .send({
+        errors: ['Carnê não pode ser excluído pois existe parcela paga!']
+      });
+  } else next();
+});
+
+BillsReceive.route(':code([0-9]+)', ['delete'], (req, res, next) => {  
+  BillsReceive.find({ code: req.params.code })
+    .then(billsReceives => {      
+      if (billsReceives.some(billsReceive => billsReceive.situation === 'C')) {
+        return res
+          .status(500)
+          .send({
+            errors: ['Carnê não pode ser excluído pois existe parcela paga!']
+          });
+      }
+      else {
+        let billsReceivesRemovePromise = billsReceives.map(b => b.remove());
+        Promise.all(billsReceivesRemovePromise)
+          .then(values => {
+            console.log(values);
+            res.status(200).json('OK');
+          })
+          .catch(error => {
+            res.status(500).json(error);
+          });
+      }  
+    });
+});
 
 module.exports = BillsReceive;

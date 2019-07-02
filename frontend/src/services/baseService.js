@@ -17,7 +17,7 @@ export default route => {
       if (uri === '') uri = `?sort=${sort}`;
       else uri = `${uri}&sort=${order === 'desc' ? '-' : ''}${sort}`;
     }
-    if (search){
+    if (search) {
       if (filter) {
         if (filterType === 'rg') {
           filter = createRegexFromFilter(filter);
@@ -90,6 +90,6 @@ export default route => {
     getAll,
     get,
     remove,
-    count
+    count,
   };
 };
