@@ -11,6 +11,8 @@ console.log(result.parsed);
 let new_version = '102';
 let old_version = '101';
 
+let prod = 'n';
+
 /*console.log(process.env.SSH_PASS);
 
 const { spawn, execSync } = require('child_process');
@@ -22,6 +24,12 @@ console.log(stdout.toString());
 
 async function main() {
   let out = [];
+  let repo = prod === 'y' ? 'systore_conv' : 'systore_homolog';
+  if (prod === 'y')
+    console.log(
+      `Gerando uma versão de produção com versão anterior ${old_version}`
+    );
+  else console.log('Gerando uma versão de homologação');
   console.log('deleting old files');
   //delete old files
   var result = await exec('rm -rf build');
@@ -48,7 +56,7 @@ async function main() {
         process.env.SSH_USER
       }@${
         process.env.SSH_ADDRESS
-      } "cd /var/www/systore_conv && mv -f build build_${old_version}"`
+      } "cd /var/www/${repo} && mv -f build build_${old_version}"`
     );
 
     if (result.stderr) {
@@ -64,7 +72,7 @@ async function main() {
       process.env.SSH_PASS
     } scp -o StrictHostKeyChecking=no -r build ${process.env.SSH_USER}@${
       process.env.SSH_ADDRESS
-    }:/var/www/systore_conv`
+    }:/var/www/${repo}`
   );
 
   if (result.stderr) {
@@ -76,4 +84,16 @@ async function main() {
   console.log(out);
 }
 
-main();
+console.log('Esse é um deploy de produção y/n');
+
+process.stdin.on('readable', () => {
+  // reads what is being typed.
+  let variable = process.stdin.read();
+  // trying to read
+  variable = variable.toString().replace(/\n/, '');
+  variable = variable.replace(/\r/, '');
+  if (variable.toLowerCase() === 'y') prod = 'y';
+  else old_version = '';
+
+  main();
+});
