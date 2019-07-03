@@ -38,7 +38,7 @@ MongoClient.connect(url, async function(err, db) {
   let lastClientCode = parseInt(await inserirRegistros(log_conversao, dados_finais));
   log_conversao.push(`atualizando ultimo código do cliente para ${lastClientCode}` );
   await db.db("systore").collection("counters").updateOne({_id: "client_code"}, {$set : {seq: lastClientCode}}, {upsert: true});
-  log_conversao.push('Exportando banco de dados');  
+  /*log_conversao.push('Exportando banco de dados');  
   try{
     var result = await exec('rm -rf dump && mongodump --db systore');
   }
@@ -137,6 +137,7 @@ MongoClient.connect(url, async function(err, db) {
     log_conversao.push(`error: ${result.stderr}`);
   }
   log_conversao.push(result.stdout);
+  */
 
   fs.writeFileSync('CONVERSAO.log', log_conversao.join('\n'));
 
