@@ -89,16 +89,14 @@ const styles = theme => ({
       fontWeight: '600 !important',
       fontSize: '1.1em !important',
     },
-  },  
+  },
 });
-
 
 const stylesMenu = theme => ({
   iconPadding: {
     paddingRight: theme.spacing(1),
-  }
+  },
 });
-
 
 function _MenuAcoes(props) {
   const {
@@ -106,6 +104,7 @@ function _MenuAcoes(props) {
     anchorElMenuAcoes,
     handlePrintBillReceiveGroupByCode,
     handlePrintBillReceive,
+    handlePrintBillReceivesOpen,
     handleEditBillReceive,
     handleDeleteBillReceive,
     billReceiveKey,
@@ -150,6 +149,15 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
+          handlePrintBillReceivesOpen();
+          handleCloseMenuAcoes();
+        }}
+      >
+        <Icon className={classes.iconPadding}>print</Icon>
+        Imprimir parcelas em aberto
+      </MenuItem>
+      <MenuItem
+        onClick={() => {
           handleDeleteBillReceive(billReceiveKey);
           handleCloseMenuAcoes();
         }}
@@ -161,13 +169,13 @@ function _MenuAcoes(props) {
   );
 }
 
-
 _MenuAcoes.propTypes = {
   classes: PropTypes.object.isRequired,
   handleCloseMenuAcoes: PropTypes.func.isRequired,
   anchorElMenuAcoes: PropTypes.object.isRequired,
   handlePrintBillReceiveGroupByCode: PropTypes.func.isRequired,
   handlePrintBillReceive: PropTypes.func.isRequired,
+  handlePrintBillReceivesOpen: PropTypes.func.isRequired,
   handleEditBillReceive: PropTypes.func.isRequired,
   handleDeleteBillReceive: PropTypes.func.isRequired,
   billReceiveKey: PropTypes.string.isRequired,
@@ -204,7 +212,7 @@ function BillReceiveTable(props) {
   useEffect(() => {
     handleChangePage(null, 0);
     // eslint-disable-next-line
-  }, [billsReceiveComplete]);  
+  }, [billsReceiveComplete]);
 
   const handleOpenMenuAcoes = (billReceiveKey, situation) => event => {
     setDadosMenuAcoes({
@@ -240,12 +248,6 @@ function BillReceiveTable(props) {
     setOpen(true);
   }
 
-  function handlePrintBillReceiveGroupByCode(key) {
-    internalPrintBillReceives(
-      billsReceive.filter(item => item.code === billsReceive[key].code)
-    );
-  }
-
   function renderEditModal(bill) {
     if (openEditModal) {
       return (
@@ -258,6 +260,18 @@ function BillReceiveTable(props) {
         />
       );
     }
+  }
+
+  function handlePrintBillReceivesOpen() {
+    internalPrintBillReceives(
+      billsReceiveComplete.filter(item => item.situation === 'O')
+    );
+  }
+
+  function handlePrintBillReceiveGroupByCode(key) {
+    internalPrintBillReceives(
+      billsReceiveComplete.filter(item => item.code === billsReceive[key].code)
+    );
   }
 
   function handlePrintBillReceive(key) {
@@ -330,6 +344,7 @@ function BillReceiveTable(props) {
         anchorElMenuAcoes={dadosMenuAcoes.anchorEl}
         handlePrintBillReceiveGroupByCode={handlePrintBillReceiveGroupByCode}
         handlePrintBillReceive={handlePrintBillReceive}
+        handlePrintBillReceivesOpen={handlePrintBillReceivesOpen}
         handleEditBillReceive={handleEditBillReceive}
         handleDeleteBillReceive={handleDeleteBillReceive}
         billReceiveKey={dadosMenuAcoes.billReceiveKey}
@@ -386,7 +401,7 @@ function BillReceiveTable(props) {
                     {getDateToString(billsReceive[key].purchase_date)}
                   </TableCell>
                   <TableCell size="small">{billsReceive[key].vendor}</TableCell>
-                  <TableCell size="small">{billsReceive[key].code}</TableCell>                  
+                  <TableCell size="small">{billsReceive[key].code}</TableCell>
                   <TableCell size="small">{billsReceive[key].quota}</TableCell>
                   <TableCell>
                     {getDateToString(billsReceive[key].due_date)}
