@@ -185,7 +185,13 @@ _MenuAcoes.propTypes = {
 const MenuAcoes = withStyles(stylesMenu)(_MenuAcoes);
 
 function BillReceiveTable(props) {
-  const { classes, clientId, clientData, handleOpenMessage } = props;
+  const {
+    classes,
+    clientId,
+    clientData,
+    handleOpenMessage,
+    handleSaveClient,
+  } = props;
   const dateCurrent = getCurrentDate();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -224,6 +230,16 @@ function BillReceiveTable(props) {
 
   function handleCloseMenuAcoes() {
     setDadosMenuAcoes({ anchorEl: null, billReceiveKey: '' });
+  }
+
+  function handleOpenCreateModal() {
+    if ((clientId === '0' || clientId === '') && handleSaveClient) {
+      Confirm(
+        'Atenção',
+        'Cliente ainda não está salvo, para continuar é preciso salvar.',
+        () => handleSaveClient(() => setOpenCreateModal(true))
+      );
+    } else setOpenCreateModal(true);
   }
 
   function handleSaveBillReceive(reason, print, clientData, billReceive) {
@@ -355,8 +371,8 @@ function BillReceiveTable(props) {
           variant="outlined"
           color="primary"
           className={classes.button}
-          disabled={clientId === '0' || clientId === ''}
-          onClick={() => setOpenCreateModal(true)}
+          disabled={(clientId === '0' || clientId === '') && !handleSaveClient}
+          onClick={handleOpenCreateModal}
         >
           INCLUIR
         </Button>
@@ -526,6 +542,7 @@ BillReceiveTable.propTypes = {
   classes: PropTypes.object.isRequired,
   clientId: PropTypes.string.isRequired,
   handleOpenMessage: PropTypes.func.isRequired,
+  handleSaveClient: PropTypes.oneOfType([PropTypes.func, PropTypes.any]),
 };
 
-export default withStyles(styles)(BillReceiveTable);
+export default React.memo(withStyles(styles)(BillReceiveTable));

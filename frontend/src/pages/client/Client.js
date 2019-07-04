@@ -82,7 +82,14 @@ class Client extends Component {
     );*/
   }
 
-  fetchClients = (page, rowsPerPage, columnSearch, columnSort, order, filter) => {
+  fetchClients = (
+    page,
+    rowsPerPage,
+    columnSearch,
+    columnSort,
+    order,
+    filter
+  ) => {
     if (columnSearch === 'code' && /\D/.test(filter)) {
       this.setState({
         messageOpen: true,
@@ -108,8 +115,16 @@ class Client extends Component {
     });
     const skip = page * rowsPerPage;
     clientservice
-      .getAll(skip, rowsPerPage, columnSearch, columnSort, order, filterType, filter)
-      .then(res => {        
+      .getAll(
+        skip,
+        rowsPerPage,
+        columnSearch,
+        columnSort,
+        order,
+        filterType,
+        filter
+      )
+      .then(res => {
         this.setState({
           stateData: 'LIST',
           inEdit: false,
@@ -240,7 +255,7 @@ class Client extends Component {
     );
   };
 
-  handleSave = () => {
+  handleSave = callback => {
     if (this.state.inEdit) {
       let _data = {
         ...this.state.data,
@@ -249,7 +264,20 @@ class Client extends Component {
       };
       clientservice
         .update(_data)
-        .then(() => this.handleCancel('SAVE'))
+        .then(res => {
+          if (callback && typeof callback === 'function') {
+            this.setState(
+              {
+                ...this.state,
+                messageOpen: true,
+                messageText: 'Cliente salvo com suceso!',
+                variantMessage: 'success',
+                data: res.data,
+              },
+              callback
+            );
+          } else this.handleCancel('SAVE');
+        })
         .catch(error =>
           this.setState({
             messageOpen: true,
@@ -266,7 +294,21 @@ class Client extends Component {
       };
       clientservice
         .create(_data)
-        .then(() => this.handleCancel('SAVE'))
+        .then(res => {
+          if (callback && typeof callback === 'function') {
+            this.setState(
+              {
+                ...this.state,
+                inEdit: true,
+                messageOpen: true,
+                messageText: 'Cliente salvo com suceso!',
+                variantMessage: 'success',
+                data: res.data,
+              },
+              callback
+            );
+          } else this.handleCancel('SAVE');
+        })
         .catch(error =>
           this.setState({
             messageOpen: true,
@@ -338,9 +380,8 @@ class Client extends Component {
     );
   };
 
-
   handleRequestSearch = event => {
-    if (this.state.columnSearch !== event.target.value){      
+    if (this.state.columnSearch !== event.target.value) {
       this.fetchClients(
         this.state.page,
         this.state.rowsPerPage,
@@ -432,7 +473,7 @@ class Client extends Component {
         {stateData === 'EDIT_INSERT' && (
           <EditClient
             handleValueChange={this.handleValueChange}
-            data={data}
+            clientData={data}
             handleCancel={this.handleCancel}
             handleSave={this.handleSave}
             handleDateValueChange={this.handleDateValueChange}
