@@ -384,7 +384,6 @@ function BillReceiveTable(props) {
           </TableHead>
           <TableBody>
             {Object.keys(billsReceive).map(key => {
-              console.log(billsReceive[key]);
               let _daysDelay =
                 billsReceive[key].pay_date != null
                   ? billsReceive[key].days_delay

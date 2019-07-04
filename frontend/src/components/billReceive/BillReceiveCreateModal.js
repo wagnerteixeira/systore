@@ -212,15 +212,39 @@ class BillReceiveCreateModal extends React.Component {
     this.props.onClose(null, 'cancel');
   };
 
-  handleChangeDateInGrid = key => date => {
+  /*handleChangeDateInGrid = key => (date, other) => {
+    console.log(other);
     let bills_receives = [...this.state.bills_receives];
     bills_receives[key] = { ...bills_receives[key], due_date: date };
     this.setState({
       bills_receives: bills_receives,
     });
+  };*/
+
+  handleChangeDateInGrid = key => date => {
+    console.log('passou');
+    let due_date = new Date(date);
+    const newBillsReceives = this.state.bills_receives.map(
+      (billReceive, index) => {
+        if (parseInt(key) === 0) {
+          if (index === 0) return { ...billReceive, due_date: date };
+          else {
+            due_date.setMonth(due_date.getMonth() + 1);
+            return { ...billReceive, due_date: new Date(due_date) };
+          }
+        } else {
+          return parseInt(key) === index
+            ? { ...billReceive, due_date: date }
+            : billReceive;
+        }
+      }
+    );
+    this.setState({
+      bills_receives: newBillsReceives,
+    });
   };
 
-  handleValueChangeInGrig = (key, name) => event => {
+  handleValueChangeInGrig = (key, name) => event => {    
     let bills_receives = [...this.state.bills_receives];
     bills_receives[key] = {
       ...bills_receives[key],
