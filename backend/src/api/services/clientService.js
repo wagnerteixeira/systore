@@ -33,14 +33,11 @@ Client.before('delete', (req, res, next) => {
 
 Client.before('post', async (req, res, next) => {
   let _client = await Client.findOne({ cpf: req.body.cpf });
-  if (_client)
-    return res
-      .status(412)
-      .json({
-        erros: [
-          `Já existe um cliente com o CPF ${_client.cpf}, ${_client.name} `
-        ]
-      });
+  if (_client) {
+    return res.status(412).json({
+      erros: [`Já existe um cliente com o CPF ${_client.cpf}, ${_client.name} `]
+    });
+  }
   Counter.findOneAndUpdate(
     { _id: 'client_code' },
     { $inc: { seq: 1 } },
@@ -50,6 +47,24 @@ Client.before('post', async (req, res, next) => {
       next();
     }
   );
+});
+
+Client.before('put', async (req, res, next) => {
+  let clients = await Client.find({ cpf: req.body.cpf });
+  if (clients.length === 0) next();
+  else {    
+    _clients = clients.filter(c => c._id.toString() !== req.body._id.toString());    
+    if (_clients.length > 0 && _clients[0]._id !== req.body._id) {
+      return res.status(412).json({
+        erros: [
+          `Já existe um cliente com o CPF ${_clients[0].cpf}, ${
+            _clients[0].name
+          } `
+        ]
+      });
+    }
+    next();
+  }
 });
 
 Client.route('count', ['get'], (req, res, next) => {

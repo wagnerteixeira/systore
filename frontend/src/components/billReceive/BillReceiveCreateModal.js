@@ -68,6 +68,7 @@ class BillReceiveCreateModal extends React.Component {
     variantMessage: 'success',
     messageText: '',
     bills_receives: [],
+    inSaving: false,
   };
 
   handleMessageClose = () => {
@@ -151,6 +152,7 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleSaveQuotas = clientId => onClose => () => {
+    this.setState({ inSaving: true });
     let _original_value = accounting.unformat(
       this.state.original_value.replace('.', ',')
     );
@@ -160,6 +162,7 @@ class BillReceiveCreateModal extends React.Component {
         messageOpen: true,
         messageText: message,
         variantMessage: 'warning',
+        inSaving: false,
       });
       return;
     }
@@ -187,6 +190,7 @@ class BillReceiveCreateModal extends React.Component {
           purchase_date: new Date(),
           vendor: '',
           bills_receives: [],
+          inSaving: false,
         });
         onClose(res.data, 'created');
       })
@@ -195,6 +199,7 @@ class BillReceiveCreateModal extends React.Component {
           messageOpen: true,
           messageText: getErrosFromApi(error),
           variantMessage: 'error',
+          inSaving: false,
         })
       );
   };
@@ -221,8 +226,7 @@ class BillReceiveCreateModal extends React.Component {
     });
   };*/
 
-  handleChangeDateInGrid = key => date => {
-    console.log('passou');
+  handleChangeDateInGrid = key => date => {    
     let due_date = new Date(date);
     const newBillsReceives = this.state.bills_receives.map(
       (billReceive, index) => {
@@ -460,6 +464,7 @@ class BillReceiveCreateModal extends React.Component {
             variant="outlined"
             color="primary"
             className={classes.button}
+            disabled={this.state.inSaving}
             onClick={this.handleSaveQuotas(clientId)(onClose)}
           >
             Salvar
@@ -467,6 +472,7 @@ class BillReceiveCreateModal extends React.Component {
           <Button
             variant="outlined"
             color="secondary"
+            disabled={this.state.inSaving}
             className={classes.button}
             onClick={this.handleCancel}
           >
