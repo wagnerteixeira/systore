@@ -37,6 +37,7 @@ import TablePaginationActions from '../common/TablePaginationActions';
 import Confirm from '../common/ConfirmAlert';
 
 import PrintContainer from '../common/PrintContainer';
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
   container: {
@@ -89,6 +90,10 @@ const styles = theme => ({
       fontWeight: '600 !important',
       fontSize: '1.1em !important',
     },
+  },
+  flexContainer: {
+    display: 'flex',
+    alignItems: 'center',
   },
 });
 
@@ -366,7 +371,7 @@ function BillReceiveTable(props) {
         billReceiveKey={dadosMenuAcoes.billReceiveKey}
         situation={dadosMenuAcoes.situation}
       />
-      <div>
+      <div className={classes.flexContainer}>
         <Button
           variant="outlined"
           color="primary"
@@ -376,6 +381,44 @@ function BillReceiveTable(props) {
         >
           INCLUIR
         </Button>
+        {!(clientId === '0' || clientId === '') && (
+          <>
+            <Typography style={{ paddingLeft: 10 }}>
+              Saldo devedor sem juros:{'  '}
+              <span style={{ fontWeight: 600, color: 'red' }}>
+                {getNumberToString(
+                  billsReceiveComplete
+                    .filter(b => b.situation === 'O')
+                    .reduce((prev, curr) => {
+                      return (
+                        parseFloat(curr.original_value['$numberDecimal']) + prev
+                      );
+                    }, 0.0)
+                )}
+              </span>
+            </Typography>
+            <Typography style={{ paddingLeft: 10 }}>
+              Saldo devedor com juros:{'  '}
+              <span style={{ fontWeight: 600, color: 'red' }}>
+                {getNumberToString(
+                  billsReceiveComplete
+                    .filter(b => b.situation === 'O')
+                    .reduce((prev, curr) => {
+                      return (
+                        parseFloat(
+                          getValueWithInterest(
+                            curr.original_value['$numberDecimal'],
+                            curr.due_date,
+                            dateCurrent
+                          )
+                        ) + prev
+                      );
+                    }, 0.0)
+                )}
+              </span>
+            </Typography>
+          </>
+        )}
       </div>
       <div className={classes.back}>
         <Table className={classes.table} size="small">
