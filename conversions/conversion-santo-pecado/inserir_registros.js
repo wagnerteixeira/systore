@@ -38,7 +38,7 @@ MongoClient.connect(url, async function(err, db) {
   let lastClientCode = parseInt(await inserirRegistros(log_conversao, dados_finais));
   log_conversao.push(`atualizando ultimo código do cliente para ${lastClientCode}` );
   await db.db("systore").collection("counters").updateOne({_id: "client_code"}, {$set : {seq: lastClientCode}}, {upsert: true});
-  log_conversao.push('Exportando banco de dados');  
+  /*log_conversao.push('Exportando banco de dados');  
   try{
     var result = await exec('rm -rf dump && mongodump --db systore');
   }
@@ -94,13 +94,28 @@ MongoClient.connect(url, async function(err, db) {
   log_conversao.push(result.stdout);
 
 
+  log_conversao.push('Deletando banco de dados');
+  result = await exec(
+    `sshpass -p ${process.env.SSH_PASS} ssh -o StrictHostKeyChecking=no ${
+      process.env.SSH_USER
+    }@${
+      process.env.SSH_ADDRESS
+    } "mongo systore --eval 'db.dropDatabase()'"`
+  );
+
+  if (result.stderr) {
+    log_conversao.push(`error: ${result.stderr}`);
+  }
+  log_conversao.push(result.stdout);
+
+
   log_conversao.push('Restaurando banco de dados systore');
   result = await exec(
     `sshpass -p ${process.env.SSH_PASS} ssh -o StrictHostKeyChecking=no ${
       process.env.SSH_USER
     }@${
       process.env.SSH_ADDRESS
-    } "cd /root && mongorestore --nsInclude systore.clients --nsInclude systore.users --nsInclude systore.billsreceives --drop"`
+    } "cd /root && mongorestore --nsInclude systore.counters --nsInclude systore.clients --nsInclude systore.users --nsInclude systore.billsreceives --drop"`
   );
 
   if (result.stderr) {
@@ -137,6 +152,7 @@ MongoClient.connect(url, async function(err, db) {
     log_conversao.push(`error: ${result.stderr}`);
   }
   log_conversao.push(result.stdout);
+  */
 
   fs.writeFileSync('CONVERSAO.log', log_conversao.join('\n'));
 
@@ -146,8 +162,8 @@ MongoClient.connect(url, async function(err, db) {
   
 });
 
-const path_clientes = 'emitente_d_0706_convert';
-var path_titulos = 'titulo_07_06';
+const path_clientes = 'emitente_convert';
+var path_titulos = 'titulo';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8080'

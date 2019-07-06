@@ -37,6 +37,7 @@ import TablePaginationActions from '../common/TablePaginationActions';
 import Confirm from '../common/ConfirmAlert';
 
 import PrintContainer from '../common/PrintContainer';
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
   container: {
@@ -89,16 +90,18 @@ const styles = theme => ({
       fontWeight: '600 !important',
       fontSize: '1.1em !important',
     },
-  },  
+  },
+  flexContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 });
-
 
 const stylesMenu = theme => ({
   iconPadding: {
     paddingRight: theme.spacing(1),
-  }
+  },
 });
-
 
 function _MenuAcoes(props) {
   const {
@@ -106,6 +109,7 @@ function _MenuAcoes(props) {
     anchorElMenuAcoes,
     handlePrintBillReceiveGroupByCode,
     handlePrintBillReceive,
+    handlePrintBillReceivesOpen,
     handleEditBillReceive,
     handleDeleteBillReceive,
     billReceiveKey,
@@ -150,6 +154,15 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
+          handlePrintBillReceivesOpen();
+          handleCloseMenuAcoes();
+        }}
+      >
+        <Icon className={classes.iconPadding}>print</Icon>
+        Imprimir parcelas em aberto
+      </MenuItem>
+      <MenuItem
+        onClick={() => {
           handleDeleteBillReceive(billReceiveKey);
           handleCloseMenuAcoes();
         }}
@@ -161,13 +174,13 @@ function _MenuAcoes(props) {
   );
 }
 
-
 _MenuAcoes.propTypes = {
   classes: PropTypes.object.isRequired,
   handleCloseMenuAcoes: PropTypes.func.isRequired,
   anchorElMenuAcoes: PropTypes.object.isRequired,
   handlePrintBillReceiveGroupByCode: PropTypes.func.isRequired,
   handlePrintBillReceive: PropTypes.func.isRequired,
+  handlePrintBillReceivesOpen: PropTypes.func.isRequired,
   handleEditBillReceive: PropTypes.func.isRequired,
   handleDeleteBillReceive: PropTypes.func.isRequired,
   billReceiveKey: PropTypes.string.isRequired,
@@ -177,7 +190,13 @@ _MenuAcoes.propTypes = {
 const MenuAcoes = withStyles(stylesMenu)(_MenuAcoes);
 
 function BillReceiveTable(props) {
-  const { classes, clientId, clientData, handleOpenMessage } = props;
+  const {
+    classes,
+    clientId,
+    clientData,
+    handleOpenMessage,
+    handleSaveClient,
+  } = props;
   const dateCurrent = getCurrentDate();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -204,7 +223,7 @@ function BillReceiveTable(props) {
   useEffect(() => {
     handleChangePage(null, 0);
     // eslint-disable-next-line
-  }, [billsReceiveComplete]);  
+  }, [billsReceiveComplete]);
 
   const handleOpenMenuAcoes = (billReceiveKey, situation) => event => {
     setDadosMenuAcoes({
@@ -216,6 +235,16 @@ function BillReceiveTable(props) {
 
   function handleCloseMenuAcoes() {
     setDadosMenuAcoes({ anchorEl: null, billReceiveKey: '' });
+  }
+
+  function handleOpenCreateModal() {
+    if ((clientId === '0' || clientId === '') && handleSaveClient) {
+      Confirm(
+        'Atenção',
+        'Cliente ainda não está salvo, para continuar é preciso salvar.',
+        () => handleSaveClient(() => setOpenCreateModal(true))
+      );
+    } else setOpenCreateModal(true);
   }
 
   function handleSaveBillReceive(reason, print, clientData, billReceive) {
@@ -240,12 +269,6 @@ function BillReceiveTable(props) {
     setOpen(true);
   }
 
-  function handlePrintBillReceiveGroupByCode(key) {
-    internalPrintBillReceives(
-      billsReceive.filter(item => item.code === billsReceive[key].code)
-    );
-  }
-
   function renderEditModal(bill) {
     if (openEditModal) {
       return (
@@ -260,6 +283,18 @@ function BillReceiveTable(props) {
     }
   }
 
+  function handlePrintBillReceivesOpen() {
+    internalPrintBillReceives(
+      billsReceiveComplete.filter(item => item.situation === 'O')
+    );
+  }
+
+  function handlePrintBillReceiveGroupByCode(key) {
+    internalPrintBillReceives(
+      billsReceiveComplete.filter(item => item.code === billsReceive[key].code)
+    );
+  }
+
   function handlePrintBillReceive(key) {
     internalPrintBillReceives([billsReceiveComplete[key]]);
   }
@@ -272,11 +307,12 @@ function BillReceiveTable(props) {
   function handleDeleteBillReceive(key) {
     Confirm('Atenção', 'Confirma a exclusão?', () =>
       billsReceiveservice
-        .remove(billsReceive[key]._id)
+        .remove(billsReceive[key].code)
         .then(() => {
-          let copyBillComplete = billsReceiveComplete.slice();
-          copyBillComplete.splice(key, 1);
-          setbillsReceiveComplete(copyBillComplete);
+          let billsReceiveCompleteWithoutDeleted = billsReceiveComplete.filter(
+            billReceive => billReceive.code !== billsReceive[key].code
+          );
+          setbillsReceiveComplete(billsReceiveCompleteWithoutDeleted);
         })
         .catch(error => {
           console.log(error.response);
@@ -329,21 +365,60 @@ function BillReceiveTable(props) {
         anchorElMenuAcoes={dadosMenuAcoes.anchorEl}
         handlePrintBillReceiveGroupByCode={handlePrintBillReceiveGroupByCode}
         handlePrintBillReceive={handlePrintBillReceive}
+        handlePrintBillReceivesOpen={handlePrintBillReceivesOpen}
         handleEditBillReceive={handleEditBillReceive}
         handleDeleteBillReceive={handleDeleteBillReceive}
         billReceiveKey={dadosMenuAcoes.billReceiveKey}
         situation={dadosMenuAcoes.situation}
       />
-      <div>
+      <div className={classes.flexContainer}>
         <Button
           variant="outlined"
           color="primary"
           className={classes.button}
-          disabled={clientId === '0' || clientId === ''}
-          onClick={() => setOpenCreateModal(true)}
+          disabled={(clientId === '0' || clientId === '') && !handleSaveClient}
+          onClick={handleOpenCreateModal}
         >
           INCLUIR
         </Button>
+        {!(clientId === '0' || clientId === '') && (
+          <>
+            <Typography style={{ paddingLeft: 10 }}>
+              Saldo devedor sem juros:{'  '}
+              <span style={{ fontWeight: 600, color: 'red' }}>
+                {getNumberToString(
+                  billsReceiveComplete
+                    .filter(b => b.situation === 'O')
+                    .reduce((prev, curr) => {
+                      return (
+                        parseFloat(curr.original_value['$numberDecimal']) + prev
+                      );
+                    }, 0.0)
+                )}
+              </span>
+            </Typography>
+            <Typography style={{ paddingLeft: 10 }}>
+              Saldo devedor com juros:{'  '}
+              <span style={{ fontWeight: 600, color: 'red' }}>
+                {getNumberToString(
+                  billsReceiveComplete
+                    .filter(b => b.situation === 'O')
+                    .reduce((prev, curr) => {
+                      return (
+                        parseFloat(
+                          getValueWithInterest(
+                            curr.original_value['$numberDecimal'],
+                            curr.due_date,
+                            dateCurrent
+                          )
+                        ) + prev
+                      );
+                    }, 0.0)
+                )}
+              </span>
+            </Typography>
+          </>
+        )}
       </div>
       <div className={classes.back}>
         <Table className={classes.table} size="small">
@@ -368,7 +443,6 @@ function BillReceiveTable(props) {
           </TableHead>
           <TableBody>
             {Object.keys(billsReceive).map(key => {
-              console.log(billsReceive[key]);
               let _daysDelay =
                 billsReceive[key].pay_date != null
                   ? billsReceive[key].days_delay
@@ -385,7 +459,7 @@ function BillReceiveTable(props) {
                     {getDateToString(billsReceive[key].purchase_date)}
                   </TableCell>
                   <TableCell size="small">{billsReceive[key].vendor}</TableCell>
-                  <TableCell size="small">{billsReceive[key].code}</TableCell>                  
+                  <TableCell size="small">{billsReceive[key].code}</TableCell>
                   <TableCell size="small">{billsReceive[key].quota}</TableCell>
                   <TableCell>
                     {getDateToString(billsReceive[key].due_date)}
@@ -511,6 +585,7 @@ BillReceiveTable.propTypes = {
   classes: PropTypes.object.isRequired,
   clientId: PropTypes.string.isRequired,
   handleOpenMessage: PropTypes.func.isRequired,
+  handleSaveClient: PropTypes.oneOfType([PropTypes.func, PropTypes.any]),
 };
 
-export default withStyles(styles)(BillReceiveTable);
+export default React.memo(withStyles(styles)(BillReceiveTable));

@@ -68,6 +68,7 @@ class BillReceiveCreateModal extends React.Component {
     variantMessage: 'success',
     messageText: '',
     bills_receives: [],
+    inSaving: false,
   };
 
   handleMessageClose = () => {
@@ -151,6 +152,7 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleSaveQuotas = clientId => onClose => () => {
+    this.setState({ inSaving: true });
     let _original_value = accounting.unformat(
       this.state.original_value.replace('.', ',')
     );
@@ -160,6 +162,7 @@ class BillReceiveCreateModal extends React.Component {
         messageOpen: true,
         messageText: message,
         variantMessage: 'warning',
+        inSaving: false,
       });
       return;
     }
@@ -187,6 +190,7 @@ class BillReceiveCreateModal extends React.Component {
           purchase_date: new Date(),
           vendor: '',
           bills_receives: [],
+          inSaving: false,
         });
         onClose(res.data, 'created');
       })
@@ -195,6 +199,7 @@ class BillReceiveCreateModal extends React.Component {
           messageOpen: true,
           messageText: getErrosFromApi(error),
           variantMessage: 'error',
+          inSaving: false,
         })
       );
   };
@@ -212,15 +217,38 @@ class BillReceiveCreateModal extends React.Component {
     this.props.onClose(null, 'cancel');
   };
 
-  handleChangeDateInGrid = key => date => {
+  /*handleChangeDateInGrid = key => (date, other) => {
+    console.log(other);
     let bills_receives = [...this.state.bills_receives];
     bills_receives[key] = { ...bills_receives[key], due_date: date };
     this.setState({
       bills_receives: bills_receives,
     });
+  };*/
+
+  handleChangeDateInGrid = key => date => {    
+    let due_date = new Date(date);
+    const newBillsReceives = this.state.bills_receives.map(
+      (billReceive, index) => {
+        if (parseInt(key) === 0) {
+          if (index === 0) return { ...billReceive, due_date: date };
+          else {
+            due_date.setMonth(due_date.getMonth() + 1);
+            return { ...billReceive, due_date: new Date(due_date) };
+          }
+        } else {
+          return parseInt(key) === index
+            ? { ...billReceive, due_date: date }
+            : billReceive;
+        }
+      }
+    );
+    this.setState({
+      bills_receives: newBillsReceives,
+    });
   };
 
-  handleValueChangeInGrig = (key, name) => event => {
+  handleValueChangeInGrig = (key, name) => event => {    
     let bills_receives = [...this.state.bills_receives];
     bills_receives[key] = {
       ...bills_receives[key],
@@ -436,6 +464,7 @@ class BillReceiveCreateModal extends React.Component {
             variant="outlined"
             color="primary"
             className={classes.button}
+            disabled={this.state.inSaving}
             onClick={this.handleSaveQuotas(clientId)(onClose)}
           >
             Salvar
@@ -443,6 +472,7 @@ class BillReceiveCreateModal extends React.Component {
           <Button
             variant="outlined"
             color="secondary"
+            disabled={this.state.inSaving}
             className={classes.button}
             onClick={this.handleCancel}
           >

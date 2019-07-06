@@ -6,7 +6,7 @@ namespace ConversaoSantoPecado
     {
         static void Main(string[] args)
         {
-            new EmitenteConvert().ConverterArquivo(@"/media/wagner/OS/santo_pecado/07_06_2019/emitente_d_0706");
+            new EmitenteConvert().ConverterArquivo(@"/media/wagner/OS/santo_pecado/20_06_2019/emitente.d");
             Console.ReadLine();
         }
     }

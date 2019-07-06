@@ -107,7 +107,7 @@ function ViewClient(props) {
     handleSearch,
     handleChangeTextSearch,
     handleCreate,
-  } = props;
+  } = props;  
   return (
     <Paper className={classes.root}>
       <Grid container className={classes.itens} spacing={24}>
@@ -333,4 +333,4 @@ ViewClient.propTypes = {
   handleCreate: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(ViewClient);
+export default React.memo(withStyles(styles)(ViewClient));

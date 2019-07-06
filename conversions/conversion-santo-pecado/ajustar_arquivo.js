@@ -1,9 +1,9 @@
 var fs = require('fs');
 
 
-var path_clientes='emitente_teste.1.txt';
+var path_clientes='emitente_18_06_convert';
 //var path_clientes_alterado = 'emitente_alterado.txt';
-var path_titulos='titulo_teste.txt';
+var path_titulos='titulo_18_06';
 
 var countFields = 0;
 var linhasRetiradas = 0;

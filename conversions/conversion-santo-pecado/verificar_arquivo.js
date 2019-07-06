@@ -2,7 +2,7 @@ var fs = require('fs');
 
 
 //var path_clientes='titulo_11-04.txt';
-var path_clientes = 'emitente_11-04.txt';
+var path_clientes='titulo'; //titulo_18_06
 var path_titulos='titulo_teste.txt';
 
 var countFields = 0;

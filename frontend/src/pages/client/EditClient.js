@@ -113,9 +113,7 @@ class EditClient extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabValue: 'EDIT',
-      clientId: props.data._id,
-      clientData: props.data,
+      tabValue: 'EDIT'
     };
   }
 
@@ -126,14 +124,14 @@ class EditClient extends Component {
   render() {
     const {
       classes,
-      data,
+      clientData,
       handleValueChange,
       handleSave,
       handleCancel,
       handleDateValueChange,
       handleCepChange,
     } = this.props;
-
+    
     const { tabValue } = this.state;
 
     return (
@@ -164,7 +162,7 @@ class EditClient extends Component {
                     id="name"
                     label="Nome"
                     className={classes.textField}
-                    value={data.name}
+                    value={clientData.name}
                     onChange={handleValueChange('name')}
                     margin="normal"
                     fullWidth
@@ -183,7 +181,7 @@ class EditClient extends Component {
                     id="cpf"
                     label="Cpf"
                     className={classes.textField}
-                    value={data.cpf}
+                    value={clientData.cpf}
                     onChange={handleValueChange('cpf')}
                     margin="normal"
                     fullWidth
@@ -202,7 +200,7 @@ class EditClient extends Component {
                     id="rg"
                     label="RG"
                     className={classes.textField}
-                    value={data.rg}
+                    value={clientData.rg}
                     onChange={handleValueChange('rg')}
                     margin="normal"
                     fullWidth
@@ -221,7 +219,7 @@ class EditClient extends Component {
                     id="registry_date"
                     label="Data de Registro"
                     className={classes.textField}
-                    value={data.registry_date}
+                    value={clientData.registry_date}
                     onChange={handleDateValueChange('registry_date')}
                     margin="normal"
                     format={'dd/MM/yyyy'}
@@ -241,7 +239,7 @@ class EditClient extends Component {
                     id="date_of_birth"
                     label="Data de Aniversário"
                     className={classes.textField}
-                    value={data.date_of_birth}
+                    value={clientData.date_of_birth}
                     onChange={handleDateValueChange('date_of_birth')}
                     margin="normal"
                     format={'dd/MM/yyyy'}
@@ -261,7 +259,7 @@ class EditClient extends Component {
                     id="place_of_birth"
                     label="Naturalidade"
                     className={classes.textField}
-                    value={data.place_of_birth}
+                    value={clientData.place_of_birth}
                     onChange={handleValueChange('place_of_birth')}
                     margin="normal"
                     fullWidth
@@ -280,7 +278,7 @@ class EditClient extends Component {
                     id="address"
                     label="Endereço"
                     className={classes.textField}
-                    value={data.address}
+                    value={clientData.address}
                     onChange={handleValueChange('address')}
                     margin="normal"
                     fullWidth
@@ -299,7 +297,7 @@ class EditClient extends Component {
                     id="address_number"
                     label="Número"
                     className={classes.textField}
-                    value={data.address_number}
+                    value={clientData.address_number}
                     onChange={handleValueChange('address_number')}
                     margin="normal"
                     fullWidth
@@ -318,7 +316,7 @@ class EditClient extends Component {
                     id="complement"
                     label="Complemento"
                     className={classes.textField}
-                    value={data.complement}
+                    value={clientData.complement}
                     onChange={handleValueChange('complement')}
                     margin="normal"
                     fullWidth
@@ -337,7 +335,7 @@ class EditClient extends Component {
                     id="neighborhood"
                     label="Bairro"
                     className={classes.textField}
-                    value={data.neighborhood}
+                    value={clientData.neighborhood}
                     onChange={handleValueChange('neighborhood')}
                     margin="normal"
                     fullWidth
@@ -356,7 +354,7 @@ class EditClient extends Component {
                     id="city"
                     label="Cidade"
                     className={classes.textField}
-                    value={data.city}
+                    value={clientData.city}
                     onChange={handleValueChange('city')}
                     margin="normal"
                     fullWidth
@@ -375,7 +373,7 @@ class EditClient extends Component {
                     id="state"
                     label="Estado"
                     className={classes.textField}
-                    value={data.state}
+                    value={clientData.state}
                     onChange={handleValueChange('state')}
                     margin="normal"
                     fullWidth
@@ -394,7 +392,7 @@ class EditClient extends Component {
                     id="postal_code"
                     label="CEP"
                     className={classes.textField}
-                    value={data.postal_code}
+                    value={clientData.postal_code}
                     onChange={handleCepChange}
                     margin="normal"
                     fullWidth
@@ -413,7 +411,7 @@ class EditClient extends Component {
                     id="seller"
                     label="Vendedor"
                     className={classes.textField}
-                    value={data.seller}
+                    value={clientData.seller}
                     onChange={handleValueChange('seller')}
                     margin="normal"
                     fullWidth
@@ -432,7 +430,7 @@ class EditClient extends Component {
                     id="job_name"
                     label="Empresa"
                     className={classes.textField}
-                    value={data.job_name}
+                    value={clientData.job_name}
                     onChange={handleValueChange('job_name')}
                     margin="normal"
                     fullWidth
@@ -451,7 +449,7 @@ class EditClient extends Component {
                     id="admission_date"
                     label="Data de Admissão"
                     className={classes.textField}
-                    value={data.admission_date}
+                    value={clientData.admission_date}
                     onChange={handleDateValueChange('admission_date')}
                     margin="normal"
                     format={'dd/MM/yyyy'}
@@ -471,7 +469,7 @@ class EditClient extends Component {
                     id="occupation"
                     label="Profissão"
                     className={classes.textField}
-                    value={data.occupation}
+                    value={clientData.occupation}
                     onChange={handleValueChange('occupation')}
                     margin="normal"
                     fullWidth
@@ -489,7 +487,7 @@ class EditClient extends Component {
                   <SelectGeneric
                     description="Estado civil"
                     showEmpty={false}
-                    value={data.civil_status}
+                    value={clientData.civil_status}
                     onChange={handleValueChange('civil_status')}
                     itens={menuCivilStatus}
                   />
@@ -507,7 +505,7 @@ class EditClient extends Component {
                     id="spouse"
                     label="Cônjuge"
                     className={classes.textField}
-                    value={data.spouse}
+                    value={clientData.spouse}
                     onChange={handleValueChange('spouse')}
                     margin="normal"
                     fullWidth
@@ -526,7 +524,7 @@ class EditClient extends Component {
                     id="father_name"
                     label="Pai"
                     className={classes.textField}
-                    value={data.father_name}
+                    value={clientData.father_name}
                     onChange={handleValueChange('father_name')}
                     margin="normal"
                     fullWidth
@@ -545,7 +543,7 @@ class EditClient extends Component {
                     id="mother_name"
                     label="Mãe"
                     className={classes.textField}
-                    value={data.mother_name}
+                    value={clientData.mother_name}
                     onChange={handleValueChange('mother_name')}
                     margin="normal"
                     fullWidth
@@ -565,7 +563,7 @@ class EditClient extends Component {
                       Telefone 1
                     </InputLabel>
                     <Input
-                      value={data.phone1}
+                      value={clientData.phone1}
                       onChange={handleValueChange('phone1')}
                       id="phone1"
                       inputComponent={TextMaskCustom}
@@ -605,7 +603,7 @@ class EditClient extends Component {
                       Telefone 2
                     </InputLabel>
                     <Input
-                      value={data.phone2}
+                      value={clientData.phone2}
                       onChange={handleValueChange('phone2')}
                       id="phone2"
                       inputComponent={TextMaskCustom}
@@ -645,7 +643,7 @@ class EditClient extends Component {
                     label="Observações"
                     rows="6"
                     className={classes.textField}
-                    value={data.note}
+                    value={clientData.note}
                     onChange={handleValueChange('note')}
                     margin="normal"
                     multiline
@@ -677,9 +675,10 @@ class EditClient extends Component {
         )}
         {tabValue === 'LIST' && (
           <BillReceiveTable
-            clientId={this.state.clientId}
-            clientData={this.state.clientData}
+            clientId={this.props.clientData._id}
+            clientData={this.props.clientData}
             handleOpenMessage={this.props.handleOpenMessage}
+            handleSaveClient={this.props.handleSave}
           />
         )}
       </div>

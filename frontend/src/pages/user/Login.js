@@ -8,6 +8,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import config from '../../config/config.json';
+
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -21,33 +23,42 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 300
+    width: 300,
   },
   grow: {
     flexGrow: 1,
   },
   divPadding: {
-    paddingTop: theme.spacing(15)
-  }
-
+    paddingTop: theme.spacing(15),
+  },
+  headerToolbar: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
 });
 
-
-function Login(props){
-  const { classes, 
-          userName, 
-          password, 
-          handleLogin, 
-          handleValueChange,
-          keyPress
-        } = props;        
+function Login(props) {
+  const {
+    classes,
+    userName,
+    password,
+    handleLogin,
+    handleValueChange,
+    keyPress,
+  } = props;
   return (
     <div>
       <AppBar position="static">
-        <Toolbar>
-          <Typography variant='h6' align='center' color="inherit" className={classes.grow}>
+        <Toolbar className={classes.headerToolbar}>
+          <Typography
+            variant="h6"
+            align="center"
+            color="inherit"
+            className={classes.grow}
+          >
             Entre com seu usuário e senha
-          </Typography>        
+          </Typography>
+          <Typography variant="caption">{config.version}</Typography>
         </Toolbar>
       </AppBar>
       <div className={classes.divPadding} />
@@ -82,19 +93,19 @@ function Login(props){
             shrink: true,
           }}
         />
-        <Button 
-          variant="contained" 
-          color="primary" 
+        <Button
+          variant="contained"
+          color="primary"
           className={classes.button}
           onClick={() => handleLogin()}
         >
           Entrar
-        </Button>        
-      </div>       
+        </Button>
+      </div>
     </div>
   );
 }
- 
+
 Login.propTypes = {
   classes: PropTypes.object.isRequired,
   handleLogin: PropTypes.func.isRequired,
