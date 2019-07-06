@@ -3,11 +3,14 @@ export const getErrosFromApi = error => {
   if (error.response) {
     if (error.response.data) {
       if (error.response.data.message) return error.response.data.message;
-      else
-        return Object.values(error.response.data).reduce(
-          (resultError, currentError) => `${resultError}${currentError}\n`,
-          ''
-        );
+      else {
+        return Object.keys(error.response.data)
+          .map(item => error.response.data[item])
+          .reduce(
+            (resultError, currentError) => `${resultError}${currentError}\n`,
+            ''
+          );
+      }
     } else return JSON.stringify(error.response);
   } else if (error) {
     if (error.message) {
