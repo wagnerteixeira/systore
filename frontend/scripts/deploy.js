@@ -9,7 +9,7 @@ const exec = util.promisify(require('child_process').exec);
 //console.log(result.parsed);
 
 let new_version = '102';
-let old_version = '102';
+let old_version = '103';
 
 let prod = 'n';
 
