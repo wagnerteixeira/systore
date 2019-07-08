@@ -113,7 +113,7 @@ class EditClient extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabValue: 'EDIT'
+      tabValue: 'EDIT',
     };
   }
 
@@ -130,8 +130,9 @@ class EditClient extends Component {
       handleCancel,
       handleDateValueChange,
       handleCepChange,
+      handleCheckCpf,
     } = this.props;
-    
+
     const { tabValue } = this.state;
 
     return (
@@ -183,6 +184,7 @@ class EditClient extends Component {
                     className={classes.textField}
                     value={clientData.cpf}
                     onChange={handleValueChange('cpf')}
+                    onBlur={() => handleCheckCpf(clientData.cpf)}
                     margin="normal"
                     fullWidth
                   />
@@ -694,6 +696,7 @@ EditClient.propTypes = {
   data: PropTypes.object.isRequired,
   handleDateValueChange: PropTypes.func.isRequired,
   handleOpenMessage: PropTypes.func.isRequired,
+  handleCheckCpf: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EditClient);

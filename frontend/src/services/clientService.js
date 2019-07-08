@@ -1,5 +1,9 @@
+import axios from './axios';
+
 import baseService from './baseService';
 
 const clientService = baseService('client');
 
-export default clientService;
+const existCpf = cpf => axios.get(`/client/existcpf/${cpf}`);
+
+export default { ...clientService, existCpf };

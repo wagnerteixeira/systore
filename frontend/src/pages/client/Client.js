@@ -167,6 +167,27 @@ class Client extends Component {
       );
   };
 
+  checkCpf = cpf => {
+    clientservice
+      .existCpf(cpf)
+      .then(res => {
+        if (!res.data === 'OK') {
+          this.setState({
+            messageOpen: true,
+            messageText: getErrosFromApi(res.data),
+            variantMessage: 'warning',
+          });
+        }
+      })
+      .catch(error =>
+        this.setState({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'error',
+        })
+      );
+  };
+
   handleCreate = () => {
     this.setState({
       stateData: 'EDIT_INSERT',
@@ -467,7 +488,7 @@ class Client extends Component {
             handleSearch={this.handleSearch}
             handleChangeTextSearch={this.handleChangeTextSearch}
             search={search}
-            handleCreate={this.handleCreate}
+            handleCreate={this.handleCreate}            
           />
         )}
         {stateData === 'EDIT_INSERT' && (
@@ -479,6 +500,7 @@ class Client extends Component {
             handleDateValueChange={this.handleDateValueChange}
             handleOpenMessage={this.handleOpenMessage}
             handleCepChange={this.handleCepChange}
+            handleCheckCpf={this.checkCpf}
           />
         )}
       </div>

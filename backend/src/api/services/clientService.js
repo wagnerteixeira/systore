@@ -52,8 +52,10 @@ Client.before('post', async (req, res, next) => {
 Client.before('put', async (req, res, next) => {
   let clients = await Client.find({ cpf: req.body.cpf });
   if (clients.length === 0) next();
-  else {    
-    _clients = clients.filter(c => c._id.toString() !== req.body._id.toString());    
+  else {
+    _clients = clients.filter(
+      c => c._id.toString() !== req.body._id.toString()
+    );
     if (_clients.length > 0 && _clients[0]._id !== req.body._id) {
       return res.status(412).json({
         erros: [
@@ -93,5 +95,40 @@ Client.route('count', ['get'], (req, res, next) => {
     }
   });
 });
+
+Client.route(
+  'existcpf.:edit(0|1).:id([0-9a-fA-F]{0,24}|).:cpf([0-9]{11})',
+  ['get'],
+  (req, res, next) => {
+    Client.find({ cpf: req.params.cpf }, (error, value) => {
+      if (error) {
+        res.status(500).json({ erros: [error] });
+      } else {
+        if (req.params.edit) {
+          console.log(value)
+          if (!!value.length && value[0]._id.toString() !== req.params.id) {
+            return res.status(412).json({
+              erros: [
+                `Já existe um cliente com o CPF ${value[0].cpf}, ${
+                  value[0].name
+                } `
+              ]
+            });
+          } else res.json('OK');
+        } else {
+          if (!!value.length) {
+            return res.status(412).json({
+              erros: [
+                `Já existe um cliente com o CPF ${value[0].cpf}, ${
+                  value[0].name
+                } `
+              ]
+            });
+          } else res.json('OK');
+        }
+      }
+    });
+  }
+);
 
 module.exports = Client;
