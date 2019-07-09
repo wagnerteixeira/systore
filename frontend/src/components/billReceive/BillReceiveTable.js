@@ -95,6 +95,12 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
   },
+  ellipses: {
+    width: '100px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
 });
 
 const stylesMenu = theme => ({
@@ -431,9 +437,9 @@ function BillReceiveTable(props) {
               <TableCell size="small">Data de vencimento</TableCell>
               <TableCell size="small"> Data de pagamento</TableCell>
               <TableCell size="small">Valor</TableCell>
-              <TableCell size="small" align="left">
+              {/*<TableCell size="small" align="left">
                 Situação
-              </TableCell>
+                  </TableCell>*/}
               <TableCell size="small">Valor pago/atual</TableCell>
               <TableCell size="small">Dias em atraso</TableCell>
               <TableCell size="small" align="left">
@@ -458,7 +464,11 @@ function BillReceiveTable(props) {
                   <TableCell size="small">
                     {getDateToString(billsReceive[key].purchase_date)}
                   </TableCell>
-                  <TableCell size="small">{billsReceive[key].vendor}</TableCell>
+                  <TableCell size="small">
+                    <div className={classes.ellipses}>
+                      {billsReceive[key].vendor}
+                    </div>
+                  </TableCell>
                   <TableCell size="small">{billsReceive[key].code}</TableCell>
                   <TableCell size="small">{billsReceive[key].quota}</TableCell>
                   <TableCell>
@@ -472,9 +482,9 @@ function BillReceiveTable(props) {
                       billsReceive[key].original_value
                     )}
                   </TableCell>
-                  <TableCell size="small" align="left">
+                  {/*<TableCell size="small" align="left">
                     {billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
-                  </TableCell>
+                    </TableCell>*/}
                   <TableCell size="small" className={classes.cellValue}>
                     {getNumberToString(
                       billsReceive[key].pay_date != null
