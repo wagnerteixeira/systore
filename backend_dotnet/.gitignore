@@ -1,0 +1,17 @@
+
+# Created by https://www.gitignore.io/api/dotnetcore
+# Edit at https://www.gitignore.io/?templates=dotnetcore
+
+### DotnetCore ###
+# .NET Core build folders
+bin
+obj
+.suo
+v15
+.vscode
+*.csproj.user
+# Common node modules locations
+node_modules
+
+
+# End of https://www.gitignore.io/api/dotnetcore
