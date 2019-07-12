@@ -3,15 +3,29 @@
 # Edit at https://www.gitignore.io/?templates=dotnetcore
 
 ### DotnetCore ###
-# .NET Core build folders
-bin
-obj
-.suo
-v15
 .vscode
-*.csproj.user
+.vs/
+
 # Common node modules locations
 node_modules
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
 
 # End of https://www.gitignore.io/api/dotnetcore
