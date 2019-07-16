@@ -31,7 +31,7 @@ namespace Systore.Api.Controllers
     [HttpGet]
     [Route("")]
     // GET: api/Entity
-    public async Task<IActionResult> GetAllAsync()
+    public virtual async Task<IActionResult> GetAllAsync()
     {
       try
       {
@@ -46,11 +46,11 @@ namespace Systore.Api.Controllers
     [HttpGet]
     [Route("{id}")]
     // GET: api/Entity/5
-    public IActionResult Get(int id)
+    public virtual async Task<IActionResult> Get(int id)
     {
       try
       {
-        return Ok(_service.Get(id));
+        return Ok(await _service.Get(id));
       }
       catch (Exception e)
       {
@@ -61,57 +61,110 @@ namespace Systore.Api.Controllers
     [HttpPost]
     [Route("")]
     // POST: api/Entity
-    public IActionResult Post([FromBody]TEntity value)
+    public virtual async Task<IActionResult> Post([FromBody]TEntity entity)
     {
       try
       {
-        string ret = _service.Add(value);
+        string ret = await _service.Add(entity);
         if (string.IsNullOrWhiteSpace(ret))
-          return Ok(new ResultDTO() { Success = true, Message = "", Key = GetEntityId(value) });
+          return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
         else
-          return Ok(new ResultDTO() { Success = false, Message = ret });
+          return SendBadRequest(ret);
       }
       catch (Exception e)
       {
-        return BadRequest(e);
+        return SendBadRequest(e);
       }
     }
     [HttpPut]
-    [Route("{id}")]
-    // PUT: api/Entity/5
-    public IActionResult Put(int id, [FromBody]TEntity value)
+    [Route("")]
+    // PUT: api/Entity
+    public async virtual Task<IActionResult> Put([FromBody]TEntity entity)
     {
       try
       {
-        string ret = _service.Update(value);
+        string ret = await _service.Update(entity);
         if (string.IsNullOrWhiteSpace(ret))
-          return Ok(new ResultDTO() { Success = true, Message = "" });
+          return Ok(entity);
         else
-          return Ok(new ResultDTO() { Success = false, Message = ret });
+          return SendBadRequest(ret);
       }
       catch (Exception e)
       {
-        return BadRequest(e);
+        return SendBadRequest(e);
       }
     }
 
     [HttpDelete]
-    [Route("{id}")]
-    // DELETE: api/Entity/5
-    public IActionResult Delete(int Id)
+    [Route("")]
+    // DELETE: api/Entity
+    public async virtual Task<IActionResult> Delete([FromBody]TEntity entity)
     {
       try
       {
-        string ret = _service.Remove(Id);
+        string ret = await _service.Remove(entity);
         if (string.IsNullOrWhiteSpace(ret))
-          return Ok(new ResultDTO() { Success = true, Message = "" });
+          return Ok("");
         else
-          return Ok(new ResultDTO() { Success = false, Message = ret });
+          return SendBadRequest(ret);
       }
       catch (Exception e)
       {
-        return BadRequest(e);
+        return SendBadRequest(e);
       }
+    }
+
+
+    public IActionResult SendStatusCode(int statusCode, string[] errors)
+    {
+      return StatusCode(statusCode, new { errors = errors.ToArray() });
+    }
+
+    public IActionResult SendStatusCode(int statusCode, string error)
+    {
+
+      return StatusCode(statusCode, new { errors = new string[] { error } });
+    }
+
+    public IActionResult SendStatusCode(int statusCode, Exception e)
+    {
+      string error = e.Message;
+      if (e.InnerException != null)
+      {
+        error += '|' + e.InnerException.Message;
+        if (e.InnerException.InnerException != null)
+          error += '|' + e.InnerException.InnerException.Message;
+
+      }
+
+      return StatusCode(statusCode, new { errors = error.Split('|') });
+    }
+
+
+
+    public IActionResult SendBadRequest(string[] errors)
+    {
+      return BadRequest(new { errors = errors.ToArray() });
+    }
+
+    public IActionResult SendBadRequest(string error)
+    {
+
+      return BadRequest(new { errors = new string[] { error } });
+    }
+
+    public IActionResult SendBadRequest(Exception e)
+    {
+      string error = e.Message;
+      if (e.InnerException != null)
+      {
+        error += '|' + e.InnerException.Message;
+        if (e.InnerException.InnerException != null)
+          error += '|' + e.InnerException.InnerException.Message;
+
+      }
+
+      return BadRequest(new { errors = error.Split('|') });
     }
 
 

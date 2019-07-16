@@ -8,6 +8,6 @@ namespace Systore.Data.Repositories
     {   
         public ClientRepository(IDbContext context) : base(context) {
 
-        }        
+        } 
     }
 }
