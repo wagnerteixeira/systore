@@ -167,9 +167,11 @@ class Client extends Component {
       );
   };
 
-  checkCpf = cpf => {
+  checkCpf = () => {
+    console.log(this.state.inEdit, this.state.data._id, this.state.data.cpf);
+    const cpf = this.state.data.cpf.replace(/\D+/g, '');
     clientservice
-      .existCpf(cpf)
+      .existCpf(this.state.inEdit ? 1 : 0, this.state.data._id, cpf)
       .then(res => {
         if (!res.data === 'OK') {
           this.setState({
@@ -488,7 +490,7 @@ class Client extends Component {
             handleSearch={this.handleSearch}
             handleChangeTextSearch={this.handleChangeTextSearch}
             search={search}
-            handleCreate={this.handleCreate}            
+            handleCreate={this.handleCreate}
           />
         )}
         {stateData === 'EDIT_INSERT' && (

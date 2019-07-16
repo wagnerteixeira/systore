@@ -93,6 +93,9 @@ const styles = theme => ({
     fontWeight: 'bold',
   },
   '@global': {
+    '.MuiTableCell-sizeSmall': {
+      padding: '5px 5px 5px 5px !important',
+    },
     'tr > td': {
       fontWeight: '600 !important',
       fontSize: '1.1em !important',
@@ -151,6 +154,26 @@ class EditClient extends Component {
             <div className={classes.back}>
               <Grid className={classes.itens} container spacing={3}>
                 <Grid
+                    className={classes.item}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={3}
+                    lg={2}
+                    xl={2}
+                  >
+                    <TextField
+                    id="cpf"
+                    label="Cpf"
+                    className={classes.textField}
+                    value={clientData.cpf}
+                    onChange={handleValueChange('cpf')}
+                    onBlur={handleCheckCpf}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid
                   className={classes.item}
                   item
                   xs={12}
@@ -165,26 +188,6 @@ class EditClient extends Component {
                     className={classes.textField}
                     value={clientData.name}
                     onChange={handleValueChange('name')}
-                    margin="normal"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid
-                  className={classes.item}
-                  item
-                  xs={12}
-                  sm={6}
-                  md={3}
-                  lg={2}
-                  xl={2}
-                >
-                  <TextField
-                    id="cpf"
-                    label="Cpf"
-                    className={classes.textField}
-                    value={clientData.cpf}
-                    onChange={handleValueChange('cpf')}
-                    onBlur={() => handleCheckCpf(clientData.cpf)}
                     margin="normal"
                     fullWidth
                   />

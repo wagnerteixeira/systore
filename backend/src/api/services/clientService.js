@@ -97,7 +97,7 @@ Client.route('count', ['get'], (req, res, next) => {
 });
 
 Client.route(
-  'existcpf.:edit(0|1).:id([0-9a-fA-F]{0,24}|).:cpf([0-9]{11})',
+  'existcpf.:edit(0|1).:id([0-9a-fA-F]{0,24}|).:cpf([0-9]{0,11})',
   ['get'],
   (req, res, next) => {
     Client.find({ cpf: req.params.cpf }, (error, value) => {
