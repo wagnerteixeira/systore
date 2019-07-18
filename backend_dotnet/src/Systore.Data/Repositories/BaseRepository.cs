@@ -53,6 +53,14 @@ namespace Systore.Data.Repositories
       return this.SaveChangesAsync();
     }
 
+    public Task<int> ExecuteCommandAsync(string command, params object[] parameters){
+      return _context.Instance.Database.ExecuteSqlCommandAsync(command, parameters);
+    }
+
+    public int ExecuteCommand(string command, params object[] parameters){
+      return _context.Instance.Database.ExecuteSqlCommand(command, parameters);
+    }
+
 
     protected async virtual Task<string> SaveChangesAsync()
     {

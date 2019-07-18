@@ -11,7 +11,7 @@ namespace Systore.Infra.Mapping
       builder.ToTable("Client");
       builder.Property(p => p.Id);
       builder.Property(p => p.Name);
-      builder.Property(p => p.Code);
+      //builder.Property(p => p.Code);
       builder.Property(p => p.RegistryDate);
       builder.Property(p => p.DateOfBirth);
       builder.Property(p => p.Address);

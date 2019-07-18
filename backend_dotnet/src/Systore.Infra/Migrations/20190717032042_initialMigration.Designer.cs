@@ -9,8 +9,8 @@ using Systore.Context.Infra;
 namespace Systore.Infra.Migrations
 {
     [DbContext(typeof(SystoreContext))]
-    [Migration("20190712031316_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20190717032042_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,13 +32,13 @@ namespace Systore.Infra.Migrations
 
                     b.Property<DateTime>("DueDate");
 
-                    b.Property<double>("FinalValue");
+                    b.Property<decimal>("FinalValue");
 
-                    b.Property<double>("Interest");
+                    b.Property<decimal>("Interest");
 
-                    b.Property<double>("OriginalValue");
+                    b.Property<decimal>("OriginalValue");
 
-                    b.Property<DateTime>("PayDate");
+                    b.Property<DateTime?>("PayDate");
 
                     b.Property<DateTime>("PurchaseDate");
 
@@ -67,19 +67,17 @@ namespace Systore.Infra.Migrations
 
                     b.Property<string>("AddressNumber");
 
-                    b.Property<string>("AdmissionDate");
+                    b.Property<DateTime?>("AdmissionDate");
 
                     b.Property<string>("City");
 
                     b.Property<int>("CivilStatus");
 
-                    b.Property<int>("Code");
-
                     b.Property<string>("Complement");
 
                     b.Property<string>("Cpf");
 
-                    b.Property<DateTime>("DateOfBirth");
+                    b.Property<DateTime?>("DateOfBirth");
 
                     b.Property<string>("FatherName");
 
@@ -103,7 +101,7 @@ namespace Systore.Infra.Migrations
 
                     b.Property<string>("PostalCode");
 
-                    b.Property<DateTime>("RegistryDate");
+                    b.Property<DateTime?>("RegistryDate");
 
                     b.Property<string>("Rg");
 

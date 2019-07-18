@@ -68,7 +68,7 @@ namespace Systore.Api
             //app.UseHttpsRedirection();
             app.UseMvc();
             // uncoment for automatic migration
-            // InitializeDatabase(app);
+            InitializeDatabase(app);
         }
 
         private void InitializeDatabase(IApplicationBuilder app)

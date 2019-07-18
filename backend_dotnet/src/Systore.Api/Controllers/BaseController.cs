@@ -10,7 +10,7 @@ namespace Systore.Api.Controllers
 {
   public abstract class BaseController<TEntity> : ControllerBase, IDisposable where TEntity : class
   {
-    public readonly IBaseService<TEntity> _service = null;
+    protected readonly IBaseService<TEntity> _service = null;
     public BaseController(IBaseService<TEntity> Service)
     {
       _service = Service;

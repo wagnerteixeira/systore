@@ -4,8 +4,8 @@ using Systore.Domain.Enums;
 
 namespace Systore.Domain.Entities
 {
-  public class Client
-  {
+  public class ClientDto
+  {    
     public int Id { get; set; }
     public string Name { get; set; }
     //public int Code { get; set; }

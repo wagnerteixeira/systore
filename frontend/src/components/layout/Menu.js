@@ -142,14 +142,19 @@ class Menu extends React.Component {
       variantMessage: 'success',
       messageText: '',
       anchorEl: null,
-      date: new Date().toLocaleString().slice(0, 16),
+      date: new Date(),
       interval: 0,
     };
   }
 
   componentWillMount() {
     let _interval = setInterval(
-      () => this.setState({ date: new Date().toLocaleString().slice(0, 16) }),
+      () =>
+        this.setState(prevState => {
+          return {
+            date: prevState.date.setMinutes(prevState.date.getMinutes() + 1),
+          };
+        }),
       60000
     );
 

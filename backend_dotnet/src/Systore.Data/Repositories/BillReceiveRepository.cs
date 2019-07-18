@@ -3,6 +3,10 @@ using Systore.Data.Abstractions;
 using Systore.Infra.Abstractions;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Collections.Generic;
+using Systore.Domain.Enums;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Systore.Data.Repositories
 {
@@ -13,8 +17,41 @@ namespace Systore.Data.Repositories
 
     }
 
-    public Task<int> CountBillReceivesByClient(int clientId) {
-       return CountWhere(c => c.ClientId == clientId);
+    public Task<int> CountBillReceivesByClient(int clientId) =>
+      CountWhere(c => c.ClientId == clientId);
+
+    public Task<List<BillReceive>> GetBillReceivesByClient(int ClientId)
+    {
+      var queryOpen = this._entities
+        .Where(c => c.ClientId == ClientId && c.Situation == BillReceiveSituation.Open)
+        .OrderBy(c => c.PurchaseDate)
+        .ThenBy(c => c.Quota);
+
+      var queryClose = this._entities
+        .Where(c => c.ClientId == ClientId && c.Situation == BillReceiveSituation.Closed)
+        .OrderByDescending(c => c.PurchaseDate)
+        .ThenBy(c => c.Quota);
+
+      return queryOpen
+        .Union(queryClose)
+        .ToListAsync();
     }
+
+    public Task<List<BillReceive>> GetPaidBillReceivesByClient(int ClientId) =>
+        this._entities
+          .Where(c => c.ClientId == ClientId && c.Situation == BillReceiveSituation.Closed)
+          .OrderBy(c => c.Code)
+          .ThenBy(c => c.Quota)
+          .ToListAsync();
+
+    public Task<List<BillReceive>> GetNoPaidBillReceivesByClient(int ClientId) =>
+        this._entities
+          .Where(c => c.ClientId == ClientId && c.Situation == BillReceiveSituation.Open)
+          .OrderBy(c => c.Code)
+          .ThenBy(c => c.Quota)
+          .ToListAsync();
+    public async Task<int> NextCode() => 
+       await this._entities.MaxAsync(c=> c.Code) + 1;
+
   }
 }

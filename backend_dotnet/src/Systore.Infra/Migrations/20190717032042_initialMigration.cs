@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Systore.Infra.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class initialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,9 +15,8 @@ namespace Systore.Infra.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    Code = table.Column<int>(nullable: false),
-                    RegistryDate = table.Column<DateTime>(nullable: false),
-                    DateOfBirth = table.Column<DateTime>(nullable: false),
+                    RegistryDate = table.Column<DateTime>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: true),
                     Address = table.Column<string>(nullable: true),
                     Neighborhood = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
@@ -35,7 +34,7 @@ namespace Systore.Infra.Migrations
                     AddressNumber = table.Column<string>(nullable: true),
                     Rg = table.Column<string>(nullable: true),
                     Complement = table.Column<string>(nullable: true),
-                    AdmissionDate = table.Column<string>(nullable: true),
+                    AdmissionDate = table.Column<DateTime>(nullable: true),
                     CivilStatus = table.Column<int>(nullable: false),
                     FatherName = table.Column<string>(nullable: true),
                     MotherName = table.Column<string>(nullable: true)
@@ -69,12 +68,12 @@ namespace Systore.Infra.Migrations
                     ClientId = table.Column<int>(nullable: false),
                     Code = table.Column<int>(nullable: false),
                     Quota = table.Column<int>(nullable: false),
-                    OriginalValue = table.Column<double>(nullable: false),
-                    Interest = table.Column<double>(nullable: false),
-                    FinalValue = table.Column<double>(nullable: false),
+                    OriginalValue = table.Column<decimal>(nullable: false),
+                    Interest = table.Column<decimal>(nullable: false),
+                    FinalValue = table.Column<decimal>(nullable: false),
                     PurchaseDate = table.Column<DateTime>(nullable: false),
                     DueDate = table.Column<DateTime>(nullable: false),
-                    PayDate = table.Column<DateTime>(nullable: false),
+                    PayDate = table.Column<DateTime>(nullable: true),
                     DaysDelay = table.Column<int>(nullable: false),
                     Situation = table.Column<int>(nullable: false),
                     Vendor = table.Column<string>(nullable: true)

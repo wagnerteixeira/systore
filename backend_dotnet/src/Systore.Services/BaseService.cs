@@ -13,7 +13,7 @@ namespace Systore.Services
 {
   public abstract class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
   {
-    private readonly IBaseRepository<TEntity> _repository;
+    protected readonly IBaseRepository<TEntity> _repository;
     public BaseService(IBaseRepository<TEntity> repository)
     {
       this._repository = repository;
