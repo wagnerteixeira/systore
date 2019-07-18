@@ -123,7 +123,7 @@ async function fetchClients(
   );
   let _clients = result.data.map(client => ({
     value: client._id,
-    label: `Código: ${client.code} Nome: ${client.name} Cpf: ${client.cpf}`,
+    label: `Código: ${client.code} Nome: ${client.name} Cpf: ${client.cpf} Data Nasc.: ${getDateToString(client.date_of_birth)}`,
     clientData: client,
   }));
   callback(_clients);
