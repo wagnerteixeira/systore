@@ -10,6 +10,7 @@ import ViewClient from './ViewClient';
 import clientservice from '../../services/clientService';
 import Confirm from '../../components/common/ConfirmAlert';
 import { getErrosFromApi } from '../../utils/errorsHelper';
+import { getCurrentDate } from '../../utils/operators';
 
 const styles = theme => ({
   root: {
@@ -190,6 +191,16 @@ class Client extends Component {
       );
   };
 
+  checkDateBirth = () => {
+    if (this.state.data.date_of_birth > getCurrentDate()) {
+      this.setState({
+        messageOpen: true,
+        messageText: 'Data de nascimento não pode ser maior que a data atual',
+        variantMessage: 'warning',
+      });
+    }
+  }
+
   handleCreate = () => {
     this.setState({
       stateData: 'EDIT_INSERT',
@@ -260,11 +271,11 @@ class Client extends Component {
     let nextState = { stateData: 'LIST' };
     if (previusOperation === 'SAVE') {
       nextState.messageOpen = true;
-      nextState.messageText = 'Cliente salvo com suceso!';
+      nextState.messageText = 'Cliente salvo com sucesso!';
       nextState.variantMessage = 'success';
     } else if (previusOperation === 'DELETE') {
       nextState.messageOpen = true;
-      nextState.messageText = 'Cliente excluído com suceso!';
+      nextState.messageText = 'Cliente excluído com sucesso!';
       nextState.variantMessage = 'success';
     }
     this.setState(nextState);
@@ -293,7 +304,7 @@ class Client extends Component {
               {
                 ...this.state,
                 messageOpen: true,
-                messageText: 'Cliente salvo com suceso!',
+                messageText: 'Cliente salvo com sucesso!',
                 variantMessage: 'success',
                 data: res.data,
               },
@@ -324,7 +335,7 @@ class Client extends Component {
                 ...this.state,
                 inEdit: true,
                 messageOpen: true,
-                messageText: 'Cliente salvo com suceso!',
+                messageText: 'Cliente salvo com sucesso!',
                 variantMessage: 'success',
                 data: res.data,
               },
@@ -503,6 +514,7 @@ class Client extends Component {
             handleOpenMessage={this.handleOpenMessage}
             handleCepChange={this.handleCepChange}
             handleCheckCpf={this.checkCpf}
+            handleCheckDateBirth={this.checkDateBirth}
           />
         )}
       </div>

@@ -16,6 +16,7 @@ import TextMaskCustom from '../../components/common/TextMaskCustom';
 import SelectGeneric from '../../components/common/SelectGeneric';
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
 
+
 const styles = theme => ({
   container: {
     marginTop: theme.spacing(3),
@@ -124,6 +125,8 @@ class EditClient extends Component {
     this.setState({ tabValue: value });
   };
 
+  
+
   render() {
     const {
       classes,
@@ -134,6 +137,7 @@ class EditClient extends Component {
       handleDateValueChange,
       handleCepChange,
       handleCheckCpf,
+      handleCheckDateBirth,
     } = this.props;
 
     const { tabValue } = this.state;
@@ -249,6 +253,7 @@ class EditClient extends Component {
                     className={classes.textField}
                     value={clientData.date_of_birth}
                     onChange={handleDateValueChange('date_of_birth')}
+                    onBlur={handleCheckDateBirth}
                     margin="normal"
                     format={'dd/MM/yyyy'}
                     fullWidth
