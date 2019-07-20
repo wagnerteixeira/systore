@@ -171,6 +171,9 @@ class EditClient extends Component {
                     onBlur={handleCheckCpf}
                     margin="normal"
                     fullWidth
+                    inputProps={{                                
+                      maxLength: 11,
+                    }}
                   />
                 </Grid>
                 <Grid
@@ -208,7 +211,7 @@ class EditClient extends Component {
                     value={clientData.rg}
                     onChange={handleValueChange('rg')}
                     margin="normal"
-                    fullWidth
+                    fullWidth                    
                   />
                 </Grid>
                 <Grid

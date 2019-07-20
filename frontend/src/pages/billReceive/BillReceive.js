@@ -34,7 +34,7 @@ import AsyncSelect from 'react-select/async';
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
 import MessageSnackbar from '../../components/common/MessageSnackbar';
 import clientService from '../../services/clientService';
-import { debounceTimeWithParams } from '../../utils/operators';
+import { debounceTimeWithParams, getDateToString } from '../../utils/operators';
 
 const styles = theme => ({
   root: {

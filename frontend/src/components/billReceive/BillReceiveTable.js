@@ -22,6 +22,7 @@ import {
   getNumberDecimalToStringCurrency,
   getNumberToString,
   getValueWithInterest,
+  getValueInterest,
 } from '../../utils/operators';
 
 import BillReceiveCreateModal from './BillReceiveCreateModal';
@@ -111,6 +112,7 @@ const stylesMenu = theme => ({
 
 function _MenuAcoes(props) {
   const {
+    handleSaveClient,
     handleCloseMenuAcoes,
     anchorElMenuAcoes,
     handlePrintBillReceiveGroupByCode,
@@ -142,8 +144,10 @@ function _MenuAcoes(props) {
       )}
       <MenuItem
         onClick={() => {
-          handlePrintBillReceiveGroupByCode(billReceiveKey);
-          handleCloseMenuAcoes();
+          handleSaveClient(() => { 
+                handlePrintBillReceiveGroupByCode(billReceiveKey); 
+                handleCloseMenuAcoes()
+              });          
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -151,8 +155,10 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
+          handleSaveClient(() => {
           handlePrintBillReceive(billReceiveKey);
           handleCloseMenuAcoes();
+          });
         }}
       >
         <Icon className={classes.iconPadding}>print </Icon>
@@ -160,8 +166,10 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
+          handleSaveClient(() => {
           handlePrintBillReceivesOpen();
           handleCloseMenuAcoes();
+          })
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -367,6 +375,7 @@ function BillReceiveTable(props) {
   return (
     <div className={classes.container}>
       <MenuAcoes
+        handleSaveClient={handleSaveClient}
         handleCloseMenuAcoes={handleCloseMenuAcoes}
         anchorElMenuAcoes={dadosMenuAcoes.anchorEl}
         handlePrintBillReceiveGroupByCode={handlePrintBillReceiveGroupByCode}
