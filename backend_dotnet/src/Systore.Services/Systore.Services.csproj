@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Systore.Data\Systore.Data.csproj" />
     <ProjectReference Include="..\Systore.Domain\Systore.Domain.csproj" />
+    <ProjectReference Include="..\Systore.Dtos\Systore.Dtos.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

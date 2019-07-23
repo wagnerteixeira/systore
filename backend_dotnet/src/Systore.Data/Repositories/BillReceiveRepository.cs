@@ -52,6 +52,11 @@ namespace Systore.Data.Repositories
           .ToListAsync();
     public async Task<int> NextCode() => 
        await this._entities.MaxAsync(c=> c.Code) + 1;
+      
+    public async Task RemoveBillReceivesByCode(int Code){
+      this._entities.RemoveRange(this._entities.Where(c => c.Code == Code));
+      await this.SaveChangesAsync();
+    }
 
   }
 }

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Systore.Domain.Enums;
+using Systore.Domain.Entities;
 
-namespace Systore.Domain.Entities
+namespace Systore.Domain.Dtos
 {
   public class ClientDto
   {    
@@ -35,3 +36,4 @@ namespace Systore.Domain.Entities
     public ICollection<BillReceive> BillReceives { get; set; }
   }
 }
+

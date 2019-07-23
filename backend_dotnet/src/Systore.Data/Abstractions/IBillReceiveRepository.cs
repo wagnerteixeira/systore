@@ -11,5 +11,6 @@ namespace Systore.Data.Abstractions
     Task<List<BillReceive>> GetNoPaidBillReceivesByClient(int ClientId);
     Task<int> CountBillReceivesByClient(int clientId);
     Task<int> NextCode();
+    Task RemoveBillReceivesByCode(int Code);
   }
 }
