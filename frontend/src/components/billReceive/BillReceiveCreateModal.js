@@ -110,9 +110,20 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleGenerateQuotas = () => {
-    let _original_value = accounting.unformat(
-      this.state.original_value.replace('.', ',')
-    );
+    if (
+      typeof this.state.original_value === 'string' &&
+      this.state.original_value.length === 0
+    )
+      return;
+    console.log(this.state.original_value);
+
+    let _original_value = 0.0;
+    if (typeof original_value == 'string') {
+      if (this.state.original_value.length > 0)
+        _original_value = accounting.unformat(
+          this.state.original_value.replace('.', ',')
+        );
+    } else _original_value = this.state.original_value;
     if (_original_value > 0 && this.state.quotas > 0) {
       let _quotaValue = accounting.unformat(
         accounting.formatNumber(_original_value / this.state.quotas, 1)
@@ -226,7 +237,7 @@ class BillReceiveCreateModal extends React.Component {
     });
   };*/
 
-  handleChangeDateInGrid = key => date => {    
+  handleChangeDateInGrid = key => date => {
     let due_date = new Date(date);
     const newBillsReceives = this.state.bills_receives.map(
       (billReceive, index) => {
@@ -248,7 +259,7 @@ class BillReceiveCreateModal extends React.Component {
     });
   };
 
-  handleValueChangeInGrig = (key, name) => event => {    
+  handleValueChangeInGrig = (key, name) => event => {
     let bills_receives = [...this.state.bills_receives];
     bills_receives[key] = {
       ...bills_receives[key],
@@ -275,11 +286,12 @@ class BillReceiveCreateModal extends React.Component {
       messageText,
     } = this.state;
     let _original_value = '';
-    if (typeof original_value == 'string')
-      _original_value = accounting.formatNumber(
-        accounting.unformat(original_value.replace('.', ','))
-      );
-    else _original_value = accounting.formatNumber(original_value);
+    if (typeof original_value == 'string') {
+      if (original_value.length > 0)
+        _original_value = accounting.formatNumber(
+          accounting.unformat(original_value.replace('.', ','))
+        );
+    } else _original_value = accounting.formatNumber(original_value);
     return (
       <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
         <MessageSnackbar
@@ -358,7 +370,7 @@ class BillReceiveCreateModal extends React.Component {
               id="quotas"
               label="Parcelas"
               className={classes.margin}
-              value={quotas}
+              value={quotas === 0 ? '' : quotas}
               onChange={this.handleValueChange('quotas')}
               margin="normal"
               fullWidth
