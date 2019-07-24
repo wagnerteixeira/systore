@@ -11,11 +11,14 @@ import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
+import Tooltip from '@material-ui/core/Tooltip';
+import Fab from '@material-ui/core/Fab';
 import TextMaskCustom from '../../components/common/TextMaskCustom';
 import SelectGeneric from '../../components/common/SelectGeneric';
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
+import MapIcon from '@material-ui/icons/Map';
 
+import axios from 'axios';
 
 const styles = theme => ({
   container: {
@@ -125,7 +128,36 @@ class EditClient extends Component {
     this.setState({ tabValue: value });
   };
 
-  
+  handleSearchCep = () => {
+    const { handleOpenMessage } = this.props;
+    const { address, city, state } = this.props.clientData;
+
+    if (address.length == 0) {
+      handleOpenMessage(
+        true,
+        'warning',
+        'Informe o Endereço para buscar o Cep.'
+      );
+      return;
+    }
+
+    if (city.length == 0) {
+      handleOpenMessage(true, 'warning', 'Informe a Cidade para buscar o Cep.');
+      return;
+    }
+
+    if (state.length == 0) {
+      handleOpenMessage(true, 'warning', 'Informe o Estado para buscar o Cep.');
+      return;
+    }
+
+    axios
+      .get(`https://viacep.com.br/ws/${state}/${city}/${address}/json/`)
+      .then(res => {
+        if (res.data.erro) return;
+        console.log(res.data);
+      });
+  };
 
   render() {
     const {
@@ -158,15 +190,15 @@ class EditClient extends Component {
             <div className={classes.back}>
               <Grid className={classes.itens} container spacing={3}>
                 <Grid
-                    className={classes.item}
-                    item
-                    xs={12}
-                    sm={6}
-                    md={3}
-                    lg={2}
-                    xl={2}
-                  >
-                    <TextField
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  lg={2}
+                  xl={2}
+                >
+                  <TextField
                     id="cpf"
                     label="Cpf"
                     className={classes.textField}
@@ -175,7 +207,7 @@ class EditClient extends Component {
                     onBlur={handleCheckCpf}
                     margin="normal"
                     fullWidth
-                    inputProps={{                                
+                    inputProps={{
                       maxLength: 11,
                     }}
                   />
@@ -215,7 +247,7 @@ class EditClient extends Component {
                     value={clientData.rg}
                     onChange={handleValueChange('rg')}
                     margin="normal"
-                    fullWidth                    
+                    fullWidth
                   />
                 </Grid>
                 <Grid
@@ -358,10 +390,10 @@ class EditClient extends Component {
                   className={classes.item}
                   item
                   xs={12}
-                  sm={6}
-                  md={6}
-                  lg={6}
-                  xl={6}
+                  sm={5}
+                  md={5}
+                  lg={5}
+                  xl={5}
                 >
                   <TextField
                     id="city"
@@ -391,6 +423,33 @@ class EditClient extends Component {
                     margin="normal"
                     fullWidth
                   />
+                </Grid>
+                <Grid
+                  container
+                  alignItems="center"
+                  justify="center"
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={1}
+                  md={1}
+                  lg={1}
+                  xl={1}
+                >
+                  <Tooltip
+                    title="Buscar Cep"
+                    placement={'bottom-start'}
+                    enterDelay={300}
+                  >
+                    <Fab
+                      color="primary"
+                      aria-label="Buscar Cep"
+                      size="small"
+                      onClick={this.handleSearchCep}
+                    >
+                      <MapIcon />
+                    </Fab>
+                  </Tooltip>
                 </Grid>
                 <Grid
                   className={classes.item}

@@ -107,7 +107,7 @@ function ViewClient(props) {
     handleSearch,
     handleChangeTextSearch,
     handleCreate,
-  } = props;  
+  } = props;
   return (
     <Paper className={classes.root}>
       <Grid container className={classes.itens} spacing={24}>
@@ -192,7 +192,7 @@ function ViewClient(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell size="small">
+            <TableCell padding="none" size="small">
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -207,7 +207,7 @@ function ViewClient(props) {
                 </TableSortLabel>
               </Tooltip>
             </TableCell>
-            <TableCell size="small">
+            <TableCell padding="none" size="small">
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -222,7 +222,7 @@ function ViewClient(props) {
                 </TableSortLabel>
               </Tooltip>
             </TableCell>
-            <TableCell className={classes.headerCpf}>
+            <TableCell padding="none" className={classes.headerCpf}>
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -237,7 +237,7 @@ function ViewClient(props) {
                 </TableSortLabel>
               </Tooltip>
             </TableCell>
-            <TableCell >
+            <TableCell padding="none">
               <Tooltip
                 title="Ordenar"
                 placement={'bottom-start'}
@@ -251,8 +251,12 @@ function ViewClient(props) {
                   Data de nascimento
                 </TableSortLabel>
               </Tooltip>
-            </TableCell>            
-            <TableCell className={classes.headerAcoes} align="right">
+            </TableCell>
+            <TableCell
+              padding="none"
+              className={classes.headerAcoes}
+              align="right"
+            >
               Ações
             </TableCell>
           </TableRow>
@@ -260,10 +264,18 @@ function ViewClient(props) {
         <TableBody>
           {Object.keys(clients).map(key => (
             <TableRow hover key={key}>
-              <TableCell size="small">{clients[key].code}</TableCell>
-              <TableCell size="small">{clients[key].name}</TableCell>
-              <TableCell size="small">{clients[key].cpf}</TableCell>
-              <TableCell size="small">{getDateToString(clients[key].date_of_birth)}</TableCell>
+              <TableCell padding="none" size="small">
+                {clients[key].code}
+              </TableCell>
+              <TableCell padding="none" size="small">
+                {clients[key].name}
+              </TableCell>
+              <TableCell padding="none" size="small">
+                {clients[key].cpf}
+              </TableCell>
+              <TableCell padding="none" size="small">
+                {getDateToString(clients[key].date_of_birth)}
+              </TableCell>
               <TableCell padding="none" align="right">
                 <Fab
                   color="primary"

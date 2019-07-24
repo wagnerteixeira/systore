@@ -144,10 +144,10 @@ function _MenuAcoes(props) {
       )}
       <MenuItem
         onClick={() => {
-          handleSaveClient(() => { 
-                handlePrintBillReceiveGroupByCode(billReceiveKey); 
-                handleCloseMenuAcoes()
-              });          
+          handleSaveClient(() => {
+            handlePrintBillReceiveGroupByCode(billReceiveKey);
+            handleCloseMenuAcoes();
+          });
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -156,8 +156,8 @@ function _MenuAcoes(props) {
       <MenuItem
         onClick={() => {
           handleSaveClient(() => {
-          handlePrintBillReceive(billReceiveKey);
-          handleCloseMenuAcoes();
+            handlePrintBillReceive(billReceiveKey);
+            handleCloseMenuAcoes();
           });
         }}
       >
@@ -167,9 +167,9 @@ function _MenuAcoes(props) {
       <MenuItem
         onClick={() => {
           handleSaveClient(() => {
-          handlePrintBillReceivesOpen();
-          handleCloseMenuAcoes();
-          })
+            handlePrintBillReceivesOpen();
+            handleCloseMenuAcoes();
+          });
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -448,8 +448,9 @@ function BillReceiveTable(props) {
               <TableCell size="small">Valor</TableCell>
               {/*<TableCell size="small" align="left">
                 Situação
-                  </TableCell>*/}
+                  </TableCell>*/}              
               <TableCell size="small">Valor pago/atual</TableCell>
+              <TableCell size="small">Juros</TableCell>
               <TableCell size="small">Dias em atraso</TableCell>
               <TableCell size="small" align="left">
                 Ações
@@ -470,23 +471,23 @@ function BillReceiveTable(props) {
                   }
                   key={key}
                 >
-                  <TableCell size="small" className={classes.cellValue}>
+                  <TableCell size="small">
                     {getDateToString(billsReceive[key].purchase_date)}
                   </TableCell>
-                  <TableCell size="small" className={classes.cellValue}>
+                  <TableCell size="small">
                     <div className={classes.ellipses}>
                       {billsReceive[key].vendor}
                     </div>
                   </TableCell>
-                  <TableCell size="small" className={classes.cellValue}>{billsReceive[key].code}</TableCell>
-                  <TableCell size="small" className={classes.cellValue}>{billsReceive[key].quota}</TableCell>
-                  <TableCell className={classes.cellValue}>
+                  <TableCell size="small">{billsReceive[key].code}</TableCell>
+                  <TableCell size="small">{billsReceive[key].quota}</TableCell>
+                  <TableCell>
                     {getDateToString(billsReceive[key].due_date)}
                   </TableCell>
-                  <TableCell size="small" className={classes.cellValue}>
+                  <TableCell size="small">
                     {getDateToString(billsReceive[key].pay_date)}
                   </TableCell>
-                  <TableCell size="small" className={classes.cellValue}>
+                  <TableCell size="small">
                     {getNumberDecimalToStringCurrency(
                       billsReceive[key].original_value
                     )}
@@ -494,40 +495,38 @@ function BillReceiveTable(props) {
                   {/*<TableCell size="small" align="left">
 {billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
 </TableCell>*/}
-                  <TableCell size="small" className={classes.cellValue}>
+                  <TableCell size="small">
                     {getNumberToString(
                       billsReceive[key].pay_date != null
                         ? billsReceive[key].final_value['$numberDecimal']
                         : parseFloat(
-                          getValueWithInterest(
-                            billsReceive[key].original_value[
-                            '$numberDecimal'
-                            ],
-                            billsReceive[key].due_date,
-                            dateCurrent
+                            getValueWithInterest(
+                              billsReceive[key].original_value[
+                                '$numberDecimal'
+                              ],
+                              billsReceive[key].due_date,
+                              dateCurrent
+                            )
                           )
-                        )
                     )}
                   </TableCell>
-                  <TableCell size="small" className={classes.cellValue}>
+                  <TableCell size="small">
                     {getNumberToString(
                       billsReceive[key].pay_date != null
-                        ? billsReceive[key].interest[
-                        '$numberDecimal'
-                        ]
+                        ? billsReceive[key].interest['$numberDecimal']
                         : parseFloat(
-                          getValueInterest(
-                            billsReceive[key].original_value[
-                            '$numberDecimal'
-                            ],
-                            billsReceive[key].due_date,
-                            dateCurrent
+                            getValueInterest(
+                              billsReceive[key].original_value[
+                                '$numberDecimal'
+                              ],
+                              billsReceive[key].due_date,
+                              dateCurrent
+                            )
                           )
-                        )
                     )}
                   </TableCell>
-                  <TableCell size="small" className={classes.cellValue}>{_daysDelay}</TableCell>
-                  <TableCell size="small" className={classes.cellValue} align="left">
+                  <TableCell size="small">{_daysDelay}</TableCell>
+                  <TableCell size="small" align="left">
                     <Fab
                       color="primary"
                       aria-label="Delete"

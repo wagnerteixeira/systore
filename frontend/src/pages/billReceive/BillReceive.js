@@ -112,9 +112,11 @@ async function fetchClients(
   if (columnSearch === 'code') filterType = 'eq';
   else filterType = 'rg';
 
+  const _limit = inputValue.trim().split(' ').length < 3 ? 10 : 1000;
+
   let result = await clientService.getAll(
     0,
-    10,
+    _limit,
     columnSearch,
     columnSearch,
     'asc',

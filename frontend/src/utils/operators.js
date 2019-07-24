@@ -44,11 +44,11 @@ export const getDateTimeToString = date => {
 
 export const getNumberDecimalToStringCurrency = number => {
   if (number && number['$numberDecimal'])
-    return `R$ ${parseFloat(number['$numberDecimal']).toLocaleString('pt-BR', {
+    return `${parseFloat(number['$numberDecimal']).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })}`;
-  else return 'R$ 0,00';
+  else return '0,00';
 };
 
 export const getNumberDecimalToString = number => {
@@ -62,11 +62,11 @@ export const getNumberDecimalToString = number => {
 
 export const getNumberToString = number => {
   if (number)
-    return `R$ ${parseFloat(number).toLocaleString('pt-BR', {
+    return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })}`;
-  else return 'R$ 0,00';
+  else return '0,00';
 };
 
 export const getNumberToString2 = number => {
