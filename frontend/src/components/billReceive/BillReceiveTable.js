@@ -352,7 +352,7 @@ function BillReceiveTable(props) {
         setbillsReceive([]);*/
   }
 
-  function onCloseCreateModal(event, reason) {
+  function onCloseCreateModal(event, reason) {    
     setOpenCreateModal(false);
     if (reason === 'created') {
       handleOpenMessage(false, 'success', '');

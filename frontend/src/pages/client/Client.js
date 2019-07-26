@@ -232,35 +232,42 @@ class Client extends Component {
     this.setState({ data: { ...this.state.data, [name]: event.target.value } });
   };
 
-  handleCepChange = event => {
-    this.setState({
-      data: { ...this.state.data, postal_code: event.target.value },
-    });
-    if (event.target.value.length === 8) {
-      axios
-        .get(`https://viacep.com.br/ws/${event.target.value}/json/`)
-        .then(res => {
-          if (res.data.erro) return;
-          this.setState({
-            data: {
-              ...this.state.data,
-              neighborhood: res.data.bairro,
-              city: res.data.localidade,
-              address: res.data.logradouro,
-              state: res.data.uf,
-            },
+  handlePostalCodeChange = (event, origin) => {    
+    if (origin === 'textFieldCep'){
+      this.setState({
+        data: { ...this.state.data, postal_code: event.target.value },
+      });
+      if (event.target.value.length === 8) {
+        axios
+          .get(`https://viacep.com.br/ws/${event.target.value}/json/`)
+          .then(res => {
+            if (res.data.erro) return;
+            this.setState({
+              data: {
+                ...this.state.data,
+                neighborhood: res.data.bairro,
+                city: res.data.localidade,
+                address: res.data.logradouro,
+                state: res.data.uf,
+              },
+            });
           });
-        });
-      // bairro: "Vila Espírito Santo"
-      // cep: "35500-260"
-      // complemento: ""
-      // gia: ""
-      // ibge: "3122306"
-      // localidade: "Divinópolis"
-      // logradouro: "Rua Itaguara"
-      // uf: "MG"
-      // unidade: ""
+        // bairro: "Vila Espírito Santo"
+        // cep: "35500-260"
+        // complemento: ""
+        // gia: ""
+        // ibge: "3122306"
+        // localidade: "Divinópolis"
+        // logradouro: "Rua Itaguara"
+        // uf: "MG"
+        // unidade: ""
+      }
     }
+    else if (origin === 'choosePostalCode'){
+      this.setState({
+        data: { ...this.state.data, postal_code: event.target.value.postal_code, address: event.target.value.address, neighborhood: event.target.value.neighborhood },
+      });
+    };
   };
 
   handleDateValueChange = name => date => {
@@ -512,7 +519,7 @@ class Client extends Component {
             handleSave={this.handleSave}
             handleDateValueChange={this.handleDateValueChange}
             handleOpenMessage={this.handleOpenMessage}
-            handleCepChange={this.handleCepChange}
+            handlePostalCodeChange={this.handlePostalCodeChange}
             handleCheckCpf={this.checkCpf}
             handleCheckDateBirth={this.checkDateBirth}
           />
