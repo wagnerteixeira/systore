@@ -11,10 +11,16 @@ import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
+import Tooltip from '@material-ui/core/Tooltip';
+import Fab from '@material-ui/core/Fab';
 import TextMaskCustom from '../../components/common/TextMaskCustom';
 import SelectGeneric from '../../components/common/SelectGeneric';
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
+import MapIcon from '@material-ui/icons/Map';
+
+import axios from 'axios';
+
+import ChoosePostalCode from './ChoosePostalCode';
 
 const styles = theme => ({
   container: {
@@ -83,6 +89,17 @@ const styles = theme => ({
     padding: theme.spacing(4),
     outline: 'none',
   },
+  paperModalAddress: {
+    position: 'absolute',
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2),
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%,-50%)',
+    outline: 'none',
+    width: theme.spacing(60),
+  },
   table: {
     minWidth: 500,
   },
@@ -117,11 +134,57 @@ class EditClient extends Component {
     super(props);
     this.state = {
       tabValue: 'EDIT',
+      openModalAddress: false, 
+      postalCodes: [], 
     };
-  }
+  }  
 
   handleTabChange = (event, value) => {
     this.setState({ tabValue: value });
+  };
+
+  handleOpeModalAddress = (value) => {
+    this.setState({openModalAddress: value});
+  } 
+
+
+   onCloseModalAddress = (event, reason) => {     
+    this.setState({openModalAddress: false});
+    if (reason === 'created') {
+      
+    }
+  }
+
+  handleSearchPostalCode = () => {
+    const { handleOpenMessage } = this.props;
+    const { address, city, state } = this.props.clientData;
+
+    if (address.length === 0) {
+      handleOpenMessage(
+        true,
+        'warning',
+        'Informe o Endereço para buscar o Cep.'
+      );
+      return;
+    }
+
+    if (city.length === 0) {
+      handleOpenMessage(true, 'warning', 'Informe a Cidade para buscar o Cep.');
+      return;
+    }
+
+    if (state.length === 0) {
+      handleOpenMessage(true, 'warning', 'Informe o Estado para buscar o Cep.');
+      return;
+    }
+
+    axios
+      .get(`https://viacep.com.br/ws/${state}/${city}/${address}/json/`)
+      .then(res => {
+        if (res.data.erro) return;
+        let _postalCodes = res.data.map(item => ({ neighborhood: item.bairro, postal_code: item.cep,  address: item.logradouro }));               
+        this.setState({openModalAddress : true, postalCodes : _postalCodes});
+      });
   };
 
   render() {
@@ -132,8 +195,9 @@ class EditClient extends Component {
       handleSave,
       handleCancel,
       handleDateValueChange,
-      handleCepChange,
+      handlePostalCodeChange,
       handleCheckCpf,
+      handleCheckDateBirth,
     } = this.props;
 
     const { tabValue } = this.state;
@@ -152,17 +216,24 @@ class EditClient extends Component {
         {tabValue === 'EDIT' && (
           <form className={classes.container} noValidate autoComplete="off">
             <div className={classes.back}>
+              <ChoosePostalCode 
+                open={this.state.openModalAddress} 
+                handleClose={this.onCloseModalAddress} 
+                paperClass={classes.paperModalAddress}
+                rows={this.state.postalCodes}                
+                handlePostalCodeChange={handlePostalCodeChange}
+                />
               <Grid className={classes.itens} container spacing={3}>
                 <Grid
-                    className={classes.item}
-                    item
-                    xs={12}
-                    sm={6}
-                    md={3}
-                    lg={2}
-                    xl={2}
-                  >
-                    <TextField
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  lg={2}
+                  xl={2}
+                >
+                  <TextField
                     id="cpf"
                     label="Cpf"
                     className={classes.textField}
@@ -171,6 +242,9 @@ class EditClient extends Component {
                     onBlur={handleCheckCpf}
                     margin="normal"
                     fullWidth
+                    inputProps={{
+                      maxLength: 11,
+                    }}
                   />
                 </Grid>
                 <Grid
@@ -246,6 +320,7 @@ class EditClient extends Component {
                     className={classes.textField}
                     value={clientData.date_of_birth}
                     onChange={handleDateValueChange('date_of_birth')}
+                    onBlur={handleCheckDateBirth}
                     margin="normal"
                     format={'dd/MM/yyyy'}
                     fullWidth
@@ -350,10 +425,10 @@ class EditClient extends Component {
                   className={classes.item}
                   item
                   xs={12}
-                  sm={6}
-                  md={6}
-                  lg={6}
-                  xl={6}
+                  sm={5}
+                  md={5}
+                  lg={5}
+                  xl={5}
                 >
                   <TextField
                     id="city"
@@ -385,6 +460,33 @@ class EditClient extends Component {
                   />
                 </Grid>
                 <Grid
+                  container
+                  alignItems="center"
+                  justify="center"
+                  className={classes.item}
+                  item
+                  xs={12}
+                  sm={1}
+                  md={1}
+                  lg={1}
+                  xl={1}
+                >
+                  <Tooltip
+                    title="Buscar Cep"
+                    placement={'bottom-start'}
+                    enterDelay={300}
+                  >
+                    <Fab
+                      color="primary"
+                      aria-label="Buscar Cep"
+                      size="small"
+                      onClick={this.handleSearchPostalCode}
+                    >
+                      <MapIcon />
+                    </Fab>
+                  </Tooltip>
+                </Grid>
+                <Grid
                   className={classes.item}
                   item
                   xs={12}
@@ -398,7 +500,7 @@ class EditClient extends Component {
                     label="CEP"
                     className={classes.textField}
                     value={clientData.postal_code}
-                    onChange={handleCepChange}
+                    onChange={(event)=> handlePostalCodeChange(event, 'textFieldCep')}
                     margin="normal"
                     fullWidth
                   />

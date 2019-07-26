@@ -38,6 +38,18 @@ Client.before('post', async (req, res, next) => {
       erros: [`Já existe um cliente com o CPF ${_client.cpf}, ${_client.name} `]
     });
   }
+  
+  if (new Date(req.body.date_of_birth) > new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate())
+  ) {
+    return res.status(412).json({
+      erros: [          
+        `Data de nascimento não pode ser maior que a data atual`
+      ]
+    });
+  }
   Counter.findOneAndUpdate(
     { _id: 'client_code' },
     { $inc: { seq: 1 } },
@@ -47,6 +59,7 @@ Client.before('post', async (req, res, next) => {
       next();
     }
   );
+
 });
 
 Client.before('put', async (req, res, next) => {
@@ -62,6 +75,18 @@ Client.before('put', async (req, res, next) => {
           `Já existe um cliente com o CPF ${_clients[0].cpf}, ${
             _clients[0].name
           } `
+        ]
+      });
+    }   
+    
+    if (new Date(req.body.date_of_birth) > new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate())
+    ) {
+      return res.status(412).json({
+        erros: [          
+          `Data de nascimento não pode ser maior que a data atual`
         ]
       });
     }

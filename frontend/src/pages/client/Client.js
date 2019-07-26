@@ -10,6 +10,7 @@ import ViewClient from './ViewClient';
 import clientservice from '../../services/clientService';
 import Confirm from '../../components/common/ConfirmAlert';
 import { getErrosFromApi } from '../../utils/errorsHelper';
+import { getCurrentDate } from '../../utils/operators';
 
 const styles = theme => ({
   root: {
@@ -190,6 +191,16 @@ class Client extends Component {
       );
   };
 
+  checkDateBirth = () => {
+    if (this.state.data.date_of_birth > getCurrentDate()) {
+      this.setState({
+        messageOpen: true,
+        messageText: 'Data de nascimento não pode ser maior que a data atual',
+        variantMessage: 'warning',
+      });
+    }
+  }
+
   handleCreate = () => {
     this.setState({
       stateData: 'EDIT_INSERT',
@@ -221,35 +232,42 @@ class Client extends Component {
     this.setState({ data: { ...this.state.data, [name]: event.target.value } });
   };
 
-  handleCepChange = event => {
-    this.setState({
-      data: { ...this.state.data, postal_code: event.target.value },
-    });
-    if (event.target.value.length === 8) {
-      axios
-        .get(`https://viacep.com.br/ws/${event.target.value}/json/`)
-        .then(res => {
-          if (res.data.erro) return;
-          this.setState({
-            data: {
-              ...this.state.data,
-              neighborhood: res.data.bairro,
-              city: res.data.localidade,
-              address: res.data.logradouro,
-              state: res.data.uf,
-            },
+  handlePostalCodeChange = (event, origin) => {    
+    if (origin === 'textFieldCep'){
+      this.setState({
+        data: { ...this.state.data, postal_code: event.target.value },
+      });
+      if (event.target.value.length === 8) {
+        axios
+          .get(`https://viacep.com.br/ws/${event.target.value}/json/`)
+          .then(res => {
+            if (res.data.erro) return;
+            this.setState({
+              data: {
+                ...this.state.data,
+                neighborhood: res.data.bairro,
+                city: res.data.localidade,
+                address: res.data.logradouro,
+                state: res.data.uf,
+              },
+            });
           });
-        });
-      // bairro: "Vila Espírito Santo"
-      // cep: "35500-260"
-      // complemento: ""
-      // gia: ""
-      // ibge: "3122306"
-      // localidade: "Divinópolis"
-      // logradouro: "Rua Itaguara"
-      // uf: "MG"
-      // unidade: ""
+        // bairro: "Vila Espírito Santo"
+        // cep: "35500-260"
+        // complemento: ""
+        // gia: ""
+        // ibge: "3122306"
+        // localidade: "Divinópolis"
+        // logradouro: "Rua Itaguara"
+        // uf: "MG"
+        // unidade: ""
+      }
     }
+    else if (origin === 'choosePostalCode'){
+      this.setState({
+        data: { ...this.state.data, postal_code: event.target.value.postal_code, address: event.target.value.address, neighborhood: event.target.value.neighborhood },
+      });
+    };
   };
 
   handleDateValueChange = name => date => {
@@ -260,11 +278,11 @@ class Client extends Component {
     let nextState = { stateData: 'LIST' };
     if (previusOperation === 'SAVE') {
       nextState.messageOpen = true;
-      nextState.messageText = 'Cliente salvo com suceso!';
+      nextState.messageText = 'Cliente salvo com sucesso!';
       nextState.variantMessage = 'success';
     } else if (previusOperation === 'DELETE') {
       nextState.messageOpen = true;
-      nextState.messageText = 'Cliente excluído com suceso!';
+      nextState.messageText = 'Cliente excluído com sucesso!';
       nextState.variantMessage = 'success';
     }
     this.setState(nextState);
@@ -293,7 +311,7 @@ class Client extends Component {
               {
                 ...this.state,
                 messageOpen: true,
-                messageText: 'Cliente salvo com suceso!',
+                messageText: 'Cliente salvo com sucesso!',
                 variantMessage: 'success',
                 data: res.data,
               },
@@ -324,7 +342,7 @@ class Client extends Component {
                 ...this.state,
                 inEdit: true,
                 messageOpen: true,
-                messageText: 'Cliente salvo com suceso!',
+                messageText: 'Cliente salvo com sucesso!',
                 variantMessage: 'success',
                 data: res.data,
               },
@@ -501,8 +519,9 @@ class Client extends Component {
             handleSave={this.handleSave}
             handleDateValueChange={this.handleDateValueChange}
             handleOpenMessage={this.handleOpenMessage}
-            handleCepChange={this.handleCepChange}
+            handlePostalCodeChange={this.handlePostalCodeChange}
             handleCheckCpf={this.checkCpf}
+            handleCheckDateBirth={this.checkDateBirth}
           />
         )}
       </div>
