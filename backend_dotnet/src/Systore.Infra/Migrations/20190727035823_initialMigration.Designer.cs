@@ -9,7 +9,7 @@ using Systore.Context.Infra;
 namespace Systore.Infra.Migrations
 {
     [DbContext(typeof(SystoreContext))]
-    [Migration("20190717032042_initialMigration")]
+    [Migration("20190727035823_initialMigration")]
     partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,6 +130,29 @@ namespace Systore.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Admin = true,
+                            Password = "Senha123",
+                            UserName = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Admin = true,
+                            Password = "1234",
+                            UserName = "ROSE"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Admin = true,
+                            Password = "1234",
+                            UserName = "IZAQUE"
+                        });
                 });
 
             modelBuilder.Entity("Systore.Domain.Entities.BillReceive", b =>

@@ -49,7 +49,7 @@ class App extends Component {
 
   handleLogin = async () => {
     let user = {
-      user_name: this.state.userName,
+      username: this.state.userName,
       password: this.state.password,
     };
 

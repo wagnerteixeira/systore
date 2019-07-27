@@ -89,6 +89,21 @@ namespace Systore.Infra.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "Admin", "Password", "UserName" },
+                values: new object[] { 1, true, "Senha123", "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "Admin", "Password", "UserName" },
+                values: new object[] { 2, true, "1234", "ROSE" });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "Admin", "Password", "UserName" },
+                values: new object[] { 3, true, "1234", "IZAQUE" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_BillReceive_ClientId",
                 table: "BillReceive",
