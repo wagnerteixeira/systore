@@ -43,8 +43,7 @@ namespace Systore.Api.Controllers
       }
     }
 
-    [HttpGet]
-    [Route("{id}")]
+    [HttpGet("{id:int}")]    
     // GET: api/Entity/5
     public virtual async Task<IActionResult> Get(int id)
     {

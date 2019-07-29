@@ -4,6 +4,12 @@ using Systore.Domain.Entities;
 using Systore.Domain.Abstractions;
 using Systore.Dtos;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 
 namespace Systore.Api.Controllers
 {
@@ -11,9 +17,12 @@ namespace Systore.Api.Controllers
     public class AuthController : ControllerBase, IDisposable
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private IConfiguration _config;
+      
+        public AuthController(IAuthService authService, IConfiguration config)
         {
             _authService = authService;
+            _config = config;
         }
 
         [HttpPost]
@@ -22,6 +31,7 @@ namespace Systore.Api.Controllers
         {
             try
             {
+               
                 var result = await _authService.Login(loginRequestDto);
                 return Ok(result);
             }
@@ -32,12 +42,15 @@ namespace Systore.Api.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("validateToken")]
-        public IActionResult ValidateToken([FromBody] ValidateTokenDto validateTokenDto)
+        public async Task<IActionResult> ValidateToken([FromBody] string token)
         {
             try
-            {
-                return Ok(new LoginResponseDto()
+            {                
+                var result = await Task.Run(() => _authService.ValidateToken(token));
+                return Ok(result);
+                /*return Ok(new LoginResponseDto()
                 {
                     User = new UserLoginDto()
                     {
@@ -46,7 +59,7 @@ namespace Systore.Api.Controllers
                     },
                     Token = "3214654s6a4d65as4f654sd6f46s",
                     Valid = true
-                });
+                });*/
             }
             catch (Exception e)
             {

@@ -117,7 +117,7 @@ function ViewUser(props) {
                 id: 'sort'
               }}
             >
-              <MenuItem value={'user_name'}>Nome</MenuItem>
+              <MenuItem value={'userName'}>Nome</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -191,9 +191,9 @@ function ViewUser(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'user_name'}
+                  active={columnSort === 'userName'}
                   direction={order}
-                  onClick={handleSort('user_name')}
+                  onClick={handleSort('userName')}
                 >
                   Nome
                 </TableSortLabel>
@@ -207,7 +207,7 @@ function ViewUser(props) {
         <TableBody>
           {Object.keys(users).map(key => (
             <TableRow hover key={key}>
-              <TableCell padding="checkbox">{users[key].user_name}</TableCell>
+              <TableCell padding="checkbox">{users[key].userName}</TableCell>
               <TableCell padding="none" align="right">
                 <Fab
                   color="primary"

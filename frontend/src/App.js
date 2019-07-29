@@ -113,11 +113,12 @@ class App extends Component {
       logged,
       user,
     } = this.state;
-
+    console.log(logged);
     if (!logged) {
       let _token = localStorageService.getItem('token');
       if (_token) {
-        axiosOApi.post('/validateToken', { token: _token }).then(res => {
+        axiosOApi.post('/validateToken', `"${_token}"`,).then(res => {
+          console.log(res.data);
           if (res.data.valid) {
             this.setState({ logged: true, user: res.data.user });
           }

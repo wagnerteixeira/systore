@@ -135,9 +135,7 @@ class Menu extends React.Component {
       user: props.user,
 
       drawerOpen: false,
-      headerText: '',
-      password: '',
-      userName: '',
+      headerText: '',      
       messageOpen: false,
       variantMessage: 'success',
       messageText: '',
@@ -198,6 +196,8 @@ class Menu extends React.Component {
   render() {
     const { classes, handleLogout } = this.props;
     const { messageOpen, variantMessage, messageText, anchorEl } = this.state;
+
+    console.log(this.state.user);
 
     return (
       <div className={classes.root}>
@@ -297,7 +297,7 @@ class Menu extends React.Component {
                 color="inherit"
                 className={classes.marginRight}
               >
-                {this.state.date}
+                {this.state.date.toLocaleString()}
               </Typography>
               <Typography variant="caption" className={classes.marginRight}>
                 {config.version}
@@ -309,7 +309,7 @@ class Menu extends React.Component {
                     color="inherit"
                     className={classes.userText}
                   >
-                    {this.state.user.user_name}
+                    {this.state.user.userName}
                   </Typography>
                 </ButtonBase>
                 <MaterialMenu

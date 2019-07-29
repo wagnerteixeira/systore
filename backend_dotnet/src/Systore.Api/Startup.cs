@@ -17,6 +17,10 @@ using Systore.Infra.Abstractions;
 using Systore.Services;
 using Systore.Data.Abstractions;
 using Systore.Data.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Systore.Domain;
 
 namespace Systore.Api
 {
@@ -50,10 +54,32 @@ namespace Systore.Api
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IBillReceiveRepository, BillReceiveRepository>();
-            services.AddCors();
+            services.AddCors();           
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
 
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,11 +100,11 @@ namespace Systore.Api
                 builder.AllowAnyOrigin()
                       .AllowAnyMethod()
                       .AllowAnyHeader()
-                      .AllowCredentials()
             );
+
+            app.UseAuthentication();
+
             app.UseMvc();
-
-
 
             // uncoment for automatic migration
             InitializeDatabase(app);
