@@ -145,12 +145,13 @@ class Menu extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let _interval = setInterval(
       () =>
-        this.setState(prevState => {
+        this.setState(prevState => {          
+          prevState.date.setMinutes(prevState.date.getMinutes() + 1);          
           return {
-            date: prevState.date.setMinutes(prevState.date.getMinutes() + 1),
+            date: prevState.date,
           };
         }),
       60000
@@ -195,10 +196,8 @@ class Menu extends React.Component {
 
   render() {
     const { classes, handleLogout } = this.props;
-    const { messageOpen, variantMessage, messageText, anchorEl } = this.state;
-
-    console.log(this.state.user);
-
+    const { messageOpen, variantMessage, messageText, anchorEl } = this.state;    
+    console.log(typeof this.state.date);
     return (
       <div className={classes.root}>
         <Drawer
@@ -297,7 +296,7 @@ class Menu extends React.Component {
                 color="inherit"
                 className={classes.marginRight}
               >
-                {this.state.date.toLocaleString()}
+                {this.state.date.toLocaleString().slice(0, 16)}
               </Typography>
               <Typography variant="caption" className={classes.marginRight}>
                 {config.version}
