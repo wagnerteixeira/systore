@@ -33,9 +33,8 @@ class Client extends Component {
     clients: [],
     countClients: 0,
     data: {
-      _id: '',
+      id: 0,
       name: '',
-      code: 0,
       cpf: '',
       rg: '',
       registry_date: null,
@@ -91,7 +90,7 @@ class Client extends Component {
     order,
     filter
   ) => {
-    if (columnSearch === 'code' && /\D/.test(filter)) {
+    if (columnSearch === 'id' && /\D/.test(filter)) {
       this.setState({
         messageOpen: true,
         messageText: 'Informe somente números na pesquisa por código.',
@@ -101,7 +100,7 @@ class Client extends Component {
     }
 
     let filterType = '';
-    if (columnSearch === 'code') filterType = 'eq';
+    if (columnSearch === 'id') filterType = 'eq';
     else filterType = 'rg';
 
     clientservice.count(columnSearch, filterType, filter).then(res => {
@@ -132,7 +131,7 @@ class Client extends Component {
           selectedIndex: '0',
           clients: res.data,
           data: {
-            _id: '',
+            id: 0,
             name: '',
             cpf: '',
             registry_date: new Date(),
@@ -169,10 +168,10 @@ class Client extends Component {
   };
 
   checkCpf = () => {
-    console.log(this.state.inEdit, this.state.data._id, this.state.data.cpf);
+    console.log(this.state.inEdit, this.state.data.id, this.state.data.cpf);
     const cpf = this.state.data.cpf.replace(/\D+/g, '');
     clientservice
-      .existCpf(this.state.inEdit ? 1 : 0, this.state.data._id, cpf)
+      .existCpf(this.state.inEdit ? 1 : 0, this.state.data.id, cpf)
       .then(res => {
         if (!res.data === 'OK') {
           this.setState({
@@ -205,7 +204,7 @@ class Client extends Component {
     this.setState({
       stateData: 'EDIT_INSERT',
       data: {
-        _id: '',
+        id: 0,
         name: '',
         cpf: '',
         registry_date: new Date(),
@@ -329,7 +328,7 @@ class Client extends Component {
     } else {
       let _data = {
         ...this.state.data,
-        _id: undefined,
+        id: undefined,
         phone1: this.state.data.phone1.replace(/\D/g, ''),
         phone2: this.state.data.phone2.replace(/\D/g, ''),
       };
@@ -363,7 +362,7 @@ class Client extends Component {
   handleDelete = key => {
     Confirm('Atenção', 'Confirma a exclusão?', () =>
       clientservice
-        .remove(this.state.clients[key]._id)
+        .remove(this.state.clients[key].id)
         .then(() => this.handleCancel('DELETE'))
         .catch(error => {
           this.setState({

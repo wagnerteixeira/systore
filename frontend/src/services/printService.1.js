@@ -10,7 +10,7 @@ const createPageForPrint = (clientData, billReceive) => {
     x: 8,
     y: 18
   }); //numero_compra
-  items.push({ text: clientData.code, x: 40, y: 18 }); //cod_cliente
+  items.push({ text: clientData.id, x: 40, y: 18 }); //cod_cliente
   items.push({ text: clientData.name, x: 74, y: 18 }); //nome_cliente
   //linha 2
   items.push({ text: billReceive.vendor, x: 8, y: 29 }); //vendedor
@@ -20,7 +20,7 @@ const createPageForPrint = (clientData, billReceive) => {
     x: 74,
     y: 29
   }); //numero_compra
-  items.push({ text: clientData.code, x: 97, y: 29 }); //cod_cliente
+  items.push({ text: clientData.id, x: 97, y: 29 }); //cod_cliente
   items.push({ text: getDateToString(billReceive.due_date), x: 128, y: 29 }); //data_vencimento
   //linha 3
   items.push({

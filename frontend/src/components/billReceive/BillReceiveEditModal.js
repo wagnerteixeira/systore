@@ -50,7 +50,7 @@ class BillReceiveEditModal extends React.Component {
       messageText: '',
       printQuota: false,
       data: {
-        _id: props.bill._id,
+        id: props.bill.id,
         client: props.bill.client,
         code: props.bill.code,
         quota: props.bill.quota,

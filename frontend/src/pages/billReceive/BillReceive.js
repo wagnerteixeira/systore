@@ -98,7 +98,7 @@ async function fetchClients(
   callback,
   handleOpenMessage
 ) {
-  if (columnSearch === 'code' && /\D/.test(inputValue)) {
+  if (columnSearch === 'id' && /\D/.test(inputValue)) {
     handleOpenMessage(
       true,
       'warning',
@@ -109,7 +109,7 @@ async function fetchClients(
   }
 
   let filterType = '';
-  if (columnSearch === 'code') filterType = 'eq';
+  if (columnSearch === 'id') filterType = 'eq';
   else filterType = 'rg';
 
   const _limit = inputValue.trim().split(' ').length < 3 ? 10 : 1000;
@@ -124,8 +124,8 @@ async function fetchClients(
     inputValue
   );
   let _clients = result.data.map(client => ({
-    value: client._id,
-    label: `Código: ${client.code} Nome: ${client.name} Cpf: ${client.cpf} Data Nasc.: ${getDateToString(client.date_of_birth)}`,
+    value: client.id,
+    label: `Código: ${client.id} Nome: ${client.name} Cpf: ${client.cpf} Data Nasc.: ${getDateToString(client.date_of_birth)}`,
     clientData: client,
   }));
   callback(_clients);
@@ -306,7 +306,7 @@ function BillReceive(props) {
 
   let textPlaceHolder = '';
   switch (columnSearch) {
-    case 'code':
+    case 'id':
       textPlaceHolder = 'código';
       break;
     case 'name':
@@ -334,7 +334,7 @@ function BillReceive(props) {
                 id: 'sort',
               }}
             >
-              <MenuItem value={'code'}>Código</MenuItem>
+              <MenuItem value={'id'}>Código</MenuItem>
               <MenuItem value={'name'}>Nome</MenuItem>
               <MenuItem value={'cpf'}>Cpf</MenuItem>
             </Select>

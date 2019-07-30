@@ -541,43 +541,7 @@ function BillReceiveTable(props) {
                       size="small"
                     >
                       <TouchApp fontSize="small" />
-                    </Fab>
-                    {/*<Fab
-                      color="secondary"
-                      aria-label="Delete"
-                      className={classNames(classes.fab, classes.fabEdit)}
-                      onClick={() => handlePrintBillReceiveGroupByCode(key)}
-                      size="small"
-                    >
-                      <Icon fontSize="small">event_note</Icon>
-                    </Fab>
-                    <Fab
-                      color="secondary"
-                      aria-label="Delete"
-                      className={classNames(classes.fab, classes.fabEdit)}
-                      onClick={() => handlePrintBillReceive(key)}
-                      size="small"
-                    >
-                      <Icon fontSize="small">local_printshop</Icon>
-                    </Fab>
-                    <Fab
-                      color="primary"
-                      aria-label="Edit"
-                      className={classNames(classes.fab, classes.fabEdit)}
-                      onClick={() => handleEditBillReceive(key)}
-                      size="small"
-                    >
-                      <Icon fontSize="small">edit_icon</Icon>
-                    </Fab>
-                    <Fab
-                      color="secondary"
-                      aria-label="Delete"
-                      className={classes.fab}
-                      onClick={() => handleDeleteBillReceive(key)}
-                      size="small"
-                    >
-                      <Icon fontSize="small">delete_icon</Icon>
-                    </Fab>*/}
+                    </Fab>                   
                   </TableCell>
                 </TableRow>
               );

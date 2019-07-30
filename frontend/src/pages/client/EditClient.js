@@ -782,7 +782,7 @@ class EditClient extends Component {
         )}
         {tabValue === 'LIST' && (
           <BillReceiveTable
-            clientId={this.props.clientData._id}
+            clientId={this.props.clientData.id}
             clientData={this.props.clientData}
             handleOpenMessage={this.props.handleOpenMessage}
             handleSaveClient={this.props.handleSave}

@@ -122,7 +122,7 @@ function ViewClient(props) {
                 id: 'sort',
               }}
             >
-              <MenuItem value={'code'}>Código</MenuItem>
+              <MenuItem value={'id'}>Código</MenuItem>
               <MenuItem value={'name'}>Nome</MenuItem>
               <MenuItem value={'cpf'}>Cpf</MenuItem>
               <MenuItem value={'date_of_birth'}>Data de nascimento</MenuItem>
@@ -199,9 +199,9 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'code'}
+                  active={columnSort === 'id'}
                   direction={order}
-                  onClick={handleSort('code')}
+                  onClick={handleSort('id')}
                 >
                   Código
                 </TableSortLabel>
@@ -265,7 +265,7 @@ function ViewClient(props) {
           {Object.keys(clients).map(key => (
             <TableRow hover key={key}>
               <TableCell padding="none" size="small">
-                {clients[key].code}
+                {clients[key].id}
               </TableCell>
               <TableCell padding="none" size="small">
                 {clients[key].name}

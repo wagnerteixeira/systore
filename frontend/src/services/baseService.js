@@ -2,7 +2,7 @@ import axios from './axios';
 
 export default route => {
   const create = data => axios.post(`/${route}`, data);
-  const update = data => axios.put(`/${route}/${data._id}`, data);
+  const update = data => axios.put(`/${route}/${data.id}`, data);
   const getAll = (skip, limit, search, sort, order, filterType, filter) => {
     let uri = '';
     if (skip) {

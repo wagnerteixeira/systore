@@ -34,7 +34,7 @@ class User extends Component {
     users: [],
     countUsers: 0,
     data: {
-      _id: '',
+      id: '',
       user_name: '',
       email: '',
       password: ''
@@ -74,7 +74,7 @@ class User extends Component {
           selectedIndex: '0',
           users: res.data,
           data: {
-            _id: '',
+            id: '',
             user_name: '',
             email: '',
             password: '',
@@ -155,7 +155,7 @@ class User extends Component {
   handleDelete = key => {
     Confirm('Atenção', 'Confirma a exclusão?', () => 
       userservice
-        .remove(this.state.users[key]._id)
+        .remove(this.state.users[key].id)
         .then(() => this.handleCancel('DELETE'))
         .catch(error =>
           this.setState({
@@ -180,7 +180,7 @@ class User extends Component {
     this.setState({
       stateData: 'EDIT_INSERT',
       data: {
-        _id: '',
+        id: '',
         user_name: '',
         email: '',
         password: ''

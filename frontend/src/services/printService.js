@@ -20,7 +20,7 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
     x: _x,
     y: 13
   }); //numero_compra
-  items.push({ text: clientData.code, x: _x + 32, y: 13 }); //cod_cliente
+  items.push({ text: clientData.id, x: _x + 32, y: 13 }); //cod_cliente
   items.push({ text: clientData.name, x: _x + 66, y: 13 }); //nome_cliente
   //linha 2
   items.push({ text: billReceive.vendor, x: _x, y: 26 }); //vendedor
@@ -34,7 +34,7 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
     x: _x + 66,
     y: 27
   }); //numero_compra
-  items.push({ text: clientData.code, x: _x + 89, y: 26 }); //cod_cliente
+  items.push({ text: clientData.id, x: _x + 89, y: 26 }); //cod_cliente
   items.push({
     text: getDateToString(billReceive.due_date),
     x: _x + 120,
@@ -108,7 +108,7 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
     x: 8,
     y: 23
   }); //numero_compra
-  items.push({ text: clientData.code, x: 40, y: 23 }); //cod_cliente
+  items.push({ text: clientData.id, x: 40, y: 23 }); //cod_cliente
   items.push({ text: clientData.name, x: 74, y: 23 }); //nome_cliente
   //linha 2
   items.push({ text: billReceive.vendor, x: 8, y: 34 }); //vendedor
@@ -122,7 +122,7 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
     x: 74,
     y: 34
   }); //numero_compra
-  items.push({ text: clientData.code, x: 97, y: 34 }); //cod_cliente
+  items.push({ text: clientData.id, x: 97, y: 34 }); //cod_cliente
   items.push({ text: getDateToString(billReceive.due_date), x: 128, y: 34 }); //data_vencimento
   //linha 3
   items.push({
