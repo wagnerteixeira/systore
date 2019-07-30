@@ -12,6 +12,34 @@ import Confirm from '../../components/common/ConfirmAlert';
 import { getErrosFromApi } from '../../utils/errorsHelper';
 import { getCurrentDate } from '../../utils/operators';
 
+const initialData = {
+  id: '',
+  name: '',
+  registryDate: new Date(),
+  dateOfBirth: null,
+  address: '',
+  neighborhood: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  cpf: '',
+  seller: '',
+  jobName: '',
+  occupation: '',
+  placeOfBirth: '',
+  spouse: '',
+  note: '',
+  phone1: '',
+  phone2: '',
+  addressNumber: '',
+  complement: '',
+  admissionDate: null,
+  civilStatus: 0,
+  fatherName: '',
+  motherName: '',
+  billsReceives: [],
+}
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -32,40 +60,12 @@ class Client extends Component {
     selectedIndex: '0',
     clients: [],
     countClients: 0,
-    data: {
-      _id: '',
-      name: '',
-      code: 0,
-      cpf: '',
-      rg: '',
-      registry_date: null,
-      date_of_birth: null,
-      place_of_birth: '',
-      address: '',
-      address_number: '',
-      complement: '',
-      neighborhood: '',
-      city: '',
-      state: '',
-      postal_code: '',
-      seller: '',
-      job_name: '',
-      admission_date: null,
-      occupation: '',
-      civil_status: 0,
-      spouse: '',
-      phone1: '',
-      phone2: '',
-      note: '',
-      father_name: '',
-      mother_name: '',
-      bills_receives: [],
-    },
+    data: initialData,
     page: 0,
     rowsPerPage: 5,
-    order: 'asc',
-    columnSort: 'name',
-    columnSearch: 'name',
+    order: 'Asc',
+    columnSort: 'Name',
+    columnSearch: 'Name',
     search: '',
     messageOpen: false,
     variantMessage: 'success',
@@ -91,7 +91,11 @@ class Client extends Component {
     order,
     filter
   ) => {
-    if (columnSearch === 'code' && /\D/.test(filter)) {
+    if (filter.length === 0) {
+      this.setState({ columnSearch });
+      return;
+    }
+    if (columnSearch === 'Id' && /\D/.test(filter)) {
       this.setState({
         messageOpen: true,
         messageText: 'Informe somente números na pesquisa por código.',
@@ -101,18 +105,19 @@ class Client extends Component {
     }
 
     let filterType = '';
-    if (columnSearch === 'code') filterType = 'eq';
-    else filterType = 'rg';
+    if (columnSearch === 'Id') filterType = 'Eq';
+    else filterType = 'Con';
 
     clientservice.count(columnSearch, filterType, filter).then(res => {
-      if (filter !== '' && parseInt(res.data.value) === 0) {
+      console.log(res.data)
+      if (filter !== '' && parseInt(res.data) === 0) {
         this.setState({
           messageOpen: true,
           messageText: 'Não foi encontrado nenhum cliente com o filtro.',
           variantMessage: 'warning',
         });
       }
-      this.setState({ countClients: res.data.value });
+      this.setState({ countClients: res.data });
     });
     const skip = page * rowsPerPage;
     clientservice
@@ -131,27 +136,7 @@ class Client extends Component {
           inEdit: false,
           selectedIndex: '0',
           clients: res.data,
-          data: {
-            _id: '',
-            name: '',
-            cpf: '',
-            registry_date: new Date(),
-            date_of_birth: null,
-            place_of_birth: '',
-            address: '',
-            neighborhood: '',
-            city: '',
-            state: '',
-            postal_code: '',
-            seller: '',
-            job_name: '',
-            occupation: '',
-            spouse: '',
-            phone1: '',
-            phone2: '',
-            note: '',
-            bills_receives: [],
-          },
+          data: initialData,
           page: page,
           rowsPerPage: rowsPerPage,
           columnSort: columnSort,
@@ -232,8 +217,8 @@ class Client extends Component {
     this.setState({ data: { ...this.state.data, [name]: event.target.value } });
   };
 
-  handlePostalCodeChange = (event, origin) => {    
-    if (origin === 'textFieldCep'){
+  handlePostalCodeChange = (event, origin) => {
+    if (origin === 'textFieldCep') {
       this.setState({
         data: { ...this.state.data, postal_code: event.target.value },
       });
@@ -263,7 +248,7 @@ class Client extends Component {
         // unidade: ""
       }
     }
-    else if (origin === 'choosePostalCode'){
+    else if (origin === 'choosePostalCode') {
       this.setState({
         data: { ...this.state.data, postal_code: event.target.value.postal_code, address: event.target.value.address, neighborhood: event.target.value.neighborhood },
       });
@@ -407,9 +392,9 @@ class Client extends Component {
   };
 
   handleSort = property => event => {
-    let order = 'asc';
-    if (this.state.columnSort === property && this.state.order === 'asc') {
-      order = 'desc';
+    let order = 'Asc';
+    if (this.state.columnSort === property && this.state.order === 'Asc') {
+      order = 'Desc';
     }
     this.fetchClients(
       this.state.page,

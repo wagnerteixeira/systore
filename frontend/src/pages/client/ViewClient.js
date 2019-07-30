@@ -122,10 +122,10 @@ function ViewClient(props) {
                 id: 'sort',
               }}
             >
-              <MenuItem value={'code'}>Código</MenuItem>
-              <MenuItem value={'name'}>Nome</MenuItem>
-              <MenuItem value={'cpf'}>Cpf</MenuItem>
-              <MenuItem value={'date_of_birth'}>Data de nascimento</MenuItem>
+              <MenuItem value={'Id'}>Código</MenuItem>
+              <MenuItem value={'Name'}>Nome</MenuItem>
+              <MenuItem value={'Cpf'}>Cpf</MenuItem>
+              <MenuItem value={'DateOfBirth'}>Data de nascimento</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -199,9 +199,9 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'code'}
+                  active={columnSort === 'Id'}
                   direction={order}
-                  onClick={handleSort('code')}
+                  onClick={handleSort('Id')}
                 >
                   Código
                 </TableSortLabel>
@@ -214,9 +214,9 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'name'}
+                  active={columnSort === 'Name'}
                   direction={order}
-                  onClick={handleSort('name')}
+                  onClick={handleSort('Name')}
                 >
                   Nome
                 </TableSortLabel>
@@ -229,9 +229,9 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'cpf'}
+                  active={columnSort === 'Cpf'}
                   direction={order}
-                  onClick={handleSort('cpf')}
+                  onClick={handleSort('Cpf')}
                 >
                   CPF
                 </TableSortLabel>
@@ -244,9 +244,9 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'date_of_birth'}
+                  active={columnSort === 'DateOfBirth'}
                   direction={order}
-                  onClick={handleSort('date_of_birth')}
+                  onClick={handleSort('DateOfBirth')}
                 >
                   Data de nascimento
                 </TableSortLabel>
@@ -265,7 +265,7 @@ function ViewClient(props) {
           {Object.keys(clients).map(key => (
             <TableRow hover key={key}>
               <TableCell padding="none" size="small">
-                {clients[key].code}
+                {clients[key].id}
               </TableCell>
               <TableCell padding="none" size="small">
                 {clients[key].name}

@@ -41,7 +41,7 @@ class User extends Component {
     },
     page: 0,
     rowsPerPage: 5,
-    order: 'asc',
+    order: 'Asc',
     columnSort: 'user_name',
     search: '',
     messageOpen: false,
@@ -66,7 +66,7 @@ class User extends Component {
       .then(res => this.setState({ countUsers: res.data.value }));
     const skip = page * rowsPerPage;
     userservice
-      .getAll(skip, rowsPerPage, columnSort, columnSort, order, 'rg', filter)
+      .getAll(skip, rowsPerPage, columnSort, columnSort, order, 'Con', filter)
       .then(res => {
         this.setState({
           stateData: 'LIST',
@@ -209,9 +209,9 @@ class User extends Component {
   };
 
   handleSort = property => event => {
-    let order = 'asc';
-    if (this.state.columnSort === property && this.state.order === 'asc') {
-      order = 'desc';
+    let order = 'Asc';
+    if (this.state.columnSort === property && this.state.order === 'Asc') {
+      order = 'Desc';
     }
 
     this.fetchUsers(
