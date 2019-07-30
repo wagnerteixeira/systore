@@ -109,8 +109,8 @@ async function fetchClients(
   }
 
   let filterType = '';
-  if (columnSearch === 'id') filterType = 'eq';
-  else filterType = 'rg';
+  if (columnSearch === 'Code') filterType = 'Eq';
+  else filterType = 'Con';
 
   const _limit = inputValue.trim().split(' ').length < 3 ? 10 : 1000;
 
@@ -119,7 +119,7 @@ async function fetchClients(
     _limit,
     columnSearch,
     columnSearch,
-    'asc',
+    'Asc',
     filterType,
     inputValue
   );
