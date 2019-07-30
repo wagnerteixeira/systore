@@ -110,7 +110,7 @@ async function fetchClients(
 
   let filterType = '';
   if (columnSearch === 'Code') filterType = 'Eq';
-  else filterType = 'Con';
+  else filterType = 'StW';
 
   const _limit = inputValue.trim().split(' ').length < 3 ? 10 : 1000;
 

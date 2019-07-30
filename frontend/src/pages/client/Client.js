@@ -106,7 +106,7 @@ class Client extends Component {
 
     let filterType = '';
     if (columnSearch === 'Id') filterType = 'Eq';
-    else filterType = 'Con';
+    else filterType = 'StW';
 
     clientservice.count(columnSearch, filterType, filter).then(res => {
       console.log(res.data)
