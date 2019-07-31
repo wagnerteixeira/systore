@@ -64,7 +64,7 @@ namespace Systore.Services
         billReceive.ClientId = createBillReceivesDto.ClientId;
         billReceive.PurchaseDate = createBillReceivesDto.PurchaseDate;
         billReceive.Code = nextCode;
-        var ret = await (_repository as IBillReceiveRepository).Add(billReceive);
+        var ret = await (_repository as IBillReceiveRepository).AddAsync(billReceive);
         if (!string.IsNullOrWhiteSpace(ret))
           throw new NotSupportedException(ret);
       }

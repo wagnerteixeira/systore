@@ -274,7 +274,7 @@ function ViewClient(props) {
                 {clients[key].cpf}
               </TableCell>
               <TableCell padding="none" size="small">
-                {getDateToString(clients[key].date_of_birth)}
+                {getDateToString(clients[key].dateOfBirth)}
               </TableCell>
               <TableCell padding="none" align="right">
                 <Fab

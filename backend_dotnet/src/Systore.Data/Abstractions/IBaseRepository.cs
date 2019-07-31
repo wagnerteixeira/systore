@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using Systore.Domain.Entities;
+using System.Linq;
 
 namespace Systore.Data.Abstractions
 {
     public interface IBaseRepository<TEntity>
     {
-        Task<string> Add(TEntity entity);
-        Task<TEntity> Get(int id);
-        IEnumerable<TEntity> GetAll();
+        Task<string> AddAsync(TEntity entity);
+        Task<TEntity> GetAsync(int id);
+        IQueryable<TEntity> GetAll();
         Task<IEnumerable<TEntity>> GetAllAsync();
-        Task<List<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate);
-        Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
-        Task<int> CountAll();
-        Task<int> CountWhere(Expression<Func<TEntity, bool>> predicate);
-        Task<string> Update(TEntity entity);
-        Task<string> Remove(TEntity entity);
-        Task<List<TEntity>> GetWhere(FilterPaginateDto filterPaginateDto);
-        Task<int> CountWhere(IEnumerable<FilterDto> filters);
+        Task<List<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<int> CountAllAsync();
+        Task<int> CountWhereAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<string> UpdateAsync(TEntity entity);
+        Task<string> RemoveAsync(int id);
+        Task<List<TEntity>> GetWhereAsync(FilterPaginateDto filterPaginateDto);
+        Task<int> CountWhereAsync(IEnumerable<FilterDto> filters);
 
 
         void Dispose();

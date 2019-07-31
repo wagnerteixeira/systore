@@ -13,11 +13,5 @@ namespace Systore.Api.Controllers
     {
 
     }
-
-    public override object GetEntityId(User entity)
-    {
-      return $"código {entity.Id} ";
-    }
-
   }
 }

@@ -15,7 +15,7 @@ namespace Systore.Services
         }
 
         public async Task<bool> ExistBillReceiveForClient(int ClientId){
-          return await _billReceiveRepository.CountWhere(c => c.ClientId == ClientId) > 0;
+          return await _billReceiveRepository.CountWhereAsync(c => c.ClientId == ClientId) > 0;
         }
     }
 }

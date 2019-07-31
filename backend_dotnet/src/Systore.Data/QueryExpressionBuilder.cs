@@ -32,6 +32,8 @@ namespace Systore.Data
             return body != null ? Expression.Lambda<Func<T, bool>>(body, param) : null;
         }
 
+
+
         /// <summary>Comparision operator expression generator.</summary>
         /// <param name="param">The parameter.</param>
         /// <param name="filter">The filter.</param>
@@ -104,6 +106,50 @@ namespace Systore.Data
             }
 
             return null;
+        }
+
+        public static Expression GetOrderByExpression<TEntity>(string sortPropertyName)
+        {
+            var param = Expression.Parameter(typeof(TEntity), "t");
+            MemberExpression member = Expression.Property(param, sortPropertyName);
+
+            //QueryExpressionBuilder.GetUnaryExpression(member, )
+            Expression expression;
+            switch (member.Type.Name)
+            {
+                case "Int32":
+                    expression = Expression.Lambda<Func<TEntity, Int32>>(member, param);
+                    break;
+                case "String":
+                    expression = Expression.Lambda<Func<TEntity, string>>(member, param);
+                    break;
+                case "DateTime":
+                    expression = Expression.Lambda<Func<TEntity, DateTime>>(member, param);
+                    break;
+                case "Nullable`1":
+                    var nullableType = Nullable.GetUnderlyingType(member.Type);
+                    switch (nullableType.Name)
+                    {
+                        case "DateTime":
+                            expression = Expression.Lambda<Func<TEntity, DateTime?>>(member, param);
+                            break;
+                        case "Int32":
+                            expression = Expression.Lambda<Func<TEntity, Int32>>(member, param);
+                            break;
+                        default:
+                            expression = Expression.Lambda<Func<TEntity, object>>(member, param);
+                            break;
+                    }
+                    break;
+                default:
+                    expression = Expression.Lambda<Func<TEntity, object>>(member, param);
+                    break;
+            }
+
+            //var orderBy = Expression.Lambda<Func<TEntity, object>>(member, param);
+
+            return expression;
+
         }
 
         #endregion

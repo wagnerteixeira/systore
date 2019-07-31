@@ -13,7 +13,7 @@ import ModalWrapped from '../../components/common/Modal';
 
 const headRows = [
   { id: 'address', numeric: false, disablePadding: false, label: 'Rua' },
-  { id: 'postal_code', numeric: false, disablePadding: false, label: 'Cep' },
+  { id: 'postalCode', numeric: false, disablePadding: false, label: 'Cep' },
   { id: 'neighborhood', numeric: false, disablePadding: false, label: 'Bairro' },
 ];
 
@@ -87,25 +87,25 @@ export function ChoosePostalCode(props) {
   const { open, handleClose, rows, handlePostalCodeChange } = props;
   
   useEffect(() => {
-    let newSelected = [rows.length > 0 ? rows[0].postal_code : ''];    
+    let newSelected = [rows.length > 0 ? rows[0].postalCode : ''];    
     setSelected(newSelected);
   }, [rows])
 
-  function handleClick(event, postal_code) {
-    let newSelected = [].concat(postal_code);
+  function handleClick(event, postalCode) {
+    let newSelected = [].concat(postalCode);
     setSelected(newSelected);
   }
 
   function handleChoosePostalCode() {
     if (selected.length > 0) {
-      let row = rows.find(item => item.postal_code === selected[0]);
+      let row = rows.find(item => item.postalCode === selected[0]);
       let e = { target: { value: row } }      
       handleClose(e, 'sucess');
       handlePostalCodeChange(e, 'choosePostalCode');
     }
   }
 
-  const isSelected = _postal_code => selected.indexOf(_postal_code) !== -1;
+  const isSelected = _postalCode => selected.indexOf(_postalCode) !== -1;
 
   return (
     <ModalWrapped onClose={handleClose} open={open} paperClass={classes.paper}>
@@ -114,13 +114,13 @@ export function ChoosePostalCode(props) {
           <EnhancedTableHead />
           <TableBody>
             {(rows ? rows : []).map((row, index) => {
-              const isItemSelected = isSelected(row.postal_code);
+              const isItemSelected = isSelected(row.postalCode);
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
                 <TableRow
                   hover
-                  onClick={event => handleClick(event, row.postal_code)}
+                  onClick={event => handleClick(event, row.postalCode)}
                   role="checkbox"
                   aria-checked={isItemSelected}
                   tabIndex={-1}
@@ -140,7 +140,7 @@ export function ChoosePostalCode(props) {
                   >
                     {row.address}
                   </TableCell>
-                  <TableCell>{row.postal_code}</TableCell>
+                  <TableCell>{row.postalCode}</TableCell>
                   <TableCell>{row.neighborhood}</TableCell>
                 </TableRow>
               );

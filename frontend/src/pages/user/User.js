@@ -35,14 +35,14 @@ class User extends Component {
     countUsers: 0,
     data: {
       id: '',
-      user_name: '',
-      email: '',
+      userName: '',
+      admin: false,
       password: ''
     },
     page: 0,
     rowsPerPage: 5,
     order: 'Asc',
-    columnSort: 'user_name',
+    columnSort: 'userName',
     search: '',
     messageOpen: false,
     variantMessage: 'success',
@@ -62,7 +62,7 @@ class User extends Component {
 
   fetchUsers = (page, rowsPerPage, columnSort, order, filter) => {
     userservice
-      .count(columnSort, filter)
+      .count(columnSort, 'StW', filter)
       .then(res => this.setState({ countUsers: res.data.value }));
     const skip = page * rowsPerPage;
     userservice
@@ -75,8 +75,7 @@ class User extends Component {
           users: res.data,
           data: {
             id: '',
-            user_name: '',
-            email: '',
+            userName: '',            
             password: '',
             admin: false
           },
@@ -134,10 +133,9 @@ class User extends Component {
         );
     } else {
       let user = {
-        user_name: this.state.data.user_name,
-        email: this.state.data.email,
-        password: this.state.data.password,
-        admin: false
+        userName: this.state.data.userName,
+        admin: this.state.data.admin,
+        password: this.state.data.password,        
       };
       userservice
         .create(user)
@@ -181,7 +179,7 @@ class User extends Component {
       stateData: 'EDIT_INSERT',
       data: {
         id: '',
-        user_name: '',
+        userName: '',
         email: '',
         password: ''
       }

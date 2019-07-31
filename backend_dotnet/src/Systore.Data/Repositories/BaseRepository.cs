@@ -19,73 +19,118 @@ namespace Systore.Data.Repositories
 
         public BaseRepository(IDbContext context)
         {
-            this._context = context;
-            this._entities = _context.Instance.Set<TEntity>();
+            _context = context;
+            _entities = _context.Instance.Set<TEntity>();
         }
 
-        public async virtual Task<string> Add(TEntity entity)
+        public virtual async Task<string> AddAsync(TEntity entity)
         {
-            await this._entities.AddAsync(entity);
-            return await this.SaveChangesAsync();
+            await _entities.AddAsync(entity);
+            return await SaveChangesAsync();
         }
-        public virtual Task<TEntity> Get(int id) => this._entities.FindAsync(id);
+        public virtual async Task<TEntity> GetAsync(int id) => await _entities.FindAsync(id);
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync() => await this._entities.ToListAsync();
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync() => await _entities.ToListAsync();
 
-        public virtual IEnumerable<TEntity> GetAll() => _context.Instance.Set<TEntity>();
+        public virtual IQueryable<TEntity> GetAll() => _entities.Select(x => x);
 
-        public Task<List<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate) => this._entities.Where(predicate).ToListAsync();
-        public Task<List<TEntity>> GetWhere(FilterPaginateDto filterPaginateDto) {
-            var query = this._entities
-                .Where(QueryExpressionBuilder.GetExpression<TEntity>(filterPaginateDto.filters))
+        public virtual async Task<List<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate) => await _entities.Where(predicate).ToListAsync();
+        public virtual async Task<List<TEntity>> GetWhereAsync(FilterPaginateDto filterPaginateDto) {
+            var query = _entities.Select(x => x);
+            if (filterPaginateDto.filters != null)
+                query = query.Where(QueryExpressionBuilder.GetExpression<TEntity>(filterPaginateDto.filters));
+
+            query = query
                 .Skip(filterPaginateDto.Skip)
                 .Take(filterPaginateDto.Limit);
+           
             var param = Expression.Parameter(typeof(TEntity), "t");
-            MemberExpression member = Expression.Property(param, filterPaginateDto.SortPropertyName);
-            var orderBy = Expression.Lambda<Func<TEntity, object>>(member, param);
-            if (filterPaginateDto.Order == Order.Asc)
-                return query.OrderBy(orderBy).ToListAsync();
-            else
-                return query.OrderByDescending(orderBy).ToListAsync();
-
+            MemberExpression member = Expression.Property(param, filterPaginateDto.SortPropertyName);           
+            
+            switch (member.Type.Name)
+            {
+                case "Int32":
+                    var int32Expression = Expression.Lambda<Func<TEntity, Int32>>(member, param);
+                    if (filterPaginateDto.Order == Order.Asc)
+                        return await query.OrderBy(int32Expression).ToListAsync();
+                    else
+                        return await query.OrderByDescending(int32Expression).ToListAsync();
+                    
+                case "String":
+                    var stringExpression = Expression.Lambda<Func<TEntity, string>>(member, param);
+                    if (filterPaginateDto.Order == Order.Asc)
+                        return await query.OrderBy(stringExpression).ToListAsync();
+                    else
+                        return await query.OrderByDescending(stringExpression).ToListAsync();                    
+                case "DateTime":
+                    var dateTimeExpression = Expression.Lambda<Func<TEntity, string>>(member, param);
+                    if (filterPaginateDto.Order == Order.Asc)
+                        return await query.OrderBy(dateTimeExpression).ToListAsync();
+                    else
+                        return await query.OrderByDescending(dateTimeExpression).ToListAsync();                    
+                case "Nullable`1":
+                    var nullableType = Nullable.GetUnderlyingType(member.Type);
+                    switch (nullableType.Name)
+                    {
+                        case "DateTime":
+                            var nullDateTimeExpression = Expression.Lambda<Func<TEntity, DateTime?>>(member, param);
+                            if (filterPaginateDto.Order == Order.Asc)
+                                return await query.OrderBy(nullDateTimeExpression).ToListAsync();
+                            else
+                                return await query.OrderByDescending(nullDateTimeExpression).ToListAsync();
+                        case "Int32":
+                            var nullInt32Expression = Expression.Lambda<Func<TEntity, Int32?>>(member, param);
+                            if (filterPaginateDto.Order == Order.Asc)
+                                return await query.OrderBy(nullInt32Expression).ToListAsync();
+                            else
+                                return await query.OrderByDescending(nullInt32Expression).ToListAsync();
+                        default:
+                            var nullObjExpression = Expression.Lambda<Func<TEntity, object>>(member, param);
+                            if (filterPaginateDto.Order == Order.Asc)
+                                return await query.OrderBy(nullObjExpression).ToListAsync();
+                            else
+                                return await query.OrderByDescending(nullObjExpression).ToListAsync();                            
+                    }
+                default:
+                    var objExpression = Expression.Lambda<Func<TEntity, object>>(member, param);
+                    if (filterPaginateDto.Order == Order.Asc)
+                        return await query.OrderBy(objExpression).ToListAsync();
+                    else
+                        return await query.OrderByDescending(objExpression).ToListAsync();                    
+            }
         }
 
-        public Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> predicate) => this._entities.FirstOrDefaultAsync(predicate);
+        public virtual async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) => await _entities.FirstOrDefaultAsync(predicate);
 
-        public Task<int> CountAll() => this._entities.CountAsync();
-        public Task<int> CountWhere(Expression<Func<TEntity, bool>> predicate) => this._entities.CountAsync(predicate);
-        public Task<int> CountWhere(IEnumerable<FilterDto> filters) => this._entities.CountAsync(QueryExpressionBuilder.GetExpression<TEntity>(filters));
+        public virtual async Task<int> CountAllAsync() => await _entities.CountAsync();
+        public virtual async Task<int> CountWhereAsync(Expression<Func<TEntity, bool>> predicate) => await _entities.CountAsync(predicate);
+        public virtual async Task<int> CountWhereAsync(IEnumerable<FilterDto> filters) => await _entities.CountAsync(QueryExpressionBuilder.GetExpression<TEntity>(filters));
 
 
-        public virtual Task<string> Update(TEntity entity)
+        public virtual async Task<string> UpdateAsync(TEntity entity)
         {
             // In case AsNoTracking is used
             _context.Instance.Entry(entity).State = EntityState.Modified;
-            return this.SaveChangesAsync();
+            return await SaveChangesAsync();
         }
 
-        public virtual Task<string> Remove(TEntity entity)
+        public virtual async Task<string> RemoveAsync(int id)
         {
+            var entity = await _entities.FindAsync(id);
             _context.Instance.Remove(entity);
-            return this.SaveChangesAsync();
+            return await SaveChangesAsync();
         }
 
-        public Task<int> ExecuteCommandAsync(string command, params object[] parameters)
+        public virtual async Task<int> ExecuteCommandAsync(string command, params object[] parameters)
         {
-            return _context.Instance.Database.ExecuteSqlCommandAsync(command, parameters);
+            return await _context.Instance.Database.ExecuteSqlCommandAsync(command, parameters);
         }
-
-        public int ExecuteCommand(string command, params object[] parameters)
-        {
-            return _context.Instance.Database.ExecuteSqlCommand(command, parameters);
-        }
-
-
-        protected async virtual Task<string> SaveChangesAsync()
+        
+        protected virtual async Task<string> SaveChangesAsync()
         {
             try
             {
-                await this._context.Instance.SaveChangesAsync();
+                await _context.Instance.SaveChangesAsync();
                 return "";
             }
             /*

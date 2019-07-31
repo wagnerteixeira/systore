@@ -177,7 +177,7 @@ class Client extends Component {
   };
 
   checkDateBirth = () => {
-    if (this.state.data.date_of_birth > getCurrentDate()) {
+    if (this.state.data.dateOfBirth > getCurrentDate()) {
       this.setState({
         messageOpen: true,
         messageText: 'Data de nascimento não pode ser maior que a data atual',
@@ -193,16 +193,16 @@ class Client extends Component {
         id: 0,
         name: '',
         cpf: '',
-        registry_date: new Date(),
-        date_of_birth: null,
-        place_of_birth: '',
+        registryDate: new Date(),
+        dateOfBirth: null,
+        placeOfBirth: '',
         address: '',
         neighborhood: '',
         city: '',
         state: '',
-        postal_code: '',
+        postalCode: '',
         seller: '',
-        job_name: '',
+        jobName: '',
         occupation: '',
         spouse: '',
         phone1: '',
@@ -220,7 +220,7 @@ class Client extends Component {
   handlePostalCodeChange = (event, origin) => {
     if (origin === 'textFieldCep') {
       this.setState({
-        data: { ...this.state.data, postal_code: event.target.value },
+        data: { ...this.state.data, postalCode: event.target.value },
       });
       if (event.target.value.length === 8) {
         axios
@@ -250,7 +250,7 @@ class Client extends Component {
     }
     else if (origin === 'choosePostalCode') {
       this.setState({
-        data: { ...this.state.data, postal_code: event.target.value.postal_code, address: event.target.value.address, neighborhood: event.target.value.neighborhood },
+        data: { ...this.state.data, postalCode: event.target.value.postalCode, address: event.target.value.address, neighborhood: event.target.value.neighborhood },
       });
     };
   };

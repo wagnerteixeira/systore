@@ -19,29 +19,29 @@ namespace Systore.Services
             this._repository = repository;
         }
 
-        public Task<string> Add(TEntity entity) => _repository.Add(entity);
+        public virtual Task<string> AddAsync(TEntity entity) => _repository.AddAsync(entity);
 
-        public Task<TEntity> Get(int id) => _repository.Get(id);
+        public virtual Task<TEntity> GetAsync(int id) => _repository.GetAsync(id);
 
-        public Task<IEnumerable<TEntity>> GetAllAsync() => _repository.GetAllAsync();
+        public virtual Task<IEnumerable<TEntity>> GetAllAsync() => _repository.GetAllAsync();
 
 
-        public IEnumerable<TEntity> GetAll() => _repository.GetAll();
+        public virtual IQueryable<TEntity> GetAll() => _repository.GetAll();
 
-        public Task<List<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate) => _repository.GetWhere(predicate);
-        public Task<List<TEntity>> GetWhere(FilterPaginateDto filterPaginateDto) => _repository.GetWhere(filterPaginateDto);
+        public virtual Task<List<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate) => _repository.GetWhereAsync(predicate);
+        public virtual Task<List<TEntity>> GetWhereAsync(FilterPaginateDto filterPaginateDto) => _repository.GetWhereAsync(filterPaginateDto);
 
-        public Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> predicate) => _repository.FirstOrDefault(predicate);
+        public virtual Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) => _repository.FirstOrDefaultAsync(predicate);
 
-        public Task<int> CountAll() => _repository.CountAll();
+        public virtual Task<int> CountAllAsync() => _repository.CountAllAsync();
 
-        public Task<int> CountWhere(Expression<Func<TEntity, bool>> predicate) => _repository.CountWhere(predicate);
+        public virtual Task<int> CountWhereAsync(Expression<Func<TEntity, bool>> predicate) => _repository.CountWhereAsync(predicate);
 
-        public Task<int> CountWhere(IEnumerable<FilterDto> filters) => _repository.CountWhere(filters);
+        public virtual Task<int> CountWhereAsync(IEnumerable<FilterDto> filters) => _repository.CountWhereAsync(filters);
 
-        public Task<string> Update(TEntity entity) => _repository.Update(entity);
+        public virtual Task<string> UpdateAsync(TEntity entity) => _repository.UpdateAsync(entity);
 
-        public Task<string> Remove(TEntity entity) => _repository.Remove(entity);
+        public virtual Task<string> RemoveAsync(int id) => _repository.RemoveAsync(id);
 
 
     }

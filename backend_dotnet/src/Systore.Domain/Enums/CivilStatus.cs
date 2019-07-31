@@ -5,7 +5,7 @@ namespace Systore.Domain.Enums
   {
     NotMarried,
     Married,
-    Divordced,
+    Divorced,
     Separete,
     Widower
   }

@@ -18,7 +18,7 @@ namespace Systore.Data.Repositories
     }
 
     public Task<int> CountBillReceivesByClient(int clientId) =>
-      CountWhere(c => c.ClientId == clientId);
+      CountWhereAsync(c => c.ClientId == clientId);
 
     public Task<List<BillReceive>> GetBillReceivesByClient(int ClientId)
     {

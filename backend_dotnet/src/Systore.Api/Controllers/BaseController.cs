@@ -32,8 +32,7 @@ namespace Systore.Api.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]        
         // GET: api/Entity
         public virtual async Task<IActionResult> GetAllAsync()
         {
@@ -53,7 +52,7 @@ namespace Systore.Api.Controllers
         {
             try
             {
-                return Ok(await _service.Get(id));
+                return Ok(await _service.GetAsync(id));
             }
             catch (Exception e)
             {
@@ -68,7 +67,7 @@ namespace Systore.Api.Controllers
         {
             try
             {
-                string ret = await _service.Add(entity);
+                string ret = await _service.AddAsync(entity);
                 if (string.IsNullOrWhiteSpace(ret))
                     return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
                 else
@@ -79,14 +78,13 @@ namespace Systore.Api.Controllers
                 return SendBadRequest(e);
             }
         }
-        [HttpPut]
-        [Route("")]
+        [HttpPut("")]        
         // PUT: api/Entity
         public async virtual Task<IActionResult> Put([FromBody]TEntity entity)
         {
             try
             {
-                string ret = await _service.Update(entity);
+                string ret = await _service.UpdateAsync(entity);
                 if (string.IsNullOrWhiteSpace(ret))
                     return Ok(entity);
                 else
@@ -98,14 +96,13 @@ namespace Systore.Api.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("")]
+        [HttpDelete("{id:int}")]        
         // DELETE: api/Entity
-        public async virtual Task<IActionResult> Delete([FromBody]TEntity entity)
+        public async virtual Task<IActionResult> Delete([FromRoute]int id)
         {
             try
             {
-                string ret = await _service.Remove(entity);
+                string ret = await _service.RemoveAsync(id);
                 if (string.IsNullOrWhiteSpace(ret))
                     return Ok("");
                 else
@@ -180,7 +177,7 @@ namespace Systore.Api.Controllers
         {
             try
             {
-                var count = await _service.CountWhere(filterDto);
+                var count = await _service.CountWhereAsync(filterDto);
 
                 return Ok(count);
 
@@ -196,7 +193,7 @@ namespace Systore.Api.Controllers
         {
             try
             {
-                var count = await _service.GetWhere(filterPaginateDto);
+                var count = await _service.GetWhereAsync(filterPaginateDto);
 
                 return Ok(count);
 
