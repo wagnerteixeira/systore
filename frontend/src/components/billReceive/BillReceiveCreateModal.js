@@ -59,20 +59,20 @@ const styles = theme => ({
 
 class BillReceiveCreateModal extends React.Component {
   state = {
-    code: '',
-    quotas: 0,
-    original_value: 0.0,
-    purchase_date: new Date(),
-    vendor: '',
-    messageOpen: false,
-    variantMessage: 'success',
-    messageText: '',
-    bills_receives: [],
-    inSaving: false,
+    Code: '',
+    Quotas: 0,
+    OriginalValue: 0.0,
+    PurchaseDate: new Date(),
+    Vendor: '',
+    MessageOpen: false,
+    VariantMessage: 'success',
+    MessageText: '',
+    BillsReceive: [],
+    InSaving: false,
   };
 
   handleMessageClose = () => {
-    this.setState({ messageOpen: false });
+    this.setState({ MessageOpen: false });
   };
 
   handleValueChange = name => event => {
@@ -80,14 +80,14 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleOriginalValueChange = event => {
-    this.setState({ original_value: event.target.value });
+    this.setState({ OriginalValue: event.target.value });
   };
 
   handleValueChangeInterest = event => {
     this.setState({
-      interest: event.target.value,
-      pay_value:
-        parseFloat(this.state.original_value) + parseFloat(event.target.value),
+      Interest: event.target.value,
+      PayValue:
+        parseFloat(this.state.OriginalValue) + parseFloat(event.target.value),
     });
   };
 
@@ -95,134 +95,135 @@ class BillReceiveCreateModal extends React.Component {
     this.setState({ [name]: date });
   };
 
-  validadeSaveQuotas = original_value => {
+  validadeSaveQuotas = OriginalValue => {
     let message = '';
-    if (!original_value || original_value <= 0)
+    if (!OriginalValue || OriginalValue <= 0)
       message += 'Informe o valor!\n\n';
-    if (!this.state.quotas || this.state.quotas <= 0)
+    if (!this.state.Quotas || this.state.Quotas <= 0)
       message += 'Informe as parcelas!\n\n';
-    if (!this.state.bills_receives || this.state.bills_receives.length <= 0)
+    if (!this.state.BillsReceive || this.state.BillsReceive.length <= 0)
       message += 'Faça o cálculo das parcelas!\n\n';
-    if (!this.state.purchase_date) message += 'Informe a data da venda!\n\n';
-    if (!this.state.vendor || this.state.vendor === '')
+    if (!this.state.PurchaseDate) message += 'Informe a data da venda!\n\n';
+    if (!this.state.Vendor || this.state.Vendor === '')
       message += 'Informe o vendedor!\n\n';
     return message;
   };
 
   handleGenerateQuotas = () => {
     if (
-      typeof this.state.original_value === 'string' &&
-      this.state.original_value.length === 0
+      typeof this.state.OriginalValue === 'string' &&
+      this.state.OriginalValue.length === 0
     )
       return;
-    console.log(this.state.original_value);
 
     let _original_value = 0.0;
-    if (typeof original_value == 'string') {
-      if (this.state.original_value.length > 0)
+    if (typeof OriginalValue == 'string') {
+      if (this.state.OriginalValue.length > 0)
         _original_value = accounting.unformat(
-          this.state.original_value.replace('.', ',')
+          this.state.OriginalValue.replace('.', ',')
         );
-    } else _original_value = this.state.original_value;
-    if (_original_value > 0 && this.state.quotas > 0) {
+    } else _original_value = this.state.OriginalValue;
+    if (_original_value > 0 && this.state.Quotas > 0) {
       let _quotaValue = accounting.unformat(
-        accounting.formatNumber(_original_value / this.state.quotas, 1)
+        accounting.formatNumber(_original_value / this.state.Quotas, 1)
       );
       let quotaOfAdjustment =
-        _original_value - (this.state.quotas - 1) * _quotaValue;
+        _original_value - (this.state.Quotas - 1) * _quotaValue;
       let quotas = [];
       let i = 0;
-      let due_date = new Date(this.state.purchase_date.getTime());
-      for (i = 0; i < this.state.quotas; i++) {
+      let due_date = new Date(this.state.PurchaseDate.getTime());
+      for (i = 0; i < this.state.Quotas; i++) {
         let original_value_quota = _quotaValue;
         due_date.setMonth(due_date.getMonth() + 1);
         if (i === 0) {
           quotas.push({
-            quota: i + 1,
-            due_date: new Date(due_date.getTime()),
-            original_value: accounting.formatNumber(quotaOfAdjustment),
+            Quota: i + 1,
+            DueDate: new Date(due_date.getTime()),
+            OriginalValue: accounting.formatNumber(quotaOfAdjustment),
           });
         } else {
           quotas.push({
-            quota: i + 1,
-            due_date: new Date(due_date.getTime()),
-            original_value: accounting.formatNumber(original_value_quota),
+            Quota: i + 1,
+            DueDate: new Date(due_date.getTime()),
+            OriginalValue: accounting.formatNumber(original_value_quota),
           });
         }
       }
       this.setState({
-        bills_receives: quotas,
+        BillsReceive: quotas,
       });
     } else {
       this.setState({
-        messageOpen: true,
-        messageText: 'Informe o valor e a quantidade de parcelas!',
-        variantMessage: 'warning',
+        MessageOpen: true,
+        MessageText: 'Informe o valor e a quantidade de parcelas!',
+        VariantMessage: 'warning',
       });
     }
   };
 
   handleSaveQuotas = clientId => onClose => () => {
-    this.setState({ inSaving: true });
+    this.setState({ InSaving: true });
     let _original_value = accounting.unformat(
-      this.state.original_value.replace('.', ',')
+      this.state.OriginalValue.replace('.', ',')
     );
     let message = this.validadeSaveQuotas(_original_value);
     if (message !== '') {
       this.setState({
-        messageOpen: true,
-        messageText: message,
-        variantMessage: 'warning',
-        inSaving: false,
+        MessageOpen: true,
+        MessageText: message,
+        VariantMessage: 'warning',
+        InSaving: false,
       });
       return;
     }
     let data = {
-      original_value: _original_value,
-      quotas: this.state.quotas,
-      vendor: this.state.vendor,
-      purchase_date: this.state.purchase_date,
-      bills_receives: this.state.bills_receives.map(bills_receive => {
+      ClientId: clientId,
+      OriginalValue: _original_value,
+      Quotas: this.state.Quotas,
+      Vendor: this.state.Vendor,
+      PurchaseDate: this.state.PurchaseDate,
+      BillReceives: this.state.BillsReceive.map(bills_receive => {
         return {
           ...bills_receive,
-          original_value: accounting.unformat(bills_receive.original_value),
+          OriginalValue: accounting.unformat(bills_receive.OriginalValue),
         };
       }),
     };
 
+
     billsReceiveService
-      .createQuotas(clientId, data)
+      .createBillReceives(data)
       .then(res => {
         console.log(res.data);
         this.setState({
-          code: '',
-          quotas: 0,
-          original_value: 0.0,
-          purchase_date: new Date(),
-          vendor: '',
-          bills_receives: [],
-          inSaving: false,
+          Code: '',
+          Quotas: 0,
+          OriginalValue: 0.0,
+          PurchaseDate: new Date(),
+          Vendor: '',
+          BillsReceive: [],
+          InSaving: false,
         });
         onClose(res.data, 'created');
       })
       .catch(error =>
         this.setState({
-          messageOpen: true,
-          messageText: getErrosFromApi(error),
-          variantMessage: 'error',
-          inSaving: false,
+          MessageOpen: true,
+          MessageText: getErrosFromApi(error),
+          VariantMessage: 'error',
+          InSaving: false,
         })
       );
   };
 
   handleCancel = () => {
     this.setState({
-      code: '',
-      quotas: 0,
-      original_value: 0.0,
-      purchase_date: new Date(),
-      vendor: '',
-      bills_receives: [],
+      Code: '',
+      Quotas: 0,
+      OriginalValue: 0.0,
+      PurchaseDate: new Date(),
+      Vendor: '',
+      BillsReceive: [],
     });
 
     this.props.onClose(null, 'cancel');
@@ -230,45 +231,45 @@ class BillReceiveCreateModal extends React.Component {
 
   /*handleChangeDateInGrid = key => (date, other) => {
     console.log(other);
-    let bills_receives = [...this.state.bills_receives];
-    bills_receives[key] = { ...bills_receives[key], due_date: date };
+    let BillsReceive = [...this.state.BillsReceive];
+    BillsReceive[key] = { ...BillsReceive[key], due_date: date };
     this.setState({
-      bills_receives: bills_receives,
+      BillsReceive: BillsReceive,
     });
   };*/
 
   handleChangeDateInGrid = key => date => {
     let due_date = new Date(date);
-    const newBillsReceives = this.state.bills_receives.map(
+    const newBillsReceives = this.state.BillsReceive.map(
       (billReceive, index) => {
         if (parseInt(key) === 0) {
-          if (index === 0) return { ...billReceive, due_date: date };
+          if (index === 0) return { ...billReceive, DueDate: date };
           else {
             due_date.setMonth(due_date.getMonth() + 1);
-            return { ...billReceive, due_date: new Date(due_date) };
+            return { ...billReceive, DueDate: new Date(due_date) };
           }
         } else {
           return parseInt(key) === index
-            ? { ...billReceive, due_date: date }
+            ? { ...billReceive, DueDate: date }
             : billReceive;
         }
       }
     );
     this.setState({
-      bills_receives: newBillsReceives,
+      BillsReceive: newBillsReceives,
     });
   };
 
   handleValueChangeInGrig = (key, name) => event => {
-    let bills_receives = [...this.state.bills_receives];
-    bills_receives[key] = {
-      ...bills_receives[key],
+    let BillsReceive = [...this.state.BillsReceive];
+    BillsReceive[key] = {
+      ...BillsReceive[key],
       [name]: accounting.formatNumber(
         accounting.unformat(event.target.value.replace('.', ','))
       ),
     };
     this.setState({
-      bills_receives: bills_receives,
+      BillsReceive: BillsReceive,
     });
   };
 
@@ -276,29 +277,29 @@ class BillReceiveCreateModal extends React.Component {
     const { open, onClose, classes, clientId } = this.props;
 
     const {
-      original_value,
-      purchase_date,
-      vendor,
-      quotas,
-      bills_receives,
-      messageOpen,
-      variantMessage,
-      messageText,
+      OriginalValue,
+      PurchaseDate,
+      Vendor,
+      Quotas,
+      BillsReceive,
+      MessageOpen,
+      VariantMessage,
+      MessageText,
     } = this.state;
     let _original_value = '';
-    if (typeof original_value == 'string') {
-      if (original_value.length > 0)
+    if (typeof OriginalValue == 'string') {
+      if (OriginalValue.length > 0)
         _original_value = accounting.formatNumber(
-          accounting.unformat(original_value.replace('.', ','))
+          accounting.unformat(OriginalValue.replace('.', ','))
         );
-    } else _original_value = accounting.formatNumber(original_value);
+    } else _original_value = accounting.formatNumber(OriginalValue);
     return (
       <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
         <MessageSnackbar
           onClose={this.handleMessageClose}
-          open={messageOpen}
-          variant={variantMessage}
-          message={messageText}
+          open={MessageOpen}
+          variant={VariantMessage}
+          message={MessageText}
         />
         <Grid className={classes.itens} container spacing={3}>
           <Grid
@@ -324,11 +325,11 @@ class BillReceiveCreateModal extends React.Component {
             xl={4}
           >
             <KeyboardDatePicker
-              id="purchase_date"
+              id="PurchaseDate"
               label="Data da venda"
               className={classes.margin}
-              value={purchase_date}
-              onChange={this.handleDateValueChange('purchase_date')}
+              value={PurchaseDate}
+              onChpnge={this.handleDateValueChange('PurchaseDate')}
               margin="normal"
               format={'dd/MM/yyyy'}
               fullWidth
@@ -370,8 +371,8 @@ class BillReceiveCreateModal extends React.Component {
               id="quotas"
               label="Parcelas"
               className={classes.margin}
-              value={quotas === 0 ? '' : quotas}
-              onChange={this.handleValueChange('quotas')}
+              value={Quotas === 0 ? '' : Quotas}
+              onChange={this.handleValueChange('Quotas')}
               margin="normal"
               fullWidth
             />
@@ -416,8 +417,8 @@ class BillReceiveCreateModal extends React.Component {
               id="vendor"
               label="Nome do vendedor"
               className={classes.margin}
-              value={vendor}
-              onChange={this.handleValueChange('vendor')}
+              value={Vendor}
+              onChange={this.handleValueChange('Vendor')}
               fullWidth
             />
           </Grid>
@@ -432,16 +433,16 @@ class BillReceiveCreateModal extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Object.keys(bills_receives).map(key => (
+              {Object.keys(BillsReceive).map(key => (
                 <TableRow hover key={key}>
                   <TableCell component="th" scope="row">
-                    {bills_receives[key].quota}
+                    {BillsReceive[key].Quota}
                   </TableCell>
                   <TableCell align="left">
                     <KeyboardDatePicker
-                      id="purchase_date"
+                      id="PurchaseDate"
                       className={classes.margin}
-                      value={bills_receives[key].due_date}
+                      value={BillsReceive[key].DueDate}
                       onChange={this.handleChangeDateInGrid(key)}
                       margin="normal"
                       format={'dd/MM/yyyy'}
@@ -454,12 +455,12 @@ class BillReceiveCreateModal extends React.Component {
                   <TableCell align="left">
                     <TextField
                       className={classes.margin}
-                      value={bills_receives[key].original_value}
+                      value={BillsReceive[key].OriginalValue}
                       onChange={this.handleValueChangeInGrig(
                         key,
-                        'original_value'
+                        'OriginalValue'
                       )}
-                      id="original_value"
+                      id="OriginalValue"
                       InputProps={{
                         inputComponent: NumberFormatCustom,
                       }}
@@ -476,7 +477,7 @@ class BillReceiveCreateModal extends React.Component {
             variant="outlined"
             color="primary"
             className={classes.button}
-            disabled={this.state.inSaving}
+            Iisabled={this.state.InSaving}
             onClick={this.handleSaveQuotas(clientId)(onClose)}
           >
             Salvar
@@ -484,7 +485,7 @@ class BillReceiveCreateModal extends React.Component {
           <Button
             variant="outlined"
             color="secondary"
-            disabled={this.state.inSaving}
+            Iisabled={this.state.InSaving}
             className={classes.button}
             onClick={this.handleCancel}
           >
