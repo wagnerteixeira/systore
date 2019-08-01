@@ -144,10 +144,8 @@ function _MenuAcoes(props) {
       )}
       <MenuItem
         onClick={() => {
-          handleSaveClient(() => {
             handlePrintBillReceiveGroupByCode(billReceiveKey);
             handleCloseMenuAcoes();
-          });
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -155,10 +153,8 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-          handleSaveClient(() => {
             handlePrintBillReceive(billReceiveKey);
-            handleCloseMenuAcoes();
-          });
+            handleCloseMenuAcoes();          
         }}
       >
         <Icon className={classes.iconPadding}>print </Icon>
@@ -166,10 +162,8 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-          handleSaveClient(() => {
             handlePrintBillReceivesOpen();
             handleCloseMenuAcoes();
-          });
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
