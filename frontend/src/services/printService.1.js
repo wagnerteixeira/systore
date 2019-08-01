@@ -14,17 +14,17 @@ const createPageForPrint = (clientData, billReceive) => {
   items.push({ text: clientData.name, x: 74, y: 18 }); //nome_cliente
   //linha 2
   items.push({ text: billReceive.vendor, x: 8, y: 29 }); //vendedor
-  items.push({ text: getDateToString(billReceive.due_date), x: 40, y: 29 }); //data_vencimento
+  items.push({ text: getDateToString(billReceive.dueDate), x: 40, y: 29 }); //data_vencimento
   items.push({
     text: `${billReceive.code}/${billReceive.quota}`,
     x: 74,
     y: 29
   }); //numero_compra
   items.push({ text: clientData.id, x: 97, y: 29 }); //cod_cliente
-  items.push({ text: getDateToString(billReceive.due_date), x: 128, y: 29 }); //data_vencimento
+  items.push({ text: getDateToString(billReceive.dueDate), x: 128, y: 29 }); //data_vencimento
   //linha 3
   items.push({
-    text: getNumberDecimalToString(billReceive.original_value),
+    text: getNumberDecimalToString(billReceive.originalValue),
     x: 44,
     y: 43
   }); //valor
@@ -35,7 +35,7 @@ const createPageForPrint = (clientData, billReceive) => {
   }); //data_compra
   items.push({ text: billReceive.vendor, x: 97, y: 41 }); //vendedor
   items.push({
-    text: getNumberDecimalToString(billReceive.original_value),
+    text: getNumberDecimalToString(billReceive.originalValue),
     x: 133,
     y: 42
   }); //valor

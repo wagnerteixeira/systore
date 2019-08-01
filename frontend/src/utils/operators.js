@@ -43,8 +43,8 @@ export const getDateTimeToString = date => {
 };
 
 export const getNumberDecimalToStringCurrency = number => {
-  if (number && number['$numberDecimal'])
-    return `${parseFloat(number['$numberDecimal']).toLocaleString('pt-BR', {
+  if (number && number)
+    return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })}`;
@@ -52,8 +52,8 @@ export const getNumberDecimalToStringCurrency = number => {
 };
 
 export const getNumberDecimalToString = number => {
-  if (number && number['$numberDecimal'])
-    return `${parseFloat(number['$numberDecimal']).toLocaleString('pt-BR', {
+  if (number && number)
+    return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })}`;
@@ -78,13 +78,13 @@ export const getNumberToString2 = number => {
   else return '0,00';
 };
 
-export const getDelayedDays = (due_date, pay_date) => {
-  let days = moment(pay_date).startOf('day').diff(moment(due_date).startOf('day'), 'days');
+export const getDelayedDays = (dueDate, pay_date) => {
+  let days = moment(pay_date).startOf('day').diff(moment(dueDate).startOf('day'), 'days');
   return days;
 };
 
-export const getValueWithInterest = (value, due_date, pay_date) => {
-  let days = getDelayedDays(due_date, pay_date);
+export const getValueWithInterest = (value, dueDate, pay_date) => {
+  let days = getDelayedDays(dueDate, pay_date);
   let p = 0;
   if (days >= 5) {
     p = (0.07 / 30) * days;
@@ -96,8 +96,8 @@ export const getValueWithInterest = (value, due_date, pay_date) => {
   }
 };
 
-export const getValueInterest = (value, due_date, pay_date) => {
-  let days = getDelayedDays(due_date, pay_date);
+export const getValueInterest = (value, dueDate, pay_date) => {
+  let days = getDelayedDays(dueDate, pay_date);
   console.log(days);
   let p = 0;
   if (days >= 5) {

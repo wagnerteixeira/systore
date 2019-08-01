@@ -116,36 +116,36 @@ class BillReceiveCreateModal extends React.Component {
     )
       return;
 
-    let _original_value = 0.0;
-    if (typeof originalValue == 'string') {
-      if (this.state.originalValue.length > 0)
-        _original_value = accounting.unformat(
-          this.state.originalValue.replace('.', ',')
+    let _originalValue = 0.0;
+    if (typeof OriginalValue == 'string') {
+      if (this.state.OriginalValue.length > 0)
+        _originalValue = accounting.unformat(
+          this.state.OriginalValue.replace('.', ',')
         );
-    } else _original_value = this.state.originalValue;
-    if (_original_value > 0 && this.state.quotas > 0) {
+    } else _originalValue = this.state.OriginalValue;
+    if (_originalValue > 0 && this.state.Quotas > 0) {
       let _quotaValue = accounting.unformat(
-        accounting.formatNumber(_original_value / this.state.quotas, 1)
+        accounting.formatNumber(_originalValue / this.state.Quotas, 1)
       );
       let quotaOfAdjustment =
-        _original_value - (this.state.quotas - 1) * _quotaValue;
+        _originalValue - (this.state.Quotas - 1) * _quotaValue;
       let quotas = [];
       let i = 0;
-      let due_date = new Date(this.state.PurchaseDate.getTime());
-      for (i = 0; i < this.state.quotas; i++) {
-        let original_value_quota = _quotaValue;
-        due_date.setMonth(due_date.getMonth() + 1);
+      let dueDate = new Date(this.state.PurchaseDate.getTime());
+      for (i = 0; i < this.state.Quotas; i++) {
+        let originalValue_quota = _quotaValue;
+        dueDate.setMonth(dueDate.getMonth() + 1);
         if (i === 0) {
           quotas.push({
             Quota: i + 1,
-            DueDate: new Date(due_date.getTime()),
-            originalValue: accounting.formatNumber(quotaOfAdjustment),
+            DueDate: new Date(dueDate.getTime()),
+            OriginalValue: accounting.formatNumber(quotaOfAdjustment),
           });
         } else {
           quotas.push({
             Quota: i + 1,
-            DueDate: new Date(due_date.getTime()),
-            originalValue: accounting.formatNumber(original_value_quota),
+            DueDate: new Date(dueDate.getTime()),
+            OriginalValue: accounting.formatNumber(originalValue_quota),
           });
         }
       }
@@ -163,10 +163,17 @@ class BillReceiveCreateModal extends React.Component {
 
   handleSavequotas = clientId => onClose => () => {
     this.setState({ InSaving: true });
+<<<<<<< HEAD
     let _original_value = accounting.unformat(
       this.state.originalValue.replace('.', ',')
     );
     let message = this.validadeSavequotas(_original_value);
+=======
+    let _originalValue = accounting.unformat(
+      this.state.OriginalValue.replace('.', ',')
+    );
+    let message = this.validadeSaveQuotas(_originalValue);
+>>>>>>> e8a4538cc4419ce2b86c71d9943182879f98c209
     if (message !== '') {
       this.setState({
         MessageOpen: true,
@@ -178,8 +185,13 @@ class BillReceiveCreateModal extends React.Component {
     }
     let data = {
       ClientId: clientId,
+<<<<<<< HEAD
       originalValue: _original_value,
       quotas: this.state.quotas,
+=======
+      OriginalValue: _originalValue,
+      Quotas: this.state.Quotas,
+>>>>>>> e8a4538cc4419ce2b86c71d9943182879f98c209
       Vendor: this.state.Vendor,
       PurchaseDate: this.state.PurchaseDate,
       BillReceives: this.state.BillsReceive.map(bills_receive => {
@@ -232,21 +244,21 @@ class BillReceiveCreateModal extends React.Component {
   /*handleChangeDateInGrid = key => (date, other) => {
     console.log(other);
     let BillsReceive = [...this.state.BillsReceive];
-    BillsReceive[key] = { ...BillsReceive[key], due_date: date };
+    BillsReceive[key] = { ...BillsReceive[key], dueDate: date };
     this.setState({
       BillsReceive: BillsReceive,
     });
   };*/
 
   handleChangeDateInGrid = key => date => {
-    let due_date = new Date(date);
+    let dueDate = new Date(date);
     const newBillsReceives = this.state.BillsReceive.map(
       (billReceive, index) => {
         if (parseInt(key) === 0) {
           if (index === 0) return { ...billReceive, DueDate: date };
           else {
-            due_date.setMonth(due_date.getMonth() + 1);
-            return { ...billReceive, DueDate: new Date(due_date) };
+            dueDate.setMonth(dueDate.getMonth() + 1);
+            return { ...billReceive, DueDate: new Date(dueDate) };
           }
         } else {
           return parseInt(key) === index
@@ -286,6 +298,7 @@ class BillReceiveCreateModal extends React.Component {
       VariantMessage,
       MessageText,
     } = this.state;
+<<<<<<< HEAD
     let _original_value = '';
     if (typeof originalValue == 'string') {
       if (originalValue.length > 0)
@@ -293,6 +306,15 @@ class BillReceiveCreateModal extends React.Component {
           accounting.unformat(originalValue.replace('.', ','))
         );
     } else _original_value = accounting.formatNumber(originalValue);
+=======
+    let _originalValue = '';
+    if (typeof OriginalValue == 'string') {
+      if (OriginalValue.length > 0)
+        _originalValue = accounting.formatNumber(
+          accounting.unformat(OriginalValue.replace('.', ','))
+        );
+    } else _originalValue = accounting.formatNumber(OriginalValue);
+>>>>>>> e8a4538cc4419ce2b86c71d9943182879f98c209
     return (
       <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
         <MessageSnackbar
@@ -350,9 +372,9 @@ class BillReceiveCreateModal extends React.Component {
             <TextField
               className={classes.margin}
               label="Valor"
-              value={_original_value}
+              value={_originalValue}
               onChange={this.handleOriginalValueChange}
-              id="original_value"
+              id="originalValue"
               InputProps={{
                 inputComponent: NumberFormatCustom,
               }}
