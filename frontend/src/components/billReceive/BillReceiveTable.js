@@ -461,8 +461,8 @@ function BillReceiveTable(props) {
           <TableBody>
             {Object.keys(billsReceive).map(key => {
               let _daysDelay =
-                billsReceive[key].pay_date != null
-                  ? billsReceive[key].days_delay
+                billsReceive[key].payDate != null
+                  ? billsReceive[key].daysDelay
                   : getDelayedDays(billsReceive[key].dueDate, dateCurrent);
               if (parseInt(_daysDelay) <= 0) _daysDelay = '';
               return (
@@ -473,7 +473,7 @@ function BillReceiveTable(props) {
                   key={key}
                 >
                   <TableCell size="small">
-                    {getDateToString(billsReceive[key].purchase_date)}
+                    {getDateToString(billsReceive[key].purchaseDate)}
                   </TableCell>
                   <TableCell size="small">
                     <div className={classes.ellipses}>
@@ -486,7 +486,7 @@ function BillReceiveTable(props) {
                     {getDateToString(billsReceive[key].dueDate)}
                   </TableCell>
                   <TableCell size="small">
-                    {getDateToString(billsReceive[key].pay_date)}
+                    {getDateToString(billsReceive[key].payDate)}
                   </TableCell>
                   <TableCell size="small">
                     {getNumberDecimalToStringCurrency(
@@ -498,8 +498,8 @@ function BillReceiveTable(props) {
 </TableCell>*/}
                   <TableCell size="small">
                     {getNumberToString(
-                      billsReceive[key].pay_date != null
-                        ? billsReceive[key].final_value
+                      billsReceive[key].payDate != null
+                        ? billsReceive[key].finalValue
                         : parseFloat(
                             getValueWithInterest(
                               billsReceive[key].originalValue[
@@ -513,7 +513,7 @@ function BillReceiveTable(props) {
                   </TableCell>
                   <TableCell size="small">
                     {getNumberToString(
-                      billsReceive[key].pay_date != null
+                      billsReceive[key].payDate != null
                         ? billsReceive[key].interest
                         : parseFloat(
                             getValueInterest(

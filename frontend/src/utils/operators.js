@@ -78,13 +78,13 @@ export const getNumberToString2 = number => {
   else return '0,00';
 };
 
-export const getDelayedDays = (dueDate, pay_date) => {
-  let days = moment(pay_date).startOf('day').diff(moment(dueDate).startOf('day'), 'days');
+export const getDelayedDays = (dueDate, payDate) => {
+  let days = moment(payDate).startOf('day').diff(moment(dueDate).startOf('day'), 'days');
   return days;
 };
 
-export const getValueWithInterest = (value, dueDate, pay_date) => {
-  let days = getDelayedDays(dueDate, pay_date);
+export const getValueWithInterest = (value, dueDate, payDate) => {
+  let days = getDelayedDays(dueDate, payDate);
   let p = 0;
   if (days >= 5) {
     p = (0.07 / 30) * days;
@@ -96,8 +96,8 @@ export const getValueWithInterest = (value, dueDate, pay_date) => {
   }
 };
 
-export const getValueInterest = (value, dueDate, pay_date) => {
-  let days = getDelayedDays(dueDate, pay_date);
+export const getValueInterest = (value, dueDate, payDate) => {
+  let days = getDelayedDays(dueDate, payDate);
   console.log(days);
   let p = 0;
   if (days >= 5) {

@@ -59,7 +59,7 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
   }); //valor
   //linha 4
   let totalValue =
-    billReceive.pay_date != null
+    billReceive.payDate != null
       ? billReceive.finalValue
       : parseFloat(
           getValueWithInterest(
@@ -131,7 +131,7 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
     y: 48
   }); //valor
   items.push({
-    text: getDateToStringYearTwoDigits(billReceive.purchase_date),
+    text: getDateToStringYearTwoDigits(billReceive.purchaseDate),
     x: 74,
     y: 46
   }); //data_compra
@@ -143,8 +143,8 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
   }); //valor
   //linha 4
   let totalValue =
-    billReceive.pay_date != null
-      ? billReceive.final_value
+    billReceive.payDate != null
+      ? billReceive.finalValue
       : parseFloat(
           getValueWithInterest(
             billReceive.originalValue,
@@ -168,8 +168,8 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
     }); //juros
   }
   //linha 5
-  let final_value = getNumberDecimalToString(billReceive.final_value);
-  if (final_value !== '0,00') {
+  let finalValue = getNumberDecimalToString(billReceive.finalValue);
+  if (finalValue !== '0,00') {
     items.push({
       text: getNumberToString2(totalValue),
       x: 44,
