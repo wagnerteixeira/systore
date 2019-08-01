@@ -75,37 +75,7 @@ namespace Systore.Api.Controllers
       {
         return SendBadRequest(e);
       }
-    }
-
-    [HttpGet]
-    [Route("createbillreceives2")]
-    public IActionResult CreateBillReceives2()
-    {
-      List<BillReceive> billReceives = new List<BillReceive>();
-      billReceives.Add(new BillReceive(){
-            Quota = 1,
-            OriginalValue = 25.64M,
-            Interest = 0,
-            FinalValue = 25.36M,
-            DueDate = DateTime.Now,
-            Vendor = "TESTE"
-          });
-        billReceives.Add(new BillReceive(){
-            Quota = 2,
-            OriginalValue = 25.64M,
-            Interest = 0,
-            FinalValue = 25.36M,
-            DueDate = DateTime.Now,
-            Vendor = "TESTE"
-          });
-
-      var result = new CreateBillReceivesDto(){
-        BillReceives = billReceives,
-        OriginalValue = 154.36M,
-        PurchaseDate = DateTime.Now.AddDays(-10)
-      };
-      return Ok(result);
-    }
+    }  
     
 
     [HttpPost]

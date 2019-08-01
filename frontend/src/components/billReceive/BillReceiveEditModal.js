@@ -54,25 +54,25 @@ class BillReceiveEditModal extends React.Component {
         client: props.bill.client,
         code: props.bill.code,
         quota: props.bill.quota,
-        original_value: props.bill.original_value['$numberDecimal'],
+        originalValue: props.bill.originalValue,
         interest:
           props.bill.pay_date != null
-            ? props.bill.interest['$numberDecimal']
+            ? props.bill.interest
             : getValueInterest(
-                props.bill.original_value['$numberDecimal'],
-                props.bill.due_date,
+                props.bill.originalValue,
+                props.bill.dueDate,
                 getCurrentDate()
               ),
         final_value:
           props.bill.pay_date != null
-            ? props.bill.final_value['$numberDecimal']
+            ? props.bill.final_value
             : getValueWithInterest(
-                props.bill.original_value['$numberDecimal'],
-                props.bill.due_date,
+                props.bill.originalValue,
+                props.bill.dueDate,
                 getCurrentDate()
               ),
         purchase_date: props.bill.purchase_date,
-        due_date: props.bill.due_date,
+        dueDate: props.bill.dueDate,
         pay_date:
           props.bill.pay_date != null ? props.bill.pay_date : getCurrentDate(),
         days_delay: props.bill.days_delay,
@@ -96,7 +96,7 @@ class BillReceiveEditModal extends React.Component {
         ...this.state.data,
         interest: event.target.value,
         final_value:
-          parseFloat(this.state.data.original_value) +
+          parseFloat(this.state.data.originalValue) +
           parseFloat(event.target.value),
       },
     });
@@ -140,8 +140,8 @@ class BillReceiveEditModal extends React.Component {
 
   handleGenerateInterest = () => {    
     let value = getValueInterest(
-      this.state.data.original_value,
-      this.state.data.due_date,
+      this.state.data.originalValue,
+      this.state.data.dueDate,
       this.state.data.pay_date
     );    
     this.setState({
@@ -149,7 +149,7 @@ class BillReceiveEditModal extends React.Component {
         ...this.state.data,
         interest: value,
         final_value:
-          parseFloat(this.state.data.original_value) + parseFloat(value),
+          parseFloat(this.state.data.originalValue) + parseFloat(value),
       },
     });
   };
@@ -165,7 +165,7 @@ class BillReceiveEditModal extends React.Component {
       printQuota,
     } = this.state;
 
-    let _original_value = parseFloat(data.original_value)
+    let _originalValue = parseFloat(data.originalValue)
       .toFixed(2)
       .replace('.', ',');
     let _final_value = parseFloat(data.final_value)
@@ -228,10 +228,10 @@ class BillReceiveEditModal extends React.Component {
             xl={4}
           >
             <TextField
-              id="due_date"
+              id="dueDate"
               label="Data de vencimento"
               className={classes.textField}
-              value={getDateToString(data.due_date)}
+              value={getDateToString(data.dueDate)}
               margin="normal"
               fullWidth
               InputProps={{
@@ -336,11 +336,11 @@ class BillReceiveEditModal extends React.Component {
             xl={5}
           >
             <TextField
-              id="original_value"
+              id="originalValue"
               label="Valor"
               className={classes.textField}
-              value={_original_value}
-              onChange={this.handleValueChangeBill('original_value')}
+              value={_originalValue}
+              onChange={this.handleValueChangeBill('originalValue')}
               margin="normal"
               fullWidth
               InputProps={{

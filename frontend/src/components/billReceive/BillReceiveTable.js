@@ -407,7 +407,7 @@ function BillReceiveTable(props) {
                     .filter(b => b.situation === 'O')
                     .reduce((prev, curr) => {
                       return (
-                        parseFloat(curr.original_value['$numberDecimal']) + prev
+                        parseFloat(curr.originalValue) + prev
                       );
                     }, 0.0)
                 )}
@@ -423,8 +423,8 @@ function BillReceiveTable(props) {
                       return (
                         parseFloat(
                           getValueWithInterest(
-                            curr.original_value['$numberDecimal'],
-                            curr.due_date,
+                            curr.originalValue,
+                            curr.dueDate,
                             dateCurrent
                           )
                         ) + prev
@@ -463,7 +463,7 @@ function BillReceiveTable(props) {
               let _daysDelay =
                 billsReceive[key].pay_date != null
                   ? billsReceive[key].days_delay
-                  : getDelayedDays(billsReceive[key].due_date, dateCurrent);
+                  : getDelayedDays(billsReceive[key].dueDate, dateCurrent);
               if (parseInt(_daysDelay) <= 0) _daysDelay = '';
               return (
                 <TableRow
@@ -483,14 +483,14 @@ function BillReceiveTable(props) {
                   <TableCell size="small">{billsReceive[key].code}</TableCell>
                   <TableCell size="small">{billsReceive[key].quota}</TableCell>
                   <TableCell>
-                    {getDateToString(billsReceive[key].due_date)}
+                    {getDateToString(billsReceive[key].dueDate)}
                   </TableCell>
                   <TableCell size="small">
                     {getDateToString(billsReceive[key].pay_date)}
                   </TableCell>
                   <TableCell size="small">
                     {getNumberDecimalToStringCurrency(
-                      billsReceive[key].original_value
+                      billsReceive[key].originalValue
                     )}
                   </TableCell>
                   {/*<TableCell size="small" align="left">
@@ -499,13 +499,13 @@ function BillReceiveTable(props) {
                   <TableCell size="small">
                     {getNumberToString(
                       billsReceive[key].pay_date != null
-                        ? billsReceive[key].final_value['$numberDecimal']
+                        ? billsReceive[key].final_value
                         : parseFloat(
                             getValueWithInterest(
-                              billsReceive[key].original_value[
+                              billsReceive[key].originalValue[
                                 '$numberDecimal'
                               ],
-                              billsReceive[key].due_date,
+                              billsReceive[key].dueDate,
                               dateCurrent
                             )
                           )
@@ -514,13 +514,13 @@ function BillReceiveTable(props) {
                   <TableCell size="small">
                     {getNumberToString(
                       billsReceive[key].pay_date != null
-                        ? billsReceive[key].interest['$numberDecimal']
+                        ? billsReceive[key].interest
                         : parseFloat(
                             getValueInterest(
-                              billsReceive[key].original_value[
+                              billsReceive[key].originalValue[
                                 '$numberDecimal'
                               ],
-                              billsReceive[key].due_date,
+                              billsReceive[key].dueDate,
                               dateCurrent
                             )
                           )
