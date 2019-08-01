@@ -252,8 +252,6 @@ function BillReceiveTable(props) {
         'Cliente ainda não está salvo, para continuar é preciso salvar.',
         () => handleSaveClient(() => setOpenCreateModal(true))
       );
-    } else if (handleSaveClient) {
-      handleSaveClient(() => setOpenCreateModal(true))
     } else 
       setOpenCreateModal(true);
   }
@@ -346,7 +344,7 @@ function BillReceiveTable(props) {
         setbillsReceive([]);*/
   }
 
-  function onCloseCreateModal(event, reason) {
+  function onCloseCreateModal(event, reason) {    
     setOpenCreateModal(false);
     if (reason === 'created') {
       handleOpenMessage(false, 'success', '');

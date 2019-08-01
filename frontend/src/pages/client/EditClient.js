@@ -20,6 +20,8 @@ import MapIcon from '@material-ui/icons/Map';
 
 import axios from 'axios';
 
+import ChoosePostalCode from './ChoosePostalCode';
+
 const styles = theme => ({
   container: {
     marginTop: theme.spacing(3),
@@ -87,6 +89,17 @@ const styles = theme => ({
     padding: theme.spacing(4),
     outline: 'none',
   },
+  paperModalAddress: {
+    position: 'absolute',
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2),
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%,-50%)',
+    outline: 'none',
+    width: theme.spacing(60),
+  },
   table: {
     minWidth: 500,
   },
@@ -121,18 +134,32 @@ class EditClient extends Component {
     super(props);
     this.state = {
       tabValue: 'EDIT',
+      openModalAddress: false, 
+      postalCodes: [], 
     };
-  }
+  }  
 
   handleTabChange = (event, value) => {
     this.setState({ tabValue: value });
   };
 
-  handleSearchCep = () => {
+  handleOpeModalAddress = (value) => {
+    this.setState({openModalAddress: value});
+  } 
+
+
+   onCloseModalAddress = (event, reason) => {     
+    this.setState({openModalAddress: false});
+    if (reason === 'created') {
+      
+    }
+  }
+
+  handleSearchPostalCode = () => {
     const { handleOpenMessage } = this.props;
     const { address, city, state } = this.props.clientData;
 
-    if (address.length == 0) {
+    if (address.length === 0) {
       handleOpenMessage(
         true,
         'warning',
@@ -141,12 +168,12 @@ class EditClient extends Component {
       return;
     }
 
-    if (city.length == 0) {
+    if (city.length === 0) {
       handleOpenMessage(true, 'warning', 'Informe a Cidade para buscar o Cep.');
       return;
     }
 
-    if (state.length == 0) {
+    if (state.length === 0) {
       handleOpenMessage(true, 'warning', 'Informe o Estado para buscar o Cep.');
       return;
     }
@@ -155,7 +182,8 @@ class EditClient extends Component {
       .get(`https://viacep.com.br/ws/${state}/${city}/${address}/json/`)
       .then(res => {
         if (res.data.erro) return;
-        console.log(res.data);
+        let _postalCodes = res.data.map(item => ({ neighborhood: item.bairro, postal_code: item.cep,  address: item.logradouro }));               
+        this.setState({openModalAddress : true, postalCodes : _postalCodes});
       });
   };
 
@@ -167,7 +195,7 @@ class EditClient extends Component {
       handleSave,
       handleCancel,
       handleDateValueChange,
-      handleCepChange,
+      handlePostalCodeChange,
       handleCheckCpf,
       handleCheckDateBirth,
     } = this.props;
@@ -188,6 +216,13 @@ class EditClient extends Component {
         {tabValue === 'EDIT' && (
           <form className={classes.container} noValidate autoComplete="off">
             <div className={classes.back}>
+              <ChoosePostalCode 
+                open={this.state.openModalAddress} 
+                handleClose={this.onCloseModalAddress} 
+                paperClass={classes.paperModalAddress}
+                rows={this.state.postalCodes}                
+                handlePostalCodeChange={handlePostalCodeChange}
+                />
               <Grid className={classes.itens} container spacing={3}>
                 <Grid
                   className={classes.item}
@@ -445,7 +480,7 @@ class EditClient extends Component {
                       color="primary"
                       aria-label="Buscar Cep"
                       size="small"
-                      onClick={this.handleSearchCep}
+                      onClick={this.handleSearchPostalCode}
                     >
                       <MapIcon />
                     </Fab>
@@ -465,7 +500,7 @@ class EditClient extends Component {
                     label="CEP"
                     className={classes.textField}
                     value={clientData.postal_code}
-                    onChange={handleCepChange}
+                    onChange={(event)=> handlePostalCodeChange(event, 'textFieldCep')}
                     margin="normal"
                     fullWidth
                   />
