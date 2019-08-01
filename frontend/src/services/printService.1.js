@@ -29,7 +29,7 @@ const createPageForPrint = (clientData, billReceive) => {
     y: 43
   }); //valor
   items.push({
-    text: getDateToString(billReceive.purchase_date),
+    text: getDateToString(billReceive.purchaseDate),
     x: 74,
     y: 41
   }); //data_compra
@@ -54,15 +54,15 @@ const createPageForPrint = (clientData, billReceive) => {
     }); //juros
   }
   //linha 5
-  let final_value = getNumberDecimalToString(billReceive.final_value);
-  if (final_value !== '0,00') {
+  let finalValue = getNumberDecimalToString(billReceive.finalValue);
+  if (finalValue !== '0,00') {
     items.push({
-      text: final_value,
+      text: finalValue,
       x: 44,
       y: 67
     }); //total
     items.push({
-      text: final_value,
+      text: finalValue,
       x: 133,
       y: 67
     }); //total
