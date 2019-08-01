@@ -131,7 +131,7 @@ function _MenuAcoes(props) {
       open={Boolean(anchorElMenuAcoes)}
       onClose={handleCloseMenuAcoes}
     >
-      {situation === 'O' && (
+      {situation === 0 && (
         <MenuItem
           onClick={() => {
             handleEditBillReceive(billReceiveKey);
@@ -220,7 +220,7 @@ function BillReceiveTable(props) {
   const [dadosMenuAcoes, setDadosMenuAcoes] = useState({
     anchorEl: null,
     billReceiveKey: '',
-    situation: 'O',
+    situation: 0,
   });
 
   useEffect(() => {
@@ -294,7 +294,7 @@ function BillReceiveTable(props) {
 
   function handlePrintBillReceivesOpen() {
     internalPrintBillReceives(
-      billsReceiveComplete.filter(item => item.situation === 'O')
+      billsReceiveComplete.filter(item => item.situation === 0)
     );
   }
 
@@ -391,14 +391,14 @@ function BillReceiveTable(props) {
         >
           INCLUIR
         </Button>
-        {!(clientId === '0' || clientId === '') && (
+        {!(clientId === 0 || clientId === '') && (
           <>
             <Typography style={{ paddingLeft: 10 }}>
               Saldo devedor sem juros:{'  '}
               <span style={{ fontWeight: 600, color: 'red' }}>
                 {getNumberToString(
                   billsReceiveComplete
-                    .filter(b => b.situation === 'O')
+                    .filter(b => b.situation === 0)
                     .reduce((prev, curr) => {
                       return (
                         parseFloat(curr.originalValue) + prev
@@ -412,7 +412,7 @@ function BillReceiveTable(props) {
               <span style={{ fontWeight: 600, color: 'red' }}>
                 {getNumberToString(
                   billsReceiveComplete
-                    .filter(b => b.situation === 'O')
+                    .filter(b => b.situation === 0)
                     .reduce((prev, curr) => {
                       return (
                         parseFloat(
@@ -462,7 +462,7 @@ function BillReceiveTable(props) {
               return (
                 <TableRow
                   className={
-                    billsReceive[key].situation === 'O' && classes.openRow
+                    billsReceive[key].situation === 0 && classes.openRow
                   }
                   key={key}
                 >
@@ -488,7 +488,7 @@ function BillReceiveTable(props) {
                     )}
                   </TableCell>
                   {/*<TableCell size="small" align="left">
-{billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
+{billsReceive[key].situation === 1 ? 'QUITADO' : 'ABERTO'}
 </TableCell>*/}
                   <TableCell size="small">
                     {getNumberToString(
