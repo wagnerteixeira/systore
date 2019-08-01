@@ -161,19 +161,12 @@ class BillReceiveCreateModal extends React.Component {
     }
   };
 
-  handleSavequotas = clientId => onClose => () => {
+  handleSaveQuotas = clientId => onClose => () => {
     this.setState({ InSaving: true });
-<<<<<<< HEAD
-    let _original_value = accounting.unformat(
-      this.state.originalValue.replace('.', ',')
-    );
-    let message = this.validadeSavequotas(_original_value);
-=======
     let _originalValue = accounting.unformat(
       this.state.OriginalValue.replace('.', ',')
     );
     let message = this.validadeSaveQuotas(_originalValue);
->>>>>>> e8a4538cc4419ce2b86c71d9943182879f98c209
     if (message !== '') {
       this.setState({
         MessageOpen: true,
@@ -185,13 +178,8 @@ class BillReceiveCreateModal extends React.Component {
     }
     let data = {
       ClientId: clientId,
-<<<<<<< HEAD
-      originalValue: _original_value,
-      quotas: this.state.quotas,
-=======
       OriginalValue: _originalValue,
       Quotas: this.state.Quotas,
->>>>>>> e8a4538cc4419ce2b86c71d9943182879f98c209
       Vendor: this.state.Vendor,
       PurchaseDate: this.state.PurchaseDate,
       BillReceives: this.state.BillsReceive.map(bills_receive => {
@@ -298,23 +286,13 @@ class BillReceiveCreateModal extends React.Component {
       VariantMessage,
       MessageText,
     } = this.state;
-<<<<<<< HEAD
-    let _original_value = '';
+    let _originalValue = '';
     if (typeof originalValue == 'string') {
       if (originalValue.length > 0)
-        _original_value = accounting.formatNumber(
+        _originalValue = accounting.formatNumber(
           accounting.unformat(originalValue.replace('.', ','))
         );
-    } else _original_value = accounting.formatNumber(originalValue);
-=======
-    let _originalValue = '';
-    if (typeof OriginalValue == 'string') {
-      if (OriginalValue.length > 0)
-        _originalValue = accounting.formatNumber(
-          accounting.unformat(OriginalValue.replace('.', ','))
-        );
-    } else _originalValue = accounting.formatNumber(OriginalValue);
->>>>>>> e8a4538cc4419ce2b86c71d9943182879f98c209
+    } else _originalValue = accounting.formatNumber(originalValue);
     return (
       <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
         <MessageSnackbar
