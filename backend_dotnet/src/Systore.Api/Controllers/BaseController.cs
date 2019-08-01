@@ -20,7 +20,7 @@ namespace Systore.Api.Controllers
             _service = Service;            
         }
 
-        public virtual object GetEntityId(TEntity entity)
+        protected virtual object GetEntityId(TEntity entity)
         {
             try
             {
@@ -205,18 +205,18 @@ namespace Systore.Api.Controllers
         }
 
 
-        public IActionResult SendStatusCode(int statusCode, string[] errors)
+        protected IActionResult SendStatusCode(int statusCode, string[] errors)
         {
             return StatusCode(statusCode, new { errors = errors.ToArray() });
         }
 
-        public IActionResult SendStatusCode(int statusCode, string error)
+        protected IActionResult SendStatusCode(int statusCode, string error)
         {
 
             return StatusCode(statusCode, new { errors = new string[] { error } });
         }
 
-        public IActionResult SendStatusCode(int statusCode, Exception e)
+        protected IActionResult SendStatusCode(int statusCode, Exception e)
         {
             string error = e.Message;
             if (e.InnerException != null)
@@ -232,18 +232,18 @@ namespace Systore.Api.Controllers
 
 
 
-        public IActionResult SendBadRequest(string[] errors)
+        protected IActionResult SendBadRequest(string[] errors)
         {
             return BadRequest(new { errors = errors.ToArray() });
         }
 
-        public IActionResult SendBadRequest(string error)
+        protected IActionResult SendBadRequest(string error)
         {
 
             return BadRequest(new { errors = new string[] { error } });
         }
 
-        public IActionResult SendBadRequest(Exception e)
+        protected IActionResult SendBadRequest(Exception e)
         {
             string error = e.Message;
             if (e.InnerException != null)
