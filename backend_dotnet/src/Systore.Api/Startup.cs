@@ -22,21 +22,27 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Systore.Domain;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using System.IO;
 
 namespace Systore.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private readonly IHostingEnvironment _env;
 
         public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        {
+            Configuration = configuration;
+            _env = env;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<SystoreContext>();
 
             services.AddScoped<IDbContext, SystoreContext>();
@@ -53,8 +59,21 @@ namespace Systore.Api
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IBillReceiveRepository, BillReceiveRepository>();
-            services.AddCors();           
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCors();
+
+            Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
+
+
+            if (_env.IsDevelopment())
+            {
+
+                services.AddMvc(opts =>
+                {
+                    opts.Filters.Add(new AllowAnonymousFilter());
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }
+            else
+                services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -82,7 +101,32 @@ namespace Systore.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Systore", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Systore", Version = "v1" });                
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,                          
+                    Type = SecuritySchemeType.ApiKey,   
+                    
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },       
+                            
+                           // In = ParameterLocation.Header
+                        },
+                        new[] { "readAccess", "writeAccess" }
+                    }
+                });
+
+                //var path = Path.Combine(_env.ContentRootPath, "Systore.Controllers.xml");
+                //c.IncludeXmlComments(path);
             });
         }
 
@@ -106,6 +150,7 @@ namespace Systore.Api
                       .AllowAnyHeader()
             );
 
+
             app.UseAuthentication();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -115,7 +160,7 @@ namespace Systore.Api
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Systore");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Systore");                                
             });
 
             app.UseMvc();

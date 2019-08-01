@@ -25,8 +25,8 @@ namespace Systore.Api.Controllers
             _config = config;
         }
 
-        [HttpPost]
-        [Route("login")]
+        [AllowAnonymous]
+        [HttpPost("login")]        
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
             try
@@ -41,25 +41,14 @@ namespace Systore.Api.Controllers
             }
         }
 
-        [HttpPost]
         [AllowAnonymous]
-        [Route("validateToken")]
+        [HttpPost("validateToken")]               
         public async Task<IActionResult> ValidateToken([FromBody] string token)
         {
             try
             {                
                 var result = await Task.Run(() => _authService.ValidateToken(token));
-                return Ok(result);
-                /*return Ok(new LoginResponseDto()
-                {
-                    User = new UserLoginDto()
-                    {
-                        Admin = false,
-                        UserName = "",
-                    },
-                    Token = "3214654s6a4d65as4f654sd6f46s",
-                    Valid = true
-                });*/
+                return Ok(result);               
             }
             catch (Exception e)
             {

@@ -3,6 +3,7 @@ using Systore.Domain.Entities;
 using Systore.Domain.Abstractions;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Systore.Api.Controllers
 {
@@ -16,7 +17,8 @@ namespace Systore.Api.Controllers
 
         }
 
-        [HttpDelete("{id:int}")]
+        [Authorize]
+        [HttpDelete("{id:int}")]        
         public override async Task<IActionResult> Delete([FromRoute]int id)
         {
 
@@ -28,6 +30,7 @@ namespace Systore.Api.Controllers
             return await base.Delete(id);
         }
 
+        [Authorize]
         [HttpPost("")]
         public override async Task<IActionResult> Post([FromBody]Client entity)
         {
@@ -40,6 +43,7 @@ namespace Systore.Api.Controllers
             return await base.Post(entity);
         }
 
+        [Authorize]
         [HttpPut("")]
         public override async Task<IActionResult> Put([FromBody]Client entity)
         {
@@ -51,6 +55,7 @@ namespace Systore.Api.Controllers
             return await base.Put(entity);
         }
 
+        [Authorize]
         [HttpGet("existcpf/{edit}/{id}/{cpf}")]        
         public async Task<IActionResult> ExistCpf([FromRoute]int Edit, [FromRoute]int Id, [FromRoute]string Cpf)
         {

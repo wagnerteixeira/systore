@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Systore.Domain.Abstractions;
@@ -32,6 +33,7 @@ namespace Systore.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("")]        
         // GET: api/Entity
         public virtual async Task<IActionResult> GetAllAsync()
@@ -46,6 +48,7 @@ namespace Systore.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id:int}")]
         // GET: api/Entity/5
         public virtual async Task<IActionResult> Get(int id)
@@ -60,8 +63,8 @@ namespace Systore.Api.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("")]
+        [Authorize]
+        [HttpPost("")]        
         // POST: api/Entity
         public virtual async Task<IActionResult> Post([FromBody]TEntity entity)
         {
@@ -78,6 +81,8 @@ namespace Systore.Api.Controllers
                 return SendBadRequest(e);
             }
         }
+
+        [Authorize]
         [HttpPut("")]        
         // PUT: api/Entity
         public async virtual Task<IActionResult> Put([FromBody]TEntity entity)
@@ -96,6 +101,7 @@ namespace Systore.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id:int}")]        
         // DELETE: api/Entity
         public async virtual Task<IActionResult> Delete([FromRoute]int id)
@@ -114,64 +120,7 @@ namespace Systore.Api.Controllers
             }
         }
 
-       /* public Expression<Func<TEntity, bool>> GetExpression<TEntity>(IEnumerable<FilterDto> filters)
-        {
-            var param = Expression.Parameter(typeof(TEntity), "t");
-            var body = filters
-                .Select(filter => GetExpression(param, filter))
-                .DefaultIfEmpty()
-                .Aggregate(Expression.AndAlso);
-            return body != null ? Expression.Lambda<Func<TEntity, bool>>(body, param) : null;
-        }
-
-        private static Expression GetExpression(ParameterExpression param, FilterDto filter)
-        {
-            MemberExpression member = Expression.Property(param, filter.Field);
-            var type = member.Type;
-            ConstantExpression constant;
-            switch (type.Name)
-            {
-                case "Int32":
-                    constant = Expression.Constant(Convert.ToInt32(filter.Filter));
-                    break;
-                case "String":
-                default:
-                    constant = Expression.Constant(filter.Filter);
-                    break;
-            }
-
-            // ConstantExpression constant = Expression.Constant(filter.Value);
-
-            switch (filter.TilterType)
-            {
-                case Domain.Enums.Operation.Eq:
-                    return Expression.Equal(member, constant);
-
-                case Domain.Enums.Operation.Gt:
-                    return Expression.GreaterThan(member, constant);
-
-                case Domain.Enums.Operation.Gte:
-                    return Expression.GreaterThanOrEqual(member, constant);
-
-                case Domain.Enums.Operation.Lt:
-                    return Expression.LessThan(member, constant);
-
-                case Domain.Enums.Operation.Lte:
-                    return Expression.LessThanOrEqual(member, constant);
-
-                /*case Op.Contains:
-                    return Expression.Call(member, ContainsMethod, constant);
-
-                case Op.StartsWith:
-                    return Expression.Call(member, StartsWithMethod, constant);
-
-                case Op.EndsWith:
-                    return Expression.Call(member, EndsWithMethod, constant);
-            }
-
-            return null;
-        }*/
-
+        [Authorize]
         [HttpPost("count")]
         public async virtual Task<IActionResult> Count([FromBody]IEnumerable<FilterDto> filterDto)
         {
@@ -188,6 +137,7 @@ namespace Systore.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("getpaginate")]
         public async virtual Task<IActionResult> GetPaginate([FromBody]FilterPaginateDto filterPaginateDto)
         {
