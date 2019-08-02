@@ -13,6 +13,9 @@ namespace Systore.Data.Repositories
 {
     public class BillReceiveRepository : BaseRepository<BillReceive>, IBillReceiveRepository
     {
+        private decimal _interestTax = 0.0023333333333333333333333333M; //(0.07M / 30.0M)
+
+
         public BillReceiveRepository(IDbContext context) : base(context)
         {
 
@@ -21,7 +24,7 @@ namespace Systore.Data.Repositories
         public Task<int> CountBillReceivesByClient(int clientId) =>
           CountWhereAsync(c => c.ClientId == clientId);
 
-        public Task<List<BillReceive>> GetBillReceivesByClient(int ClientId)
+        public async Task<List<BillReceive>> GetBillReceivesByClient(int ClientId)
         {
             var queryOpen = this._entities
               .Where(c => c.ClientId == ClientId && c.Situation == BillReceiveSituation.Open)
@@ -33,9 +36,24 @@ namespace Systore.Data.Repositories
               .OrderByDescending(c => c.PurchaseDate)
               .ThenBy(c => c.Quota);
 
-            return queryOpen
+            var _billReceives = await queryOpen
               .Union(queryClose)
               .ToListAsync();
+
+            return _billReceives.Select(c =>
+            {
+                var days = DateTime.Today - c.DueDate;
+                if ((c.Situation == BillReceiveSituation.Open) && (days.Days > 5))
+                {
+                    c.DaysDelay = days.Days;
+                    var interestPerDay = _interestTax * c.DaysDelay;
+                    c.Interest = Decimal.Round(c.OriginalValue * interestPerDay, 2);
+                    c.FinalValue = c.OriginalValue + c.Interest;
+                }
+                else
+                    c.FinalValue = c.OriginalValue;
+                return c;
+            }).ToList();
         }
 
         public Task<List<BillReceive>> GetPaidBillReceivesByClient(int ClientId) =>

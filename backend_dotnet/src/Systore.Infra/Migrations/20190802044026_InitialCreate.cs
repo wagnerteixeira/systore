@@ -45,6 +45,26 @@ namespace Systore.Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Product",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SaleType = table.Column<sbyte>(type: "TINYINT", nullable: false),
+                    Price = table.Column<decimal>(type: "DECIMAL(18, 2)", nullable: false),
+                    ExpirationDays = table.Column<short>(type: "SMALLINT", nullable: false),
+                    FirstDescription = table.Column<string>(maxLength: 30, nullable: true),
+                    SecondDescription = table.Column<string>(maxLength: 30, nullable: true),
+                    ThirdDescription = table.Column<string>(maxLength: 30, nullable: true),
+                    PrintExpirationDate = table.Column<bool>(nullable: false),
+                    PrintDateOfPackaging = table.Column<sbyte>(type: "TINYINT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -120,6 +140,9 @@ namespace Systore.Infra.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BillReceive");
+
+            migrationBuilder.DropTable(
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "User");

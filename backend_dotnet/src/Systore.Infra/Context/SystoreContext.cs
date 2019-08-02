@@ -34,5 +34,8 @@ namespace Systore.Context.Infra
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<BillReceive> BillReceives { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }

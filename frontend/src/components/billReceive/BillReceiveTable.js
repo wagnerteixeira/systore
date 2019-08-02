@@ -453,12 +453,7 @@ function BillReceiveTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(billsReceive).map(key => {
-              let _daysDelay =
-                billsReceive[key].payDate != null
-                  ? billsReceive[key].daysDelay
-                  : getDelayedDays(billsReceive[key].dueDate, dateCurrent);
-              if (parseInt(_daysDelay) <= 0) _daysDelay = '';
+            {Object.keys(billsReceive).map(key => {             
               return (
                 <TableRow
                   className={
@@ -491,36 +486,16 @@ function BillReceiveTable(props) {
 {billsReceive[key].situation === 1 ? 'QUITADO' : 'ABERTO'}
 </TableCell>*/}
                   <TableCell size="small">
-                    {getNumberToString(
-                      billsReceive[key].payDate != null
-                        ? billsReceive[key].finalValue
-                        : parseFloat(
-                            getValueWithInterest(
-                              billsReceive[key].originalValue[
-                                '$numberDecimal'
-                              ],
-                              billsReceive[key].dueDate,
-                              dateCurrent
-                            )
-                          )
+                  {getNumberDecimalToStringCurrency(
+                      billsReceive[key].finalValue
                     )}
                   </TableCell>
                   <TableCell size="small">
-                    {getNumberToString(
-                      billsReceive[key].payDate != null
-                        ? billsReceive[key].interest
-                        : parseFloat(
-                            getValueInterest(
-                              billsReceive[key].originalValue[
-                                '$numberDecimal'
-                              ],
-                              billsReceive[key].dueDate,
-                              dateCurrent
-                            )
-                          )
+                  {getNumberDecimalToStringCurrency(
+                      billsReceive[key].interest
                     )}
                   </TableCell>
-                  <TableCell size="small">{_daysDelay}</TableCell>
+                  <TableCell size="small">{billsReceive[key].daysDelay}</TableCell>
                   <TableCell size="small" align="left">
                     <Fab
                       color="primary"

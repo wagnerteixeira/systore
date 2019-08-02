@@ -53,12 +53,14 @@ namespace Systore.Api
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IBillReceiveService, BillReceiveService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IProductService, ProductService>();
 
 
             //scoperepositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IBillReceiveRepository, BillReceiveRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddCors();
 
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");

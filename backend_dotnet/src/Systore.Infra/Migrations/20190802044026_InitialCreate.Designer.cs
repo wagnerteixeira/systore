@@ -9,7 +9,7 @@ using Systore.Context.Infra;
 namespace Systore.Infra.Migrations
 {
     [DbContext(typeof(SystoreContext))]
-    [Migration("20190802014549_InitialCreate")]
+    [Migration("20190802044026_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -140,6 +140,39 @@ namespace Systore.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Client");
+                });
+
+            modelBuilder.Entity("Systore.Domain.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<short>("ExpirationDays")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<string>("FirstDescription")
+                        .HasMaxLength(30);
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("DECIMAL(18, 2)");
+
+                    b.Property<sbyte>("PrintDateOfPackaging")
+                        .HasColumnType("TINYINT");
+
+                    b.Property<bool>("PrintExpirationDate");
+
+                    b.Property<sbyte>("SaleType")
+                        .HasColumnType("TINYINT");
+
+                    b.Property<string>("SecondDescription")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("ThirdDescription")
+                        .HasMaxLength(30);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Systore.Domain.Entities.User", b =>

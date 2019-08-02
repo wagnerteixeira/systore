@@ -6,10 +6,8 @@ using Systore.Domain.Entities;
 
 namespace Systore.Infra.Mapping
 {
-    public class ProductMapping : IEntityTypeConfiguration<Product>
+    public class ProductMappingMySql : IEntityTypeConfiguration<Product>
     {
-
-
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Product> builder)
         {
             builder.HasKey(c => c.Id);
@@ -41,13 +39,7 @@ namespace Systore.Infra.Mapping
                 .HasColumnType("TINYINT");
 
             builder.Property(p => p.PrintDateOfPackaging)
-                .HasColumnType("TINYINT");
-
-            builder.HasData(
-                new { Id = 1, UserName = "Admin", Password = "Senha123", Admin = true },
-                new { Id = 2, UserName = "ROSE", Password = "1234", Admin = true },
-                new { Id = 3, UserName = "IZAQUE", Password = "1234", Admin = true }
-            );
+                .HasColumnType("TINYINT");           
         }
     }
 }
