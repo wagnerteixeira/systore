@@ -94,7 +94,7 @@ class BillReceiveEditModal extends React.Component {
     this.setState({
       data: {
         ...this.state.data,
-        interest: event.target.value,
+        interest: parseFloat(event.target.value),
         finalValue:
           parseFloat(this.state.data.originalValue) +
           parseFloat(event.target.value),
@@ -125,7 +125,10 @@ class BillReceiveEditModal extends React.Component {
       });
       return;
     }
-    data.situation = 'C';
+    data.situation = 1;
+    data.clientId = this.props.clientData.id;
+    data.client = this.props.clientData;
+    console.log(data);
     billsReceiveservice
       .update(data)
       .then(res => {                       
@@ -147,7 +150,7 @@ class BillReceiveEditModal extends React.Component {
     this.setState({
       data: {
         ...this.state.data,
-        interest: value,
+        interest: parseFloat(value),
         finalValue:
           parseFloat(this.state.data.originalValue) + parseFloat(value),
       },

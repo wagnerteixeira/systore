@@ -98,7 +98,6 @@ export const getValueWithInterest = (value, dueDate, payDate) => {
 
 export const getValueInterest = (value, dueDate, payDate) => {
   let days = getDelayedDays(dueDate, payDate);
-  console.log(days);
   let p = 0;
   if (days >= 5) {
     p = (0.07 / 30) * days;
