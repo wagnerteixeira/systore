@@ -9,8 +9,8 @@ using Systore.Context.Infra;
 namespace Systore.Infra.Migrations
 {
     [DbContext(typeof(SystoreContext))]
-    [Migration("20190727035823_initialMigration")]
-    partial class initialMigration
+    [Migration("20190802014549_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,21 +32,27 @@ namespace Systore.Infra.Migrations
 
                     b.Property<DateTime>("DueDate");
 
-                    b.Property<decimal>("FinalValue");
+                    b.Property<decimal>("FinalValue")
+                        .HasColumnType("DECIMAL(18, 2)");
 
-                    b.Property<decimal>("Interest");
+                    b.Property<decimal>("Interest")
+                        .HasColumnType("DECIMAL(18, 2)");
 
-                    b.Property<decimal>("OriginalValue");
+                    b.Property<decimal>("OriginalValue")
+                        .HasColumnType("DECIMAL(18, 2)");
 
                     b.Property<DateTime?>("PayDate");
 
                     b.Property<DateTime>("PurchaseDate");
 
-                    b.Property<int>("Quota");
+                    b.Property<short>("Quota")
+                        .HasColumnType("SMALLINT");
 
-                    b.Property<int>("Situation");
+                    b.Property<sbyte>("Situation")
+                        .HasColumnType("TINYINT");
 
-                    b.Property<string>("Vendor");
+                    b.Property<string>("Vendor")
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -63,53 +69,73 @@ namespace Systore.Infra.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .HasMaxLength(150);
 
-                    b.Property<string>("AddressNumber");
+                    b.Property<string>("AddressNumber")
+                        .HasMaxLength(20);
 
                     b.Property<DateTime?>("AdmissionDate");
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .HasMaxLength(50);
 
-                    b.Property<int>("CivilStatus");
+                    b.Property<sbyte>("CivilStatus")
+                        .HasColumnType("TINYINT");
 
-                    b.Property<string>("Complement");
+                    b.Property<string>("Complement")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Cpf");
+                    b.Property<string>("Cpf")
+                        .HasMaxLength(20);
 
                     b.Property<DateTime?>("DateOfBirth");
 
-                    b.Property<string>("FatherName");
+                    b.Property<string>("FatherName")
+                        .HasMaxLength(150);
 
-                    b.Property<string>("JobName");
+                    b.Property<string>("JobName")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("MotherName");
+                    b.Property<string>("MotherName")
+                        .HasMaxLength(150);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(150);
 
-                    b.Property<string>("Neighborhood");
+                    b.Property<string>("Neighborhood")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Note");
 
-                    b.Property<string>("Occupation");
+                    b.Property<string>("Occupation")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Phone1");
+                    b.Property<string>("Phone1")
+                        .HasMaxLength(20);
 
-                    b.Property<string>("Phone2");
+                    b.Property<string>("Phone2")
+                        .HasMaxLength(20);
 
-                    b.Property<string>("PlaceOfBirth");
+                    b.Property<string>("PlaceOfBirth")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("PostalCode");
+                    b.Property<string>("PostalCode")
+                        .HasMaxLength(20);
 
                     b.Property<DateTime?>("RegistryDate");
 
-                    b.Property<string>("Rg");
+                    b.Property<string>("Rg")
+                        .HasMaxLength(20);
 
-                    b.Property<string>("Seller");
+                    b.Property<string>("Seller")
+                        .HasMaxLength(30);
 
-                    b.Property<string>("Spouse");
+                    b.Property<string>("Spouse")
+                        .HasMaxLength(150);
 
-                    b.Property<string>("State");
+                    b.Property<string>("State")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -121,11 +147,14 @@ namespace Systore.Infra.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Admin");
+                    b.Property<sbyte>("Admin")
+                        .HasColumnType("TINYINT");
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Password")
+                        .HasMaxLength(20);
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -135,21 +164,21 @@ namespace Systore.Infra.Migrations
                         new
                         {
                             Id = 1,
-                            Admin = true,
+                            Admin = (sbyte)1,
                             Password = "Senha123",
                             UserName = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            Admin = true,
+                            Admin = (sbyte)1,
                             Password = "1234",
                             UserName = "ROSE"
                         },
                         new
                         {
                             Id = 3,
-                            Admin = true,
+                            Admin = (sbyte)1,
                             Password = "1234",
                             UserName = "IZAQUE"
                         });

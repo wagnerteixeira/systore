@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Systore.Domain.Abstractions;
-using Systore.Domain.Entities;
-using Systore.Dtos;
+using Systore.Domain.Dtos;
 
 namespace Systore.Api.Controllers
 {

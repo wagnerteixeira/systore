@@ -10,19 +10,37 @@ namespace Systore.Infra.Mapping
             builder.HasKey(c => c.Id);
 
             builder.ToTable("BillReceive");
+
             builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd();
+
             builder.Property(p => p.Code);
-            builder.Property(p => p.Quota);
-            builder.Property(p => p.OriginalValue);
-            builder.Property(p => p.Interest);
-            builder.Property(p => p.FinalValue);
+
+            builder.Property(p => p.Quota)
+                .HasColumnType("SMALLINT");
+
+            builder.Property(p => p.OriginalValue)
+                .HasColumnType("DECIMAL(18, 2)");
+
+            builder.Property(p => p.Interest)
+                .HasColumnType("DECIMAL(18, 2)");
+
+            builder.Property(p => p.FinalValue)
+                .HasColumnType("DECIMAL(18, 2)");
+
             builder.Property(p => p.PurchaseDate);
+
             builder.Property(p => p.DueDate);
+
             builder.Property(p => p.PayDate);
+
             builder.Property(p => p.DaysDelay);
-            builder.Property(p => p.Situation);
-            builder.Property(p => p.Vendor);
+
+            builder.Property(p => p.Situation)
+                .HasColumnType("TINYINT");
+
+            builder.Property(p => p.Vendor)
+                .HasMaxLength(30);
 
 
             builder

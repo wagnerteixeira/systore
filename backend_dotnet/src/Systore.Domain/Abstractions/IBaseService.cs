@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
-using Systore.Domain.Entities;
 using System.Linq;
+using Systore.Domain.Dtos;
 
 namespace Systore.Domain.Abstractions
 {

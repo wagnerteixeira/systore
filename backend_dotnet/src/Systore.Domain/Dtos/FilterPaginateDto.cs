@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Systore.Domain.Enums;
 
-namespace Systore.Domain.Entities
+namespace Systore.Domain.Dtos
 {
     public class FilterPaginateDto 
     {

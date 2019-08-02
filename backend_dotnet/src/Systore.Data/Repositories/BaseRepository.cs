@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Systore.Infra.Abstractions;
 using System.Linq.Expressions;
 using Systore.Data.Abstractions;
-using Systore.Domain.Entities;
 using Systore.Domain.Enums;
+using Systore.Domain.Dtos;
 
 namespace Systore.Data.Repositories
 {

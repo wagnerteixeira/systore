@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Systore.Domain.Abstractions;
-using Systore.Domain.Entities;
+using Systore.Domain.Dtos;
 using Systore.Data.Abstractions;
 using System.Linq.Expressions;
 

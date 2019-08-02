@@ -11,9 +11,15 @@ namespace Systore.Infra.Mapping
             builder.ToTable("User");
             builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd();
-            builder.Property(p => p.UserName);
-            builder.Property(p => p.Password);
-            builder.Property(p => p.Admin);
+
+            builder.Property(p => p.UserName)
+                .HasMaxLength(30);
+
+            builder.Property(p => p.Password)
+                .HasMaxLength(20);
+
+            builder.Property(p => p.Admin)
+                .HasColumnType("TINYINT");
 
             builder.HasData(
                 new { Id = 1, UserName = "Admin", Password = "Senha123", Admin = true },

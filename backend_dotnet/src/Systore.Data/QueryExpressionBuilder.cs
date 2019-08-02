@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using Systore.Domain.Entities;
+using Systore.Domain.Dtos;
 using Systore.Domain.Enums;
 
 namespace Systore.Data
