@@ -34,7 +34,7 @@ import AsyncSelect from 'react-select/async';
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
 import MessageSnackbar from '../../components/common/MessageSnackbar';
 import clientService from '../../services/clientService';
-import { debounceTimeWithParams } from '../../utils/operators';
+import { debounceTimeWithParams, getDateToString } from '../../utils/operators';
 
 const styles = theme => ({
   root: {
@@ -112,9 +112,11 @@ async function fetchClients(
   if (columnSearch === 'code') filterType = 'eq';
   else filterType = 'rg';
 
+  const _limit = inputValue.trim().split(' ').length < 3 ? 10 : 1000;
+
   let result = await clientService.getAll(
     0,
-    10,
+    _limit,
     columnSearch,
     columnSearch,
     'asc',
@@ -123,7 +125,7 @@ async function fetchClients(
   );
   let _clients = result.data.map(client => ({
     value: client._id,
-    label: `Código: ${client.code} Nome: ${client.name} Cpf: ${client.cpf}`,
+    label: `Código: ${client.code} Nome: ${client.name} Cpf: ${client.cpf} Data Nasc.: ${getDateToString(client.date_of_birth)}`,
     clientData: client,
   }));
   callback(_clients);

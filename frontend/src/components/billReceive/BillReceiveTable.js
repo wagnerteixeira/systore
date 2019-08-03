@@ -22,6 +22,7 @@ import {
   getNumberDecimalToStringCurrency,
   getNumberToString,
   getValueWithInterest,
+  getValueInterest,
 } from '../../utils/operators';
 
 import BillReceiveCreateModal from './BillReceiveCreateModal';
@@ -111,6 +112,7 @@ const stylesMenu = theme => ({
 
 function _MenuAcoes(props) {
   const {
+    handleSaveClient,
     handleCloseMenuAcoes,
     anchorElMenuAcoes,
     handlePrintBillReceiveGroupByCode,
@@ -142,8 +144,8 @@ function _MenuAcoes(props) {
       )}
       <MenuItem
         onClick={() => {
-          handlePrintBillReceiveGroupByCode(billReceiveKey);
-          handleCloseMenuAcoes();
+            handlePrintBillReceiveGroupByCode(billReceiveKey);
+            handleCloseMenuAcoes();
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -151,8 +153,8 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-          handlePrintBillReceive(billReceiveKey);
-          handleCloseMenuAcoes();
+            handlePrintBillReceive(billReceiveKey);
+            handleCloseMenuAcoes();          
         }}
       >
         <Icon className={classes.iconPadding}>print </Icon>
@@ -160,8 +162,8 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-          handlePrintBillReceivesOpen();
-          handleCloseMenuAcoes();
+            handlePrintBillReceivesOpen();
+            handleCloseMenuAcoes();
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -250,7 +252,8 @@ function BillReceiveTable(props) {
         'Cliente ainda não está salvo, para continuar é preciso salvar.',
         () => handleSaveClient(() => setOpenCreateModal(true))
       );
-    } else setOpenCreateModal(true);
+    } else 
+      setOpenCreateModal(true);
   }
 
   function handleSaveBillReceive(reason, print, clientData, billReceive) {
@@ -341,7 +344,7 @@ function BillReceiveTable(props) {
         setbillsReceive([]);*/
   }
 
-  function onCloseCreateModal(event, reason) {
+  function onCloseCreateModal(event, reason) {    
     setOpenCreateModal(false);
     if (reason === 'created') {
       handleOpenMessage(false, 'success', '');
@@ -367,6 +370,7 @@ function BillReceiveTable(props) {
   return (
     <div className={classes.container}>
       <MenuAcoes
+        handleSaveClient={handleSaveClient}
         handleCloseMenuAcoes={handleCloseMenuAcoes}
         anchorElMenuAcoes={dadosMenuAcoes.anchorEl}
         handlePrintBillReceiveGroupByCode={handlePrintBillReceiveGroupByCode}
@@ -439,8 +443,9 @@ function BillReceiveTable(props) {
               <TableCell size="small">Valor</TableCell>
               {/*<TableCell size="small" align="left">
                 Situação
-                  </TableCell>*/}
+                  </TableCell>*/}              
               <TableCell size="small">Valor pago/atual</TableCell>
+              <TableCell size="small">Juros</TableCell>
               <TableCell size="small">Dias em atraso</TableCell>
               <TableCell size="small" align="left">
                 Ações
@@ -477,20 +482,35 @@ function BillReceiveTable(props) {
                   <TableCell size="small">
                     {getDateToString(billsReceive[key].pay_date)}
                   </TableCell>
-                  <TableCell size="small" className={classes.cellValue}>
+                  <TableCell size="small">
                     {getNumberDecimalToStringCurrency(
                       billsReceive[key].original_value
                     )}
                   </TableCell>
                   {/*<TableCell size="small" align="left">
-                    {billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
-                    </TableCell>*/}
-                  <TableCell size="small" className={classes.cellValue}>
+{billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
+</TableCell>*/}
+                  <TableCell size="small">
                     {getNumberToString(
                       billsReceive[key].pay_date != null
                         ? billsReceive[key].final_value['$numberDecimal']
                         : parseFloat(
                             getValueWithInterest(
+                              billsReceive[key].original_value[
+                                '$numberDecimal'
+                              ],
+                              billsReceive[key].due_date,
+                              dateCurrent
+                            )
+                          )
+                    )}
+                  </TableCell>
+                  <TableCell size="small">
+                    {getNumberToString(
+                      billsReceive[key].pay_date != null
+                        ? billsReceive[key].interest['$numberDecimal']
+                        : parseFloat(
+                            getValueInterest(
                               billsReceive[key].original_value[
                                 '$numberDecimal'
                               ],

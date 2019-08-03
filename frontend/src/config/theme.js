@@ -3,7 +3,7 @@ import { blue, red, green } from '@material-ui/core/colors';
 
 const MuiTheme = createMuiTheme({
   typography: {
-    useNextVariants: true
+    useNextVariants: true,
   },
   fontFamily: 'Roboto, sans-serif',
   palette: {
@@ -11,21 +11,40 @@ const MuiTheme = createMuiTheme({
       light: blue[500],
       main: blue[600],
       dark: blue[700],
-      contrastText: '#fff'
+      contrastText: '#fff',
     },
     secondary: {
       light: red[600],
       main: red[700],
       dark: red[800],
-      contrastText: '#000'
+      contrastText: '#000',
     },
     edit: {
       light: green[500],
       main: green[600],
       dark: green[700],
-      contrastText: '#fff'
-    }
-  }
+      contrastText: '#fff',
+    },
+  },
 });
 
 export default MuiTheme;
+
+/*overrides: {
+    MuiFab: {
+      sizeSmall: {
+        width: 30,
+        height: 30,
+      },
+    },
+    MuiSvgIcon: {
+      root: {
+        fontSize: '1.3rem',
+      },
+    },
+    MuiTableCell: {
+      paddingNone: {
+        paddingLeft: 10,
+      },
+    },
+  },*/
