@@ -11,6 +11,6 @@ namespace Systore.Domain.Dtos
         public string SortPropertyName { get; set; }
         public int Skip { get; set; }
         public int Limit { get; set; }
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
     }
 }

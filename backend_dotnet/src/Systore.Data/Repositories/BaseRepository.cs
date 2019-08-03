@@ -45,8 +45,14 @@ namespace Systore.Data.Repositories
                 .Take(filterPaginateDto.Limit);
            
             var param = Expression.Parameter(typeof(TEntity), "t");
-            MemberExpression member = Expression.Property(param, filterPaginateDto.SortPropertyName);           
+            if (string.IsNullOrEmpty(filterPaginateDto.SortPropertyName)){
+                return await query.ToListAsync();
+            }
+            MemberExpression member = Expression.Property(param, filterPaginateDto.SortPropertyName);   
             
+            if (filterPaginateDto.Order == null)
+              filterPaginateDto.Order = Order.Asc;
+
             switch (member.Type.Name)
             {
                 case "Int32":

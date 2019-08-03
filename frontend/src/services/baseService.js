@@ -5,34 +5,28 @@ export default route => {
   const update = data => axios.put(`/${route}`, data);
   const getAll = (skip, limit, search, sort, order, filterType, filter) => {
     let filterPaginateDto = {};
-    if (skip) {
-      filterPaginateDto.Skip = skip;
+    filterPaginateDto.Skip = skip;
+    filterPaginateDto.Limit = limit;
+    filterPaginateDto.SortPropertyName = sort;
+    filterPaginateDto.Order = order;
+    if ((search) && (filter)) {
+      filterPaginateDto.filters = [
+        {
+          Operation: filterType,
+          Value: filter,
+          PropertyName: search,
+        }
+      ];
     }
-    if (limit) {
-      filterPaginateDto.Limit = limit;
+    else {
+      filterPaginateDto.filters = null;
     }
-    if (sort) {
-      filterPaginateDto.SortPropertyName = sort;
-    }
-    if (order) {
-      filterPaginateDto.Order = order;
-    }
-    if (search) {
-      if (filter) {
-        filterPaginateDto.filters = [
-          {
-            Operation: filterType,
-            Value: filter,
-            PropertyName: search,
-          }
-        ];
-      }
-    }
-
+    
     console.log(JSON.stringify(filterPaginateDto));
 
     return axios.post(`/${route}/getpaginate`, filterPaginateDto);
   };
+
 
   const get = id => axios.get(`/${route}/${id}`);
   const remove = id => axios.delete(`/${route}/${id}`);

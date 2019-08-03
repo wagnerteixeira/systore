@@ -133,7 +133,6 @@ class Menu extends React.Component {
     super(props);
     this.state = {
       user: props.user,
-
       drawerOpen: false,
       headerText: '',      
       messageOpen: false,
@@ -234,6 +233,15 @@ class Menu extends React.Component {
               iconType="assignment_ind"
               primaryText="Clientes"
               onClickButton={() => this.handleHeaderText('Clientes')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/product'}
+              iconType="star"
+              primaryText="Produtos"
+              onClickButton={() => this.handleHeaderText('Produtos')}
               listItemClassName={classes.listItemClassName}
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
