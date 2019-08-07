@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Systore.Domain;
 using Microsoft.Extensions.Options;
 
-namespace Systore.Context.Infra
+namespace Systore.Infra.Context
 {
 
     public partial class SystoreContext : DbContext, ISystoreContext
