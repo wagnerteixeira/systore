@@ -64,11 +64,15 @@ namespace Systore.Api
             services.AddCors();
 
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
 
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSettings>();
 
             if (_env.IsDevelopment())
             {
-
+                Console.WriteLine($"ConnectionString: {appSettings.ConnectionString}");
                 services.AddMvc(opts =>
                 {
                     opts.Filters.Add(new AllowAnonymousFilter());
@@ -77,11 +81,7 @@ namespace Systore.Api
             else
                 services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
+            
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
             {
