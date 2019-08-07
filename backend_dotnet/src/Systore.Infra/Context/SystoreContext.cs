@@ -18,13 +18,12 @@ namespace Systore.Infra.Context
         public SystoreContext(DbContextOptions<SystoreContext> options, IOptions<AppSettings> settings)
             : base(options)
         {
-          if (settings != null)
           _appSettings = settings.Value;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured && _appSettings != null)
+            if (!optionsBuilder.IsConfigured)
             {
               if (_appSettings.DatabaseType == "Mysql")
                 optionsBuilder.UseMySql(_appSettings.ConnectionString);
