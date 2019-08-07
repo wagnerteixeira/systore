@@ -23,7 +23,7 @@ namespace Systore.Infra.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured && _appSettings != null)
             {
               if (_appSettings.DatabaseType == "Mysql")
                 optionsBuilder.UseMySql(_appSettings.ConnectionString);
