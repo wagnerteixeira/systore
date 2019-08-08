@@ -26,6 +26,7 @@ bld/
 *.user
 *.userosscache
 *.sln.docstates
+global.json
 
 
 # End of https://www.gitignore.io/api/dotnetcore

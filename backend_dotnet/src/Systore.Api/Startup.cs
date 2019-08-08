@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Systore.Domain.Abstractions;
-using Systore.Context.Infra;
+using Systore.Infra.Context;
 using Systore.Infra.Abstractions;
 using Systore.Services;
 using Systore.Data.Abstractions;
@@ -69,10 +69,9 @@ namespace Systore.Api
 
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
-
+            Console.WriteLine($"ConnectionString: {appSettings.ConnectionString}");   
             if (_env.IsDevelopment())
-            {
-                Console.WriteLine($"ConnectionString: {appSettings.ConnectionString}");
+            {                
                 services.AddMvc(opts =>
                 {
                     opts.Filters.Add(new AllowAnonymousFilter());
