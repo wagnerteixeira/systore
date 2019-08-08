@@ -26,7 +26,7 @@ namespace Systore.Infra.Context
             Console.WriteLine($"Configure database with {_appSettings.DatabaseType}");
             if (!optionsBuilder.IsConfigured)
             {
-              if (_appSettings.DatabaseType == "Mysql")
+              if (_appSettings.DatabaseType == "MySql")
                 optionsBuilder.UseMySql(_appSettings.ConnectionString);
             }
         }

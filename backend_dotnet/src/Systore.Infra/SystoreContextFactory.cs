@@ -16,7 +16,7 @@ namespace Systore.Infra
       AppSettings appSettings = new AppSettings()
       {
         ConnectionString = "Server=localhost;User Id=root;Password=12345678;Database=systore",
-        DatabaseType = "Mysql",
+        DatabaseType = "MySql",
         Secret = "Secret"
       };
       IOptions<AppSettings> options = Options.Create(appSettings);
