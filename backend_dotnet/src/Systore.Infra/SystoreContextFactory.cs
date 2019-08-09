@@ -7,20 +7,21 @@ using Systore.Domain;
 
 namespace Systore.Infra
 {
-  public class SystoreContextFactory : IDesignTimeDbContextFactory<SystoreContext>
-  {
-    public SystoreContext CreateDbContext(string[] args)
+    public class SystoreContextFactory : IDesignTimeDbContextFactory<SystoreContext>
     {
-      var optionsBuilder = new DbContextOptionsBuilder<SystoreContext>();
-      optionsBuilder.UseMySql("Server=localhost;User Id=root;Password=12345678;Database=systore");
-      AppSettings appSettings = new AppSettings()
-      {
-        ConnectionString = "Server=localhost;User Id=root;Password=12345678;Database=systore",
-        DatabaseType = "MySql",
-        Secret = "Secret"
-      };
-      IOptions<AppSettings> options = Options.Create(appSettings);
-      return new SystoreContext(optionsBuilder.Options, options);
+        private string _connectionString = "Server=localhost;User Id=root;Password=12345678;Database=systore";
+        public SystoreContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<SystoreContext>();
+            optionsBuilder.UseMySql(_connectionString);
+            AppSettings appSettings = new AppSettings()
+            {
+                ConnectionString = _connectionString,
+                DatabaseType = "MySql",
+                Secret = "Secret"
+            };
+            IOptions<AppSettings> options = Options.Create(appSettings);
+            return new SystoreContext(optionsBuilder.Options, options);
+        }
     }
-  }
 }

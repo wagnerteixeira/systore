@@ -8,6 +8,7 @@ using Systore.Domain.Enums;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Systore.Infra.Context;
 
 namespace Systore.Data.Repositories
 {
@@ -16,7 +17,7 @@ namespace Systore.Data.Repositories
         private decimal _interestTax = 0.0023333333333333333333333333M; //(0.07M / 30.0M)
 
 
-        public BillReceiveRepository(IDbContext context) : base(context)
+        public BillReceiveRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
 
         }

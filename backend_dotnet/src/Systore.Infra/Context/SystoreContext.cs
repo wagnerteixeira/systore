@@ -33,7 +33,7 @@ namespace Systore.Infra.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SystoreContext).Assembly, c => c.Name.Contains(_appSettings.DatabaseType));
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SystoreContext).Assembly, c => c.Name.Contains(_appSettings.DatabaseType) && !c.Name.Contains("Audit"));
         }
 
         public DbSet<User> Users { get; set; }

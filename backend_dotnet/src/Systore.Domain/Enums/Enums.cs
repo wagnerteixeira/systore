@@ -42,4 +42,11 @@ namespace Systore.Domain.Enums
         Unit,
         Weight
     }
+
+    public enum AuditOperation
+    {
+        Add,
+        Update,
+        Remove
+    }
 }

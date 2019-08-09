@@ -9,7 +9,7 @@ using Systore.Infra.Context;
 namespace Systore.Infra.Migrations
 {
     [DbContext(typeof(SystoreContext))]
-    [Migration("20190802044026_InitialCreate")]
+    [Migration("20190809014937_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

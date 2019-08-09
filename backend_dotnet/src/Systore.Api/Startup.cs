@@ -24,6 +24,7 @@ using Systore.Domain;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace Systore.Api
 {
@@ -45,7 +46,12 @@ namespace Systore.Api
 
             services.AddDbContext<SystoreContext>();
 
-            services.AddScoped<IDbContext, SystoreContext>();
+            services.AddDbContext<AuditContext>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddScoped<ISystoreContext, SystoreContext>();
+            services.AddScoped<IAuditContext, AuditContext>();
 
             //scopeservices
             //services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
@@ -61,6 +67,9 @@ namespace Systore.Api
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IBillReceiveRepository, BillReceiveRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IHeaderAuditRepository, HeaderAuditRepository>();
+            services.AddScoped<IItemAuditRepository, ItemAuditRepository>();
+
             services.AddCors();
 
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");

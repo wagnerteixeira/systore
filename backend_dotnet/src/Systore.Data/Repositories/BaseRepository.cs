@@ -9,6 +9,10 @@ using System.Linq.Expressions;
 using Systore.Data.Abstractions;
 using Systore.Domain.Enums;
 using Systore.Domain.Dtos;
+using Systore.Infra.Context;
+using Systore.Domain.Entities;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Systore.Domain.Abstractions;
 
 namespace Systore.Data.Repositories
 {
@@ -16,11 +20,13 @@ namespace Systore.Data.Repositories
     {
         protected readonly IDbContext _context;
         protected readonly DbSet<TEntity> _entities;
+        protected readonly IHeaderAuditRepository _headerAuditRepository;
 
-        public BaseRepository(IDbContext context)
+        public BaseRepository(IDbContext context, IHeaderAuditRepository headerAuditRepository)
         {
             _context = context;
             _entities = _context.Instance.Set<TEntity>();
+            _headerAuditRepository = headerAuditRepository;
         }
 
         public virtual async Task<string> AddAsync(TEntity entity)
@@ -35,7 +41,8 @@ namespace Systore.Data.Repositories
         public virtual IQueryable<TEntity> GetAll() => _entities.Select(x => x);
 
         public virtual async Task<List<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate) => await _entities.Where(predicate).ToListAsync();
-        public virtual async Task<List<TEntity>> GetWhereAsync(FilterPaginateDto filterPaginateDto) {
+        public virtual async Task<List<TEntity>> GetWhereAsync(FilterPaginateDto filterPaginateDto)
+        {
             var query = _entities.Select(x => x);
             if (filterPaginateDto.filters != null)
                 query = query.Where(QueryExpressionBuilder.GetExpression<TEntity>(filterPaginateDto.filters));
@@ -43,15 +50,16 @@ namespace Systore.Data.Repositories
             query = query
                 .Skip(filterPaginateDto.Skip)
                 .Take(filterPaginateDto.Limit);
-           
+
             var param = Expression.Parameter(typeof(TEntity), "t");
-            if (string.IsNullOrEmpty(filterPaginateDto.SortPropertyName)){
+            if (string.IsNullOrEmpty(filterPaginateDto.SortPropertyName))
+            {
                 return await query.ToListAsync();
             }
-            MemberExpression member = Expression.Property(param, filterPaginateDto.SortPropertyName);   
-            
+            MemberExpression member = Expression.Property(param, filterPaginateDto.SortPropertyName);
+
             if (filterPaginateDto.Order == null)
-              filterPaginateDto.Order = Order.Asc;
+                filterPaginateDto.Order = Order.Asc;
 
             switch (member.Type.Name)
             {
@@ -61,19 +69,19 @@ namespace Systore.Data.Repositories
                         return await query.OrderBy(int32Expression).ToListAsync();
                     else
                         return await query.OrderByDescending(int32Expression).ToListAsync();
-                    
+
                 case "String":
                     var stringExpression = Expression.Lambda<Func<TEntity, string>>(member, param);
                     if (filterPaginateDto.Order == Order.Asc)
                         return await query.OrderBy(stringExpression).ToListAsync();
                     else
-                        return await query.OrderByDescending(stringExpression).ToListAsync();                    
+                        return await query.OrderByDescending(stringExpression).ToListAsync();
                 case "DateTime":
                     var dateTimeExpression = Expression.Lambda<Func<TEntity, string>>(member, param);
                     if (filterPaginateDto.Order == Order.Asc)
                         return await query.OrderBy(dateTimeExpression).ToListAsync();
                     else
-                        return await query.OrderByDescending(dateTimeExpression).ToListAsync();                    
+                        return await query.OrderByDescending(dateTimeExpression).ToListAsync();
                 case "Nullable`1":
                     var nullableType = Nullable.GetUnderlyingType(member.Type);
                     switch (nullableType.Name)
@@ -95,14 +103,14 @@ namespace Systore.Data.Repositories
                             if (filterPaginateDto.Order == Order.Asc)
                                 return await query.OrderBy(nullObjExpression).ToListAsync();
                             else
-                                return await query.OrderByDescending(nullObjExpression).ToListAsync();                            
+                                return await query.OrderByDescending(nullObjExpression).ToListAsync();
                     }
                 default:
                     var objExpression = Expression.Lambda<Func<TEntity, object>>(member, param);
                     if (filterPaginateDto.Order == Order.Asc)
                         return await query.OrderBy(objExpression).ToListAsync();
                     else
-                        return await query.OrderByDescending(objExpression).ToListAsync();                    
+                        return await query.OrderByDescending(objExpression).ToListAsync();
             }
         }
 
@@ -131,12 +139,124 @@ namespace Systore.Data.Repositories
         {
             return await _context.Instance.Database.ExecuteSqlCommandAsync(command, parameters);
         }
-        
+
+        private ListAuditEntry OnBeforeSaveChanges()
+        {
+            _context.Instance.ChangeTracker.DetectChanges();
+            var auditEntries = new ListAuditEntry();
+            foreach (var entry in _context.Instance.ChangeTracker.Entries())
+            {
+               
+                if (entry.Entity is IAudit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                    continue;
+
+                AuditEntry auditEntry = new AuditEntry();
+
+                auditEntry.HeaderAudit.TableName = entry.Metadata.Relational().TableName;
+                auditEntry.HeaderAudit.Date = DateTime.Now;
+                auditEntry.HeaderAudit.UserName = "?";
+
+
+                foreach (var property in entry.Properties)
+                {
+                    if (property.IsTemporary)
+                    {
+                        // value will be generated by the database, get the value after saving
+                        auditEntry.TemporaryProperties.Add(property);
+                        continue;
+                    }
+
+                    string propertyName = property.Metadata.Name;
+                    if (property.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
+                        {
+                            FieldName = propertyName,
+                            OldValue = property.CurrentValue.ToString(),
+                            NewValue = property.CurrentValue.ToString(),
+
+                        });
+                        continue;
+                    }
+
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
+                            {
+                                FieldName = propertyName,
+                                NewValue = property.CurrentValue.ToString(),
+                            });
+                            break;
+
+                        case EntityState.Deleted:
+                            auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
+                            {
+                                FieldName = propertyName,
+                                OldValue = property.CurrentValue.ToString(),
+                            });
+                            break;
+
+                        case EntityState.Modified:
+                            if (property.IsModified)
+                            {
+                                auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
+                                {
+                                    FieldName = propertyName,
+                                    OldValue = property.CurrentValue.ToString(),
+                                    NewValue = property.CurrentValue.ToString(),
+
+                                });
+                            }
+                            break;
+                    }
+                }
+                auditEntries.AuditEntries.Add(auditEntry);
+            }
+            return auditEntries;
+        }
+
+        private Task OnAfterSaveChanges(ListAuditEntry auditEntries)
+        {
+            foreach (var auditEntry in auditEntries.AuditEntries)
+            {
+                // Get the final value of the temporary properties
+                foreach (var prop in auditEntry.TemporaryProperties)
+                {
+                    if (prop.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
+                        {
+                            FieldName = prop.Metadata.Name,
+                            OldValue = prop.CurrentValue.ToString(),
+                            NewValue = prop.CurrentValue.ToString()
+                        });
+                    }
+                    else
+                    {
+                        auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
+                        {
+                            FieldName = prop.Metadata.Name,
+
+                            NewValue = prop.CurrentValue.ToString()
+                        });
+                    }
+
+                }
+
+                _headerAuditRepository.AddAsync(auditEntry.HeaderAudit);
+            }
+            return Task.CompletedTask;
+        }
+
+
         protected virtual async Task<string> SaveChangesAsync()
         {
             try
             {
+                var listAuditEntry = OnBeforeSaveChanges();
                 await _context.Instance.SaveChangesAsync();
+                OnAfterSaveChanges(listAuditEntry);
                 return "";
             }
             /*
@@ -166,5 +286,19 @@ namespace Systore.Data.Repositories
         {
 
         }
+    }
+
+    public class ListAuditEntry
+    {
+        public List<AuditEntry> AuditEntries { get; set; } = new List<AuditEntry>();
+    }
+
+    public class AuditEntry
+    {
+        public HeaderAudit HeaderAudit { get; set; } = new HeaderAudit();
+        public List<PropertyEntry> TemporaryProperties { get; set; } = new List<PropertyEntry>();
+
+        public bool HasTemporaryProperties => TemporaryProperties.Any();
+
     }
 }

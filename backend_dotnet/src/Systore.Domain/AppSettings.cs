@@ -8,6 +8,7 @@ namespace Systore.Domain
     {
         public string Secret { get; set; }
         public string ConnectionString { get; set; }
+        public string AuditConnectionString { get; set; }
         public string DatabaseType { get; set; }
     }
 }

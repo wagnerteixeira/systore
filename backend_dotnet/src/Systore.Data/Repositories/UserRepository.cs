@@ -4,12 +4,13 @@ using Systore.Infra.Abstractions;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Systore.Infra.Context;
 
 namespace Systore.Data.Repositories
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(IDbContext context) : base(context)
+        public UserRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
 
         }
