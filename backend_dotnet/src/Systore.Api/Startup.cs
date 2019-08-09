@@ -60,16 +60,21 @@ namespace Systore.Api
             services.AddScoped<IBillReceiveService, BillReceiveService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ISaleProductsService, SaleProductsService>();
+            services.AddScoped<ISaleService, SaleService>();
 
 
             //scoperepositories
+            
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IBillReceiveRepository, BillReceiveRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IHeaderAuditRepository, HeaderAuditRepository>();
             services.AddScoped<IItemAuditRepository, ItemAuditRepository>();
-
+            services.AddScoped<ISaleProductsRepository, SaleProductsRepository>();
+            services.AddScoped<ISaleRepository, SaleRepository>();
+            
             services.AddCors();
 
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
