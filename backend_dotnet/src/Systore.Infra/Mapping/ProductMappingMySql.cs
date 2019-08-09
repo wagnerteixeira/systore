@@ -39,7 +39,8 @@ namespace Systore.Infra.Mapping
                 .HasColumnType("TINYINT");
 
             builder.Property(p => p.PrintDateOfPackaging)
-                .HasColumnType("TINYINT");           
+                .HasColumnType("TINYINT");               
+        
         }
     }
 }

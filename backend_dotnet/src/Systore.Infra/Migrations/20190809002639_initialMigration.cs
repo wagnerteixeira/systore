@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Systore.Infra.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -109,6 +109,57 @@ namespace Systore.Infra.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Sale",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ClientId = table.Column<int>(nullable: false),
+                    FinalValue = table.Column<decimal>(type: "DECIMAL(18, 2)", nullable: false),
+                    SaleDate = table.Column<DateTime>(nullable: false),
+                    Vendor = table.Column<string>(maxLength: 30, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sale", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sale_Client_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SaleProducts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SaleId = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false),
+                    Price = table.Column<decimal>(type: "DECIMAL(18, 2)", nullable: false),
+                    Quantity = table.Column<decimal>(type: "DECIMAL(18, 2)", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "DECIMAL(18, 2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SaleProducts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SaleProducts_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SaleProducts_Sale_SaleId",
+                        column: x => x.SaleId,
+                        principalTable: "Sale",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "Admin", "Password", "UserName" },
@@ -134,6 +185,21 @@ namespace Systore.Infra.Migrations
                 table: "BillReceive",
                 columns: new[] { "Code", "Quota" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sale_ClientId",
+                table: "Sale",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleProducts_ProductId",
+                table: "SaleProducts",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleProducts_SaleId",
+                table: "SaleProducts",
+                column: "SaleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -142,10 +208,16 @@ namespace Systore.Infra.Migrations
                 name: "BillReceive");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "SaleProducts");
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "Sale");
 
             migrationBuilder.DropTable(
                 name: "Client");
