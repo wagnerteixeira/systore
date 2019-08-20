@@ -19,6 +19,7 @@ import Product from './pages/product/Product';
 import User from './pages/user/User';
 import ViewLog from './pages/log/ViewLog';
 import Login from './pages/user/Login';
+import BalanceLoad from './pages/balanceLoad/BalanceLoad';
 
 import localStorageService from './localStorage/localStorageService';
 
@@ -154,6 +155,7 @@ class App extends Component {
                   <Route path="/client" component={Client} />
                   <Route path="/product" component={Product} />
                   <Route path="/user" component={User} />
+                  <Route path="/balance-load" component={BalanceLoad} />
                   {user.admin && <Route path="/log" component={ViewLog} />}
                   <Redirect from="*" to="/billsReceive" />
                 </Switch>

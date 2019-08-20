@@ -35,12 +35,15 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.ThirdDescription)
                 .HasMaxLength(30);
 
-            builder.Property(p => p.PrintDateOfPackaging)
+            builder.Property(p => p.PrintExpirationDate)
                 .HasColumnType("TINYINT");
 
             builder.Property(p => p.PrintDateOfPackaging)
-                .HasColumnType("TINYINT");               
-        
+                .HasColumnType("TINYINT");
+
+            builder.Property(p => p.ExportToBalance)
+                .HasColumnType("TINYINT");
+
         }
     }
 }

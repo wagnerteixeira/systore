@@ -49,4 +49,11 @@ namespace Systore.Domain.Enums
         Update,
         Remove
     }
+
+    public enum TypeOfSearchProductsToBalance
+    {
+        OnlyModified,
+        All
+    }
+
 }

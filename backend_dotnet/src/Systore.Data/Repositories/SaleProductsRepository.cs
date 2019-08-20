@@ -6,7 +6,7 @@ namespace Systore.Data.Repositories
 {
     public class SaleProductsRepository : BaseRepository<SaleProducts>, ISaleProductsRepository
     {
-        public SaleProductsRepository(IDbContext context) : base(context)
+        public SaleProductsRepository(IDbContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
 
         }        

@@ -255,6 +255,15 @@ class Menu extends React.Component {
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
             />
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/balance-load'}
+              iconType="vertical_align_bottom"
+              primaryText="Carga da Balança"
+              onClickButton={() => this.handleHeaderText('Gerar carga da Balança')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
             {this.state.user.admin && (
               <IconListButton
                 linkTo={process.env.REACT_APP_PUBLIC_URL + '/log'}
