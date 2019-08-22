@@ -172,8 +172,8 @@ namespace Systore.Data.Repositories
                         auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                         {
                             FieldName = propertyName,
-                            OldValue = property.CurrentValue.ToString(),
-                            NewValue = property.CurrentValue.ToString(),
+                            OldValue = (property.CurrentValue ?? "").ToString(),
+                            NewValue = (property.CurrentValue ?? "").ToString(),
 
                         });
                         continue;
@@ -185,7 +185,7 @@ namespace Systore.Data.Repositories
                             auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                             {
                                 FieldName = propertyName,
-                                NewValue = property.CurrentValue.ToString(),
+                                NewValue = (property.CurrentValue ?? "").ToString(),
                             });
                             break;
 
@@ -193,7 +193,7 @@ namespace Systore.Data.Repositories
                             auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                             {
                                 FieldName = propertyName,
-                                OldValue = property.CurrentValue.ToString(),
+                                OldValue = (property.CurrentValue ?? "").ToString(),
                             });
                             break;
 
@@ -203,8 +203,8 @@ namespace Systore.Data.Repositories
                                 auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                                 {
                                     FieldName = propertyName,
-                                    OldValue = property.CurrentValue.ToString(),
-                                    NewValue = property.CurrentValue.ToString(),
+                                    OldValue = (property.CurrentValue ?? "").ToString(),
+                                    NewValue = (property.CurrentValue ?? "").ToString(),
 
                                 });
                             }

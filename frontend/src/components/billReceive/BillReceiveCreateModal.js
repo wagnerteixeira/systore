@@ -88,6 +88,7 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleOriginalValueChange = event => {
+    console.log(typeof event.target.value,event.target.value) ;
     let _originalValue = 0.0;    
     if (typeof event.target.value === "string"){
       _originalValue = accounting.unformat(
@@ -96,6 +97,8 @@ class BillReceiveCreateModal extends React.Component {
     }
     else
       _originalValue = event.target.value;
+    console.log(_originalValue);
+    
     this.setState({ originalValue: _originalValue });
   };
 
@@ -308,6 +311,7 @@ class BillReceiveCreateModal extends React.Component {
           accounting.unformat(originalValue.replace('.', ','))
         );
     } else _originalValue = accounting.formatNumber(originalValue);
+    console.log(typeof _originalValue, _originalValue) ;
     return (
       <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
         <MessageSnackbar
@@ -366,7 +370,7 @@ class BillReceiveCreateModal extends React.Component {
               className={classes.margin}
               label="Valor"
               value={_originalValue}
-              onChange={this.handleoriginalValueChange}
+              onChange={this.handleOriginalValueChange}
               id="originalValue"
               InputProps={{
                 inputComponent: NumberFormatCustom,
