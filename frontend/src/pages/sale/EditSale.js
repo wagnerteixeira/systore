@@ -8,6 +8,7 @@ import clientService from '../../services/clientService';
 import NumberFormatCustom from '../../components/common/NumberFormatCustom';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { getDateToString, debounceTimeWithParams } from '../../utils/operators';
+import MaterialTable from 'material-table';
 
 const styles = theme => ({
   container: {
@@ -106,7 +107,7 @@ function EditSale(props) {
   const { handleOpenMessage } = props;
   const [single, setSingle] = useState(null);
   const [prevSingle, setPrevSingle] = useState(null);
-  const [dataProducts, setData] = useState(props.data.saleProducts);
+  const [dataProducts, setDataProducts] = useState(props.data.saleProducts);
 
   const selectStyles = {
     input: base => ({
