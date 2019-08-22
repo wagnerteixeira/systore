@@ -247,6 +247,15 @@ class Menu extends React.Component {
               listItemTextClassName={classes.listItemTextClassName}
             />
             <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/sale'}
+              iconType="shopping_cart"
+              primaryText="Vendas"
+              onClickButton={() => this.handleHeaderText('Vendas')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
+            <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/user'}
               iconType="accessibility_new"
               primaryText="Usuários"

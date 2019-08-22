@@ -60,8 +60,9 @@ namespace Systore.Api
             services.AddScoped<IBillReceiveService, BillReceiveService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ISaleProductsService, SaleProductsService>();
             services.AddScoped<ISaleService, SaleService>();
+            services.AddScoped<ISaleProductsService, SaleProductsService>();
+            
 
 
             //scoperepositories
@@ -72,8 +73,9 @@ namespace Systore.Api
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IHeaderAuditRepository, HeaderAuditRepository>();
             services.AddScoped<IItemAuditRepository, ItemAuditRepository>();
-            services.AddScoped<ISaleProductsRepository, SaleProductsRepository>();
             services.AddScoped<ISaleRepository, SaleRepository>();
+            services.AddScoped<ISaleProductsRepository, SaleProductsRepository>();
+            
             
             services.AddCors();
 

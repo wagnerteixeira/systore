@@ -1,12 +1,13 @@
 ﻿using Systore.Domain.Entities;
 using Systore.Data.Abstractions;
 using Systore.Infra.Abstractions;
+using Systore.Infra.Context;
 
 namespace Systore.Data.Repositories
 {
     public class SaleProductsRepository : BaseRepository<SaleProducts>, ISaleProductsRepository
     {
-        public SaleProductsRepository(IDbContext context) : base(context)
+        public SaleProductsRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
 
         }        

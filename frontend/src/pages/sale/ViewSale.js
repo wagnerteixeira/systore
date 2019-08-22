@@ -64,7 +64,7 @@ const styles = theme => ({
   },
 });
 
-function ViewProduct(props) {
+function ViewSale(props) {
   const [selectedRow, setSelectedRow] = useState(null);
 
   const { data, actions, classes, columnSearch, search, handleSearch, handleCreate, handleChangeTextSearch, handleRequestSearch } = props;
@@ -84,8 +84,8 @@ function ViewProduct(props) {
               }}
             >
               <MenuItem value={'id'}>Código</MenuItem>
-              <MenuItem value={'firstDescription'}>Descrição</MenuItem>
-              <MenuItem value={'secondDescription'}>Complemento</MenuItem>              
+              <MenuItem value={'vendor'}>Vendedor</MenuItem>
+              <MenuItem value={'saleDate'}>Data de venda</MenuItem>              
             </Select>
           </FormControl>
         </Grid>
@@ -133,7 +133,7 @@ function ViewProduct(props) {
             </Fab>
           </Tooltip>
           <Tooltip
-            title="Incluir Produto"
+            title="Incluir Venda"
             placement={'bottom-start'}
             enterDelay={300}
           >
@@ -152,8 +152,8 @@ function ViewProduct(props) {
       <MaterialTable
         columns={[
           { title: 'Código', field: 'id', primary: true },
-          { title: 'Descrição 1', field: 'firstDescription', primary: true },
-          { title: 'Descrição 2', field: 'secondDescription', primary: true },
+          { title: 'Vendedor', field: 'vendor', primary: true },
+          { title: 'Data de venda', field: 'dateSale', primary: true },
         ]}
         data={data}
         title=''
@@ -206,4 +206,4 @@ function ViewProduct(props) {
   )
 }
 
-export default withStyles(styles)(ViewProduct);
+export default withStyles(styles)(ViewSale);
