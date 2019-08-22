@@ -133,19 +133,19 @@ function Product(props) {
   const handleValueChangeInteger = name => event => {
     let _value = parseInt(event.target.value.replace(/[^0-9]/g, ''));
     if (isNaN(_value))
-    _value = 0;
+      _value = 0;
     setData({ ...data, [name]: _value });
   };
 
   const handleValueDecimalChange = name => event => {
-    let _value = 0.0;    
-    if (typeof event.target.value === "string"){
+    let _value = 0.0;
+    if (typeof event.target.value === "string") {
       _value = accounting.unformat(
         _value = event.target.value.replace('.', ',')
       );
     }
     else
-    _value = event.target.value;
+      _value = event.target.value;
     setData({ ...data, [name]: _value });
   };
 
@@ -173,7 +173,7 @@ function Product(props) {
 
     productService
       .getAll(0, 99999, columnSearch, '', '', filterType, search)
-      .then(res => {setProducts(res.data)})
+      .then(res => { setProducts(res.data) })
       .catch(error => setMessage({
         messageOpen: true,
         messageText: getErrosFromApi(error),
@@ -207,7 +207,7 @@ function Product(props) {
       {stateData === 'LIST' && (
         <ViewProduct
           data={products}
-          columnSearch={columnSearch} 
+          columnSearch={columnSearch}
           search={search}
           handleSearch={handleSearch}
           handleCreate={handleCreate}

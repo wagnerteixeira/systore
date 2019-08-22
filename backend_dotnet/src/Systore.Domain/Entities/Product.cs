@@ -24,6 +24,8 @@ namespace Systore.Domain.Entities
         public bool PrintExpirationDate { get; set; }
 
         public bool PrintDateOfPackaging { get; set; }
+
+        public bool ExportToBalance { get; set; }
         
         public ICollection<SaleProducts> SaleProducts { get; set; }
 
