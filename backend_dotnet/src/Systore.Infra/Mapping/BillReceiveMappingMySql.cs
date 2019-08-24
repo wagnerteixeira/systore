@@ -48,10 +48,6 @@ namespace Systore.Infra.Mapping
               .WithMany(g => g.BillReceives)
               .HasForeignKey(s => s.ClientId)
               .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-              .HasIndex(p => new { p.Code, p.Quota })
-              .IsUnique();
         }
     }
 }

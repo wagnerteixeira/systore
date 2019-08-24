@@ -56,6 +56,7 @@ namespace Systore.Data.Repositories
             {
                 return await query.ToListAsync();
             }
+
             MemberExpression member = Expression.Property(param, filterPaginateDto.SortPropertyName);
 
             if (filterPaginateDto.Order == null)
@@ -146,7 +147,7 @@ namespace Systore.Data.Repositories
             var auditEntries = new ListAuditEntry();
             foreach (var entry in _context.Instance.ChangeTracker.Entries())
             {
-               
+
                 if (entry.Entity is IAudit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
                     continue;
 
@@ -254,9 +255,14 @@ namespace Systore.Data.Repositories
         {
             try
             {
-                var listAuditEntry = OnBeforeSaveChanges();
-                await _context.Instance.SaveChangesAsync();
-                OnAfterSaveChanges(listAuditEntry);
+                if (_headerAuditRepository != null)
+                {
+                    var listAuditEntry = OnBeforeSaveChanges();
+                    await _context.Instance.SaveChangesAsync();
+                    OnAfterSaveChanges(listAuditEntry);
+                }
+                else
+                    await _context.Instance.SaveChangesAsync();
                 return "";
             }
             /*
