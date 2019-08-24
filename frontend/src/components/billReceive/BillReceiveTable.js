@@ -144,8 +144,8 @@ function _MenuAcoes(props) {
       )}
       <MenuItem
         onClick={() => {
-            handlePrintBillReceiveGroupByCode(billReceiveKey);
-            handleCloseMenuAcoes();
+          handlePrintBillReceiveGroupByCode(billReceiveKey);
+          handleCloseMenuAcoes();
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -153,8 +153,8 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-            handlePrintBillReceive(billReceiveKey);
-            handleCloseMenuAcoes();          
+          handlePrintBillReceive(billReceiveKey);
+          handleCloseMenuAcoes();
         }}
       >
         <Icon className={classes.iconPadding}>print </Icon>
@@ -162,8 +162,8 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-            handlePrintBillReceivesOpen();
-            handleCloseMenuAcoes();
+          handlePrintBillReceivesOpen();
+          handleCloseMenuAcoes();
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -252,8 +252,7 @@ function BillReceiveTable(props) {
         'Cliente ainda não está salvo, para continuar é preciso salvar.',
         () => handleSaveClient(() => setOpenCreateModal(true))
       );
-    } else 
-      setOpenCreateModal(true);
+    } else setOpenCreateModal(true);
   }
 
   function handleSaveBillReceive(reason, print, clientData, billReceive) {
@@ -324,7 +323,6 @@ function BillReceiveTable(props) {
           setbillsReceiveComplete(billsReceiveCompleteWithoutDeleted);
         })
         .catch(error => {
-          console.log(error.response);
           handleOpenMessage(true, 'error', getErrosFromApi(error));
         })
     );
@@ -344,7 +342,7 @@ function BillReceiveTable(props) {
         setbillsReceive([]);*/
   }
 
-  function onCloseCreateModal(event, reason) {    
+  function onCloseCreateModal(event, reason) {
     setOpenCreateModal(false);
     if (reason === 'created') {
       handleOpenMessage(false, 'success', '');
@@ -400,9 +398,7 @@ function BillReceiveTable(props) {
                   billsReceiveComplete
                     .filter(b => b.situation === 0)
                     .reduce((prev, curr) => {
-                      return (
-                        parseFloat(curr.originalValue) + prev
-                      );
+                      return parseFloat(curr.originalValue) + prev;
                     }, 0.0)
                 )}
               </span>
@@ -443,7 +439,7 @@ function BillReceiveTable(props) {
               <TableCell size="small">Valor</TableCell>
               {/*<TableCell size="small" align="left">
                 Situação
-                  </TableCell>*/}              
+                  </TableCell>*/}
               <TableCell size="small">Valor pago/atual</TableCell>
               <TableCell size="small">Juros</TableCell>
               <TableCell size="small">Dias em atraso</TableCell>
@@ -453,7 +449,7 @@ function BillReceiveTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(billsReceive).map(key => {             
+            {Object.keys(billsReceive).map(key => {
               return (
                 <TableRow
                   className={
@@ -486,16 +482,18 @@ function BillReceiveTable(props) {
 {billsReceive[key].situation === 1 ? 'QUITADO' : 'ABERTO'}
 </TableCell>*/}
                   <TableCell size="small">
-                  {getNumberDecimalToStringCurrency(
+                    {getNumberDecimalToStringCurrency(
                       billsReceive[key].finalValue
                     )}
                   </TableCell>
                   <TableCell size="small">
-                  {getNumberDecimalToStringCurrency(
+                    {getNumberDecimalToStringCurrency(
                       billsReceive[key].interest
                     )}
                   </TableCell>
-                  <TableCell size="small">{billsReceive[key].daysDelay}</TableCell>
+                  <TableCell size="small">
+                    {billsReceive[key].daysDelay}
+                  </TableCell>
                   <TableCell size="small" align="left">
                     <Fab
                       color="primary"
@@ -508,7 +506,7 @@ function BillReceiveTable(props) {
                       size="small"
                     >
                       <TouchApp fontSize="small" />
-                    </Fab>                   
+                    </Fab>
                   </TableCell>
                 </TableRow>
               );

@@ -125,7 +125,9 @@ async function fetchClients(
   );
   let _clients = result.data.map(client => ({
     value: client.id,
-    label: `Código: ${client.id} Nome: ${client.name} Cpf: ${client.cpf} Data Nasc.: ${getDateToString(client.dateOfBirth)}`,
+    label: `Código: ${client.id} Nome: ${client.name} Cpf: ${
+      client.cpf
+    } Data Nasc.: ${getDateToString(client.dateOfBirth)}`,
     clientData: client,
   }));
   callback(_clients);
@@ -318,8 +320,6 @@ function BillReceive(props) {
     default:
       textPlaceHolder = 'nome';
   }
-
-  console.log(single);
 
   return (
     <Paper className={classes.root}>

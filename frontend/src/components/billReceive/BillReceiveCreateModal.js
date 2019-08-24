@@ -80,25 +80,19 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleQuotasChange = event => {
-    let _quotas = parseInt(event.target.value)
-    console.log(_quotas);
-    if (isNaN(_quotas))
-      _quotas = 0;
+    let _quotas = parseInt(event.target.value);
+    if (isNaN(_quotas)) _quotas = 0;
     this.setState({ quotas: _quotas });
   };
 
   handleOriginalValueChange = event => {
-    console.log(typeof event.target.value,event.target.value) ;
-    let _originalValue = 0.0;    
-    if (typeof event.target.value === "string"){
+    let _originalValue = 0.0;
+    if (typeof event.target.value === 'string') {
       _originalValue = accounting.unformat(
-        _originalValue = event.target.value.replace('.', ',')
+        (_originalValue = event.target.value.replace('.', ','))
       );
-    }
-    else
-      _originalValue = event.target.value;
-    console.log(_originalValue);
-    
+    } else _originalValue = event.target.value;
+
     this.setState({ originalValue: _originalValue });
   };
 
@@ -116,8 +110,7 @@ class BillReceiveCreateModal extends React.Component {
 
   validadeSaveQuotas = originalValue => {
     let message = '';
-    if (!originalValue || originalValue <= 0)
-      message += 'Informe o valor!\n\n';
+    if (!originalValue || originalValue <= 0) message += 'Informe o valor!\n\n';
     if (!this.state.quotas || this.state.quotas <= 0)
       message += 'Informe as parcelas!\n\n';
     if (!this.state.billsReceive || this.state.billsReceive.length <= 0)
@@ -136,7 +129,6 @@ class BillReceiveCreateModal extends React.Component {
       return;
 
     let _originalValue = 0.0;
-    console.log(this.state);
     if (typeof this.state.originalValue == 'string') {
       if (this.state.originalValue.length > 0)
         _originalValue = accounting.unformat(
@@ -208,11 +200,9 @@ class BillReceiveCreateModal extends React.Component {
       }),
     };
 
-
     billsReceiveService
       .createBillReceives(data)
       .then(res => {
-        console.log(res.data);
         this.setState({
           code: '',
           quotas: 0,
@@ -293,7 +283,6 @@ class BillReceiveCreateModal extends React.Component {
 
   render() {
     const { open, onClose, classes, clientId } = this.props;
-    console.log(this.state);
     const {
       originalValue,
       purchaseDate,
@@ -311,7 +300,6 @@ class BillReceiveCreateModal extends React.Component {
           accounting.unformat(originalValue.replace('.', ','))
         );
     } else _originalValue = accounting.formatNumber(originalValue);
-    console.log(typeof _originalValue, _originalValue) ;
     return (
       <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
         <MessageSnackbar
@@ -504,7 +492,7 @@ class BillReceiveCreateModal extends React.Component {
           <Button
             variant="outlined"
             color="secondary"
-            Iisabled={this.state.inSaving}
+            disabled={this.state.inSaving}
             className={classes.button}
             onClick={this.handleCancel}
           >

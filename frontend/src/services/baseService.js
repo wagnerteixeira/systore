@@ -9,37 +9,30 @@ export default route => {
     filterPaginateDto.Limit = limit;
     filterPaginateDto.SortPropertyName = sort;
     filterPaginateDto.Order = order;
-    if ((search) && (filter)) {
+    if (search && filter) {
       filterPaginateDto.filters = [
         {
           Operation: filterType,
           Value: filter,
           PropertyName: search,
-        }
+        },
       ];
-    }
-    else {
+    } else {
       filterPaginateDto.filters = null;
     }
-    
-    console.log(JSON.stringify(filterPaginateDto));
-
     return axios.post(`/${route}/getpaginate`, filterPaginateDto);
   };
-
 
   const get = id => axios.get(`/${route}/${id}`);
   const remove = id => axios.delete(`/${route}/${id}`);
   const count = (sort, filterType, filter) => {
-    console.log(sort);
-    console.log(filterType);
-    console.log(filter);
-
-    let filterDto = [{
-      PropertyName: sort,
-      Operation: filterType,
-      Value: filter
-    }];
+    let filterDto = [
+      {
+        PropertyName: sort,
+        Operation: filterType,
+        Value: filter,
+      },
+    ];
     /*if (filterType === 'Eq') filterDto = {
 
     };

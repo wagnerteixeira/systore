@@ -4,9 +4,12 @@ import baseService from './baseService';
 
 const productService = baseService('product');
 
-const getAllNoParameters = () => {
-  return axios.get(`/product`);
+const getProductsForExportToBalance = ({ typeOfSearchProductsToBalance }) =>
+  axios.post(`product/get-products-for-export-to-balance`, {
+    typeOfSearchProductsToBalance,
+  });
+
+export default {
+  ...productService,
+  getProductsForExportToBalance,
 };
-
-
-export default { ...productService, getAllNoParameters };

@@ -134,7 +134,7 @@ class Menu extends React.Component {
     this.state = {
       user: props.user,
       drawerOpen: false,
-      headerText: '',      
+      headerText: '',
       messageOpen: false,
       variantMessage: 'success',
       messageText: '',
@@ -147,8 +147,8 @@ class Menu extends React.Component {
   componentDidMount() {
     let _interval = setInterval(
       () =>
-        this.setState(prevState => {          
-          prevState.date.setMinutes(prevState.date.getMinutes() + 1);          
+        this.setState(prevState => {
+          prevState.date.setMinutes(prevState.date.getMinutes() + 1);
           return {
             date: prevState.date,
           };
@@ -195,8 +195,7 @@ class Menu extends React.Component {
 
   render() {
     const { classes, handleLogout } = this.props;
-    const { messageOpen, variantMessage, messageText, anchorEl } = this.state;    
-    console.log(typeof this.state.date);
+    const { messageOpen, variantMessage, messageText, anchorEl } = this.state;
     return (
       <div className={classes.root}>
         <Drawer
@@ -268,7 +267,9 @@ class Menu extends React.Component {
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/balance-load'}
               iconType="vertical_align_bottom"
               primaryText="Carga da Balança"
-              onClickButton={() => this.handleHeaderText('Gerar carga da Balança')}
+              onClickButton={() =>
+                this.handleHeaderText('Gerar carga da Balança')
+              }
               listItemClassName={classes.listItemClassName}
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}

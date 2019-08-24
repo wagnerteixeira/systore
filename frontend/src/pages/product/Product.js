@@ -20,7 +20,6 @@ const styles = theme => ({
 });
 
 function Product(props) {
-
   const [products, setProducts] = useState([]);
   const [data, setData] = useState({});
   const [stateData, setStateData] = useState('LIST');
@@ -29,7 +28,7 @@ function Product(props) {
   const [message, setMessage] = useState({
     messageOpen: false,
     variantMessage: 'success',
-    messageText: ''
+    messageText: '',
   });
 
   function handleCancel(previusOperation) {
@@ -46,7 +45,7 @@ function Product(props) {
     setStateData('LIST');
     setMessage(nextMessage);
     fetchProducts();
-  };
+  }
 
   function handleDelete(rowData) {
     Confirm('Atenção', 'Confirma a exclusão?', () =>
@@ -61,10 +60,9 @@ function Product(props) {
           });
         })
     );
-  };
+  }
 
   function handleSave() {
-    console.log(data);
     if (data.id > 0) {
       productService
         .update(data)
@@ -101,7 +99,7 @@ function Product(props) {
   function handleEdit(rowData) {
     setStateData('EDIT_INSERT');
     setData(rowData);
-  };
+  }
 
   function handleCreate() {
     setStateData('EDIT_INSERT');
@@ -116,7 +114,7 @@ function Product(props) {
       printExpirationDate: false,
       printDateOfPackaging: false,
     });
-  };
+  }
 
   function handleOpenMessage(messageOpen, variantMessage, messageText) {
     setMessage({
@@ -124,7 +122,7 @@ function Product(props) {
       messageText: messageText,
       variantMessage: variantMessage,
     });
-  };
+  }
 
   const handleValueChange = name => event => {
     setData({ ...data, [name]: event.target.value });
@@ -132,20 +130,17 @@ function Product(props) {
 
   const handleValueChangeInteger = name => event => {
     let _value = parseInt(event.target.value.replace(/[^0-9]/g, ''));
-    if (isNaN(_value))
-      _value = 0;
+    if (isNaN(_value)) _value = 0;
     setData({ ...data, [name]: _value });
   };
 
   const handleValueDecimalChange = name => event => {
     let _value = 0.0;
-    if (typeof event.target.value === "string") {
+    if (typeof event.target.value === 'string') {
       _value = accounting.unformat(
-        _value = event.target.value.replace('.', ',')
+        (_value = event.target.value.replace('.', ','))
       );
-    }
-    else
-      _value = event.target.value;
+    } else _value = event.target.value;
     setData({ ...data, [name]: _value });
   };
 
@@ -173,12 +168,16 @@ function Product(props) {
 
     productService
       .getAll(0, 99999, columnSearch, '', '', filterType, search)
-      .then(res => { setProducts(res.data) })
-      .catch(error => setMessage({
-        messageOpen: true,
-        messageText: getErrosFromApi(error),
-        variantMessage: 'warning'
-      }))
+      .then(res => {
+        setProducts(res.data);
+      })
+      .catch(error =>
+        setMessage({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'warning',
+        })
+      );
   }
 
   const handleRequestSearch = event => {
@@ -187,19 +186,24 @@ function Product(props) {
 
   function handleSearch() {
     fetchProducts();
-  };
+  }
 
   const handleChangeTextSearch = event => {
     setSearch(event.target.value.toUpperCase());
   };
-
 
   const { classes } = props;
 
   return (
     <div className={classes.root}>
       <MessageSnackbar
-        onClose={() => setMessage({ messageOpen: false, messageText: '', variantMessage: 'success' })}
+        onClose={() =>
+          setMessage({
+            messageOpen: false,
+            messageText: '',
+            variantMessage: 'success',
+          })
+        }
         open={message.messageOpen}
         variant={message.variantMessage}
         message={message.messageText}
@@ -220,7 +224,7 @@ function Product(props) {
               iconProps: {
                 color: 'primary',
               },
-              onClick: (event, rowData) => handleEdit(rowData)
+              onClick: (event, rowData) => handleEdit(rowData),
             },
             {
               icon: 'delete',
@@ -228,8 +232,8 @@ function Product(props) {
               iconProps: {
                 color: 'secondary',
               },
-              onClick: (event, rowData) => handleDelete(rowData)
-            }
+              onClick: (event, rowData) => handleDelete(rowData),
+            },
           ]}
           handleCreate={handleCreate}
         />

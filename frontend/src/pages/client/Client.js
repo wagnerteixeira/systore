@@ -38,7 +38,7 @@ const initialData = {
   fatherName: '',
   motherName: '',
   billsReceives: [],
-}
+};
 
 const styles = theme => ({
   root: {
@@ -109,7 +109,6 @@ class Client extends Component {
     else filterType = 'StW';
 
     clientservice.count(columnSearch, filterType, filter).then(res => {
-      console.log(res.data)
       if (filter !== '' && parseInt(res.data) === 0) {
         this.setState({
           messageOpen: true,
@@ -154,7 +153,6 @@ class Client extends Component {
   };
 
   checkCpf = () => {
-    console.log(this.state.inEdit, this.state.data.id, this.state.data.cpf);
     const cpf = this.state.data.cpf.replace(/\D+/g, '');
     clientservice
       .existCpf(this.state.inEdit ? 1 : 0, this.state.data.id, cpf)
@@ -184,7 +182,7 @@ class Client extends Component {
         variantMessage: 'warning',
       });
     }
-  }
+  };
 
   handleCreate = () => {
     this.setState({
@@ -247,12 +245,16 @@ class Client extends Component {
         // uf: "MG"
         // unidade: ""
       }
-    }
-    else if (origin === 'choosePostalCode') {
+    } else if (origin === 'choosePostalCode') {
       this.setState({
-        data: { ...this.state.data, postalCode: event.target.value.postalCode, address: event.target.value.address, neighborhood: event.target.value.neighborhood },
+        data: {
+          ...this.state.data,
+          postalCode: event.target.value.postalCode,
+          address: event.target.value.address,
+          neighborhood: event.target.value.neighborhood,
+        },
       });
-    };
+    }
   };
 
   handleDateValueChange = name => date => {

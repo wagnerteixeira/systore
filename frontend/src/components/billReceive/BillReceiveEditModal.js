@@ -110,8 +110,7 @@ class BillReceiveEditModal extends React.Component {
     let message = '';
     if (!this.state.data.finalValue || this.state.data.finalValue <= 0)
       message += 'Informe o valor pago!\n\n';
-    if (!this.state.data.payDate)
-      message += 'Informe a data de pagamento!\n\n';
+    if (!this.state.data.payDate) message += 'Informe a data de pagamento!\n\n';
     return message;
   };
 
@@ -128,11 +127,15 @@ class BillReceiveEditModal extends React.Component {
     data.situation = 1;
     data.clientId = this.props.clientData.id;
     data.client = this.props.clientData;
-    console.log(data);
     billsReceiveservice
       .update(data)
-      .then(res => {                       
-        this.props.handleSave('saved', this.state.printQuota, this.props.clientData, [{ ...res.data }]);        
+      .then(res => {
+        this.props.handleSave(
+          'saved',
+          this.state.printQuota,
+          this.props.clientData,
+          [{ ...res.data }]
+        );
       })
       .catch(error => console.log(error.response));
   };
@@ -141,12 +144,12 @@ class BillReceiveEditModal extends React.Component {
     this.setState({ [name]: event.target.checked });
   };
 
-  handleGenerateInterest = () => {    
+  handleGenerateInterest = () => {
     let value = getValueInterest(
       this.state.data.originalValue,
       this.state.data.dueDate,
       this.state.data.payDate
-    );    
+    );
     this.setState({
       data: {
         ...this.state.data,
@@ -445,7 +448,7 @@ class BillReceiveEditModal extends React.Component {
               }
               label="Imprimir parcela"
             />
-            </Grid>
+          </Grid>
         </Grid>
         <div>
           <Button

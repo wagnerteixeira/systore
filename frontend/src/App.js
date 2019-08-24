@@ -79,7 +79,6 @@ class App extends Component {
         localStorageService.setItem('token', res.data.token);
       }
     } catch (e) {
-      console.log(e);
       let errors = e.response.data.errors
         ? e.response.data.errors.join('\n')
         : 'Verifique usuário e/ou senha!';
@@ -116,12 +115,10 @@ class App extends Component {
       logged,
       user,
     } = this.state;
-    console.log(logged);
     if (!logged) {
       let _token = localStorageService.getItem('token');
       if (_token) {
-        axiosOApi.post('/validateToken', `"${_token}"`,).then(res => {
-          console.log(res.data);
+        axiosOApi.post('/validateToken', `"${_token}"`).then(res => {
           if (res.data.valid) {
             this.setState({ logged: true, user: res.data.user });
           }

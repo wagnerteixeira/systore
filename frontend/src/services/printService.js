@@ -6,7 +6,7 @@ import {
   getDateToStringYearTwoDigits,
   getCurrentDate,
   getValueWithInterest,
-  getNumberToString2
+  getNumberToString2,
 } from '../utils/operators';
 
 let dateCurrent = getCurrentDate();
@@ -18,7 +18,7 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
   items.push({
     text: `${billReceive.code}/${billReceive.quota}`,
     x: _x,
-    y: 13
+    y: 13,
   }); //numero_compra
   items.push({ text: clientData.id, x: _x + 32, y: 13 }); //cod_cliente
   items.push({ text: clientData.name, x: _x + 66, y: 13 }); //nome_cliente
@@ -27,35 +27,35 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
   items.push({
     text: getDateToStringYearTwoDigits(billReceive.dueDate),
     x: _x + 30,
-    y: 27
+    y: 27,
   }); //data_vencimento
   items.push({
     text: `${billReceive.code}/${billReceive.quota}`,
     x: _x + 66,
-    y: 27
+    y: 27,
   }); //numero_compra
   items.push({ text: clientData.id, x: _x + 89, y: 26 }); //cod_cliente
   items.push({
     text: getDateToString(billReceive.dueDate),
     x: _x + 120,
-    y: 27
+    y: 27,
   }); //data_vencimento
   //linha 3
   items.push({
     text: getNumberDecimalToString(billReceive.originalValue),
     x: _x + 36,
-    y: 42
+    y: 42,
   }); //valor
   items.push({
     text: getDateToStringYearTwoDigits(billReceive.purchaseDate),
     x: _x + 66,
-    y: 42
+    y: 42,
   }); //data_compra
   items.push({ text: billReceive.vendor, x: _x + 89, y: 42 }); //vendedor
   items.push({
     text: getNumberDecimalToString(billReceive.originalValue),
     x: _x + 125,
-    y: 42
+    y: 42,
   }); //valor
   //linha 4
   let totalValue =
@@ -68,29 +68,28 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
             dateCurrent
           )
         );
-  let interest =
-    totalValue - parseFloat(billReceive.originalValue);
+  let interest = totalValue - parseFloat(billReceive.originalValue);
   if (interest > 0) {
     items.push({
       text: getNumberToString2(interest),
       x: _x + 36,
-      y: 59
+      y: 59,
     }); //juros
     items.push({
       text: getNumberToString2(interest),
       x: _x + 125,
-      y: 59
+      y: 59,
     }); //juros
     //linha 5
     items.push({
       text: getNumberToString2(totalValue),
       x: _x + 36,
-      y: 73
+      y: 73,
     }); //total
     items.push({
       text: getNumberToString2(totalValue),
       x: _x + 125,
-      y: 73
+      y: 73,
     }); //total
   }
 
@@ -187,8 +186,6 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
 };*/
 
 const printBillsReceiveis = (clientData, billsReceive) => {
-  console.log(clientData);
-  console.log(billsReceive);
   let pages = [];
   billsReceive.forEach(billReceive =>
     pages.push(createPageForPrintLX300(clientData, billReceive))
@@ -200,9 +197,6 @@ const printBillsReceiveis = (clientData, billsReceive) => {
   doc.setFontType('normal');
   doc.deletePage(1);
   doc.setFontSize(12);
-
-  console.log(doc.getFontList());
-
   pages.forEach(page => {
     doc.addPage(page.width, page.height);
     page.items.forEach(item => {

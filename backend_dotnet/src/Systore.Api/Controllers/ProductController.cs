@@ -20,7 +20,7 @@ namespace Systore.Api.Controllers
 
         [Authorize]
         [HttpPost("get-products-for-export-to-balance")]
-        public async Task<IActionResult> GetProductsForExportToBalance(FilterProductsToBalance filterProductsToBalance)
+        public async Task<IActionResult> GetProductsForExportToBalance([FromBody]FilterProductsToBalance filterProductsToBalance)
         {
             try
             {

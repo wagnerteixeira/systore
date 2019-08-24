@@ -20,7 +20,6 @@ const styles = theme => ({
 });
 
 function Sale(props) {
-
   const [sales, setSales] = useState([]);
   const [data, setData] = useState({});
   const [stateData, setStateData] = useState('LIST');
@@ -29,7 +28,7 @@ function Sale(props) {
   const [message, setMessage] = useState({
     messageOpen: false,
     variantMessage: 'success',
-    messageText: ''
+    messageText: '',
   });
 
   function handleCancel(previusOperation) {
@@ -46,7 +45,7 @@ function Sale(props) {
     setStateData('LIST');
     setMessage(nextMessage);
     fetchSales();
-  };
+  }
 
   function handleDelete(rowData) {
     Confirm('Atenção', 'Confirma a exclusão?', () =>
@@ -61,10 +60,9 @@ function Sale(props) {
           });
         })
     );
-  };
+  }
 
   function handleSave() {
-    console.log(data);
     if (data.id > 0) {
       saleService
         .update(data)
@@ -101,19 +99,19 @@ function Sale(props) {
   function handleEdit(rowData) {
     setStateData('EDIT_INSERT');
     setData(rowData);
-  };
+  }
 
   function handleCreate() {
     setStateData('EDIT_INSERT');
     setData({
       id: 0,
       clientId: 0,
-      vendor: "",
+      vendor: '',
       saleDate: new Date(),
       finalPrice: 0.0,
-      saleProducts: []
+      saleProducts: [],
     });
-  };
+  }
 
   function handleOpenMessage(messageOpen, variantMessage, messageText) {
     setMessage({
@@ -121,7 +119,7 @@ function Sale(props) {
       messageText: messageText,
       variantMessage: variantMessage,
     });
-  };
+  }
 
   const handleValueChange = name => event => {
     setData({ ...data, [name]: event.target.value });
@@ -132,14 +130,12 @@ function Sale(props) {
   };
 
   const handleValueDecimalChange = name => event => {
-    let _value = 0.0;    
-    if (typeof event.target.value === "string"){
+    let _value = 0.0;
+    if (typeof event.target.value === 'string') {
       _value = accounting.unformat(
-        _value = event.target.value.replace('.', ',')
+        (_value = event.target.value.replace('.', ','))
       );
-    }
-    else
-    _value = event.target.value;
+    } else _value = event.target.value;
     setData({ ...data, [name]: _value });
   };
 
@@ -163,12 +159,16 @@ function Sale(props) {
 
     saleService
       .getAll(0, 99999, columnSearch, '', '', filterType, search)
-      .then(res => {setSales(res.data)})
-      .catch(error => setMessage({
-        messageOpen: true,
-        messageText: getErrosFromApi(error),
-        variantMessage: 'warning'
-      }))
+      .then(res => {
+        setSales(res.data);
+      })
+      .catch(error =>
+        setMessage({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'warning',
+        })
+      );
   }
 
   const handleRequestSearch = event => {
@@ -177,19 +177,24 @@ function Sale(props) {
 
   function handleSearch() {
     fetchSales();
-  };
+  }
 
   const handleChangeTextSearch = event => {
     setSearch(event.target.value.toUpperCase());
   };
-
 
   const { classes } = props;
 
   return (
     <div className={classes.root}>
       <MessageSnackbar
-        onClose={() => setMessage({ messageOpen: false, messageText: '', variantMessage: 'success' })}
+        onClose={() =>
+          setMessage({
+            messageOpen: false,
+            messageText: '',
+            variantMessage: 'success',
+          })
+        }
         open={message.messageOpen}
         variant={message.variantMessage}
         message={message.messageText}
@@ -197,7 +202,7 @@ function Sale(props) {
       {stateData === 'LIST' && (
         <ViewSale
           data={sales}
-          columnSearch={columnSearch} 
+          columnSearch={columnSearch}
           search={search}
           handleSearch={handleSearch}
           handleCreate={handleCreate}
@@ -210,7 +215,7 @@ function Sale(props) {
               iconProps: {
                 color: 'primary',
               },
-              onClick: (event, rowData) => handleEdit(rowData)
+              onClick: (event, rowData) => handleEdit(rowData),
             },
             {
               icon: 'delete',
@@ -218,8 +223,8 @@ function Sale(props) {
               iconProps: {
                 color: 'secondary',
               },
-              onClick: (event, rowData) => handleDelete(rowData)
-            }
+              onClick: (event, rowData) => handleDelete(rowData),
+            },
           ]}
           handleCreate={handleCreate}
         />
