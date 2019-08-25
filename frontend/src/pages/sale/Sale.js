@@ -238,6 +238,7 @@ function Sale(props) {
           handleCancel={handleCancel}
           handleSave={handleSave}
           handleOpenMessage={handleOpenMessage}
+          message={message}
         />
       )}
     </div>

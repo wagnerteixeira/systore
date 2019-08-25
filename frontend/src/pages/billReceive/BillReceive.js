@@ -21,20 +21,17 @@ export default withStyles(styles)(BillReceive);
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import AsyncSelect from 'react-select/async';
-
 import BillReceiveTable from '../../components/billReceive/BillReceiveTable';
 import MessageSnackbar from '../../components/common/MessageSnackbar';
 import clientService from '../../services/clientService';
-import { debounceTimeWithParams, getDateToString } from '../../utils/operators';
+import { getDateToString } from '../../utils/operators';
+import AsyncSelectGeneric from '../../components/common/AsyncSelectGeneric';
 
 const styles = theme => ({
   root: {
@@ -44,45 +41,6 @@ const styles = theme => ({
     marginBottom: theme.spacing(1),
     overflowX: 'auto',
     padding: theme.spacing(2),
-  },
-  input: {
-    display: 'flex',
-    padding: 0,
-  },
-  valueContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flex: 1,
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  noOptionsMessage: {
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
-  },
-  loadingMessage: {
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
-  },
-  placeholder: {
-    position: 'absolute',
-    left: 2,
-    fontSize: 16,
-  },
-  paper: {
-    position: 'absolute',
-    zIndex: 1,
-    marginTop: theme.spacing(1),
-    left: 0,
-    right: 0,
-  },
-  select: {
-    paddingTop: theme.spacing(1) * 1.65,
-    maxWidth: '95%',
-  },
-  gridSearch: {
-    paddingLeft: `${theme.spacing(0.2)}px !important `,
-    [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing(1),
-    },
   },
   '@global': {
     'tr > td': {
@@ -133,117 +91,10 @@ async function fetchClients(
   callback(_clients);
 }
 
-const fetchClientsDebounce = debounceTimeWithParams(500, fetchClients);
-
-function NoOptionsMessage(props) {
-  return (
-    <Typography
-      color="textSecondary"
-      className={props.selectProps.classes.noOptionsMessage}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Typography>
-  );
-}
-
-function inputComponent({ inputRef, ...props }) {
-  return <div ref={inputRef} {...props} />;
-}
-
-function Control(props) {
-  return (
-    <TextField
-      fullWidth
-      InputProps={{
-        inputComponent,
-        inputProps: {
-          className: props.selectProps.classes.input,
-          inputRef: props.innerRef,
-          children: props.children,
-          ...props.innerProps,
-        },
-      }}
-      {...props.selectProps.textFieldProps}
-    />
-  );
-}
-
-function Option(props) {
-  return (
-    <MenuItem
-      buttonRef={props.innerRef}
-      selected={props.isFocused}
-      component="div"
-      style={{
-        fontWeight: props.isSelected ? 500 : 400,
-      }}
-      {...props.innerProps}
-    >
-      {props.children}
-    </MenuItem>
-  );
-}
-
-function Placeholder(props) {
-  return (
-    <Typography
-      color="textSecondary"
-      className={props.selectProps.classes.placeholder}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Typography>
-  );
-}
-
-function ValueContainer(props) {
-  return (
-    <div className={props.selectProps.classes.valueContainer}>
-      {props.children}
-    </div>
-  );
-}
-
-function LoadingMessage(props) {
-  return (
-    <Typography
-      color="textSecondary"
-      className={props.selectProps.classes.loadingMessage}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Typography>
-  );
-}
-
-function Menu(props) {
-  return (
-    <Paper
-      square
-      className={props.selectProps.classes.paper}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Paper>
-  );
-}
-
-const components = {
-  Control,
-  Menu,
-  NoOptionsMessage,
-  Option,
-  Placeholder,
-  ValueContainer,
-  LoadingMessage,
-};
-
 function BillReceive(props) {
   const { classes } = props;
   const [single, setSingle] = React.useState(null);
   const [prevSingle, setPrevSingle] = React.useState(null);
-  //const [inputValue, setIputValue] = React.useState('');
   const [messageData, setMessageData] = React.useState({
     messageOpen: false,
     messageText: '',
@@ -252,55 +103,13 @@ function BillReceive(props) {
 
   const [columnSearch, setColumnSearch] = React.useState('name');
 
-  function handleChangeSingle(value) {
-    setSingle(value);
-  }
-
-  function loadOptions(inputValue, callback) {
-    fetchClientsDebounce(inputValue, columnSearch, callback, handleOpenMessage);
-    /*inputValue,
-  columnSearch,
-  callback,
-  handleOpenMessage*/
-  }
-
-  function handleInputChangeAsync(newValue, action) {
-    const inputValue = newValue.toUpperCase();
-    return inputValue;
-  }
-
   function handleOpenMessage(messageOpen, variantMessage, messageText) {
     setMessageData({ messageOpen, variantMessage, messageText });
-  }
-
-  const selectStyles = {
-    input: base => ({
-      ...base,
-      color: 'primary',
-      '& input': {
-        font: 'inherit',
-      },
-    }),
-  };
-
-  function handleBlurAsyncSelect() {
-    if (!single && prevSingle) {
-      setSingle(prevSingle);
-      setPrevSingle(null);
-    }
-  }
-
-  function handleMenuOpenAsyncSelect() {
-    if (single) {
-      setPrevSingle(single);
-      setSingle(null);
-    }
   }
 
   function handleChangeColumnSearch(event) {
     if (columnSearch !== event.target.value) {
       setColumnSearch(event.target.value);
-      //setPrevSingle(null);
       setSingle({ value: 'clean' });
       setTimeout(() => setSingle(null), 80);
     }
@@ -349,25 +158,18 @@ function BillReceive(props) {
           lg={11}
           xl={11}
         >
-          <FormControl fullWidth>
-            <AsyncSelect
-              className={classes.select}
-              classes={classes}
-              styles={selectStyles}
-              components={components}
-              loadOptions={loadOptions}
-              onChange={handleChangeSingle}
-              onInputChange={handleInputChangeAsync}
-              placeholder={`Digite o ${textPlaceHolder} do cliente`}
-              loadingMessage={() => 'Buscando clientes'}
-              noOptionsMessage={() => 'Nenhum cliente encontrado'}
-              onBlur={handleBlurAsyncSelect}
-              onMenuOpen={handleMenuOpenAsyncSelect}
-              value={single}
-              //onFocus={() => console.log('focus')}
-              openMenuOnFocus
-            />
-          </FormControl>
+          <AsyncSelectGeneric
+            single={single}
+            prevSingle={prevSingle}
+            placeholder={`Digite o ${textPlaceHolder} do cliente`}
+            loadingMessage={() => 'Buscando clientes'}
+            noOptionsMessage={() => 'Nenhum cliente selecionado'}
+            fetch={fetchClients}
+            setSingle={setSingle}
+            setPrevSingle={setPrevSingle}
+            columnSearch={columnSearch}
+            handleOpenMessage={handleOpenMessage}
+          />
         </Grid>
       </Grid>
       <BillReceiveTable
