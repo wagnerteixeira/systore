@@ -21,12 +21,38 @@ namespace Systore.Data.Repositories
         protected readonly IDbContext _context;
         protected readonly DbSet<TEntity> _entities;
         protected readonly IHeaderAuditRepository _headerAuditRepository;
+        private bool _inTransaction;
 
         public BaseRepository(IDbContext context, IHeaderAuditRepository headerAuditRepository)
         {
             _context = context;
             _entities = _context.Instance.Set<TEntity>();
             _headerAuditRepository = headerAuditRepository;
+            _inTransaction = false;
+        }
+
+        public bool BeginTransaction()
+        {
+            if (_inTransaction)
+                return false;
+            try
+            {
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+            
+        }
+        public bool Commit()
+        {
+            return true;
+        }
+
+        public void Rollback()
+        {
+
         }
 
         public virtual async Task<string> AddAsync(TEntity entity)

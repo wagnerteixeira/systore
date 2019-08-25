@@ -4,6 +4,7 @@ using Systore.Domain.Abstractions;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace Systore.Api.Controllers
 {
@@ -11,8 +12,8 @@ namespace Systore.Api.Controllers
     public class ClientController : BaseController<Client>
     {
 
-        public ClientController(IClientService Service)
-            : base(Service)
+        public ClientController(IClientService Service, ILogger<ClientController> logger)
+            : base(Service, logger)
         {
 
         }

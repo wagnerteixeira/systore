@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Systore.Domain.Abstractions;
 using Systore.Infra.Context;
@@ -25,6 +24,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Serilog;
+using Systore.Api.Extensions;
 
 namespace Systore.Api
 {
@@ -43,42 +44,21 @@ namespace Systore.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.UseSerilog();
 
             services.AddDbContext<SystoreContext>();
-
             services.AddDbContext<AuditContext>();
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<ISystoreContext, SystoreContext>();
             services.AddScoped<IAuditContext, AuditContext>();
 
-            //scopeservices
-            //services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IClientService, ClientService>();
-            services.AddScoped<IBillReceiveService, BillReceiveService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ISaleService, SaleService>();
-            services.AddScoped<ISaleProductsService, SaleProductsService>();
-            
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.UseRepositories();
+            services.UseServices();
 
-            //scoperepositories
-            
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IClientRepository, ClientRepository>();
-            services.AddScoped<IBillReceiveRepository, BillReceiveRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IHeaderAuditRepository, HeaderAuditRepository>();
-            services.AddScoped<IItemAuditRepository, ItemAuditRepository>();
-            services.AddScoped<ISaleRepository, SaleRepository>();
-            services.AddScoped<ISaleProductsRepository, SaleProductsRepository>();
-            
-            
             services.AddCors();
-
+            Log.Logger.Information($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -167,7 +147,7 @@ namespace Systore.Api
                       .AllowAnyHeader()
             );
 
-
+          
             app.UseAuthentication();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.

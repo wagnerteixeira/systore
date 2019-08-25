@@ -9,7 +9,11 @@ const getProductsForExportToBalance = ({ typeOfSearchProductsToBalance }) =>
     typeOfSearchProductsToBalance,
   });
 
+const generateFileToBalance = productsId =>
+  axios.post(`product/generate-file-to-balance`, productsId);
+
 export default {
   ...productService,
   getProductsForExportToBalance,
+  generateFileToBalance,
 };

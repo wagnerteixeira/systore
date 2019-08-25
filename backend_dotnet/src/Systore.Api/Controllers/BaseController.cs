@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Systore.Domain.Abstractions;
 using Systore.Domain.Dtos;
 
@@ -11,11 +12,13 @@ namespace Systore.Api.Controllers
 {
     public abstract class BaseController<TEntity> : ControllerBase, IDisposable where TEntity : class
     {
-        protected readonly IBaseService<TEntity> _service = null;        
+        protected readonly IBaseService<TEntity> _service = null;
+        protected readonly ILogger<BaseController<TEntity>> _logger;
 
-        public BaseController(IBaseService<TEntity> Service)
+        public BaseController(IBaseService<TEntity> Service, ILogger<BaseController<TEntity>> logger)
         {
-            _service = Service;            
+            _service = Service;
+            _logger = logger;
         }
 
         protected virtual object GetEntityId(TEntity entity)
@@ -181,17 +184,20 @@ namespace Systore.Api.Controllers
 
         protected IActionResult SendBadRequest(string[] errors)
         {
+
+            _logger.LogError(string.Join(Environment.NewLine, errors));
             return BadRequest(new { errors = errors.ToArray() });
         }
 
         protected IActionResult SendBadRequest(string error)
         {
-
+            _logger.LogError(error);
             return BadRequest(new { errors = new string[] { error } });
         }
 
         protected IActionResult SendBadRequest(Exception e)
         {
+            _logger.LogError(e, "Exception error: ");
             string error = e.Message;
             if (e.InnerException != null)
             {

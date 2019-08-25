@@ -8,6 +8,7 @@ using Systore.Domain.Dtos;
 using Systore.Domain.Enums;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Systore.Data.Repositories
 {
@@ -15,6 +16,7 @@ namespace Systore.Data.Repositories
     {
         public ProductRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
+        
         }
 
         public override Task<string> AddAsync(Product entity)

@@ -7,14 +7,15 @@ using Systore.Domain.Abstractions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace Systore.Api.Controllers
 {
     [Route("api/[controller]")]
     public class BillReceiveController : BaseController<BillReceive>
     {
-        public BillReceiveController(IBillReceiveService Service)
-            : base(Service)
+        public BillReceiveController(IBillReceiveService Service, ILogger<BillReceiveController> logger)
+            : base(Service, logger)
         {
 
         }

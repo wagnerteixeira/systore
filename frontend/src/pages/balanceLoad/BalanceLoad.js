@@ -22,6 +22,8 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import productService from '../../services/productService';
 
+import { sendFileToDownload } from '../../utils/helpers';
+
 const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(3),
@@ -78,7 +80,13 @@ function BalanceLoad(props) {
       setProducts(response.data);
       let selecteds = response.data.map(p => p.id);
       setSelected(selecteds);
-    } catch {
+    } catch (err) {
+      console.error(err);
+      setMessage({
+        messageOpen: true,
+        messageText: 'Houve um erro ao buscar os dados.',
+        variantMessage: 'error',
+      });
       setProducts([]);
     }
   }
@@ -110,6 +118,22 @@ function BalanceLoad(props) {
 
     setSelected(newSelected);
   }
+  async function handleGenerateFile() {
+    try {
+      if (selected.length > 0) {
+        const response = await productService.generateFileToBalance(selected);
+        sendFileToDownload('BALANCA.txt', response.data);
+      }
+    } catch (err) {
+      setMessage({
+        messageOpen: true,
+        messageText: 'Houve um erro ao buscar os gerar o arquivo.',
+        variantMessage: 'error',
+      });
+      console.error(err);
+    }
+  }
+
   const getProductsMemoized = useCallback(getProducts, [exportType]);
 
   useEffect(() => {
@@ -122,7 +146,7 @@ function BalanceLoad(props) {
   return (
     <Paper className={classes.root}>
       <MessageSnackbar
-        onClose={() => setMessage({ messageOpen: false })}
+        onClose={() => setMessage({ ...message, messageOpen: false })}
         open={message.messageOpen}
         variant={message.variantMessage}
         message={message.messageText}
@@ -179,6 +203,7 @@ function BalanceLoad(props) {
             disabled={!selected.length}
             variant="outlined"
             color="primary"
+            onClick={handleGenerateFile}
             className={classes.button}
           >
             Gerar Arquivo

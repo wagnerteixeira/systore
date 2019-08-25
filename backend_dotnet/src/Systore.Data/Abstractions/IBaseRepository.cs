@@ -21,8 +21,9 @@ namespace Systore.Data.Abstractions
         Task<string> RemoveAsync(int id);
         Task<List<TEntity>> GetWhereAsync(FilterPaginateDto filterPaginateDto);
         Task<int> CountWhereAsync(IEnumerable<FilterDto> filters);
-
-
+        bool BeginTransaction();
+        bool Commit();
+        void Rollback();
         void Dispose();
     }
 }
