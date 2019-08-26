@@ -88,7 +88,7 @@ function EditSale(props) {
   const { handleOpenMessage, message } = props;
   const [single, setSingle] = useState(null);
   const [prevSingle, setPrevSingle] = useState(null);
-  const [dataProducts, setDataProducts] = useState(props.data.saleProducts);
+  const [dataProducts, setDataProducts] = useState([]); // useState(props.data.saleProducts);
   const [openProductModal, setOpenProductModal] = useState(false);
   const [productIdCurrent, setProductIdCurrent] = useState(0);
 
@@ -113,9 +113,10 @@ function EditSale(props) {
   };
 
   const handleValueQuantityChange = key => event => {
-    let copy = JSON.parse(JSON.stringify({ ...dataProducts }));
+    /*   let copy = JSON.parse(JSON.stringify({ ...dataProducts }));
     copy[key].Quantity = event.target.value;
     setDataProducts(copy);
+   */
     //TODO
     //Alterar preço final na grid pois alterou a quantidade do produto
   };
@@ -123,6 +124,22 @@ function EditSale(props) {
   function onCloseProductModal(event, reason) {
     setOpenProductModal(false);
     handleOpenMessage(false, 'success', '');
+  }
+
+  function onSaveProduct(product) {
+    if (productIdCurrent > 0) {
+      //edit
+    } else {
+      let newProduct = {
+        productId: product.id,
+        firstDescription: product.firstDescription,
+        quantity: product.quantity,
+        price: product.price,
+        finalValue: parseFloat(product.quantity) * parseFloat(product.price),
+      };
+      setDataProducts([...dataProducts, newProduct]);
+    }
+    setOpenProductModal(false);
   }
 
   async function fetchClients(
@@ -376,18 +393,10 @@ function EditSale(props) {
                 {Object.keys(dataProducts).map(key => (
                   <TableRow hover key={key}>
                     <TableCell padding="none" size="small">
-                      <Input
-                        id="productId"
-                        className={classes.textField}
-                        value={dataProducts[key].productId}
-                        onChange={handleValueProductIdChange}
-                        margin="normal"
-                        fullWidth
-                      />
                       {dataProducts[key].productId}
                     </TableCell>
                     <TableCell padding="none" size="small">
-                      {dataProducts[key].descriptionProduct}
+                      {dataProducts[key].firstDescription}
                     </TableCell>
                     <TableCell padding="none" size="small">
                       {dataProducts[key].price}
@@ -395,15 +404,14 @@ function EditSale(props) {
                     <TableCell padding="none" size="small">
                       <Input
                         id="quantity"
-                        className={classes.textField}
                         value={dataProducts[key].quantity}
                         onChange={handleValueQuantityChange}
                         margin="normal"
                         fullWidth
                       />
                     </TableCell>
-                    <TableCell padding="none" size="small">
-                      {dataProducts[key].totalPrice}
+                    <TableCell padding="none" size="large">
+                      {dataProducts[key].finalValue}
                     </TableCell>
                     <TableCell padding="none" align="right">
                       <Fab
@@ -428,6 +436,7 @@ function EditSale(props) {
             productId={productIdCurrent}
             message={message}
             handleOpenMessage={handleOpenMessage}
+            onSave={onSaveProduct}
           />
 
           <div className={classes.divRow}>

@@ -47,7 +47,7 @@ const styles = theme => ({
 });
 
 function SaleProductModal(props) {
-  const { open, onClose, classes, message, handleOpenMessage } = props;
+  const { open, onClose, classes, message, handleOpenMessage, onSave } = props;
   const [productData, setProductData] = useState({
     id: props.productId,
     firstDescription: '',
@@ -129,18 +129,27 @@ function SaleProductModal(props) {
       textPlaceHolder = 'descrição 1';
   }
 
-  //TODO
-  const handleValueChange = name => event => {
-    this.setState({ [name]: event.target.value.toUpperCase() });
-  };
+  function handleQuantityValue(event) {
+    let _quantity = parseFloat(event.target.value);
+    if (isNaN(_quantity)) _quantity = 0;
+    setQuantity(_quantity);
+  }
 
   const handleCancel = () => {
     props.onClose(null, 'cancel');
   };
 
-  const handleSave = productId => onClose => {
-    props.onClose(null, 'save');
-  };
+  function handleSave() {
+    if (!productData.id) {
+      handleOpenMessage(true, 'warning', 'Produto não informado');
+    } else if (!quantity)
+      handleOpenMessage(true, 'warning', 'Quantidade não informada');
+    else {
+      let product = JSON.parse(JSON.stringify({ ...productData }));
+      product.quantity = quantity;
+      onSave(product);
+    }
+  }
 
   return (
     <ModalWrapped onClose={onClose} open={open} paperClass={classes.paper}>
@@ -215,13 +224,24 @@ function SaleProductModal(props) {
             fullWidth
           />
         </Grid>
+        <Grid className={classes.item} item xs={12} sm={3} md={3} lg={3} xl={3}>
+          <TextField
+            id="quantity"
+            label="Quantidade"
+            className={classes.margin}
+            value={quantity}
+            onChange={handleQuantityValue}
+            margin="normal"
+            fullWidth
+          />
+        </Grid>
       </Grid>
       <div>
         <Button
           variant="outlined"
           color="primary"
           className={classes.button}
-          onClick={() => handleSave(productData.id)(onClose)}
+          onClick={handleSave}
         >
           Salvar
         </Button>
