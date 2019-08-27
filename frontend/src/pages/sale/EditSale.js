@@ -16,6 +16,7 @@ import {
   Fab,
   Icon,
   Input,
+  BottomNavigation,
 } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { withStyles } from '@material-ui/core/styles';
@@ -90,35 +91,48 @@ function EditSale(props) {
   const [prevSingle, setPrevSingle] = useState(null);
   const [dataProducts, setDataProducts] = useState([]); // useState(props.data.saleProducts);
   const [openProductModal, setOpenProductModal] = useState(false);
-  const [productIdCurrent, setProductIdCurrent] = useState(0);
+  const [productCurrent, setProductCurrent] = useState({
+    id: 0,
+    firstDescription: '',
+    secondDescription: '',
+    thirtDescription: '',
+    price: 0.0,
+    quantity: 0.0,
+  });
 
   function handleDeleteProduct(key) {
     setDataProducts(dataProducts.slice(key));
   }
 
+  function handleEditProduct(key) {
+    setProductCurrent(dataProducts[key]);
+    setOpenProductModal(true);
+  }
+
   function addProduct() {
     //TODO
     //chamar showModal do produto
-    setProductIdCurrent(0);
+    setProductCurrent({
+      id: 0,
+      firstDescription: '',
+      secondDescription: '',
+      thirtDescription: '',
+      price: 0.0,
+      quantity: 0.0,
+    });
     setOpenProductModal(true);
     //inserir na grid para a pessoa poder editar a quantidade
   }
 
-  const handleValueProductIdChange = key => event => {
-    let copy = JSON.parse(JSON.stringify({ ...dataProducts }));
-    copy[key].Id = event.target.value.replace(/[^0-9]/g, '');
-    setDataProducts(copy);
-    //TODO
-    //Alterar descrição do produto e preço na grid pois alterou o código do produto
-  };
-
   const handleValueQuantityChange = key => event => {
-    /*   let copy = JSON.parse(JSON.stringify({ ...dataProducts }));
-    copy[key].Quantity = event.target.value;
+    console.log(key);
+    let copy = [...dataProducts];
+    copy[key].quantity = event.target.value;
+    copy[key].finalValue = parseFloat(copy[key].quantity * copy[key].price);
     setDataProducts(copy);
-   */
+
     //TODO
-    //Alterar preço final na grid pois alterou a quantidade do produto
+    //Alterar preço final da venda pois alterou a quantidade do produto
   };
 
   function onCloseProductModal(event, reason) {
@@ -127,7 +141,7 @@ function EditSale(props) {
   }
 
   function onSaveProduct(product) {
-    if (productIdCurrent > 0) {
+    if (productCurrent.id > 0) {
       //edit
     } else {
       let newProduct = {
@@ -405,7 +419,7 @@ function EditSale(props) {
                       <Input
                         id="quantity"
                         value={dataProducts[key].quantity}
-                        onChange={handleValueQuantityChange}
+                        onChange={handleValueQuantityChange(key)}
                         margin="normal"
                         fullWidth
                       />
@@ -414,6 +428,15 @@ function EditSale(props) {
                       {dataProducts[key].finalValue}
                     </TableCell>
                     <TableCell padding="none" align="right">
+                      <Fab
+                        color="primary"
+                        aria-label="Editar"
+                        className={classes.fab}
+                        onClick={() => handleEditProduct(key)}
+                        size="small"
+                      >
+                        <Icon fontSize="small">edit_icon</Icon>
+                      </Fab>
                       <Fab
                         color="secondary"
                         aria-label="Delete"
@@ -430,14 +453,16 @@ function EditSale(props) {
             </Table>
           </Grid>
           <br />
-          <SaleProductModal
-            open={openProductModal}
-            onClose={onCloseProductModal}
-            productId={productIdCurrent}
-            message={message}
-            handleOpenMessage={handleOpenMessage}
-            onSave={onSaveProduct}
-          />
+          {openProductModal && (
+            <SaleProductModal
+              open={openProductModal}
+              onClose={onCloseProductModal}
+              productCurrent={productCurrent}
+              message={message}
+              handleOpenMessage={handleOpenMessage}
+              onSave={onSaveProduct}
+            />
+          )}
 
           <div className={classes.divRow}>
             <Button

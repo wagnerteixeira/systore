@@ -5,13 +5,11 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 
 import ModalWrapped from '../../components/common/Modal';
 import productService from '../../services/productService';
 import AsyncSelectGeneric from '../../components/common/AsyncSelectGeneric';
 
-import { getErrosFromApi } from '../../utils/errorsHelper';
 import { FormControl, MenuItem, Select } from '@material-ui/core';
 
 const styles = theme => ({
@@ -47,14 +45,30 @@ const styles = theme => ({
 });
 
 function SaleProductModal(props) {
-  const { open, onClose, classes, message, handleOpenMessage, onSave } = props;
-  const [productData, setProductData] = useState({
-    id: props.productId,
-    firstDescription: '',
-    price: 0.0,
-  });
-  const [quantity, setQuantity] = useState(0.0);
-  const [single, setSingle] = useState(null);
+  const {
+    open,
+    onClose,
+    classes,
+    handleOpenMessage,
+    onSave,
+    productCurrent,
+  } = props;
+  const [productData, setProductData] = useState(productCurrent);
+  const [quantity, setQuantity] = useState(productCurrent.quantity);
+
+  const [single, setSingle] = useState(
+    productCurrent.productId > 0
+      ? {
+          productData: productCurrent,
+          value: productCurrent.productId,
+          label: `Código: ${productCurrent.productId} Descrição 1: ${
+            productCurrent.firstDescription
+          } Descrição 2: ${productCurrent.secondDescription} Descrição 3: ${
+            productCurrent.thirtDescription
+          }`,
+        }
+      : null
+  );
   const [prevSingle, setPrevSingle] = useState(null);
 
   useEffect(() => {
@@ -147,8 +161,22 @@ function SaleProductModal(props) {
     else {
       let product = JSON.parse(JSON.stringify({ ...productData }));
       product.quantity = quantity;
+      clear();
       onSave(product);
     }
+  }
+
+  function clear() {
+    setQuantity(0);
+    setProductData({
+      id: props.productId,
+      firstDescription: '',
+      secondDescription: '',
+      thirtDescription: '',
+      price: 0.0,
+    });
+    setSingle(null);
+    setPrevSingle(null);
   }
 
   return (
@@ -262,7 +290,7 @@ SaleProductModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  productId: PropTypes.string.isRequired,
+  productCurrent: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(SaleProductModal);
