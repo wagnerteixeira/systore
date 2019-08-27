@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +10,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import config from '../../config/config.json';
+import {
+  InputAdornment,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Input,
+} from '@material-ui/core';
 
 const styles = theme => ({
   container: {
@@ -39,11 +47,13 @@ const styles = theme => ({
 
 function Login(props) {
   const {
+    showPassword,
     classes,
     userName,
     password,
     handleLogin,
     handleValueChange,
+    handleClickShowPassword,
     keyPress,
   } = props;
   return (
@@ -77,22 +87,38 @@ function Login(props) {
             shrink: true,
           }}
         />
-        <TextField
-          id="password"
-          label="Senha"
-          value={password}
-          className={classes.textField}
-          type="password"
-          onChange={handleValueChange('password')}
-          autoComplete="current-password"
-          fullWidth
-          placeholder="Senha"
+        <FormControl
           margin="normal"
-          onKeyDown={keyPress}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
+          required
+          fullWidth
+          className={classes.textField}
+        >
+          <InputLabel htmlFor="password" shrink={true}>
+            Senha
+          </InputLabel>
+          <Input
+            name="password"
+            autoComplete="current-password"
+            id="password"
+            value={password}
+            type={showPassword ? 'text' : 'password'}
+            onChange={handleValueChange('password')}
+            fullWidth
+            placeholder="Senha"
+            margin="normal"
+            onKeyDown={keyPress}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="Toggle password visibility"
+                  onClick={handleClickShowPassword}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
         <Button
           variant="contained"
           color="primary"

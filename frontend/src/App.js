@@ -70,6 +70,7 @@ class App extends Component {
         this.setState({
           logged: true,
           messageOpen: true,
+          showPassword: false,
           messageText: 'Usuário logado com sucesso!',
           variantMessage: 'success',
           userName: '',
@@ -105,6 +106,10 @@ class App extends Component {
     this.setState({ [name]: event.target.value });
   };
 
+  handleClickShowPassword = () => {
+    this.setState({ showPassword: !this.state.showPassword });
+  };
+
   render() {
     const {
       userName,
@@ -134,6 +139,8 @@ class App extends Component {
                 handleLogin={this.handleLogin}
                 handleValueChange={this.handleValueChange}
                 handleMessageClose={this.handleMessageClose}
+                showPassword={this.state.showPassword}
+                handleClickShowPassword={this.handleClickShowPassword}
                 keyPress={this.keyPress}
                 password={password}
                 userName={userName}
