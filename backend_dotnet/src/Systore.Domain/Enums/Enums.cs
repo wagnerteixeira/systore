@@ -39,8 +39,8 @@ namespace Systore.Domain.Enums
 
     public enum SaleType
     {
-        Unit,
-        Weight
+        Weight,
+        Unit,        
     }
 
     public enum AuditOperation
