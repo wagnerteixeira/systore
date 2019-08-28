@@ -48,7 +48,7 @@ namespace Systore.Api.Controllers
             try
             {
                 var result = await (_service as IProductService).GenerateFileItensToBalance(productsId);                
-                return File(Encoding.UTF8.GetBytes(result), "text/plain", "BALANCA.txt");
+                return File(Encoding.UTF8.GetBytes(result), "text/plain", "ITENSMGV.txt");
             }
             catch (NotSupportedException e)
             {
@@ -70,7 +70,7 @@ namespace Systore.Api.Controllers
             try
             {
                 var result = await (_service as IProductService).GenerateFileItensToBalance(productsId);
-                return File(Encoding.UTF8.GetBytes(result), "text/plain", "BALANCA.txt");
+                return File(Encoding.UTF8.GetBytes(result), "text/plain", "TXINFO.txt");
             }
             catch (NotSupportedException e)
             {
