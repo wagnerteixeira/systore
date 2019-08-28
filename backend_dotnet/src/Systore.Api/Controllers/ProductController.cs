@@ -26,8 +26,7 @@ namespace Systore.Api.Controllers
         public async Task<IActionResult> GetProductsForExportToBalance([FromBody]FilterProductsToBalance filterProductsToBalance)
         {
             try
-            {
-                throw new FormatException("Mensagem");
+            {                
                 var result = await (_service as IProductService).GetProductsForExportToBalance(filterProductsToBalance);
                 return Ok(result);
             }

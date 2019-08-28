@@ -74,7 +74,7 @@ namespace Systore.Api.Controllers
                 if (string.IsNullOrWhiteSpace(ret))
                     return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
                 else
-                    return SendBadRequest(ret);
+                    return SendBadRequest(ret.Split('|', StringSplitOptions.RemoveEmptyEntries));
             }
             catch (Exception e)
             {
@@ -93,7 +93,7 @@ namespace Systore.Api.Controllers
                 if (string.IsNullOrWhiteSpace(ret))
                     return Ok(entity);
                 else
-                    return SendBadRequest(ret);
+                    return SendBadRequest(ret.Split('|', StringSplitOptions.RemoveEmptyEntries));
             }
             catch (Exception e)
             {
@@ -112,7 +112,7 @@ namespace Systore.Api.Controllers
                 if (string.IsNullOrWhiteSpace(ret))
                     return Ok("");
                 else
-                    return SendBadRequest(ret);
+                    return SendBadRequest(ret.Split('|', StringSplitOptions.RemoveEmptyEntries));
             }
             catch (Exception e)
             {

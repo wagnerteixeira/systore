@@ -336,7 +336,7 @@ class BillReceiveCreateModal extends React.Component {
               label="Data da venda"
               className={classes.margin}
               value={purchaseDate}
-              onChpnge={this.handleDateValueChange('purchaseDate')}
+              onChange={this.handleDateValueChange('purchaseDate')}
               margin="normal"
               format={'dd/MM/yyyy'}
               fullWidth
