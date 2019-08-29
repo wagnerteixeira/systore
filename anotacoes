@@ -1,0 +1,8 @@
+buildar .net core 
+docker build -f .\App.DockerFile -t systore-api .
+
+# Create a db volume
+docker volume create dbvol
+
+rodar mysql
+docker run --name db -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_USER=systore -e MYSQL_PASSWORD=12345678 -v dbvol:/var/lib/mysql -p 3306:3306 -d mysql/mysql-server:8.0.13                                                                                                                                                                     
