@@ -104,7 +104,7 @@ function ViewProduct(props) {
               }}
             >
               <MenuItem value={'id'}>Código</MenuItem>
-              <MenuItem value={'firstDescription'}>Descrição</MenuItem>
+              <MenuItem value={'description'}>Descrição</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -171,7 +171,7 @@ function ViewProduct(props) {
       <MaterialTable
         columns={[
           { title: 'Código', field: 'id', primary: true },
-          { title: 'Descrição 1', field: 'firstDescription', primary: true },
+          { title: 'Descrição', field: 'description', primary: true },
         ]}
         data={data}
         title=""

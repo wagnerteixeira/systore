@@ -24,7 +24,7 @@ function Product(props) {
   const [products, setProducts] = useState([]);
   const [data, setData] = useState({});
   const [stateData, setStateData] = useState('LIST');
-  const [columnSearch, setColumnSearch] = useState('firstDescription');
+  const [columnSearch, setColumnSearch] = useState('description');
   const [search, setSearch] = useState('');
   const [message, setMessage] = useState({
     messageOpen: false,
@@ -109,7 +109,7 @@ function Product(props) {
       saleType: 0,
       price: 0.0,
       expirationDays: 0,
-      firstDescription: '',
+      description: '',
       extraInformation: '',
       printExpirationDate: false,
       printDateOfPackaging: false,

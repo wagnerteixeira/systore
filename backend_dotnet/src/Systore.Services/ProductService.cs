@@ -35,7 +35,7 @@ namespace Systore.Services
                     .Append(product.Id.StringFormat(6))//codigo do item
                     .Append(product.Price.StringFormat(6))//preço
                     .Append(product.ExpirationDays.StringFormat(3))//dias de validade
-                    .Append(product.FirstDescription.StringFormat(25))//primeira descrição
+                    .Append(product.Description.StringFormat(25))//descrição
                     .Append("".StringFormat(25))//segunda descrição
                     .Append(product.Id.StringFormat(6))//codigo da informação extra
                     .Append(0.StringFormat(4))//codigo da imagem
@@ -77,7 +77,7 @@ namespace Systore.Services
             foreach (var product in productsToExport)
             {
 
-                fileToExport.Add($"PRODUTO {product.Id} {product.FirstDescription}");
+                fileToExport.Add($"PRODUTO {product.Id} {product.Description}");
             }
             return string.Join(Environment.NewLine, fileToExport.ToArray());
         }

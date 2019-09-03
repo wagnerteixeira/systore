@@ -83,11 +83,11 @@ function EditProduct(props) {
               xl={3}
             >
               <TextField
-                id="firstDescription"
-                label="Descrição 1"
+                id="description"
+                label="Descrição"
                 className={classes.textField}
-                value={data.firstDescription}
-                onChange={handleValueChange('firstDescription')}
+                value={data.description}
+                onChange={handleValueChange('description')}
                 margin="normal"
                 fullWidth
                 inputProps={{

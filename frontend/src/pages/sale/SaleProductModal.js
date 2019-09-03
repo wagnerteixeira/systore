@@ -61,8 +61,8 @@ function SaleProductModal(props) {
       ? {
           productData: productCurrent,
           value: productCurrent.productId,
-          label: `Código: ${productCurrent.productId} Descrição 1: ${
-            productCurrent.firstDescription
+          label: `Código: ${productCurrent.productId} Descrição: ${
+            productCurrent.description
           } `,
         }
       : null
@@ -106,13 +106,13 @@ function SaleProductModal(props) {
     );
     let _products = result.data.map(product => ({
       value: product.id,
-      label: `Código: ${product.id} Descrição 1: ${product.firstDescription} `,
+      label: `Código: ${product.id} Descrição: ${product.description} `,
       productData: product,
     }));
     callback(_products);
   }
 
-  const [columnSearch, setColumnSearch] = useState('firstDescription');
+  const [columnSearch, setColumnSearch] = useState('description');
 
   function handleChangeColumnSearch(event) {
     if (columnSearch !== event.target.value) {
@@ -127,11 +127,11 @@ function SaleProductModal(props) {
     case 'id':
       textPlaceHolder = 'código';
       break;
-    case 'firstDescription':
-      textPlaceHolder = 'descrição 1';
+    case 'description':
+      textPlaceHolder = 'descrição';
       break;
     default:
-      textPlaceHolder = 'descrição 1';
+      textPlaceHolder = 'descrição';
   }
 
   function handleQuantityValue(event) {
@@ -161,7 +161,7 @@ function SaleProductModal(props) {
     setQuantity(0);
     setProductData({
       id: props.productId,
-      firstDescription: '',
+      description: '',
       price: 0.0,
     });
     setSingle(null);
@@ -203,7 +203,7 @@ function SaleProductModal(props) {
               }}
             >
               <MenuItem value={'id'}>Código</MenuItem>
-              <MenuItem value={'firstDescription'}>Descrição 1</MenuItem>
+              <MenuItem value={'description'}>Descrição</MenuItem>
             </Select>
           </FormControl>
         </Grid>

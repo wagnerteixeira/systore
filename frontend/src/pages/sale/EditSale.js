@@ -93,7 +93,7 @@ function EditSale(props) {
   const [openProductModal, setOpenProductModal] = useState(false);
   const [productCurrent, setProductCurrent] = useState({
     id: 0,
-    firstDescription: '',
+    description: '',
     price: 0.0,
     quantity: 0.0,
   });
@@ -112,7 +112,7 @@ function EditSale(props) {
     //chamar showModal do produto
     setProductCurrent({
       id: 0,
-      firstDescription: '',
+      description: '',
       price: 0.0,
       quantity: 0.0,
     });
@@ -142,7 +142,7 @@ function EditSale(props) {
     } else {
       let newProduct = {
         productId: product.id,
-        firstDescription: product.firstDescription,
+        description: product.description,
         quantity: product.quantity,
         price: product.price,
         finalValue: parseFloat(product.quantity) * parseFloat(product.price),
@@ -406,7 +406,7 @@ function EditSale(props) {
                       {dataProducts[key].productId}
                     </TableCell>
                     <TableCell padding="none" size="small">
-                      {dataProducts[key].firstDescription}
+                      {dataProducts[key].description}
                     </TableCell>
                     <TableCell padding="none" size="small">
                       {dataProducts[key].price}
