@@ -20,6 +20,7 @@ const styles = theme => ({
 });
 
 function Product(props) {
+  const maxLength = 56;
   const [products, setProducts] = useState([]);
   const [data, setData] = useState({});
   const [stateData, setStateData] = useState('LIST');
@@ -109,8 +110,7 @@ function Product(props) {
       price: 0.0,
       expirationDays: 0,
       firstDescription: '',
-      secondDescription: '',
-      thirdDescription: '',
+      extraInformation: '',
       printExpirationDate: false,
       printDateOfPackaging: false,
     });
@@ -127,6 +127,18 @@ function Product(props) {
   const handleValueChange = name => event => {
     setData({ ...data, [name]: event.target.value });
   };
+
+  function handleValueChangeText(event) {
+    var text = event.target.value;
+    var lines = text.split(/(\r\n|\n|\r)/gm);
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].length > maxLength) {
+        lines[i] = lines[i].substring(0, maxLength);
+      }
+    }
+
+    setData({ ...data, extraInformation: lines.join('') });
+  }
 
   const handleValueChangeInteger = name => event => {
     let _value = parseInt(event.target.value.replace(/[^0-9]/g, ''));
@@ -248,6 +260,7 @@ function Product(props) {
           handleCancel={handleCancel}
           handleSave={handleSave}
           handleOpenMessage={handleOpenMessage}
+          handleValueChangeText={handleValueChangeText}
         />
       )}
     </div>

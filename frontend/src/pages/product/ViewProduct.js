@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import MaterialTable from 'material-table';
 import classNames from 'classnames';
-import { Paper, Grid, FormControl, InputLabel, Select, MenuItem, Input, Fab, Tooltip } from '@material-ui/core';
+import {
+  Paper,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Input,
+  Fab,
+  Tooltip,
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -36,7 +46,7 @@ const styles = theme => ({
   },
   margin: {
     margin: theme.spacing(1),
-  },  
+  },
   searchIcon: {
     margin: `${theme.spacing(2)}px 2px`,
   },
@@ -67,7 +77,17 @@ const styles = theme => ({
 function ViewProduct(props) {
   const [selectedRow, setSelectedRow] = useState(null);
 
-  const { data, actions, classes, columnSearch, search, handleSearch, handleCreate, handleChangeTextSearch, handleRequestSearch } = props;
+  const {
+    data,
+    actions,
+    classes,
+    columnSearch,
+    search,
+    handleSearch,
+    handleCreate,
+    handleChangeTextSearch,
+    handleRequestSearch,
+  } = props;
 
   return (
     <Paper className={classes.root}>
@@ -85,7 +105,6 @@ function ViewProduct(props) {
             >
               <MenuItem value={'id'}>Código</MenuItem>
               <MenuItem value={'firstDescription'}>Descrição</MenuItem>
-              <MenuItem value={'secondDescription'}>Complemento</MenuItem>              
             </Select>
           </FormControl>
         </Grid>
@@ -153,10 +172,9 @@ function ViewProduct(props) {
         columns={[
           { title: 'Código', field: 'id', primary: true },
           { title: 'Descrição 1', field: 'firstDescription', primary: true },
-          { title: 'Descrição 2', field: 'secondDescription', primary: true },
         ]}
         data={data}
-        title=''
+        title=""
         localization={{
           pagination: {
             labelDisplayedRows: '{from}-{to} de {count}',
@@ -176,17 +194,17 @@ function ViewProduct(props) {
             searchPlaceholder: 'Procurar',
             exportTitle: 'Gerar arquivo CSV dos dados da tela',
             exportAriaLabel: 'Exportar',
-            exportName: 'Exportar'
+            exportName: 'Exportar',
           },
           header: {
-            actions: 'Ações'
+            actions: 'Ações',
           },
           body: {
             emptyDataSourceMessage: 'Nenhum registro selecionado',
             filterRow: {
-              filterTooltip: 'Filtro'
-            }
-          }
+              filterTooltip: 'Filtro',
+            },
+          },
         }}
         actions={actions}
         options={{
@@ -197,13 +215,16 @@ function ViewProduct(props) {
           headerStyle: { padding: '8px ' },
           filterCellStyle: { padding: '8px ' },
           rowStyle: rowData => ({
-            backgroundColor: (selectedRow && selectedRow.tableData.id === rowData.tableData.id) ? '#EEE' : '#FFF',
+            backgroundColor:
+              selectedRow && selectedRow.tableData.id === rowData.tableData.id
+                ? '#EEE'
+                : '#FFF',
           }),
         }}
         onRowClick={(evt, selectedRow) => setSelectedRow(selectedRow)}
       />
     </Paper>
-  )
+  );
 }
 
 export default withStyles(styles)(ViewProduct);

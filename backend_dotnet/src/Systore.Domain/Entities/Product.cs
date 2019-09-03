@@ -17,9 +17,7 @@ namespace Systore.Domain.Entities
 
         public string FirstDescription { get; set; }
 
-        public string SecondDescription { get; set; }
-
-        public string ThirdDescription { get; set; }
+        public string ExtraInformation { get; set; }
 
         public bool PrintExpirationDate { get; set; }
 

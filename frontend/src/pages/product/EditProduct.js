@@ -1,5 +1,12 @@
-import React from 'react'
-import { Grid, TextField, Button, FormControlLabel, Checkbox, Typography } from '@material-ui/core';
+import React from 'react';
+import {
+  Grid,
+  TextField,
+  Button,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import NumberFormatCustom from '../../components/common/NumberFormatCustom';
 
@@ -33,23 +40,24 @@ const styles = theme => ({
     padding: `${theme.spacing(1)}px !important `,
   },
   titleGroup: {
-    margin: theme.spacing(2)
+    margin: theme.spacing(2),
   },
   button: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
 });
 
 function EditProduct(props) {
-
-  const { classes,
+  const {
+    classes,
     data,
     handleValueChange,
+    handleValueChangeText,
     handleValueChangeInteger,
     handleValueCheckedChange,
     handleCancel,
     handleSave,
-    handleValueDecimalChange
+    handleValueDecimalChange,
   } = props;
 
   return (
@@ -58,12 +66,11 @@ function EditProduct(props) {
         <div className={classes.back}>
           <Grid className={classes.itens} container spacing={1}>
             <Grid container spacing={1}>
-              <Grid
-                sm={12}
-                md={12}
-                lg={12}
-                xl={12}>
-                <Typography variant="h6" className={classes.titleGroup} > Dados gerais</Typography>
+              <Grid sm={12} md={12} lg={12} xl={12}>
+                <Typography variant="h6" className={classes.titleGroup}>
+                  {' '}
+                  Dados gerais
+                </Typography>
               </Grid>
             </Grid>
             <Grid
@@ -81,50 +88,6 @@ function EditProduct(props) {
                 className={classes.textField}
                 value={data.firstDescription}
                 onChange={handleValueChange('firstDescription')}
-                margin="normal"
-                fullWidth
-                inputProps={{
-                  maxLength: 30,
-                }}
-              />
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={3}
-            >
-              <TextField
-                id="secondDescription"
-                label="Descrição 2"
-                className={classes.textField}
-                value={data.secondDescription}
-                onChange={handleValueChange('secondDescription')}
-                margin="normal"
-                fullWidth
-                inputProps={{
-                  maxLength: 30,
-                }}
-              />
-            </Grid>
-            <Grid
-              className={classes.item}
-              item
-              xs={12}
-              sm={6}
-              md={6}
-              lg={6}
-              xl={3}
-            >
-              <TextField
-                id="thirdDescription"
-                label="Descrição 3"
-                className={classes.textField}
-                value={data.thirdDescription}
-                onChange={handleValueChange('thirdDescription')}
                 margin="normal"
                 fullWidth
                 inputProps={{
@@ -157,7 +120,7 @@ function EditProduct(props) {
               className={classes.item}
               item
               xs={12}
-              sm={6}
+              sm={3}
               md={3}
               lg={3}
               xl={3}
@@ -171,13 +134,33 @@ function EditProduct(props) {
                 fullWidth
               />
             </Grid>
+            <Grid
+              className={classes.item}
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              xl={12}
+            >
+              <TextField
+                id="extraInformation"
+                label="Informações extras"
+                className={classes.textField}
+                value={data.extraInformation}
+                onChange={handleValueChangeText}
+                margin="normal"
+                fullWidth
+                multiline
+                rows={5}
+              />
+            </Grid>
             <Grid container spacing={1}>
-              <Grid
-                sm={12}
-                md={12}
-                lg={12}
-                xl={12}>
-                <Typography variant="h6" className={classes.titleGroup} > Configurações de impressão</Typography>
+              <Grid sm={12} md={12} lg={12} xl={12}>
+                <Typography variant="h6" className={classes.titleGroup}>
+                  {' '}
+                  Configurações de impressão
+                </Typography>
               </Grid>
             </Grid>
             <Grid

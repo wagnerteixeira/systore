@@ -94,8 +94,6 @@ function EditSale(props) {
   const [productCurrent, setProductCurrent] = useState({
     id: 0,
     firstDescription: '',
-    secondDescription: '',
-    thirtDescription: '',
     price: 0.0,
     quantity: 0.0,
   });
@@ -115,8 +113,6 @@ function EditSale(props) {
     setProductCurrent({
       id: 0,
       firstDescription: '',
-      secondDescription: '',
-      thirtDescription: '',
       price: 0.0,
       quantity: 0.0,
     });

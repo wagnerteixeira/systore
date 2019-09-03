@@ -252,7 +252,6 @@ function BalanceLoad(props) {
                 <TableCell component="th" scope="row">
                   {product.firstDescription}
                 </TableCell>
-                <TableCell align="right">{product.secondDescription}</TableCell>
                 <TableCell align="right">{product.price}</TableCell>
               </TableRow>
             );

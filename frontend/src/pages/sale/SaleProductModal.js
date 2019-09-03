@@ -63,9 +63,7 @@ function SaleProductModal(props) {
           value: productCurrent.productId,
           label: `Código: ${productCurrent.productId} Descrição 1: ${
             productCurrent.firstDescription
-          } Descrição 2: ${productCurrent.secondDescription} Descrição 3: ${
-            productCurrent.thirtDescription
-          }`,
+          } `,
         }
       : null
   );
@@ -108,11 +106,7 @@ function SaleProductModal(props) {
     );
     let _products = result.data.map(product => ({
       value: product.id,
-      label: `Código: ${product.id} Descrição 1: ${
-        product.firstDescription
-      } Descrição 2: ${product.secondDescription} Descrição 3: ${
-        product.thirtDescription
-      }`,
+      label: `Código: ${product.id} Descrição 1: ${product.firstDescription} `,
       productData: product,
     }));
     callback(_products);
@@ -135,9 +129,6 @@ function SaleProductModal(props) {
       break;
     case 'firstDescription':
       textPlaceHolder = 'descrição 1';
-      break;
-    case 'secondDescription':
-      textPlaceHolder = 'descrição 2';
       break;
     default:
       textPlaceHolder = 'descrição 1';
@@ -171,8 +162,6 @@ function SaleProductModal(props) {
     setProductData({
       id: props.productId,
       firstDescription: '',
-      secondDescription: '',
-      thirtDescription: '',
       price: 0.0,
     });
     setSingle(null);
@@ -215,7 +204,6 @@ function SaleProductModal(props) {
             >
               <MenuItem value={'id'}>Código</MenuItem>
               <MenuItem value={'firstDescription'}>Descrição 1</MenuItem>
-              <MenuItem value={'secondDescription'}>Descrição 2</MenuItem>
             </Select>
           </FormControl>
         </Grid>
