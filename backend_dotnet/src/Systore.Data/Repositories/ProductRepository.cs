@@ -31,6 +31,11 @@ namespace Systore.Data.Repositories
             return base.UpdateAsync(entity);
         }
 
+        public Task<string> UpdateAsyncWithOutExportToBalance(Product entity)
+        {
+            return base.UpdateAsync(entity);
+        }
+
         public async Task<List<Product>> GetProductsForExportToBalance(FilterProductsToBalance filterProductsToBalance)
         {
             var query = _entities.Select(x => x);

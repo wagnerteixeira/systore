@@ -27,8 +27,8 @@ namespace Systore.Services
         public async Task<string> GenerateFileContentItensToBalance(int[] productsId)
         {
             var productsToExport = await (_repository as IProductRepository).GetAll().Where(c => productsId.Any(pid => pid == c.Id)).ToListAsync();
-            List<string> fileToExport = new List<string>();            
-            foreach(var product in productsToExport)
+            List<string> fileToExport = new List<string>();
+            foreach (var product in productsToExport)
             {
                 var line = new StringBuilder()
                     .Append(1.StringFormat(2))//codigo do departamento
@@ -69,7 +69,7 @@ namespace Systore.Services
             }
             return string.Join(Environment.NewLine, fileToExport.ToArray());
         }
-        public async  Task<string> GenerateFileContentInfoToBalance(int[] productsId)
+        public async Task<string> GenerateFileContentInfoToBalance(int[] productsId)
         {
             var productsToExport = await (_repository as IProductRepository).GetAll().Where(c => productsId.Any(pid => pid == c.Id)).ToListAsync();
             List<string> fileToExport = new List<string>();
@@ -88,12 +88,23 @@ namespace Systore.Services
                     extraInformationAdded++;
                 }
 
-                var line = stringBuilder.Append("".StringFormat((totalExtraInformation - extraInformationAdded) * 56)).ToString();           
+                var line = stringBuilder.Append("".StringFormat((totalExtraInformation - extraInformationAdded) * 56)).ToString();
 
                 fileToExport.Add(line);
             }
             return string.Join(Environment.NewLine, fileToExport.ToArray());
         }
-       
+
+        public async Task<string> UpdateProductsExportedToBalance(int[] productsId)
+        {
+            var products = await (_repository as IProductRepository).GetAll().Where(c => productsId.Any(pid => pid == c.Id)).ToListAsync();
+            foreach (var product in products)
+            {
+                product.ExportToBalance = false;
+                await (_repository as IProductRepository).UpdateAsyncWithOutExportToBalance(product);
+            }
+            return "";
+        }
+
     }
 }

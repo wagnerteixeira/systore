@@ -23,6 +23,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import productService from '../../services/productService';
 
 import { sendFileToDownload } from '../../utils/helpers';
+import { axiosOApi } from '../../services/axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -122,7 +123,14 @@ function BalanceLoad(props) {
     try {
       if (selected.length > 0) {
         const response = await productService.generateFileToBalance(selected);
-        sendFileToDownload('BALANCA.txt', response.data);
+        console.log(response.data);
+        const itensFilecontent = atob(response.data.itensFilecontent);
+        const infoFileContent = atob(response.data.infoFileContent);
+        console.log(itensFilecontent);
+        console.log(infoFileContent);
+        sendFileToDownload('ITENSMGV.txt', itensFilecontent);
+        sendFileToDownload('TXINFO.txt', infoFileContent);
+        getProducts();
       }
     } catch (err) {
       setMessage({

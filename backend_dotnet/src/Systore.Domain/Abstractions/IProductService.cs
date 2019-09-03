@@ -10,5 +10,6 @@ namespace Systore.Domain.Abstractions
         Task<List<Product>> GetProductsForExportToBalance(FilterProductsToBalance filterProductsToBalance);
         Task<string> GenerateFileContentItensToBalance(int[] productsId);
         Task<string> GenerateFileContentInfoToBalance(int[] productsId);
+        Task<string> UpdateProductsExportedToBalance(int[] productsId);
     }
 }

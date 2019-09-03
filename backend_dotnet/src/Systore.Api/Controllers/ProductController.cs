@@ -48,7 +48,7 @@ namespace Systore.Api.Controllers
         }
 
         [Authorize]
-        [HttpPost("generate-fils-to-balance")]
+        [HttpPost("generate-files-to-balance")]
         public async Task<IActionResult> GenerateFilesToBalance([FromBody]int[] productsId)
         {
             try
@@ -58,16 +58,13 @@ namespace Systore.Api.Controllers
                 if (!Directory.Exists(folder))
                     Directory.CreateDirectory(folder);
                 var itensFileContent = await (_service as IProductService).GenerateFileContentItensToBalance(productsId);
-                var itensFileName = Path.Combine(folder, "ITENSMGV.txt");
-                System.IO.File.WriteAllText(itensFileName, itensFileContent);
                 var infoFileContent = await (_service as IProductService).GenerateFileContentInfoToBalance(productsId);
-                var infoFileName = Path.Combine(folder, "TXINFO.txt");
-                System.IO.File.WriteAllText(infoFileName, infoFileContent);
+                await (_service as IProductService).UpdateProductsExportedToBalance(productsId);
                 
                 return Ok(new
                 {
-                    itensFileDownload = $"{Request.Scheme}://{Request.Host.Value}/api/product/download-temp-file/{guid}/{Base64UrlTextEncoder.Encode(Encoding.UTF8.GetBytes("ITENSMGV.txt"))}",
-                    infoFileDownload = $"{Request.Scheme}://{Request.Host.Value}/api/product/download-temp-file/{guid}/{Base64UrlTextEncoder.Encode(Encoding.UTF8.GetBytes("TXINFO.txt"))}",
+                    itensFilecontent = Base64UrlTextEncoder.Encode(Encoding.UTF8.GetBytes(itensFileContent)),
+                    infoFileContent = Base64UrlTextEncoder.Encode(Encoding.UTF8.GetBytes(infoFileContent)),
                 });
             }
             catch (NotSupportedException e)
