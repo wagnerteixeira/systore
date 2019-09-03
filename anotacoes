@@ -5,7 +5,11 @@ docker build -f .\App.DockerFile -t systore-api .
 docker volume create systore-db-vol
 rodar mysql
 docker run --name db -e MYSQL_ROOT_PASSWORD=12345678 -e MYSQL_ROOT_HOST=% -v systore-db-vol:/var/lib/mysql -p 3306:3306 -d mysql/mysql-server:8.0.13
+rodar aplicação
+docker run --name systore-api.test --link db -p 8080:80 systore-api
 
+
+-p porta_host:porta_interna
 
 
 

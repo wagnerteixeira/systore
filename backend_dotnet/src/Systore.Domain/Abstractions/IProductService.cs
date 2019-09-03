@@ -8,6 +8,7 @@ namespace Systore.Domain.Abstractions
     public interface IProductService : IBaseService<Product>
     {
         Task<List<Product>> GetProductsForExportToBalance(FilterProductsToBalance filterProductsToBalance);
-        Task<string> GenerateFileItensToBalance(int[] productsId);
+        Task<string> GenerateFileContentItensToBalance(int[] productsId);
+        Task<string> GenerateFileContentInfoToBalance(int[] productsId);
     }
 }

@@ -171,6 +171,7 @@ namespace Systore.Api
             using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 scope.ServiceProvider.GetRequiredService<SystoreContext>().Database.Migrate();
+                scope.ServiceProvider.GetRequiredService<AuditContext>().Database.Migrate();
             }
         }
     }

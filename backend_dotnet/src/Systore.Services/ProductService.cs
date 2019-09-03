@@ -23,7 +23,7 @@ namespace Systore.Services
             return (_repository as IProductRepository).GetProductsForExportToBalance(filterProductsToBalance);
         }
 
-        public async Task<string> GenerateFileItensToBalance(int[] productsId)
+        public async Task<string> GenerateFileContentItensToBalance(int[] productsId)
         {
             var productsToExport = await (_repository as IProductRepository).GetAll().Where(c => productsId.Any(pid => pid == c.Id)).ToListAsync();
             List<string> fileToExport = new List<string>();            
@@ -68,18 +68,25 @@ namespace Systore.Services
             }
             return string.Join(Environment.NewLine, fileToExport.ToArray());
         }
-
-        public async Task<string> GenerateFileInfoToBalance(int[] productsId)
+        public async  Task<string> GenerateFileContentInfoToBalance(int[] productsId)
         {
             var productsToExport = await (_repository as IProductRepository).GetAll().Where(c => productsId.Any(pid => pid == c.Id)).ToListAsync();
             List<string> fileToExport = new List<string>();
-            int departamentId = 1;
             foreach (var product in productsToExport)
             {
+                var line = new StringBuilder()
+                    .Append(product.Id.StringFormat(6))//codigo do item
+                    .Append("".StringFormat(100))//espaço vazio
+                    .Append(product.FirstDescription.StringFormat(56))//primeira descrição
+                    .Append(product.SecondDescription.StringFormat(56))//segunda descrição
+                    .Append(product.ThirdDescription.StringFormat(56))//terceira descrição
+                    .Append("".StringFormat(952))//espaço vazio                    
+                    .ToString();
 
-                fileToExport.Add($"PRODUTO {product.Id} {product.FirstDescription}");
+                fileToExport.Add(line);
             }
             return string.Join(Environment.NewLine, fileToExport.ToArray());
         }
+       
     }
 }

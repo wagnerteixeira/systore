@@ -9,7 +9,7 @@ namespace Systore.Infra
 {
     public class SystoreContextFactory : IDesignTimeDbContextFactory<SystoreContext>
     {
-        private string _connectionString = "Server=localhost;User Id=root;Password=12345678;Database=systore";
+        private string _connectionString = "Server=systorehomolog.eastus.cloudapp.azure.com;User Id=systore;Password=12345678;Database=systore";
         public SystoreContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<SystoreContext>();

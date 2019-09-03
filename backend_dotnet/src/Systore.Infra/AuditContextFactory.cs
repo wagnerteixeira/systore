@@ -9,7 +9,7 @@ namespace Systore.Infra
 {
     public class AuditContextFactory : IDesignTimeDbContextFactory<AuditContext>
     {
-        private string _connectionString = "Server=localhost;User Id=root;Password=12345678;Database=systoreAudit";
+        private string _connectionString = "Server=systorehomolog.eastus.cloudapp.azure.com;User Id=systore;Password=12345678;Database=systoreAudit";
 
         public AuditContext CreateDbContext(string[] args)
         {
