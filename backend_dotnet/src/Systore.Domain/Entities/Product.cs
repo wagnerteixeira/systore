@@ -15,11 +15,9 @@ namespace Systore.Domain.Entities
 
         public int ExpirationDays { get; set; }
 
-        public string FirstDescription { get; set; }
+        public string Description { get; set; }
 
-        public string SecondDescription { get; set; }
-
-        public string ThirdDescription { get; set; }
+        public string ExtraInformation { get; set; }
 
         public bool PrintExpirationDate { get; set; }
 

@@ -26,15 +26,11 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.ExpirationDays)
                 .HasColumnType("SMALLINT");
 
-            builder.Property(p => p.FirstDescription)
+            builder.Property(p => p.Description)
                 .HasMaxLength(30);
 
-            builder.Property(p => p.SecondDescription)
-                .HasMaxLength(30);
-
-            builder.Property(p => p.ThirdDescription)
-                .HasMaxLength(30);
-
+            builder.Property(p => p.ExtraInformation);
+            
             builder.Property(p => p.PrintExpirationDate)
                 .HasColumnType("TINYINT");
 

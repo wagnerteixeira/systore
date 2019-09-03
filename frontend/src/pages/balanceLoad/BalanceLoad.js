@@ -224,8 +224,7 @@ function BalanceLoad(props) {
                 inputProps={{ 'aria-label': 'select all desserts' }}
               />
             </TableCell>
-            <TableCell align="right">Descrição 1</TableCell>
-            <TableCell align="right">Descrição 2</TableCell>
+            <TableCell align="right">Descrição</TableCell>
             <TableCell align="right">Valor</TableCell>
           </TableRow>
         </TableHead>
@@ -250,9 +249,8 @@ function BalanceLoad(props) {
                   />
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {product.firstDescription}
+                  {product.description}
                 </TableCell>
-                <TableCell align="right">{product.secondDescription}</TableCell>
                 <TableCell align="right">{product.price}</TableCell>
               </TableRow>
             );
