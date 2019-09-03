@@ -22,9 +22,7 @@ namespace Systore.Infra.Mapping
                 .HasColumnType("TINYINT");
 
             builder.HasData(
-                new { Id = 1, UserName = "Admin", Password = "Senha123", Admin = true },
-                new { Id = 2, UserName = "ROSE", Password = "1234", Admin = true },
-                new { Id = 3, UserName = "IZAQUE", Password = "1234", Admin = true }
+                new { Id = 1, UserName = "Admin", Password = "Senha123", Admin = true }
             );
         }
     }

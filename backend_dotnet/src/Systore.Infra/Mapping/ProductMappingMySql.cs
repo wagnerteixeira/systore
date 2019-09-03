@@ -29,7 +29,8 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.Description)
                 .HasMaxLength(30);
 
-            builder.Property(p => p.ExtraInformation);
+            builder.Property(p => p.ExtraInformation)
+                .HasColumnType("TEXT");
             
             builder.Property(p => p.PrintExpirationDate)
                 .HasColumnType("TINYINT");

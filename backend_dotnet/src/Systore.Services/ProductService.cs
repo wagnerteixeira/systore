@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.Extensions.Logging;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Systore.Services
 {
@@ -74,14 +75,20 @@ namespace Systore.Services
             List<string> fileToExport = new List<string>();
             foreach (var product in productsToExport)
             {
-                var line = new StringBuilder()
+                var stringBuilder = new StringBuilder()
                     .Append(product.Id.StringFormat(6))//codigo do item
-                    .Append("".StringFormat(100))//espaço vazio
-                    .Append(product.FirstDescription.StringFormat(56))//primeira descrição
-                    .Append(product.SecondDescription.StringFormat(56))//segunda descrição
-                    .Append(product.ThirdDescription.StringFormat(56))//terceira descrição
-                    .Append("".StringFormat(952))//espaço vazio                    
-                    .ToString();
+                    .Append("".StringFormat(100));
+                int extraInformationAdded = 0;
+                int totalExtraInformation = 20;
+                //  Regex.Split(product.ExtraInformation, @"(\r\n|\n|\r)", RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace)'
+
+                foreach (var extrainfo in product.ExtraInformation.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    stringBuilder = stringBuilder.Append(extrainfo.StringFormat(56));
+                    extraInformationAdded++;
+                }
+
+                var line = stringBuilder.Append("".StringFormat((totalExtraInformation - extraInformationAdded) * 56)).ToString();           
 
                 fileToExport.Add(line);
             }
