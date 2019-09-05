@@ -107,7 +107,7 @@ function EditProduct(props) {
               <TextField
                 className={classes.textField}
                 label="Preço (R$)"
-                value={data.price}
+                value={data.price || '0,00'}
                 onChange={handleValueDecimalChange('price')}
                 id="price"
                 fullWidth

@@ -67,11 +67,12 @@ function SaleProductModal(props) {
         }
       : null
   );
+
   const [prevSingle, setPrevSingle] = useState(null);
 
   useEffect(() => {
     if (single) setProductData(single.productData);
-  }, single);
+  }, [single]);
 
   async function fetchProducts(
     inputValue,

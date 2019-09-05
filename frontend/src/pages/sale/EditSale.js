@@ -6,7 +6,6 @@ import {
   Typography,
   FormControl,
   MenuItem,
-  Paper,
   Select,
   Table,
   TableHead,
@@ -16,7 +15,6 @@ import {
   Fab,
   Icon,
   Input,
-  BottomNavigation,
 } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { withStyles } from '@material-ui/core/styles';

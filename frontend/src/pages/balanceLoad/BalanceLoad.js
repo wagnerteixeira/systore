@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import MessageSnackbar from '../../components/common/MessageSnackbar';
 import {
@@ -11,19 +10,15 @@ import {
   TableHead,
   Checkbox,
   Button,
-  Fab,
   RadioGroup,
   FormControlLabel,
   Radio,
   Paper,
 } from '@material-ui/core';
 
-import SearchIcon from '@material-ui/icons/Search';
-
 import productService from '../../services/productService';
 
 import { sendFileToDownload } from '../../utils/helpers';
-import { axiosOApi } from '../../services/axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,8 +28,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     marginLeft: theme.spacing(3),
     marginRight: theme.spacing(3),
-    paddingLeft: theme.spacing(1),
-    paddingTop: theme.spacing(1),
+    padding: theme.spacing(2),
   },
   fab: {
     margin: theme.spacing(1),
@@ -48,7 +42,6 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
   },
   tableHeight: {
-    height: `300px`,
     overflowY: 'scroll',
   },
   buttonCntainer: {
@@ -61,7 +54,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function BalanceLoad(props) {
-  const [exportType, setExportType] = useState('1');
+  const [exportType, setExportType] = useState('0');
   const [message, setMessage] = useState({
     messageOpen: false,
     variantMessage: 'success',
@@ -163,10 +156,10 @@ function BalanceLoad(props) {
         <Grid
           item
           xs={12}
-          sm={3}
-          md={3}
-          lg={3}
-          xl={3}
+          sm={12}
+          md={6}
+          lg={4}
+          xl={4}
           className={classes.radioGroupContainer}
         >
           <RadioGroup
@@ -193,20 +186,23 @@ function BalanceLoad(props) {
             />
           </RadioGroup>
         </Grid>
-        <Grid item xs={12} sm={1} md={1} lg={1} xl={1}>
-          <Fab color="primary" aria-label="search" className={classes.fab}>
-            <SearchIcon onClick={getProducts} />
-          </Fab>
-        </Grid>
         <Grid
           item
           xs={12}
-          sm={4}
-          md={4}
+          sm={12}
+          md={6}
           lg={4}
           xl={4}
           className={classes.buttonCntainer}
         >
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={getProducts}
+            className={classes.button}
+          >
+            Buscar produtos
+          </Button>
           <Button
             disabled={!selected.length}
             variant="outlined"
@@ -232,7 +228,7 @@ function BalanceLoad(props) {
                 inputProps={{ 'aria-label': 'select all desserts' }}
               />
             </TableCell>
-            <TableCell align="right">Descrição</TableCell>
+            <TableCell align="left">Descrição</TableCell>
             <TableCell align="right">Valor</TableCell>
           </TableRow>
         </TableHead>

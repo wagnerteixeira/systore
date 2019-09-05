@@ -238,14 +238,14 @@ class Menu extends React.Component {
             />
             <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/product'}
-              iconType="star"
+              iconType="local_parking"
               primaryText="Produtos"
               onClickButton={() => this.handleHeaderText('Produtos')}
               listItemClassName={classes.listItemClassName}
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
             />
-            <IconListButton
+            {/*<IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/sale'}
               iconType="shopping_cart"
               primaryText="Vendas"
@@ -253,7 +253,7 @@ class Menu extends React.Component {
               listItemClassName={classes.listItemClassName}
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
-            />
+            />*/}
             <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/user'}
               iconType="accessibility_new"
@@ -265,7 +265,7 @@ class Menu extends React.Component {
             />
             <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/balance-load'}
-              iconType="vertical_align_bottom"
+              iconType="move_to_inbox"
               primaryText="Carga da Balança"
               onClickButton={() =>
                 this.handleHeaderText('Gerar carga da Balança')

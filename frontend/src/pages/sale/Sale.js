@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import accounting from 'accounting';
 
@@ -226,7 +226,6 @@ function Sale(props) {
               onClick: (event, rowData) => handleDelete(rowData),
             },
           ]}
-          handleCreate={handleCreate}
         />
       )}
       {stateData === 'EDIT_INSERT' && (

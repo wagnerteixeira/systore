@@ -17,12 +17,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import {
   getDateToString,
-  getDelayedDays,
   getCurrentDate,
   getNumberDecimalToStringCurrency,
   getNumberToString,
   getValueWithInterest,
-  getValueInterest,
 } from '../../utils/operators';
 
 import BillReceiveCreateModal from './BillReceiveCreateModal';
@@ -112,7 +110,6 @@ const stylesMenu = theme => ({
 
 function _MenuAcoes(props) {
   const {
-    handleSaveClient,
     handleCloseMenuAcoes,
     anchorElMenuAcoes,
     handlePrintBillReceiveGroupByCode,
