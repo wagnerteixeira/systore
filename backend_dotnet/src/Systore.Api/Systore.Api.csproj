@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Systore.Domain\Systore.Domain.csproj" />
+    <ProjectReference Include="..\Systore.FastReport\Systore.FastReport.csproj" />
     <ProjectReference Include="..\Systore.Services\Systore.Services.csproj" />
     <ProjectReference Include="..\Systore.Dtos\Systore.Dtos.csproj" />
     <ProjectReference Include="..\Systore.Data\Systore.Data.csproj" />

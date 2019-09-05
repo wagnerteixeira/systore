@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systore.Services", "src\Sys
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systore.Api", "src\Systore.Api\Systore.Api.csproj", "{F778AF36-6009-48A1-AFBA-A46451027366}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Systore.FastReport", "src\Systore.FastReport\Systore.FastReport.csproj", "{7FCB9042-13BC-4033-B8BA-E1D4471134CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{F778AF36-6009-48A1-AFBA-A46451027366}.Release|x64.Build.0 = Release|Any CPU
 		{F778AF36-6009-48A1-AFBA-A46451027366}.Release|x86.ActiveCfg = Release|Any CPU
 		{F778AF36-6009-48A1-AFBA-A46451027366}.Release|x86.Build.0 = Release|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Debug|x64.Build.0 = Debug|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Debug|x86.Build.0 = Debug|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Release|x64.ActiveCfg = Release|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Release|x64.Build.0 = Release|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Release|x86.ActiveCfg = Release|Any CPU
+		{7FCB9042-13BC-4033-B8BA-E1D4471134CD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -26,6 +26,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using Systore.Api.Extensions;
+using Systore.FastReport;
 
 namespace Systore.Api
 {
@@ -161,6 +162,8 @@ namespace Systore.Api
             });
 
             app.UseMvc();
+
+            app.UseReport();
 
             // uncoment for automatic migration
             InitializeDatabase(app);
