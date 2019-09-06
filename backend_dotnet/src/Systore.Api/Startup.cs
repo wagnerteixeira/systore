@@ -33,25 +33,20 @@ namespace Systore.Api
     public class Startup
     {
         private readonly IHostingEnvironment _env;
+        private AppSettings _appSettings;
 
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            _env = env;
+            _env = env;            
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.UseSerilog();
-
-            services.AddDbContext<SystoreContext>();
-            services.AddDbContext<AuditContext>();
-
-            services.AddScoped<ISystoreContext, SystoreContext>();
-            services.AddScoped<IAuditContext, AuditContext>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -61,14 +56,16 @@ namespace Systore.Api
             services.AddCors();
             Log.Logger.Information($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
+
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
             // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            Console.WriteLine($"ConnectionString: {appSettings.ConnectionString}");   
+            _appSettings = appSettingsSection.Get<AppSettings>();
+
+            Console.WriteLine($"ConnectionString: {_appSettings.ConnectionString}");
             if (_env.IsDevelopment())
-            {                
+            {
                 services.AddMvc(opts =>
                 {
                     opts.Filters.Add(new AllowAnonymousFilter());
@@ -77,8 +74,27 @@ namespace Systore.Api
             else
                 services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddDbContext<SystoreContext>(options =>
+            {
+                if (_appSettings.DatabaseType == "MySql")
+                    options.UseMySql(_appSettings.ConnectionString);
+                else if (_appSettings.DatabaseType == "InMem")
+                    options.UseInMemoryDatabase("systore");
+            });
+
+            services.AddDbContext<AuditContext>(options =>
+            {
+                if (_appSettings.DatabaseType == "MySql")
+                    options.UseMySql(_appSettings.AuditConnectionString);
+                else if (_appSettings.DatabaseType == "InMem")
+                    options.UseInMemoryDatabase("systoreAudit");
+            });
+
+            services.AddScoped<ISystoreContext, SystoreContext>();
+            services.AddScoped<IAuditContext, AuditContext>();
+
+
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,15 +115,15 @@ namespace Systore.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Systore", Version = "v1" });                
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Systore", Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
-                    In = ParameterLocation.Header,                          
-                    Type = SecuritySchemeType.ApiKey,   
-                    
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -148,7 +164,7 @@ namespace Systore.Api
                       .AllowAnyHeader()
             );
 
-          
+
             app.UseAuthentication();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -158,14 +174,14 @@ namespace Systore.Api
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Systore");                                
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Systore");
             });
 
             app.UseMvc();
 
             app.UseReport();
 
-            // uncoment for automatic migration
+            // uncoment for automatic migration            
             InitializeDatabase(app);
         }
 
@@ -173,8 +189,16 @@ namespace Systore.Api
         {
             using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                scope.ServiceProvider.GetRequiredService<SystoreContext>().Database.Migrate();
-                scope.ServiceProvider.GetRequiredService<AuditContext>().Database.Migrate();
+                if (_appSettings.DatabaseType == "Mysql")
+                {
+                    scope.ServiceProvider.GetRequiredService<SystoreContext>().Database.Migrate();
+                    scope.ServiceProvider.GetRequiredService<AuditContext>().Database.Migrate();
+                }
+                else if(_appSettings.DatabaseType == "InMem")
+                {
+                    scope.ServiceProvider.GetRequiredService<SystoreContext>().Database.EnsureCreated();
+                    scope.ServiceProvider.GetRequiredService<AuditContext>().Database.EnsureCreated();
+                }
             }
         }
     }

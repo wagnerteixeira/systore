@@ -27,7 +27,7 @@ namespace Systore.Infra.Context
             if (!optionsBuilder.IsConfigured)
             {
                 if (_appSettings.DatabaseType == "MySql")
-                    optionsBuilder.UseMySql(_appSettings.AuditConnectionString);
+                    optionsBuilder.UseMySql(_appSettings.AuditConnectionString);                
             }
         }
 
