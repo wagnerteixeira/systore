@@ -26,7 +26,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using Systore.Api.Extensions;
-using Systore.FastReport;
+using Systore.Report;
 
 namespace Systore.Api
 {
@@ -49,7 +49,6 @@ namespace Systore.Api
             services.UseSerilog();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             services.UseRepositories();
             services.UseServices();
 
@@ -93,6 +92,7 @@ namespace Systore.Api
             services.AddScoped<ISystoreContext, SystoreContext>();
             services.AddScoped<IAuditContext, AuditContext>();
 
+            services.UseReport(_appSettings);
 
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             services.AddAuthentication(x =>

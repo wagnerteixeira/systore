@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/03/2019 13:30:57" ReportInfo.Modified="09/03/2019 23:36:12" ReportInfo.CreatorVersion="2019.3.5.0">
+  <Dictionary>
+    <MySqlDataConnection Name="SystoreConnection" ConnectionString="rijcmlqomabmqtwD7y3BaVO988Xrns8n0+Fpps4V7SdlS+EOKRfEfgYlVHw/4pnKk9NgUQNE0HY3XrOI9SOQebvbIEN3PfKc0JPPh6JiTonoq7tReJGnx1UwGwyOCM2dmLv62C5">
+      <TableDataSource Name="Table" DataType="System.Int32" Enabled="true" SelectCommand="select c.id,&#10;c.Name as Nome, c.Cpf,  c.Rg, c.PostalCode Cep, c.Address Endereço, c.AddressNumber Número,c.Neighborhood Bairro,c.City Cidade,c.State Estado,b.Code as 'Codigo do Título',b.Quota Parcela, DATE_FORMAT(b.DueDate,'%d/%m/%Y') as 'Data de Pagamento', CONCAT('R$ ',FORMAT(b.OriginalValue, 2, 'pt_BR')) as 'Valor Original'&#10;from client c&#10;join billreceive b on c.Id = b.ClientId &#10;where b.DueDate between @initialDate and @finalDate&#13;&#10;&#10;and b.Situation = 0">
+        <Column Name="id" DataType="System.Int32"/>
+        <Column Name="Nome" DataType="System.String"/>
+        <Column Name="Cpf" DataType="System.String"/>
+        <Column Name="Rg" DataType="System.String"/>
+        <Column Name="Cep" DataType="System.String"/>
+        <Column Name="Endereço" DataType="System.String"/>
+        <Column Name="Número" DataType="System.String"/>
+        <Column Name="Bairro" DataType="System.String"/>
+        <Column Name="Cidade" DataType="System.String"/>
+        <Column Name="Estado" DataType="System.String"/>
+        <Column Name="Codigo do Título" DataType="System.Int32"/>
+        <Column Name="Parcela" DataType="System.Int16"/>
+        <Column Name="Data de Pagamento" DataType="System.String"/>
+        <Column Name="Valor Original" DataType="System.String"/>
+        <CommandParameter Name="initialDate" DataType="253" Expression="[initialDate]" DefaultValue="2019-09-03"/>
+        <CommandParameter Name="finalDate" DataType="253" Expression="[finalDate]" DefaultValue="2019-09-03"/>
+      </TableDataSource>
+    </MySqlDataConnection>
+    <Parameter Name="initialDate" DataType="System.String"/>
+    <Parameter Name="finalDate" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Landscape="true" PaperWidth="297" PaperHeight="210" RawPaperSize="9" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader1" Width="1047.06" Height="39.9">
+      <TextObject Name="Text12" Top="3" Width="1020.6" Height="18.9" Text="Relatório de Inadimplentes" HorzAlign="Center" Font="Arial, 14pt, style=Bold"/>
+      <LineObject Name="Line1" Width="1020.6" Diagonal="true"/>
+      <LineObject Name="Line2" Top="28.35" Width="1020.6" Diagonal="true"/>
+    </PageHeaderBand>
+    <GroupHeaderBand Name="GroupHeader1" Top="43.9" Width="1047.06" Height="47.25" Condition="[Table.Nome]">
+      <TextObject Name="Text3" Left="274.05" Width="85.05" Height="18.9" Text="CNPJ/CPF:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <ShapeObject Name="Shape1" Width="1020.6" Height="18.9" Border.ShadowColor="LightGray" Border.Color="LightGray" Fill.Color="LightGray"/>
+      <TextObject Name="Text4" Left="56.7" Width="198.45" Height="18.9" Text="[Table.Nome]" Font="Arial, 10pt"/>
+      <TextObject Name="Text5" Width="56.7" Height="18.9" Text="Nome:" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text2" Left="359.1" Width="94.5" Height="18.9" Text="[Table.Cpf]" Font="Arial, 10pt"/>
+      <TextObject Name="Text13" Left="472.5" Width="85.05" Height="18.9" Text="Telefones:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text14" Left="557.55" Width="292.95" Height="18.9" Font="Arial, 10pt"/>
+      <TextObject Name="Text7" Left="122.85" Top="18.9" Width="94.5" Height="18.9" Text="Título" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text9" Left="245.7" Top="18.9" Width="66.15" Height="18.9" Text="Parcela" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text11" Left="434.7" Top="18.9" Width="103.95" Height="18.9" Text="Valor original" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text15" Left="330.75" Top="18.9" Width="94.5" Height="18.9" Text="Vencimento" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
+      <DataBand Name="Data1" Top="95.15" Width="1047.06" Height="37.8" DataSource="Table">
+        <TextObject Name="Text1" Left="245.7" Top="9.45" Width="94.5" Height="18.9" Text="[Table.Parcela]" Font="Arial, 10pt"/>
+        <TextObject Name="Text6" Left="122.85" Top="9.45" Width="94.5" Height="18.9" Text="[Table.Codigo do Título]" Font="Arial, 10pt"/>
+        <TextObject Name="Text8" Left="349.65" Top="9.45" Width="94.5" Height="18.9" Text="[Table.Data de Pagamento]" Font="Arial, 10pt"/>
+        <TextObject Name="Text10" Left="453.6" Top="9.45" Width="94.5" Height="18.9" Text="[Table.Valor Original]" Font="Arial, 10pt"/>
+      </DataBand>
+      <GroupFooterBand Name="GroupFooter1" Top="136.95" Width="1047.06" Height="37.8"/>
+    </GroupHeaderBand>
+    <PageFooterBand Name="PageFooter1" Top="178.75" Width="1047.06" Height="18.9"/>
+  </ReportPage>
+</Report>

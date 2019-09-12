@@ -20,7 +20,7 @@ import Sale from './pages/sale/Sale';
 import User from './pages/user/User';
 import ViewLog from './pages/log/ViewLog';
 import Login from './pages/user/Login';
-import BalanceLoad from './pages/balanceLoad/BalanceLoad';
+import BalanceLoad from './pages/reports/PrintTest';
 
 import localStorageService from './localStorage/localStorageService';
 

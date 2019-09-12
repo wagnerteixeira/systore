@@ -10,6 +10,7 @@ using Systore.Domain.Dtos;
 
 namespace Systore.Api.Controllers
 {
+    [Route("api/[controller]")]
     public abstract class BaseController<TEntity> : ControllerBase, IDisposable where TEntity : class
     {
         protected readonly IBaseService<TEntity> _service = null;
