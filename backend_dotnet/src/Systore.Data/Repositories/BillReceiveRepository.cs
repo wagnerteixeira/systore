@@ -52,7 +52,7 @@ namespace Systore.Data.Repositories
                     c.FinalValue = c.OriginalValue + c.Interest;
                 }
                 else
-                    c.FinalValue = c.OriginalValue;
+                    c.FinalValue = c.FinalValue;
                 return c;
             }).ToList();
         }

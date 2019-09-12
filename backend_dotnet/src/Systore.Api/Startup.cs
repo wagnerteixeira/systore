@@ -79,6 +79,7 @@ namespace Systore.Api
                     options.UseMySql(_appSettings.ConnectionString);
                 else if (_appSettings.DatabaseType == "InMem")
                     options.UseInMemoryDatabase("systore");
+                options.EnableSensitiveDataLogging();
             });
 
             services.AddDbContext<AuditContext>(options =>
@@ -87,6 +88,7 @@ namespace Systore.Api
                     options.UseMySql(_appSettings.AuditConnectionString);
                 else if (_appSettings.DatabaseType == "InMem")
                     options.UseInMemoryDatabase("systoreAudit");
+                options.EnableSensitiveDataLogging();
             });
 
             services.AddScoped<ISystoreContext, SystoreContext>();

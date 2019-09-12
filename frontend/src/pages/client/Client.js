@@ -154,6 +154,7 @@ class Client extends Component {
 
   checkCpf = () => {
     const cpf = this.state.data.cpf.replace(/\D+/g, '');
+    if (cpf === '') return;
     clientservice
       .existCpf(this.state.inEdit ? 1 : 0, this.state.data.id, cpf)
       .then(res => {

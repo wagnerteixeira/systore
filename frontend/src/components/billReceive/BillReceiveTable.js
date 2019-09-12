@@ -243,7 +243,7 @@ function BillReceiveTable(props) {
   }
 
   function handleOpenCreateModal() {
-    if ((clientId === '0' || clientId === '') && handleSaveClient) {
+    if ((clientId === 0 || clientId === '') && handleSaveClient) {
       Confirm(
         'Atenção',
         'Cliente ainda não está salvo, para continuar é preciso salvar.',
