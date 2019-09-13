@@ -4,6 +4,7 @@ using Systore.Domain.Abstractions;
 using FastReport.Export.PdfSimple;
 using System.IO;
 using Systore.Domain;
+using System.Collections.Generic;
 
 namespace Systore.Report
 {
@@ -17,21 +18,25 @@ namespace Systore.Report
             _appSettings = appSettings;
         }
 
-        public async Task<byte[]> GenerateReport(string reportFile, params object[] parameters)
+        public async Task<byte[]> GenerateReport(string reportFile, Dictionary<string, string> parameters)
         {
             return await Task.Factory.StartNew(() => InternalGenerateReport(reportFile, parameters));
         }
 
-        private byte[] InternalGenerateReport(string reportFile, params object[] parameters)
+        private byte[] InternalGenerateReport(string reportFile, Dictionary<string, string> parameters)
         {
             FastReport.Report report = new FastReport.Report();
-            report.Load(Path.Combine("Reports", "RelatoriosInadimplentes.frx"));
+            report.Load(Path.Combine("Reports", reportFile));
 
             report.Dictionary.Connections[0].ConnectionString = _appSettings.ConnectionString;
-            //report.SetParameterValue("initialDate", new DateTime(2019, 1, 1));
-            //report.SetParameterValue("finalDate", new DateTime(2019, 1, 7));          
-            report.SetParameterValue("initialDate", "2019-01-01");
-            report.SetParameterValue("finalDate", "2019-01-07");
+            //report.SetParameterValue("initialDate", "2019-01-01");
+            //report.SetParameterValue("finalDate", "2019-01-07");
+
+            foreach (var parameter in parameters)
+            {
+                report.SetParameterValue(parameter.Key, parameter.Value);
+            }
+
             report.Prepare();
 
             // report.Parameters[0].Value = 143;

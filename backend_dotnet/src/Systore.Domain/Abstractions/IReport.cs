@@ -7,6 +7,6 @@ namespace Systore.Domain.Abstractions
 {
     public interface IReport
     {
-        Task<byte[]> GenerateReport(string reportFile, params object[] parameters);
+        Task<byte[]> GenerateReport(string reportFile, Dictionary<string, string> parameters);
     }
 }

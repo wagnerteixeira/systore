@@ -49,7 +49,9 @@ function PrintTest(props) {
   });
 
   async function handlePrint() {
-    setSrcIframe('https://localhost:5001/api/Print/printer-test');
+    setSrcIframe(
+      'https://localhost:5001/api/Print/printer-test?initialDate=2019-01-01&finalDate=2019-01-07'
+    );
     setOpen(true);
   }
 

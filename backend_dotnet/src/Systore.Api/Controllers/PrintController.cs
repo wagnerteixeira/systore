@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,10 +25,44 @@ namespace Systore.Api.Controllers
         }
 
         [Authorize]
+        [HttpPost("printer-test-body")]
+        public async Task<IActionResult> PrinterTestBody([FromBody]JToken jsonbody)
+        {
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            foreach(JToken children in jsonbody.Children())
+            {
+                if (children is JProperty)
+                {
+                    var ch = (children as JProperty);
+                    var key = ch.Name;
+                    var value = ch.Value.ToString();
+                    
+                    parameters.Add(key, value);
+                }
+
+            }            
+            
+            var res = await _report.GenerateReport("RelatoriosInadimplentes.frx", parameters);
+            return File(res, "application/pdf", "");
+        }
+
+        [Authorize]
         [HttpGet("printer-test")]
         public async Task<IActionResult> PrinterTest()
         {
-            var res = await _report.GenerateReport("", new object[] { });
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            var queryParams = HttpContext.Request.Query;
+
+            foreach (var param in queryParams)
+            {
+                parameters.Add(param.Key, param.Value);
+            }            
+            
+            var res = await _report.GenerateReport("RelatoriosInadimplentes.frx", parameters);
             return File(res, "application/pdf", "");
         }
     }
