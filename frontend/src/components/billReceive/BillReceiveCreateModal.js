@@ -149,14 +149,14 @@ class BillReceiveCreateModal extends React.Component {
         dueDate.setMonth(dueDate.getMonth() + 1);
         if (i === 0) {
           quotas.push({
-            Quota: i + 1,
-            DueDate: new Date(dueDate.getTime()),
+            quota: i + 1,
+            dueDate: new Date(dueDate.getTime()),
             originalValue: accounting.formatNumber(quotaOfAdjustment),
           });
         } else {
           quotas.push({
-            Quota: i + 1,
-            DueDate: new Date(dueDate.getTime()),
+            quota: i + 1,
+            dueDate: new Date(dueDate.getTime()),
             originalValue: accounting.formatNumber(originalValue_quota),
           });
         }
@@ -186,6 +186,8 @@ class BillReceiveCreateModal extends React.Component {
       });
       return;
     }
+    console.log();
+
     let data = {
       ClientId: clientId,
       originalValue: _originalValue,
@@ -193,12 +195,17 @@ class BillReceiveCreateModal extends React.Component {
       vendor: this.state.vendor,
       purchaseDate: this.state.purchaseDate,
       billReceives: this.state.billsReceive.map(bills_receive => {
+        console.log(bills_receive, typeof bills_receive.dueDate);
+
         return {
           ...bills_receive,
+          dueDate: bills_receive.dueDate.toISOString(),
           originalValue: accounting.unformat(bills_receive.originalValue),
         };
       }),
     };
+
+    console.log(data);
 
     billsReceiveService
       .createBillReceives(data)
@@ -251,14 +258,14 @@ class BillReceiveCreateModal extends React.Component {
     const newBillsReceives = this.state.billsReceive.map(
       (billReceive, index) => {
         if (parseInt(key) === 0) {
-          if (index === 0) return { ...billReceive, DueDate: date };
+          if (index === 0) return { ...billReceive, dueDate: date };
           else {
             dueDate.setMonth(dueDate.getMonth() + 1);
-            return { ...billReceive, DueDate: new Date(dueDate) };
+            return { ...billReceive, dueDate: new Date(dueDate) };
           }
         } else {
           return parseInt(key) === index
-            ? { ...billReceive, DueDate: date }
+            ? { ...billReceive, dueDate: date }
             : billReceive;
         }
       }
@@ -443,13 +450,13 @@ class BillReceiveCreateModal extends React.Component {
               {Object.keys(billsReceive).map(key => (
                 <TableRow hover key={key}>
                   <TableCell component="th" scope="row">
-                    {billsReceive[key].Quota}
+                    {billsReceive[key].quota}
                   </TableCell>
                   <TableCell align="left">
                     <KeyboardDatePicker
                       id="purchaseDate"
                       className={classes.margin}
-                      value={billsReceive[key].DueDate}
+                      value={billsReceive[key].dueDate}
                       onChange={this.handleChangeDateInGrid(key)}
                       margin="normal"
                       format={'dd/MM/yyyy'}

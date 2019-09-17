@@ -27,6 +27,8 @@ using Microsoft.AspNetCore.Http;
 using Serilog;
 using Systore.Api.Extensions;
 using Systore.Report;
+using System.Globalization;
+using Newtonsoft.Json;
 
 namespace Systore.Api
 {
@@ -63,15 +65,24 @@ namespace Systore.Api
             _appSettings = appSettingsSection.Get<AppSettings>();
 
             Console.WriteLine($"ConnectionString: {_appSettings.ConnectionString}");
+            Console.WriteLine($"Current culture: {CultureInfo.CurrentCulture}");
+            var n = DateTime.UtcNow;
             if (_env.IsDevelopment())
             {
                 services.AddMvc(opts =>
                 {
                     opts.Filters.Add(new AllowAnonymousFilter());
+                }).AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             }
             else
-                services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                services.AddMvc()
+                    .AddJsonOptions(options =>
+                    {
+                        options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+                    }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<SystoreContext>(options =>
             {
