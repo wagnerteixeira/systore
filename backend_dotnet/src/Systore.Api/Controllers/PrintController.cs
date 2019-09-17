@@ -49,20 +49,19 @@ namespace Systore.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("printer-test")]
-        public async Task<IActionResult> PrinterTest()
+        [HttpGet("printer")]
+        public async Task<IActionResult> Printer()
         {
-
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
             var queryParams = HttpContext.Request.Query;
-
-            foreach (var param in queryParams)
+            
+            foreach(var param in queryParams)
             {
                 parameters.Add(param.Key, param.Value);
             }            
             
-            var res = await _report.GenerateReport("RelatoriosInadimplentes.frx", parameters);
+            var res = await _report.GenerateReport($"{queryParams.First().Value}.frx", parameters);
             return File(res, "application/pdf", "");
         }
     }

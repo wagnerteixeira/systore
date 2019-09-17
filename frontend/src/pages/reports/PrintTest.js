@@ -50,46 +50,49 @@ function PrintTest(props) {
 
   async function handlePrint() {
     setSrcIframe(
-      'https://localhost:5001/api/Print/printer-test?initialDate=2019-01-01&finalDate=2019-01-07'
+      'https://localhost:5001/api/Print/printer?name=RelatoriosInadimplentes&initialDate=2019-01-01&finalDate=2019-09-07'
     );
     setOpen(true);
   }
 
   return (
-    <Paper className={classes.root}>
-      <MessageSnackbar
-        onClose={() => setMessage({ ...message, messageOpen: false })}
-        open={message.messageOpen}
-        variant={message.variantMessage}
-        message={message.messageText}
-      />
-      <Grid container spacing={5} direction="row">
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={6}
-          lg={4}
-          xl={4}
-          className={classes.buttonCntainer}
-        >
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handlePrint}
-            className={classes.button}
+    <>
+      <Paper className={classes.root}>
+        <MessageSnackbar
+          onClose={() => setMessage({ ...message, messageOpen: false })}
+          open={message.messageOpen}
+          variant={message.variantMessage}
+          message={message.messageText}
+        />
+        <Grid container spacing={5} direction="row">
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={6}
+            lg={4}
+            xl={4}
+            className={classes.buttonCntainer}
           >
-            Imprimir
-          </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handlePrint}
+              className={classes.button}
+            >
+              Imprimir
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      </Paper>
       <PrintContainer
         base64={true}
         open={open}
         setOpen={setOpen}
         src={srcIframe}
+        waitMessage="Aguarde, gerando relatório de inadimplentes..."
       />
-    </Paper>
+    </>
   );
 }
 
