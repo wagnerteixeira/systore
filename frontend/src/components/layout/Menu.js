@@ -274,6 +274,17 @@ class Menu extends React.Component {
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
             />
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/print-defaulters'}
+              iconType="money_off"
+              primaryText="Relatório de inadimplentes"
+              onClickButton={() =>
+                this.handleHeaderText('Relatório de inadimplentes')
+              }
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
             {this.state.user.admin && (
               <IconListButton
                 linkTo={process.env.REACT_APP_PUBLIC_URL + '/log'}
