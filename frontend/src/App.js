@@ -20,7 +20,8 @@ import Sale from './pages/sale/Sale';
 import User from './pages/user/User';
 import ViewLog from './pages/log/ViewLog';
 import Login from './pages/user/Login';
-import BalanceLoad from './pages/reports/PrintTest';
+import BalanceLoad from './pages/balanceLoad/BalanceLoad';
+import PrintDefaulters from './pages/reports/PrintDefaulters';
 
 import localStorageService from './localStorage/localStorageService';
 
@@ -162,6 +163,7 @@ class App extends Component {
                   <Route path="/sale" component={Sale} />
                   <Route path="/user" component={User} />
                   <Route path="/balance-load" component={BalanceLoad} />
+                  <Route path="/print-defaulters" component={PrintDefaulters} />
                   {user.admin && <Route path="/log" component={ViewLog} />}
                   <Redirect from="*" to="/billsReceive" />
                 </Switch>

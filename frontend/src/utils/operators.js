@@ -22,6 +22,11 @@ export const getDateToString = date => {
   else return '';
 };
 
+export const getDateToStringUrl = date => {
+  if (date) return new Date(date).toISOString().substring(0, 10);
+  else return '';
+};
+
 export const getDateToStringYearTwoDigits = date => {
   if (date) {
     let _date = new Date(date);
@@ -46,7 +51,7 @@ export const getNumberDecimalToStringCurrency = number => {
   if (number && number)
     return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   else return '0,00';
 };
@@ -55,7 +60,7 @@ export const getNumberDecimalToString = number => {
   if (number && number)
     return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   else return '0,00';
 };
@@ -64,7 +69,7 @@ export const getNumberToString = number => {
   if (number)
     return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   else return '0,00';
 };
@@ -73,13 +78,15 @@ export const getNumberToString2 = number => {
   if (number)
     return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   else return '0,00';
 };
 
 export const getDelayedDays = (dueDate, payDate) => {
-  let days = moment(payDate).startOf('day').diff(moment(dueDate).startOf('day'), 'days');
+  let days = moment(payDate)
+    .startOf('day')
+    .diff(moment(dueDate).startOf('day'), 'days');
   return days;
 };
 

@@ -4,6 +4,8 @@ import MessageSnackbar from '../../components/common/MessageSnackbar';
 import { Grid, Button, Paper } from '@material-ui/core';
 
 import PrintContainer from '../../components/common/PrintContainer';
+import { getCurrentDate, getDateToStringUrl } from '../../utils/operators';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,10 +40,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function PrintTest(props) {
+function PrintDefaulters(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [srcIframe, setSrcIframe] = useState('');
+  const [initialDate, setInitialDate] = useState(getCurrentDate());
+  const [finalDate, setFinalDate] = useState(getCurrentDate());
   const [message, setMessage] = useState({
     messageOpen: false,
     variantMessage: 'success',
@@ -50,7 +54,9 @@ function PrintTest(props) {
 
   async function handlePrint() {
     setSrcIframe(
-      'https://localhost:5001/api/Print/printer?name=RelatoriosInadimplentes&initialDate=2019-01-01&finalDate=2019-09-07'
+      `https://localhost:5001/api/Print/printer?name=RelatoriosInadimplentes&initialDate=${getDateToStringUrl(
+        initialDate
+      )}&finalDate=${getDateToStringUrl(finalDate)}`
     );
     setOpen(true);
   }
@@ -66,6 +72,48 @@ function PrintTest(props) {
         />
         <Grid container spacing={5} direction="row">
           <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={6}
+            md={3}
+            lg={3}
+            xl={3}
+          >
+            <KeyboardDatePicker
+              id="initialDate"
+              label="Data inicial"
+              className={classes.textField}
+              value={initialDate}
+              onChange={value => setInitialDate(value)}
+              margin="normal"
+              format={'dd/MM/yyyy'}
+              fullWidth
+            />
+          </Grid>
+          <Grid
+            className={classes.item}
+            item
+            xs={12}
+            sm={6}
+            md={3}
+            lg={3}
+            xl={3}
+          >
+            <KeyboardDatePicker
+              id="finalDate"
+              label="Data final"
+              className={classes.textField}
+              value={finalDate}
+              onChange={value => setFinalDate(value)}
+              margin="normal"
+              format={'dd/MM/yyyy'}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={5} direction="row">
+          <Grid
             item
             xs={12}
             sm={12}
@@ -79,6 +127,7 @@ function PrintTest(props) {
               color="primary"
               onClick={handlePrint}
               className={classes.button}
+              disabled={open}
             >
               Imprimir
             </Button>
@@ -90,12 +139,12 @@ function PrintTest(props) {
         open={open}
         setOpen={setOpen}
         src={srcIframe}
-        waitMessage="Aguarde, gerando relatório de inadimplentes..."
+        waitMessage="Aguarde, gerando relatório..."
       />
     </>
   );
 }
 
-PrintTest.propTypes = {};
+PrintDefaulters.propTypes = {};
 
-export default PrintTest;
+export default PrintDefaulters;
