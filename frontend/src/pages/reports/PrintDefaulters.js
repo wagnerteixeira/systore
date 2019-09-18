@@ -53,8 +53,18 @@ function PrintDefaulters(props) {
   });
 
   async function handlePrint() {
+    console.log(
+      `${
+        process.env.REACT_APP_API_PATH
+      }/Print/printer?name=RelatoriosInadimplentes&initialDate=${getDateToStringUrl(
+        initialDate
+      )}&finalDate=${getDateToStringUrl(finalDate)}`
+    );
+
     setSrcIframe(
-      `https://localhost:5001/api/Print/printer?name=RelatoriosInadimplentes&initialDate=${getDateToStringUrl(
+      `${
+        process.env.REACT_APP_API_PATH
+      }/Print/printer?name=RelatoriosInadimplentes&initialDate=${getDateToStringUrl(
         initialDate
       )}&finalDate=${getDateToStringUrl(finalDate)}`
     );

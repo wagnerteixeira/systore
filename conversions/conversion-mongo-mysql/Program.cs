@@ -47,12 +47,12 @@ namespace conversion_mongo_mysql
                     ClientId = clientId,
                     Code = billReceive.code,
                     DaysDelay = billReceive.days_delay,
-                    DueDate = billReceive.due_date ?? DateTime.MinValue,
+                    DueDate = billReceive.due_date.HasValue ? DateTime.SpecifyKind(billReceive.due_date.Value, DateTimeKind.Utc) : DateTime.MinValue,
                     FinalValue = billReceive.final_value,
                     Interest = billReceive.interest,
                     OriginalValue = billReceive.original_value,
-                    PayDate = billReceive.pay_date,
-                    PurchaseDate = billReceive.purchase_date ?? DateTime.MinValue,
+                    PayDate = billReceive.pay_date.HasValue ? DateTime.SpecifyKind(billReceive.pay_date.Value, DateTimeKind.Utc) : billReceive.pay_date ,
+                    PurchaseDate = billReceive.purchase_date.HasValue ? DateTime.SpecifyKind(billReceive.purchase_date.Value, DateTimeKind.Utc) : DateTime.MinValue,
                     Quota = billReceive.quota,
                     Situation = billReceive.situation == "O" ? Systore.Domain.Enums.BillReceiveSituation.Open : Systore.Domain.Enums.BillReceiveSituation.Closed,
                     Vendor = billReceive.vendor,
@@ -153,8 +153,8 @@ namespace conversion_mongo_mysql
                     _client.Cpf = client.cpf;
                     _client.FatherName = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.father_name ?? ""));
                     _client.JobName = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.job_name ?? ""));
-                    _client.DateOfBirth = client.date_of_birth;
-                    _client.AdmissionDate = client.admission_date;
+                    _client.DateOfBirth = client.date_of_birth.HasValue ? DateTime.SpecifyKind(client.date_of_birth.Value, DateTimeKind.Utc) : client.date_of_birth;
+                    _client.AdmissionDate = client.admission_date.HasValue ? DateTime.SpecifyKind(client.admission_date.Value, DateTimeKind.Utc) : client.admission_date;
                     _client.MotherName = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.mother_name ?? ""));
                     _client.Name = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.name ?? ""));
                     _client.Neighborhood = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.neighborhood ?? ""));
@@ -165,7 +165,7 @@ namespace conversion_mongo_mysql
                     _client.PlaceOfBirth = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.place_of_birth ?? ""));
                     _client.PostalCode = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.postal_code ?? ""));
                     _client.Rg = client.rg;
-                    _client.RegistryDate = client.registry_date;
+                    _client.RegistryDate = client.registry_date.HasValue ? DateTime.SpecifyKind(client.registry_date.Value, DateTimeKind.Utc) : client.registry_date;
                     _client.Seller = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.seller ?? ""));
                     _client.Spouse = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.spouse ?? ""));
                     _client.State = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(client.state ?? ""));
@@ -203,8 +203,8 @@ namespace conversion_mongo_mysql
                 _clientEx.Cpf = clientEx.cpf;
                 _clientEx.FatherName = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.father_name ?? ""));
                 _clientEx.JobName = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.job_name ?? ""));
-                _clientEx.DateOfBirth = clientEx.date_of_birth;
-                _clientEx.AdmissionDate = clientEx.admission_date;
+                _clientEx.DateOfBirth = clientEx.date_of_birth.HasValue ? DateTime.SpecifyKind(clientEx.date_of_birth.Value, DateTimeKind.Utc) : clientEx.date_of_birth;
+                _clientEx.AdmissionDate = clientEx.admission_date.HasValue ? DateTime.SpecifyKind(clientEx.admission_date.Value, DateTimeKind.Utc) : clientEx.admission_date;
                 _clientEx.MotherName = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.mother_name ?? ""));
                 _clientEx.Name = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.name ?? ""));
                 _clientEx.Neighborhood = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.neighborhood ?? ""));
@@ -215,7 +215,7 @@ namespace conversion_mongo_mysql
                 _clientEx.PlaceOfBirth = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.place_of_birth ?? ""));
                 _clientEx.PostalCode = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.postal_code ?? ""));
                 _clientEx.Rg = clientEx.rg;
-                _clientEx.RegistryDate = clientEx.registry_date;
+                _clientEx.RegistryDate = clientEx.registry_date.HasValue ? DateTime.SpecifyKind(clientEx.registry_date.Value, DateTimeKind.Utc) : clientEx.registry_date;
                 _clientEx.Seller = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.seller ?? ""));
                 _clientEx.Spouse = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.spouse ?? ""));
                 _clientEx.State = System.Text.Encoding.ASCII.GetString(System.Text.Encoding.ASCII.GetBytes(clientEx.state ?? ""));
@@ -245,12 +245,12 @@ namespace conversion_mongo_mysql
                     ClientId = _clientEx.Id,
                     Code = billReceive.code,
                     DaysDelay = billReceive.days_delay,
-                    DueDate = billReceive.due_date ?? DateTime.MinValue,
+                    DueDate = billReceive.due_date.HasValue ? DateTime.SpecifyKind(billReceive.due_date.Value, DateTimeKind.Utc) : DateTime.MinValue,
                     FinalValue = billReceive.final_value,
                     Interest = billReceive.interest,
                     OriginalValue = billReceive.original_value,
-                    PayDate = billReceive.pay_date,
-                    PurchaseDate = billReceive.purchase_date ?? DateTime.MinValue,
+                    PayDate = billReceive.pay_date.HasValue ? DateTime.SpecifyKind(billReceive.pay_date.Value, DateTimeKind.Utc) : billReceive.pay_date,
+                    PurchaseDate = billReceive.purchase_date.HasValue ? DateTime.SpecifyKind(billReceive.purchase_date.Value, DateTimeKind.Utc) : DateTime.MinValue,
                     Quota = billReceive.quota,
                     Situation = billReceive.situation == "O" ? Systore.Domain.Enums.BillReceiveSituation.Open : Systore.Domain.Enums.BillReceiveSituation.Closed,
                     Vendor = billReceive.vendor,
