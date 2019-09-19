@@ -74,14 +74,14 @@ namespace Systore.Api
                     opts.Filters.Add(new AllowAnonymousFilter());
                 }).AddJsonOptions(options =>
                 {
-                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             }
             else
                 services.AddMvc()
                     .AddJsonOptions(options =>
                     {
-                        options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+                        options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                     }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<SystoreContext>(options =>
