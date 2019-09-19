@@ -72,8 +72,9 @@ namespace Systore.Api.Controllers
             try
             {
                 string ret = await _service.AddAsync(entity);
+                var objectId = new { id = GetEntityId(entity) };
                 if (string.IsNullOrWhiteSpace(ret))
-                    return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
+                    return CreatedAtAction(nameof(Get), objectId, objectId);
                 else
                     return SendBadRequest(ret.Split('|', StringSplitOptions.RemoveEmptyEntries));
             }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   TextField,
@@ -23,7 +23,10 @@ import clientService from '../../services/clientService';
 
 import NumberFormatCustom from '../../components/common/NumberFormatCustom';
 import AsyncSelectGeneric from '../../components/common/AsyncSelectGeneric';
-import { getDateToString } from '../../utils/operators';
+import {
+  getDateToString,
+  getNumberDecimalToStringCurrency,
+} from '../../utils/operators';
 import SaleProductModal from './SaleProductModal';
 
 const styles = theme => ({
@@ -95,6 +98,11 @@ function EditSale(props) {
     price: 0.0,
     quantity: 0.0,
   });
+  const [finalValue, setFinalValue] = useState(props.data.finalValue);
+
+  useEffect(() => {
+    updateFinalValue();
+  }, [dataProducts]);
 
   function handleDeleteProduct(key) {
     setDataProducts(dataProducts.slice(key));
@@ -119,15 +127,20 @@ function EditSale(props) {
   }
 
   const handleValueQuantityChange = key => event => {
-    console.log(key);
     let copy = [...dataProducts];
     copy[key].quantity = event.target.value;
-    copy[key].finalValue = parseFloat(copy[key].quantity * copy[key].price);
+    copy[key].totalPrice = parseFloat(copy[key].quantity * copy[key].price);
     setDataProducts(copy);
-
-    //TODO
-    //Alterar preço final da venda pois alterou a quantidade do produto
   };
+
+  function updateFinalValue() {
+    console.log('atualizou total');
+    let total = 0.0;
+    dataProducts.forEach(produto => {
+      total += produto.totalPrice;
+    });
+    setFinalValue(total);
+  }
 
   function onCloseProductModal(event, reason) {
     setOpenProductModal(false);
@@ -143,7 +156,7 @@ function EditSale(props) {
         description: product.description,
         quantity: product.quantity,
         price: product.price,
-        finalValue: parseFloat(product.quantity) * parseFloat(product.price),
+        totalPrice: parseFloat(product.quantity) * parseFloat(product.price),
       };
       setDataProducts([...dataProducts, newProduct]);
     }
@@ -228,7 +241,9 @@ function EditSale(props) {
 
   function save() {
     data.clientId = single.clientData.id;
+    data.finalValue = finalValue;
     data.saleProducts = dataProducts;
+    //console.log(data);
     handleSave();
   }
 
@@ -346,8 +361,7 @@ function EditSale(props) {
                 id="finalValue"
                 label="Valor total (R$)"
                 className={classes.textField}
-                value={data.finalValue}
-                onChange={handleValueDecimalChange('finalValue')}
+                value={getNumberDecimalToStringCurrency(finalValue)}
                 margin="normal"
                 fullWidth
                 disabled
@@ -419,7 +433,9 @@ function EditSale(props) {
                       />
                     </TableCell>
                     <TableCell padding="none" size="large">
-                      {dataProducts[key].finalValue}
+                      {getNumberDecimalToStringCurrency(
+                        dataProducts[key].totalPrice
+                      )}
                     </TableCell>
                     <TableCell padding="none" align="right">
                       <Fab

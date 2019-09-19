@@ -68,7 +68,6 @@ function Sale(props) {
         .update(data)
         .then(res => {
           handleCancel('SAVE');
-          setData(res.data);
           fetchSales();
         })
         .catch(error => {
@@ -83,7 +82,6 @@ function Sale(props) {
         .create(data)
         .then(res => {
           handleCancel('SAVE');
-          setData(res.data);
           fetchSales();
         })
         .catch(error => {
@@ -108,7 +106,7 @@ function Sale(props) {
       clientId: 0,
       vendor: '',
       saleDate: new Date(),
-      finalPrice: 0.0,
+      finalValue: 0.0,
       saleProducts: [],
     });
   }
