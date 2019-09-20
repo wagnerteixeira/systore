@@ -19,7 +19,8 @@ namespace Systore.Infra.Mapping
             //builder.Property(p => p.Code);
             builder.Property(p => p.RegistryDate);
 
-            builder.Property(p => p.DateOfBirth);
+            builder.Property(p => p.DateOfBirth)
+                .HasColumnType("DATE");
 
             builder.Property(p => p.Address)
                 .HasMaxLength(150);
@@ -71,7 +72,8 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.Complement)
                 .HasMaxLength(50);
 
-            builder.Property(p => p.AdmissionDate);
+            builder.Property(p => p.AdmissionDate)
+                .HasColumnType("DATE");
 
             builder.Property(p => p.CivilStatus)
                 .HasColumnType("TINYINT");

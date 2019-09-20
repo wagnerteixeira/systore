@@ -30,7 +30,8 @@ namespace Systore.Infra.Mapping
 
             builder.Property(p => p.PurchaseDate);
 
-            builder.Property(p => p.DueDate);
+            builder.Property(p => p.DueDate)
+                .HasColumnType("DATE");
 
             builder.Property(p => p.PayDate);
 

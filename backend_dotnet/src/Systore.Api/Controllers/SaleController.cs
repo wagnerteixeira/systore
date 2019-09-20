@@ -10,7 +10,7 @@ namespace Systore.Api.Controllers
 {
     [Route("api/[controller]")]
     public class SaleController : BaseController<Sale>
-    {        
+    {      
 
         public SaleController(ISaleService Service, ILogger<SaleController> logger)
             : base(Service, logger)
@@ -20,7 +20,7 @@ namespace Systore.Api.Controllers
 
         [Authorize]
         [HttpGet("GetSaleFullById/{id:int}")]
-        public virtual async Task<IActionResult> GetSaleFullById(int id)
+        public async Task<IActionResult> GetSaleFullById(int id)
         {            
             try
             {                
