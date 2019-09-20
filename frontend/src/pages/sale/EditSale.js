@@ -87,8 +87,10 @@ const styles = theme => ({
 });
 
 function EditSale(props) {
-  const { handleOpenMessage, message } = props;
+  const { handleOpenMessage, message, clientData } = props;
+
   const [single, setSingle] = useState(null);
+  console.log('client data', clientData, ' single', single);
   const [prevSingle, setPrevSingle] = useState(null);
   const [dataProducts, setDataProducts] = useState([]); // useState(props.data.saleProducts);
   const [openProductModal, setOpenProductModal] = useState(false);
@@ -107,6 +109,17 @@ function EditSale(props) {
   function handleDeleteProduct(key) {
     setDataProducts(dataProducts.slice(key));
   }
+
+  useEffect(() => {
+    if (clientData.id) {
+      setSingle({
+        value: clientData.id,
+        label: `Código: ${clientData.id} Nome: ${clientData.name} Cpf: ${
+          clientData.cpf
+        } Data Nasc.: ${getDateToString(clientData.dateOfBirth)}`,
+      });
+    } else setSingle(null);
+  }, [clientData]);
 
   function handleEditProduct(key) {
     setProductCurrent(dataProducts[key]);
@@ -246,6 +259,8 @@ function EditSale(props) {
     //console.log(data);
     handleSave();
   }
+  console.log('data', props.data);
+  console.log('single', single);
 
   return (
     <>
