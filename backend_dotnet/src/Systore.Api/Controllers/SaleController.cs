@@ -10,14 +10,12 @@ namespace Systore.Api.Controllers
 {
     [Route("api/[controller]")]
     public class SaleController : BaseController<Sale>
-    {
-
-        private ISaleService _service = null;
+    {        
 
         public SaleController(ISaleService Service, ILogger<SaleController> logger)
             : base(Service, logger)
         {
-            _service = Service;
+            
         }
 
         [Authorize]
@@ -25,9 +23,8 @@ namespace Systore.Api.Controllers
         public virtual async Task<IActionResult> GetSaleFullById(int id)
         {            
             try
-            {
-                Sale teste = _service.GetSaleFullById(id);
-                return Ok(teste);                
+            {                
+                return Ok(await (_service as ISaleService).GetSaleFullById(id));                
             }
             catch (Exception e)
             {

@@ -5,7 +5,6 @@ namespace Systore.Data.Abstractions
 {
     public interface ISaleRepository : IBaseRepository<Sale>
     {
-
-        Sale GetSaleFullById(int id);
+        Task<Sale> GetSaleFullByIdAsync(int id);
     }
 }
