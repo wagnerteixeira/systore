@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +10,6 @@ namespace Systore.Domain.Entities
 
         public int SaleId { get; set; }
 
-        [JsonIgnore]
         public Sale Sale { get; set; }
 
         public int ProductId { get; set; }

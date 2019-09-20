@@ -9,16 +9,16 @@ using Microsoft.EntityFrameworkCore;
 namespace Systore.Data.Repositories
 {
     public class SaleRepository : BaseRepository<Sale>, ISaleRepository
-    {        
+    {
         public SaleRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
-        }        
-
-        public async Task<Sale> GetSaleFullByIdAsync(int id)
-        {
-            return await _entities.Where(c => c.Id == id)
-               .Include(c => c.SaleProducts).FirstOrDefaultAsync();
-            
         }
+
+        public async Task<Sale> GetSaleFullByIdAsync(int id) =>
+            await _entities
+               .Where(c => c.Id == id)
+               .Include(c => c.SaleProducts)
+               .FirstOrDefaultAsync();
+
     }
 }
