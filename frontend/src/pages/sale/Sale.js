@@ -96,7 +96,19 @@ function Sale(props) {
 
   function handleEdit(rowData) {
     setStateData('EDIT_INSERT');
-    setData(rowData);
+    saleService
+      .getSaleFullById(rowData.id)
+      .then(res => {
+        setData(res.data);
+        console.log(res.data);
+      })
+      .catch(error => {
+        setMessage({
+          messageOpen: true,
+          messageText: getErrosFromApi(error),
+          variantMessage: 'error',
+        });
+      });
   }
 
   function handleCreate() {

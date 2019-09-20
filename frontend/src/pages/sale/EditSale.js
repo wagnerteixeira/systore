@@ -87,7 +87,18 @@ const styles = theme => ({
 });
 
 function EditSale(props) {
-  const { handleOpenMessage, message } = props;
+  const {
+    classes,
+    data,
+    handleValueChange,
+    handleDateValueChange,
+    handleCancel,
+    handleSave,
+    handleValueDecimalChange,
+    handleOpenMessage,
+    message,
+  } = props;
+
   const [single, setSingle] = useState(null);
   const [prevSingle, setPrevSingle] = useState(null);
   const [dataProducts, setDataProducts] = useState([]); // useState(props.data.saleProducts);
@@ -229,21 +240,10 @@ function EditSale(props) {
       textPlaceHolder = 'nome';
   }
 
-  const {
-    classes,
-    data,
-    handleValueChange,
-    handleDateValueChange,
-    handleCancel,
-    handleSave,
-    handleValueDecimalChange,
-  } = props;
-
   function save() {
     data.clientId = single.clientData.id;
     data.finalValue = finalValue;
     data.saleProducts = dataProducts;
-    //console.log(data);
     handleSave();
   }
 

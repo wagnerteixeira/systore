@@ -8,5 +8,8 @@ const getAllNoParameters = () => {
   return axios.get(`/sale`);
 };
 
+const getSaleFullById = id => {
+  return axios.get(`/sale/getSaleFullById/${id}`);
+};
 
-export default { ...saleService, getAllNoParameters };
+export default { ...saleService, getAllNoParameters, getSaleFullById };

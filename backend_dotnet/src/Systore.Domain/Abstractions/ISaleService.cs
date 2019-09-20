@@ -5,6 +5,8 @@ namespace Systore.Domain.Abstractions
 {
   public interface ISaleService : IBaseService<Sale>
   {
-    
+        Sale GetSaleFullById(int id);
+
+
   }
 }
