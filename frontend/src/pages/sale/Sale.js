@@ -9,6 +9,7 @@ import MessageSnackbar from '../../components/common/MessageSnackbar';
 import EditSale from './EditSale';
 import ViewSale from './ViewSale';
 import Confirm from '../../components/common/ConfirmAlert';
+import clientService from '../../services/clientService';
 
 const styles = theme => ({
   root: {
@@ -22,6 +23,7 @@ const styles = theme => ({
 function Sale(props) {
   const [sales, setSales] = useState([]);
   const [data, setData] = useState({});
+  const [clientData, setClientData] = useState({});
   const [stateData, setStateData] = useState('LIST');
   const [columnSearch, setColumnSearch] = useState('vendor');
   const [search, setSearch] = useState('');
@@ -94,8 +96,10 @@ function Sale(props) {
     }
   }
 
-  function handleEdit(rowData) {
+  async function handleEdit(rowData) {
     setStateData('EDIT_INSERT');
+    const clientDataResponse = await clientService.get(rowData.clientId);
+    setClientData(clientDataResponse.data);
     saleService
       .getSaleFullById(rowData.id)
       .then(res => {
@@ -113,6 +117,7 @@ function Sale(props) {
 
   function handleCreate() {
     setStateData('EDIT_INSERT');
+    setClientData({});
     setData({
       id: 0,
       clientId: 0,
@@ -241,6 +246,7 @@ function Sale(props) {
       {stateData === 'EDIT_INSERT' && (
         <EditSale
           data={data}
+          clientData={clientData}
           handleValueChange={handleValueChange}
           handleDateValueChange={handleDateValueChange}
           handleValueDecimalChange={handleValueDecimalChange}

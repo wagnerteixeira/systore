@@ -97,6 +97,7 @@ function EditSale(props) {
     handleValueDecimalChange,
     handleOpenMessage,
     message,
+    clientData,
   } = props;
 
   const [single, setSingle] = useState(null);
@@ -118,6 +119,17 @@ function EditSale(props) {
   function handleDeleteProduct(key) {
     setDataProducts(dataProducts.slice(key));
   }
+
+  useEffect(() => {
+    if (clientData.id) {
+      setSingle({
+        value: clientData.id,
+        label: `Código: ${clientData.id} Nome: ${clientData.name} Cpf: ${
+          clientData.cpf
+        } Data Nasc.: ${getDateToString(clientData.dateOfBirth)}`,
+      });
+    } else setSingle(null);
+  }, [clientData]);
 
   function handleEditProduct(key) {
     setProductCurrent(dataProducts[key]);
@@ -145,7 +157,6 @@ function EditSale(props) {
   };
 
   function updateFinalValue() {
-    console.log('atualizou total');
     let total = 0.0;
     dataProducts.forEach(produto => {
       total += produto.totalPrice;
