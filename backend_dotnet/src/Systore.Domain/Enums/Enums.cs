@@ -56,4 +56,11 @@ namespace Systore.Domain.Enums
         All
     }
 
+    public enum ActionItem
+    {
+        NoChanges,
+        Insert,
+        Alter,
+        Delete
+    }
 }

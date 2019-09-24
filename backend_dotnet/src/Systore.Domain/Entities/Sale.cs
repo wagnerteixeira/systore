@@ -12,7 +12,7 @@ namespace Systore.Domain.Entities
         public decimal FinalValue { get; set; }
         public DateTime SaleDate { get; set; }
         public string Vendor { get; set; }
-        public ICollection<SaleProducts> SaleProducts { get; set; }
+        public ICollection<ItemSale> ItemSale { get; set; }
     }
 }
 

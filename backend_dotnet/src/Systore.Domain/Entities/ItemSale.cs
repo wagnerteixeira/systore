@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Systore.Domain.Enums;
 
 namespace Systore.Domain.Entities
 {
-    public class SaleProducts
+    public class ItemSale
     {
         public int Id { get; set; }
 
@@ -21,5 +22,7 @@ namespace Systore.Domain.Entities
         public decimal Quantity { get; set; }
 
         public decimal TotalPrice { get; set; }
+
+        public virtual ActionItem Action { get; set; } = ActionItem.NoChanges;
     }
 }

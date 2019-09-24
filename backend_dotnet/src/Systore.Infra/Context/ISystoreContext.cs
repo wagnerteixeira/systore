@@ -14,7 +14,7 @@ namespace Systore.Infra.Context
         DbSet<BillReceive> BillReceives { get; set; }
         DbSet<Product> Products { get; set; }
         DbSet<Sale> Sales { get; set; }
-        DbSet<SaleProducts> SaleProducts { get; set; }
+        DbSet<ItemSale> ItemSales { get; set; }
 
     }
 }

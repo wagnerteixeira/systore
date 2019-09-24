@@ -20,7 +20,7 @@ namespace Systore.Api.Extensions
             services.AddScoped<IHeaderAuditRepository, HeaderAuditRepository>();
             services.AddScoped<IItemAuditRepository, ItemAuditRepository>();
             services.AddScoped<ISaleRepository, SaleRepository>();
-            services.AddScoped<ISaleProductsRepository, SaleProductsRepository>();
+            services.AddScoped<IItemSaleRepository, ItemSaleRepository>();
 
             return services;
         }

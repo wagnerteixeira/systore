@@ -3,7 +3,7 @@ using Systore.Domain.Entities;
 
 namespace Systore.Data.Abstractions
 {
-    public interface ISaleProductsRepository : IBaseRepository<SaleProducts>
+    public interface IItemSaleRepository : IBaseRepository<ItemSale>
     {
         
     }

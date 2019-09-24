@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Systore.Infra.Mapping
 {
-    public class SaleProductsMappingMySql : IEntityTypeConfiguration<SaleProducts>
+    public class ItemSaleMappingMySql : IEntityTypeConfiguration<ItemSale>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<SaleProducts> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<ItemSale> builder)
         {
             builder.HasKey(c => c.Id);
 
-            builder.ToTable("SaleProducts");
+            builder.ToTable("ItemSale");
 
             builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd();
@@ -25,15 +25,17 @@ namespace Systore.Infra.Mapping
 
             builder
               .HasOne<Sale>(s => s.Sale)
-              .WithMany(g => g.SaleProducts)
+              .WithMany(g => g.ItemSale)
               .HasForeignKey(s => s.SaleId)
               .OnDelete(DeleteBehavior.Restrict);
 
             builder
               .HasOne<Product>(s => s.Product)
-              .WithMany(g => g.SaleProducts)
+              .WithMany(g => g.ItemSale)
               .HasForeignKey(s => s.ProductId)
               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Ignore(s => s.Action);
 
         }
     }

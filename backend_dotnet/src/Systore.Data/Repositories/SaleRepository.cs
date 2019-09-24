@@ -17,7 +17,7 @@ namespace Systore.Data.Repositories
         public async Task<Sale> GetSaleFullByIdAsync(int id) =>
             await _entities
                .Where(c => c.Id == id)
-               .Include(c => c.SaleProducts)
+               .Include(c => c.ItemSale)
                .FirstOrDefaultAsync();
 
     }

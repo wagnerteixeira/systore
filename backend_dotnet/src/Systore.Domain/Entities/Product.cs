@@ -25,7 +25,7 @@ namespace Systore.Domain.Entities
 
         public bool ExportToBalance { get; set; }
         
-        public ICollection<SaleProducts> SaleProducts { get; set; }
+        public ICollection<ItemSale> ItemSale { get; set; }
 
     }
 }
