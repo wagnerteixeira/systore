@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Systore.Domain.Enums;
 
-namespace Systore.Domain.Entities
+namespace Systore.Domain.Dtos
 {
-    public class ItemSale
+    public class ItemSaleDto 
     {
         public int Id { get; set; }
 
         public int SaleId { get; set; }
 
-        public Sale Sale { get; set; }
-
-        public int ProductId { get; set; }
-
-        public Product Product { get; set; }
+        public int ProductId { get; set; }        
 
         public decimal Price { get; set; }
 
@@ -22,5 +19,6 @@ namespace Systore.Domain.Entities
 
         public decimal TotalPrice { get; set; }
 
+        public ActionItem Action { get; set; } = ActionItem.NoChanges;
     }
 }

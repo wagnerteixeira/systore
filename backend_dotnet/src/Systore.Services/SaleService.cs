@@ -2,6 +2,7 @@
 using Systore.Domain.Entities;
 using Systore.Data.Abstractions;
 using System.Threading.Tasks;
+using Systore.Domain.Dtos;
 
 namespace Systore.Services
 {
@@ -12,6 +13,6 @@ namespace Systore.Services
 
         }
 
-        public Task<Sale> GetSaleFullById(int id) => (_repository as ISaleRepository).GetSaleFullByIdAsync(id);        
+        public Task<SaleDto> GetSaleFullById(int id) => (_repository as ISaleRepository).GetSaleFullByIdAsync(id);        
     }
 }

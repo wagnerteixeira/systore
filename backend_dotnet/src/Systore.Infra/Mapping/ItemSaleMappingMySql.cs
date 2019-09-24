@@ -35,8 +35,7 @@ namespace Systore.Infra.Mapping
               .HasForeignKey(s => s.ProductId)
               .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Ignore(s => s.Action);
-
+            
         }
     }
 }
