@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Systore.Domain.Abstractions;
 using Systore.Services;
+using AutoMapper;
 
 namespace Systore.Api.Extensions
 {
@@ -19,6 +20,12 @@ namespace Systore.Api.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ISaleService, SaleService>();            
 
+            return services;
+        }
+
+        public static IServiceCollection UseAutoMapper(this  IServiceCollection services)
+        {            
+            services.AddAutoMapper(typeof(Startup));
             return services;
         }
     }

@@ -283,9 +283,9 @@ namespace Systore.Data.Repositories
             {
                 if (_headerAuditRepository != null)
                 {
-                    var listAuditEntry = OnBeforeSaveChanges();
+                   // var listAuditEntry = OnBeforeSaveChanges();
                     await _context.Instance.SaveChangesAsync();
-                    OnAfterSaveChanges(listAuditEntry);
+                   // OnAfterSaveChanges(listAuditEntry);
                 }
                 else
                     await _context.Instance.SaveChangesAsync();

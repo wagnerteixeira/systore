@@ -12,6 +12,7 @@ using Serilog.Events;
 using Serilog.Configuration;
 using Serilog.AspNetCore;
 
+
 namespace Systore.Api
 {
     public class Program
@@ -30,6 +31,10 @@ namespace Systore.Api
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
+            .WriteTo.Console(                                
+                outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} " +
+                    "{Properties:j}{NewLine}{Exception}"
+            )
             .WriteTo.File(
                 "Log\\log.txt",
                 fileSizeLimitBytes: 1_000_000,

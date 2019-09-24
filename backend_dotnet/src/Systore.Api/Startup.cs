@@ -42,19 +42,42 @@ namespace Systore.Api
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            _env = env;            
+            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.UseSerilog();
+            services
+                .AddScoped<ISystoreContext, SystoreContext>()
+                .AddScoped<IAuditContext, AuditContext>()
+                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .UseSerilog()
+                .UseRepositories()
+                .UseServices()
+                .UseAutoMapper()
+                .AddCors()
+                .UseReport(_appSettings);
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.UseRepositories();
-            services.UseServices();
 
-            services.AddCors();
+
+            services.AddDbContext<SystoreContext>(options =>
+             {
+                 if (_appSettings.DatabaseType == "MySql")
+                     options.UseMySql(_appSettings.ConnectionString);
+                 else if (_appSettings.DatabaseType == "InMem")
+                     options.UseInMemoryDatabase("systore");
+                 options.EnableSensitiveDataLogging();
+             }).AddDbContext<AuditContext>(options =>
+             {
+                 if (_appSettings.DatabaseType == "MySql")
+                     options.UseMySql(_appSettings.AuditConnectionString);
+                 else if (_appSettings.DatabaseType == "InMem")
+                     options.UseInMemoryDatabase("systoreAudit");
+                 options.EnableSensitiveDataLogging();
+             });
+
+
             Log.Logger.Information($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
 
@@ -86,30 +109,10 @@ namespace Systore.Api
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddDbContext<SystoreContext>(options =>
-            {
-                if (_appSettings.DatabaseType == "MySql")
-                    options.UseMySql(_appSettings.ConnectionString);
-                else if (_appSettings.DatabaseType == "InMem")
-                    options.UseInMemoryDatabase("systore");
-                options.EnableSensitiveDataLogging();
-            });
 
-            services.AddDbContext<AuditContext>(options =>
-            {
-                if (_appSettings.DatabaseType == "MySql")
-                    options.UseMySql(_appSettings.AuditConnectionString);
-                else if (_appSettings.DatabaseType == "InMem")
-                    options.UseInMemoryDatabase("systoreAudit");
-                options.EnableSensitiveDataLogging();
-            });
-
-            services.AddScoped<ISystoreContext, SystoreContext>();
-            services.AddScoped<IAuditContext, AuditContext>();
-
-            services.UseReport(_appSettings);
 
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -177,24 +180,15 @@ namespace Systore.Api
                 builder.AllowAnyOrigin()
                       .AllowAnyMethod()
                       .AllowAnyHeader()
-            );
-
-
-            app.UseAuthentication();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Systore");
-            });
-
-            app.UseMvc();
-
-            app.UseReport();
+            )
+            .UseAuthentication()
+            .UseSwagger()// Enable middleware to serve generated Swagger as a JSON endpoint.
+            .UseSwaggerUI(c =>
+            {                                                             // specifying the Swagger JSON endpoint.
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Systore");// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),                                                                         
+            })
+            .UseMvc()
+            .UseReport();
 
             // uncoment for automatic migration            
             InitializeDatabase(app);
@@ -209,7 +203,7 @@ namespace Systore.Api
                     scope.ServiceProvider.GetRequiredService<SystoreContext>().Database.Migrate();
                     scope.ServiceProvider.GetRequiredService<AuditContext>().Database.Migrate();
                 }
-                else if(_appSettings.DatabaseType == "InMem")
+                else if (_appSettings.DatabaseType == "InMem")
                 {
                     scope.ServiceProvider.GetRequiredService<SystoreContext>().Database.EnsureCreated();
                     scope.ServiceProvider.GetRequiredService<AuditContext>().Database.EnsureCreated();
