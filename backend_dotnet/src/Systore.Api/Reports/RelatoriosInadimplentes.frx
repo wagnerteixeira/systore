@@ -1,28 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/03/2019 13:30:57" ReportInfo.Modified="09/19/2019 20:52:30" ReportInfo.CreatorVersion="2019.3.5.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/03/2019 13:30:57" ReportInfo.Modified="09/23/2019 21:43:42" ReportInfo.CreatorVersion="2019.3.5.0">
   <Dictionary>
-    <MySqlDataConnection Name="SystoreConnection" ConnectionString="rijcmlqomabmqtwD7y3BaVO988Xrns8n0+Fpps4V7SdlS+EOKRfEfgYlVHw/4pnKk9NgUQNE0HY3XrOI9SOQebvbIEN3OZg87Twk19K+JqPqTEUmgPs6RgIQyV3H4dYq2KxshQb">
-      <TableDataSource Name="Table" DataType="System.Int32" Enabled="true" SelectCommand="&#10;select c.id&#10;     , c.Name as Nome&#10;     , c.Cpf&#10;     , c.Rg&#10;     , c.PostalCode Cep&#10;     , c.Address Endereço&#10;     , c.AddressNumber Número&#10;     , c.Neighborhood Bairro&#10;     , c.City Cidade&#10;     , c.State Estado&#10;     , DATE_FORMAT(convert_tz(c.DateOfBirth,'+00:00','-03:00'),'%d/%m/%Y') as 'Data de Nascimento'&#10;     , c.Phone1 as Telefone1&#10;     , c.Phone2 as Telefone2&#10;     , c.MotherName as Mae&#10;     , c.FatherName as Pai&#10;     , b.Code as 'Codigo do Título'&#10;     , b.Quota Parcela&#10;     , DATE_FORMAT(convert_tz(b.DueDate,'+00:00','-03:00'), '%d/%m/%Y') as 'Data de Vencimento'&#10;     , b.OriginalValue as 'Valor Original'&#10;    , datediff(current_date(), convert_tz(b.DueDate,'+00:00','-03:00')) as Atraso&#10;from client c&#10;join billreceive b on c.Id = b.ClientId &#10;where &#10;##b.code in(1007572, 1007573) &#10;cast(convert_tz(b.DueDate,'+00:00','-03:00') as date) between  @dataInicial and @dataFinal &#10;and b.Situation = 0&#10;order by c.Name, c.Id">
-        <Column Name="Nome" DataType="System.String"/>
+    <MySqlDataConnection Name="SystoreConnection" ConnectionString="rijcmlqomabmqtwD7y3BaVO988Xrns8n0+Fpps4V7SdlS+EOKRfEfgYlVHw/4pnKk9NgUQNE0HY3XrOI9SOQebvbIEN3OZg87Twk19K+JqPqTEUmgOuwhHryktkyqQTl0xwsAEz">
+      <TableDataSource Name="Table" DataType="System.Int32" Enabled="true" SelectCommand="select c.id&#10;     , c.Name&#10;     , c.Cpf&#10;     , c.Rg&#10;     , c.PostalCode &#10;     , c.Address&#10;     , c.AddressNumber &#10;     , c.Neighborhood &#10;     , c.City &#10;     , c.State&#10;     , DATE_FORMAT(convert_tz(c.DateOfBirth,'+00:00','-03:00'),'%d/%m/%Y') as DateOfBirth&#10;     , c.Phone1 &#10;     , c.Phone2 &#10;     , c.MotherName &#10;     , c.FatherName &#10;     , b.Code &#10;     , b.Quota&#10;     , DATE_FORMAT(convert_tz(b.DueDate,'+00:00','-03:00'), '%d/%m/%Y') as DueDate&#10;     , b.OriginalValue &#10;     , datediff(current_date(), convert_tz(b.DueDate,'+00:00','-03:00')) as DaysDelay&#10;from client c&#10;join billreceive b on c.Id = b.ClientId &#10;where &#10;##b.code in(1007572, 1007573) &#10;cast(convert_tz(b.DueDate,'+00:00','-03:00') as date) between  @dataInicial and @dataFinal &#10;and b.Situation = 0&#10;order by c.Name, c.Id">
         <Column Name="Cpf" DataType="System.String"/>
         <Column Name="Rg" DataType="System.String"/>
-        <Column Name="Cep" DataType="System.String"/>
-        <Column Name="Bairro" DataType="System.String"/>
-        <Column Name="Cidade" DataType="System.String"/>
-        <Column Name="Estado" DataType="System.String"/>
-        <Column Name="Codigo do Título" DataType="System.Int32"/>
-        <Column Name="Parcela" DataType="System.Int16"/>
-        <Column Name="Valor Original" DataType="System.Double"/>
         <Column Name="Id" DataType="System.Int32"/>
-        <Column Name="Data de Nascimento" DataType="System.String"/>
-        <Column Name="Data de Vencimento" DataType="System.String"/>
-        <Column Name="Atraso" DataType="System.Int64"/>
-        <Column Name="Telefone1" DataType="System.String"/>
-        <Column Name="Telefone2" DataType="System.String"/>
-        <Column Name="Mae" DataType="System.String"/>
-        <Column Name="Pai" DataType="System.String"/>
-        <Column Name="Endereço" DataType="System.String"/>
-        <Column Name="Número" DataType="System.String"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="PostalCode" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="AddressNumber" DataType="System.String"/>
+        <Column Name="Neighborhood" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="DateOfBirth" DataType="System.String"/>
+        <Column Name="Phone1" DataType="System.String"/>
+        <Column Name="Phone2" DataType="System.String"/>
+        <Column Name="MotherName" DataType="System.String"/>
+        <Column Name="FatherName" DataType="System.String"/>
+        <Column Name="Code" DataType="System.Int32"/>
+        <Column Name="Quota" DataType="System.Int16"/>
+        <Column Name="DueDate" DataType="System.String"/>
+        <Column Name="OriginalValue" DataType="System.Decimal"/>
+        <Column Name="DaysDelay" DataType="System.Int64"/>
         <CommandParameter Name="dataInicial" DataType="253" Expression="[initialDate]"/>
         <CommandParameter Name="dataFinal" DataType="253" Expression="[finalDate]"/>
       </TableDataSource>
@@ -30,7 +30,7 @@
     <Parameter Name="initialDate" DataType="System.String"/>
     <Parameter Name="finalDate" DataType="System.String"/>
     <Parameter Name="Parameter" DataType="System.String"/>
-    <Total Name="Total" Expression="[Table.Valor Original]" Evaluator="Data1" PrintOn="GroupFooter1"/>
+    <Total Name="Total" Expression="[Table.OriginalValue]" Evaluator="Data1" PrintOn="GroupFooter1"/>
   </Dictionary>
   <ReportPage Name="Page1" RawPaperSize="9" Watermark.Font="Arial, 60pt">
     <PageHeaderBand Name="PageHeader1" Width="718.2" Height="87.15" Guides="9.45">
@@ -42,35 +42,35 @@
     </PageHeaderBand>
     <GroupHeaderBand Name="GroupHeader1" Top="91.15" Width="718.2" Height="94.5" Guides="37.8,37.8,28.35,37.8,37.8,18.9,28.35,28.35,28.35,28.35" Condition="[Table.Id]" SortOrder="None">
       <TextObject Name="Text3" Left="349.65" Width="85.05" Height="18.9" Text="CNPJ/CPF:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text4" Left="56.7" Width="292.95" Height="18.9" Text="[Table.Nome]" Font="Arial, 10pt"/>
+      <TextObject Name="Text4" Left="56.7" Width="292.95" Height="18.9" Text="[Table.Name]" Font="Arial, 10pt"/>
       <TextObject Name="Text5" Width="56.7" Height="18.9" Text="Nome:" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text2" Left="434.7" Width="122.85" Height="18.9" Text="[Table.Cpf]" Font="Arial, 10pt"/>
       <TextObject Name="Text13" Top="56.7" Width="85.05" Height="18.9" Text="Telefones:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text14" Left="85.05" Top="56.7" Width="850.5" Height="18.9" Text="[Table.Telefone1] [Table.Telefone2]" Font="Arial, 10pt"/>
+      <TextObject Name="Text14" Left="85.05" Top="56.7" Width="850.5" Height="18.9" Text="[Table.Phone1] [Table.Phone2]" Font="Arial, 10pt"/>
       <TextObject Name="Text7" Left="170.1" Top="75.6" Width="75.6" Height="18.9" Text="Título" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text9" Left="255.15" Top="75.6" Width="66.15" Height="18.9" Text="Parcela" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text11" Left="557.55" Top="75.6" Width="103.95" Height="18.9" Text="Valor original" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text15" Left="340.2" Top="75.6" Width="94.5" Height="18.9" Text="Vencimento" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text16" Left="75.6" Top="37.8" Width="368.55" Height="18.9" Text="[Table.Endereco] [Table.Numero] [Table.Bairro]" Font="Arial, 10pt"/>
-      <TextObject Name="Text17" Top="37.8" Width="75.6" Height="18.9" Text="Endereço:" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text16" Left="75.6" Top="37.8" Width="368.55" Height="18.9" Text="[Table.Address] [Table.AddressNumber] [Table.Neighborhood]" Font="Arial, 10pt"/>
+      <TextObject Name="Text17" Top="37.8" Width="75.6" Height="18.9" Text="Endereco:" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text18" Left="444.15" Top="37.8" Width="47.25" Height="18.9" Text="CEP:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text19" Left="481.95" Top="37.8" Width="75.6" Height="18.9" Text="[Table.Cep]" Font="Arial, 10pt"/>
+      <TextObject Name="Text19" Left="481.95" Top="37.8" Width="75.6" Height="18.9" Text="[Table.PostalCode]" Font="Arial, 10pt"/>
       <TextObject Name="Text20" Left="557.55" Top="37.8" Width="66.15" Height="18.9" Text="Cidade:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text21" Left="614.25" Top="37.8" Width="103.95" Height="18.9" Text="[Table.Cidade]" Font="Arial, 10pt"/>
+      <TextObject Name="Text21" Left="614.25" Top="37.8" Width="103.95" Height="18.9" Text="[Table.City]" Font="Arial, 10pt"/>
       <LineObject Name="Line3" Top="75.6" Width="718.2" Border.Style="Dot" Diagonal="true"/>
       <TextObject Name="Text24" Left="444.15" Top="75.6" Width="94.5" Height="18.9" Text="Atraso (dias)" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text26" Left="557.55" Width="85.05" Height="18.9" Text="Data nasc.:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text27" Left="633.15" Width="85.05" Height="18.9" Text="[Table.Data de Nascimento]" Font="Arial, 10pt"/>
-      <TextObject Name="Text30" Left="47.25" Top="18.9" Width="302.4" Height="18.9" Text="[Table.Mae]" Font="Arial, 10pt"/>
+      <TextObject Name="Text27" Left="633.15" Width="85.05" Height="18.9" Text="[Table.DateOfBirth]" Font="Arial, 10pt"/>
+      <TextObject Name="Text30" Left="47.25" Top="18.9" Width="302.4" Height="18.9" Text="[Table.MotherName]" Font="Arial, 10pt"/>
       <TextObject Name="Text31" Top="18.9" Width="47.25" Height="18.9" Text="Mãe:" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text32" Left="387.45" Top="18.9" Width="330.75" Height="18.9" Text="[Table.Pai]" Font="Arial, 10pt"/>
+      <TextObject Name="Text32" Left="387.45" Top="18.9" Width="330.75" Height="18.9" Text="[Table.FatherName]" Font="Arial, 10pt"/>
       <TextObject Name="Text33" Left="349.65" Top="18.9" Width="37.8" Height="18.9" Text="Pai:" Font="Arial, 10pt, style=Bold"/>
       <DataBand Name="Data1" Top="189.65" Width="718.2" Height="22.9" DataSource="Table">
-        <TextObject Name="Text1" Left="255.15" Width="66.15" Height="18.9" Text="[Table.Parcela]" HorzAlign="Right" Font="Arial, 10pt"/>
-        <TextObject Name="Text6" Left="170.1" Width="75.6" Height="18.9" Text="[Table.Codigo do Título]" Font="Arial, 10pt"/>
-        <TextObject Name="Text8" Left="340.2" Width="94.5" Height="18.9" Text="[Table.Data de Vencimento]" HorzAlign="Right" Font="Arial, 10pt"/>
-        <TextObject Name="Text10" Left="557.55" Width="103.95" Height="18.9" Text="[FormatCurrency([Table.Valor Original],2)]" HorzAlign="Right" Font="Arial, 10pt"/>
-        <TextObject Name="Text25" Left="444.15" Width="94.5" Height="18.9" Text="[Table.Atraso]" HorzAlign="Right" Font="Arial, 10pt"/>
+        <TextObject Name="Text1" Left="255.15" Width="66.15" Height="18.9" Text="[Table.Quota]" HorzAlign="Right" Font="Arial, 10pt"/>
+        <TextObject Name="Text6" Left="170.1" Width="75.6" Height="18.9" Text="[Table.Code]" Font="Arial, 10pt"/>
+        <TextObject Name="Text8" Left="340.2" Width="94.5" Height="18.9" Text="[Table.DueDate]" HorzAlign="Right" Font="Arial, 10pt"/>
+        <TextObject Name="Text10" Left="557.55" Width="103.95" Height="18.9" Text="[FormatCurrency([Table.OriginalValue],2)]" HorzAlign="Right" Font="Arial, 10pt"/>
+        <TextObject Name="Text25" Left="444.15" Width="94.5" Height="18.9" Text="[Table.DaysDelay]" HorzAlign="Right" Font="Arial, 10pt"/>
       </DataBand>
       <GroupFooterBand Name="GroupFooter1" Top="216.55" Width="718.2" Height="28.35">
         <TextObject Name="Text22" Left="170.1" Top="1" Width="274.05" Height="18.9" Text="Total do cliente:" Font="Arial, 10pt, style=Bold"/>
