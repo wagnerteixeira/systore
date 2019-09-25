@@ -6,8 +6,8 @@ namespace Systore.Domain.Abstractions
 {
   public interface ISaleService : IBaseService<Sale>
   {
-        Task<SaleDto> GetSaleFullById(int id);
-
+        Task<Sale> GetSaleFullById(int id);
+        Task<string> UpdateAsync(SaleDto entity);
 
   }
 }

@@ -13,7 +13,9 @@ namespace Systore.Api.AutoMapperProfiles
         public SystoreApiProfile()
         {
             CreateMap<SaleDto, Sale>();
-            CreateMap<ItemSaleDto, ItemSale>();
+            CreateMap<Sale, SaleDto>();
+            CreateMap<ItemSaleDto, ItemSale>();            
+            CreateMap<ItemSale, ItemSaleDto>();
         }
     }
 }

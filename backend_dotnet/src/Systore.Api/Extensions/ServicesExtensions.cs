@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Systore.Domain.Abstractions;
 using Systore.Services;
 using AutoMapper;
+using Systore.Api.AutoMapperProfiles;
 
 namespace Systore.Api.Extensions
 {
@@ -25,7 +26,7 @@ namespace Systore.Api.Extensions
 
         public static IServiceCollection UseAutoMapper(this  IServiceCollection services)
         {            
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(Startup), typeof(SystoreApiProfile));
             return services;
         }
     }

@@ -5,7 +5,6 @@ using Systore.Infra.Context;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Systore.Domain.Dtos;
 
 namespace Systore.Data.Repositories
 {
@@ -15,12 +14,11 @@ namespace Systore.Data.Repositories
         {
         }
 
-        public async Task<SaleDto> GetSaleFullByIdAsync(int id) =>
-             new SaleDto();// _entities.Where(c => c.Id == id).FirstOrDefaultAsync();
-        /*_entities
+        public Task<Sale> GetSaleFullByIdAsync(int id) =>
+             _entities
                .Where(c => c.Id == id)
                .Include(c => c.ItemSale)
-               .FirstOrDefaultAsync();        */
+               .FirstOrDefaultAsync();        
 
     }
 }
