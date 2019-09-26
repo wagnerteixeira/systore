@@ -57,8 +57,9 @@ namespace conversion_mongo_mysql
                     Situation = billReceive.situation == "O" ? Systore.Domain.Enums.BillReceiveSituation.Open : Systore.Domain.Enums.BillReceiveSituation.Closed,
                     Vendor = billReceive.vendor,
                 };
-
-                string retBill = await new BillReceiveRepository(context, null).AddAsync(_billReceive);
+                var billReceiveRepository = new BillReceiveRepository(context, null);
+                billReceiveRepository.IsConversion = true;
+                string retBill = await billReceiveRepository.AddAsync(_billReceive);
 
                 if (string.IsNullOrWhiteSpace(retBill))
                 {
@@ -91,7 +92,9 @@ namespace conversion_mongo_mysql
             {
                 SystoreContext context = _systoreContextFactory.CreateDbContext(new string[] { });
                 Console.WriteLine($"Inserindo cliente {client.Name}-{client.Cpf}");
-                string ret = await new ClientRepository(context, null).AddAsync(client);
+                var clientRepository = new ClientRepository(context, null);
+                clientRepository.IsConversion = true;
+                string ret = await clientRepository.AddAsync(client);
                 if (string.IsNullOrWhiteSpace(ret))
                 {
                     clientsInserted.Add(new Tuple<int, string, string>(client.Id, clientId, $"Client  {client.Id}-{client.Name}-{client.Cpf} inserido com suceso"));
@@ -226,7 +229,9 @@ namespace conversion_mongo_mysql
             }
             SystoreContext context = _systoreContextFactory.CreateDbContext(new string[] { });
             Console.WriteLine($"Inserindo cliente {_clientEx.Name}-{_clientEx.Cpf}");
-            string ret = await new ClientRepository(context, null).AddAsync(_clientEx);
+            var clientRepository = new ClientRepository(context, null);
+            clientRepository.IsConversion = true;
+            string ret = await clientRepository.AddAsync(_clientEx);
             if (string.IsNullOrWhiteSpace(ret))
             {
                 clientsInserted.Add(new Tuple<int, string, string>(_clientEx.Id, clientEx.Id, $"Client  {_clientEx.Id}-{_clientEx.Name}-{_clientEx.Cpf} inserido com suceso"));
@@ -255,8 +260,9 @@ namespace conversion_mongo_mysql
                     Situation = billReceive.situation == "O" ? Systore.Domain.Enums.BillReceiveSituation.Open : Systore.Domain.Enums.BillReceiveSituation.Closed,
                     Vendor = billReceive.vendor,
                 };
-
-                string retBill = await new BillReceiveRepository(context, null).AddAsync(_billReceive);
+                var billReceiveRepository = new BillReceiveRepository(context, null);
+                billReceiveRepository.IsConversion = true;
+                string retBill = await billReceiveRepository.AddAsync(_billReceive);
 
                 if (string.IsNullOrWhiteSpace(retBill))
                 {

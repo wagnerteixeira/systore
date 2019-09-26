@@ -35,7 +35,8 @@ namespace Systore.Api
     public class Startup
     {
         private readonly IHostingEnvironment _env;
-        private AppSettings _appSettings;
+        private readonly AppSettings _appSettings;
+        private readonly IConfigurationSection _appSettingsSection;
 
         public IConfiguration Configuration { get; }
 
@@ -43,6 +44,8 @@ namespace Systore.Api
         {
             Configuration = configuration;
             _env = env;
+            _appSettingsSection = Configuration.GetSection("AppSettings");
+            _appSettings = _appSettingsSection.Get<AppSettings>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -81,12 +84,10 @@ namespace Systore.Api
             Log.Logger.Information($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
 
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            
+            services.Configure<AppSettings>(_appSettingsSection);
 
             // configure jwt authentication
-            _appSettings = appSettingsSection.Get<AppSettings>();
-
             Console.WriteLine($"ConnectionString: {_appSettings.ConnectionString}");
             Console.WriteLine($"Current culture: {CultureInfo.CurrentCulture}");
             var n = DateTime.UtcNow;

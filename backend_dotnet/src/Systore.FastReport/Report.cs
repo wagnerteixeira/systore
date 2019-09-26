@@ -27,7 +27,10 @@ namespace Systore.Report
         {
             FastReport.Report report = new FastReport.Report();
             report.Load(Path.Combine("Reports", reportFile));
-
+            if (string.IsNullOrWhiteSpace(_appSettings.ConnectionString)){
+                throw new NotSupportedException("Connectionstring não informada");
+            }
+            
             report.Dictionary.Connections[0].ConnectionString = _appSettings.ConnectionString;
             //report.SetParameterValue("initialDate", "2019-01-01");
             //report.SetParameterValue("finalDate", "2019-01-07");

@@ -15,11 +15,11 @@ namespace Systore.Data.Repositories
     public class BillReceiveRepository : BaseRepository<BillReceive>, IBillReceiveRepository
     {
         private decimal _interestTax = 0.0023333333333333333333333333M; //(0.07M / 30.0M)
-
+        public bool IsConversion { get; set; }
 
         public BillReceiveRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
-
+            IsConversion = false;
         }
 
         public Task<int> CountBillReceivesByClient(int clientId) =>

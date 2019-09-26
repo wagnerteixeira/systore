@@ -10,13 +10,16 @@ namespace Systore.Data.Repositories
 {
     public class ClientRepository : BaseRepository<Client>, IClientRepository
     {
+        public bool IsConversion { get; set; }
         public ClientRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
-
+            IsConversion = false;
         }
 
         private async Task<string> Validate(Client entity, bool edit)
         {
+            if (IsConversion)
+                return "";
             string validations = "";
             var query = _entities.Where(c => c.Cpf == entity.Cpf);
             if (edit)
