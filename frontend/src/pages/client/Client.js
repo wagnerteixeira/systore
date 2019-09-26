@@ -10,7 +10,7 @@ import ViewClient from './ViewClient';
 import clientservice from '../../services/clientService';
 import Confirm from '../../components/common/ConfirmAlert';
 import { getErrosFromApi } from '../../utils/errorsHelper';
-import { getCurrentDate } from '../../utils/operators';
+import { getCurrentDate, strToDate } from '../../utils/operators';
 
 const initialData = {
   id: 0,
@@ -64,8 +64,8 @@ class Client extends Component {
     page: 0,
     rowsPerPage: 5,
     order: 'Asc',
-    columnSort: 'Name',
-    columnSearch: 'Name',
+    columnSort: 'name',
+    columnSearch: 'name',
     search: '',
     messageOpen: false,
     variantMessage: 'success',
@@ -95,17 +95,41 @@ class Client extends Component {
       this.setState({ columnSearch });
       return;
     }
-    if (columnSearch === 'Id' && /\D/.test(filter)) {
+    if (columnSearch === 'id' && /\D/.test(filter)) {
       this.setState({
         messageOpen: true,
         messageText: 'Informe somente números na pesquisa por código.',
         variantMessage: 'warning',
       });
       return;
+    } else if ((columnSearch = 'dateOfBirth')) {
+      if (
+        !/^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/i.test(
+          filter
+        )
+      ) {
+        this.setState({
+          messageOpen: true,
+          messageText: 'Informe uma data como por exemplo 01/03/2019.',
+          variantMessage: 'warning',
+        });
+        return;
+      }
+
+      filter = strToDate(filter);
+      if (!filter) {
+        this.setState({
+          messageOpen: true,
+          messageText: 'Informe uma data como por exemplo 01/03/2019.',
+          variantMessage: 'warning',
+        });
+        return;
+      }
     }
 
     let filterType = '';
-    if (columnSearch === 'Id') filterType = 'Eq';
+    if (columnSearch === 'id' || columnSearch === 'dateOfBirth')
+      filterType = 'Eq';
     else filterType = 'StW';
 
     clientservice.count(columnSearch, filterType, filter).then(res => {
