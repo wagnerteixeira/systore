@@ -215,7 +215,7 @@ function EditSale(props) {
     }
 
     let filterType = '';
-    if (columnSearch === 'Code') filterType = 'Eq';
+    if (columnSearch === 'id') filterType = 'Eq';
     else filterType = 'StW';
 
     const _limit = inputValue.trim().split(' ').length < 3 ? 10 : 1000;

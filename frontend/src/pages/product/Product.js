@@ -165,7 +165,7 @@ function Product(props) {
       setColumnSearch(columnSearch);
       return;
     }
-    if (columnSearch === 'Id' && /\D/.test(search)) {
+    if (columnSearch === 'id' && /\D/.test(search)) {
       setMessage({
         messageOpen: true,
         messageText: 'Informe somente números na pesquisa por código.',
