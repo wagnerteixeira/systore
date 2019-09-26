@@ -29,6 +29,7 @@ using Systore.Api.Extensions;
 using Systore.Report;
 using System.Globalization;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Localization;
 
 namespace Systore.Api
 {
@@ -84,12 +85,11 @@ namespace Systore.Api
             Log.Logger.Information($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
 
-            
+
             services.Configure<AppSettings>(_appSettingsSection);
 
             // configure jwt authentication
-            Console.WriteLine($"ConnectionString: {_appSettings.ConnectionString}");
-            Console.WriteLine($"Current culture: {CultureInfo.CurrentCulture}");
+            Console.WriteLine($"ConnectionString: {_appSettings.ConnectionString}");            
             var n = DateTime.UtcNow;
             if (_env.IsDevelopment())
             {
@@ -176,6 +176,30 @@ namespace Systore.Api
                 app.UseHsts();
             }
 
+            var cultureInfo = new CultureInfo("pt-BR");
+
+            //cultureInfo.NumberFormat.CurrencySymbol = "R$";
+            //ci.NumberFormat.NumberDecimalSeparator = ".";
+            //ci.NumberFormat.CurrencyDecimalSeparator = ".";
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            CultureInfo.CurrentCulture = cultureInfo;
+
+            // Configure the Localization middleware
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(cultureInfo),
+                SupportedCultures = new List<CultureInfo>
+            {
+                cultureInfo,
+            },
+                SupportedUICultures = new List<CultureInfo>
+            {
+                cultureInfo,
+            }
+            });
+
             //app.UseHttpsRedirection();
             app.UseCors(builder =>
                 builder.AllowAnyOrigin()
@@ -191,8 +215,11 @@ namespace Systore.Api
             .UseMvc()
             .UseReport();
 
+            Console.WriteLine($"Current culture: {CultureInfo.CurrentCulture}");
+
             // uncoment for automatic migration            
             InitializeDatabase(app);
+
         }
 
         private void InitializeDatabase(IApplicationBuilder app)
