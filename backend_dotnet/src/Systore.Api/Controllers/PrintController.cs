@@ -24,7 +24,7 @@ namespace Systore.Api.Controllers
             _report = report;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("printer-test-body")]
         public async Task<IActionResult> PrinterTestBody([FromBody]JToken jsonbody)
         {
@@ -48,7 +48,7 @@ namespace Systore.Api.Controllers
             return File(res, "application/pdf", "");
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("printer")]
         public async Task<IActionResult> Printer()
         {
