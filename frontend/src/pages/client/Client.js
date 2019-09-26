@@ -102,7 +102,7 @@ class Client extends Component {
         variantMessage: 'warning',
       });
       return;
-    } else if ((columnSearch = 'dateOfBirth')) {
+    } else if (columnSearch === 'dateOfBirth') {
       if (
         !/^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/i.test(
           filter
@@ -434,6 +434,7 @@ class Client extends Component {
   };
 
   handleRequestSearch = event => {
+    console.log(this.state.columnSearch, event.target.value);
     if (this.state.columnSearch !== event.target.value) {
       this.fetchClients(
         this.state.page,
