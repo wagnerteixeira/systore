@@ -3,14 +3,18 @@ using Systore.Domain.Entities;
 using Systore.Data.Abstractions;
 using System.Threading.Tasks;
 using Systore.Domain.Dtos;
+using Systore.Domain.Enums;
+using Systore.Data.Repositories;
 
 namespace Systore.Services
 {
     public class SaleService : BaseService<Sale>, ISaleService
-    {        
-        public SaleService(ISaleRepository repository) : base(repository)
-        {
+    {
+        private readonly IItemSaleRepository _itemSaleRepository;
 
+        public SaleService(ISaleRepository repository, IItemSaleRepository itemSaleRepository) : base(repository)
+        {
+            _itemSaleRepository = itemSaleRepository;
         }
 
         public Task<Sale> GetSaleFullById(int id) => (_repository as ISaleRepository).GetSaleFullByIdAsync(id);
@@ -29,17 +33,46 @@ namespace Systore.Services
                 Vendor = entity.Vendor
             };
 
-            //sale.ItemSale = entity.ItemSale.Select(c => new ItemSale()
-            //{
-            //    Id = c.Id,
-            //    Price = c.Price,
-            //    ProductId = c.ProductId,
-            //    Quantity = c.Quantity,
-            //    SaleId = c.SaleId,
-            //    TotalPrice = c.TotalPrice
-            //}).ToList();
-
             retorno = await _repository.UpdateAsync(sale);
+            
+            if (retorno == "")
+            {             
+                foreach (ItemSaleDto item in entity.ItemSale)
+                {
+                    if (item.Action == ActionItem.Insert)
+                    {
+
+                        retorno = await _itemSaleRepository.AddAsync(new ItemSale()
+                        {
+                            Id = item.Id,
+                            Price = item.Price,
+                            ProductId = item.ProductId,
+                            Quantity = item.Quantity,
+                            SaleId = item.SaleId,
+                            TotalPrice = item.TotalPrice
+                        });
+                    }
+                    else if (item.Action == ActionItem.Alter)
+                    {
+                        retorno = await _itemSaleRepository.UpdateAsync(new ItemSale()
+                        {
+                            Id = item.Id,
+                            Price = item.Price,
+                            ProductId = item.ProductId,
+                            Quantity = item.Quantity,
+                            SaleId = item.SaleId,
+                            TotalPrice = item.TotalPrice
+                        });
+                    }
+                    else if (item.Action == ActionItem.Delete)
+                    {
+                        retorno = await _itemSaleRepository.RemoveAsync(item.Id);
+                    }
+
+                    if (retorno != "")
+                        break;
+                }
+            }
 
             return retorno;
         }
