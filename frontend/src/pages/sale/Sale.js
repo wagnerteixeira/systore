@@ -104,7 +104,6 @@ function Sale(props) {
       .getSaleFullById(rowData.id)
       .then(res => {
         setData(res.data);
-        console.log(res.data);
       })
       .catch(error => {
         setMessage({
@@ -124,7 +123,7 @@ function Sale(props) {
       vendor: '',
       saleDate: new Date(),
       finalValue: 0.0,
-      saleProducts: [],
+      itemSale: [],
     });
   }
 
