@@ -1,5 +1,6 @@
 using Systore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Systore.Infra.Mapping
 {
@@ -20,7 +21,15 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.RegistryDate);
 
             builder.Property(p => p.DateOfBirth)
-                .HasColumnType("DATE");
+                .HasColumnType("DATE")
+                .HasConversion(
+                    c => c.HasValue ?
+                        TimeZoneInfo.ConvertTimeFromUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
+                        c,
+                    c => c.HasValue ?
+                        TimeZoneInfo.ConvertTimeToUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
+                        c
+                    );
 
             builder.Property(p => p.Address)
                 .HasMaxLength(150);

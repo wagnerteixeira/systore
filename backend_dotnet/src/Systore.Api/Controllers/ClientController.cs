@@ -6,6 +6,9 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using Systore.Domain.Dtos;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace Systore.Api.Controllers
 {
@@ -44,6 +47,28 @@ namespace Systore.Api.Controllers
                 return SendStatusCode(412, $"Já existe um cliente com o CPF {_client.Cpf}, {_client.Name}");
             else
                 return Ok("");
+        }
+
+
+        [Authorize]
+        [HttpPost("getpaginate")]
+        public async override Task<IActionResult> GetPaginate([FromBody]FilterPaginateDto filterPaginateDto)
+        {
+            try
+            {
+                var count = await _service.GetWhereAsync(filterPaginateDto);
+
+                var json = JsonConvert.SerializeObject(count);
+                _logger.LogError(json);
+                _logger.LogError($"data {count.FirstOrDefault().DateOfBirth} {count.FirstOrDefault().DateOfBirth.Value.Kind}");
+
+                return Ok(count);
+
+            }
+            catch (Exception e)
+            {
+                return SendBadRequest(e);
+            }
         }
     }
 }

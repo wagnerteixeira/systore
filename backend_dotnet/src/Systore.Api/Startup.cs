@@ -89,7 +89,7 @@ namespace Systore.Api
             services.Configure<AppSettings>(_appSettingsSection);
 
             // configure jwt authentication
-            Console.WriteLine($"ConnectionString: {_appSettings.ConnectionString}");            
+            Console.WriteLine($"ConnectionString: {_appSettings.ConnectionString}");
             var n = DateTime.UtcNow;
             if (_env.IsDevelopment())
             {
@@ -98,7 +98,8 @@ namespace Systore.Api
                     opts.Filters.Add(new AllowAnonymousFilter());
                 }).AddJsonOptions(options =>
                 {
-                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+                    options.SerializerSettings.Formatting = Formatting.Indented;
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             }
@@ -106,7 +107,8 @@ namespace Systore.Api
                 services.AddMvc()
                     .AddJsonOptions(options =>
                     {
-                        options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+                        options.SerializerSettings.Formatting = Formatting.Indented;
+                        options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -214,8 +216,9 @@ namespace Systore.Api
             })
             .UseMvc()
             .UseReport();
-
+            
             Console.WriteLine($"Current culture: {CultureInfo.CurrentCulture}");
+            Console.WriteLine($"Local timezone {TimeZoneInfo.Local} Utc {TimeZoneInfo.Utc}");
 
             // uncoment for automatic migration            
             InitializeDatabase(app);
