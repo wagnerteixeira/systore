@@ -100,7 +100,8 @@ namespace Systore.Api
                 {
                     options.SerializerSettings.Formatting = Formatting.Indented;
                     options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             }
             else
@@ -109,7 +110,8 @@ namespace Systore.Api
                     {
                         options.SerializerSettings.Formatting = Formatting.Indented;
                         options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 

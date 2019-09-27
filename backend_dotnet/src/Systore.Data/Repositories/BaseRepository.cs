@@ -151,6 +151,7 @@ namespace Systore.Data.Repositories
         public virtual async Task<string> UpdateAsync(TEntity entity)
         {
             // In case AsNoTracking is used
+            await _context.Instance.Entry(entity).GetDatabaseValuesAsync();
             _context.Instance.Entry(entity).State = EntityState.Modified;
             return await SaveChangesAsync();
         }
@@ -165,6 +166,21 @@ namespace Systore.Data.Repositories
         public virtual async Task<int> ExecuteCommandAsync(string command, params object[] parameters)
         {
             return await _context.Instance.Database.ExecuteSqlCommandAsync(command, parameters);
+        }
+
+        private AuditOperation GetAuditOperation(EntityState entityState)
+        {
+            switch (entityState)
+            {
+                case EntityState.Added:
+                    return AuditOperation.Add;
+                case EntityState.Deleted:
+                    return AuditOperation.Remove;
+                case EntityState.Modified:
+                    return AuditOperation.Update;
+                default:
+                    return AuditOperation.Add;
+            }
         }
 
         private ListAuditEntry OnBeforeSaveChanges()
@@ -182,7 +198,7 @@ namespace Systore.Data.Repositories
                 auditEntry.HeaderAudit.TableName = entry.Metadata.Relational().TableName;
                 auditEntry.HeaderAudit.Date = DateTime.Now;
                 auditEntry.HeaderAudit.UserName = "?";
-
+                auditEntry.HeaderAudit.Operation = GetAuditOperation(entry.State);
 
                 foreach (var property in entry.Properties)
                 {
@@ -198,10 +214,8 @@ namespace Systore.Data.Repositories
                     {
                         auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                         {
-                            FieldName = propertyName,
-                            OldValue = (property.CurrentValue ?? "").ToString(),
+                            FieldName = propertyName,                            
                             NewValue = (property.CurrentValue ?? "").ToString(),
-
                         });
                         continue;
                     }
@@ -220,7 +234,7 @@ namespace Systore.Data.Repositories
                             auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                             {
                                 FieldName = propertyName,
-                                OldValue = (property.CurrentValue ?? "").ToString(),
+                                NewValue = (property.CurrentValue ?? "").ToString(),
                             });
                             break;
 
@@ -229,10 +243,8 @@ namespace Systore.Data.Repositories
                             {
                                 auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                                 {
-                                    FieldName = propertyName,
-                                    OldValue = (property.CurrentValue ?? "").ToString(),
+                                    FieldName = propertyName,                                    
                                     NewValue = (property.CurrentValue ?? "").ToString(),
-
                                 });
                             }
                             break;
