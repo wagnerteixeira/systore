@@ -1,5 +1,6 @@
 using Systore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Systore.Infra.Mapping
 {
@@ -28,12 +29,33 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.FinalValue)
                 .HasColumnType("DECIMAL(18, 2)");
 
-            builder.Property(p => p.PurchaseDate);
+            builder.Property(p => p.PurchaseDate)
+                .HasColumnType("DATE")
+                .HasConversion(
+                    c => TimeZoneInfo.ConvertTimeFromUtc(c, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) ,
+                    c => TimeZoneInfo.ConvertTimeToUtc(c, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) 
+                    );
+
 
             builder.Property(p => p.DueDate)
-                .HasColumnType("DATE");
+                .HasColumnType("DATE")
+                .HasConversion(
+                    c => TimeZoneInfo.ConvertTimeFromUtc(c, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) ,
+                    c => TimeZoneInfo.ConvertTimeToUtc(c, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) 
+                    );
 
-            builder.Property(p => p.PayDate);
+
+            builder.Property(p => p.PayDate)
+                .HasColumnType("DATE")
+                .HasConversion(
+                    c => c.HasValue ?
+                        TimeZoneInfo.ConvertTimeFromUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
+                        c,
+                    c => c.HasValue ?
+                        TimeZoneInfo.ConvertTimeToUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
+                        c
+                    );
+
 
             builder.Property(p => p.DaysDelay);
 

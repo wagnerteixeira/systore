@@ -18,7 +18,17 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.Name)
                 .HasMaxLength(150);
             //builder.Property(p => p.Code);
-            builder.Property(p => p.RegistryDate);
+            builder.Property(p => p.RegistryDate)
+                .HasColumnType("DATE")
+                .HasConversion(
+                    c => c.HasValue ?
+                        TimeZoneInfo.ConvertTimeFromUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
+                        c,
+                    c => c.HasValue ?
+                        TimeZoneInfo.ConvertTimeToUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
+                        c
+                    );
+
 
             builder.Property(p => p.DateOfBirth)
                 .HasColumnType("DATE")
@@ -82,7 +92,15 @@ namespace Systore.Infra.Mapping
                 .HasMaxLength(50);
 
             builder.Property(p => p.AdmissionDate)
-                .HasColumnType("DATE");
+                .HasColumnType("DATE")
+                .HasConversion(
+                    c => c.HasValue ?
+                        TimeZoneInfo.ConvertTimeFromUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
+                        c,
+                    c => c.HasValue ?
+                        TimeZoneInfo.ConvertTimeToUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
+                        c
+                    );
 
             builder.Property(p => p.CivilStatus)
                 .HasColumnType("TINYINT");
