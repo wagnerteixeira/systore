@@ -11,6 +11,9 @@ using Microsoft.Extensions.Options;
 using Systore.Domain;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Systore.Domain.Dtos;
+using System.Collections.Generic;
+using Systore.Domain.Enums;
 
 namespace Systore.Data.Repositories
 {
@@ -20,7 +23,7 @@ namespace Systore.Data.Repositories
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DbSet<HeaderAudit> _entities;
         public HeaderAuditRepository(IOptions<AppSettings> options, IHttpContextAccessor httpContextAccessor)
-        {            
+        {
             if (_context == null)
             {
                 _context = new AuditContextFactory().CreateDbContext(options);
@@ -38,6 +41,44 @@ namespace Systore.Data.Repositories
                 entity.UserName = "User not identified";
             await _entities.AddAsync(entity);
             return await SaveChangesAsync();
+        }
+
+        private string GetOperationString(AuditOperation auditOperation)
+        {
+            switch (auditOperation)
+            {
+                case AuditOperation.Add :
+                    return "Criação";
+                case AuditOperation.Remove:
+                    return "Exclusão";
+                case AuditOperation.Update:
+                    return "Alteração";
+                default:
+                    return "";
+            }
+        }
+
+        public async Task<List<AuditDto>> GetAuditsByDateAsync(DateTime initialDate, DateTime finalDate)
+        {
+            var ret = await _entities.
+                    Include(c => c.ItemAudits).
+                    Where(c => c.Date >= initialDate && c.Date <= finalDate)
+                    .SelectMany(c => 
+                        c.ItemAudits.Select(
+                            i => new AuditDto()
+                            {
+                                Date = c.Date,
+                                FieldName = i.FieldName,
+                                Id = c.Id,
+                                NewValue = i.NewValue,
+                                OldValue = i.OldValue,
+                                Operation = GetOperationString(c.Operation),
+                                TableName = c.TableName,
+                                UserName = c.UserName
+                            }
+                        )
+                      ).ToListAsync();
+            return ret;
         }
 
         protected virtual async Task<string> SaveChangesAsync()

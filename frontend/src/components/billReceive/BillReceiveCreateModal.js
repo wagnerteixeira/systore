@@ -121,55 +121,61 @@ class BillReceiveCreateModal extends React.Component {
     return message;
   };
 
-  handleGenerateQuotas = () => {
-    if (
-      typeof this.state.originalValue === 'string' &&
-      this.state.originalValue.length === 0
-    )
-      return;
+  handleGenerateQuotas = e => {
+    e.preventDefault();
+    e.disabled = true;
+    try {
+      if (
+        typeof this.state.originalValue === 'string' &&
+        this.state.originalValue.length === 0
+      )
+        return;
 
-    let _originalValue = 0.0;
-    if (typeof this.state.originalValue == 'string') {
-      if (this.state.originalValue.length > 0)
-        _originalValue = accounting.unformat(
-          this.state.originalValue.replace('.', ',')
+      let _originalValue = 0.0;
+      if (typeof this.state.originalValue == 'string') {
+        if (this.state.originalValue.length > 0)
+          _originalValue = accounting.unformat(
+            this.state.originalValue.replace('.', ',')
+          );
+      } else _originalValue = this.state.originalValue;
+      if (_originalValue > 0 && this.state.quotas > 0) {
+        let _quotaValue = accounting.unformat(
+          accounting.formatNumber(_originalValue / this.state.quotas, 1)
         );
-    } else _originalValue = this.state.originalValue;
-    if (_originalValue > 0 && this.state.quotas > 0) {
-      let _quotaValue = accounting.unformat(
-        accounting.formatNumber(_originalValue / this.state.quotas, 1)
-      );
-      let quotaOfAdjustment =
-        _originalValue - (this.state.quotas - 1) * _quotaValue;
-      let quotas = [];
-      let i = 0;
-      let dueDate = new Date(this.state.purchaseDate.getTime());
-      for (i = 0; i < this.state.quotas; i++) {
-        let originalValue_quota = _quotaValue;
-        dueDate.setMonth(dueDate.getMonth() + 1);
-        if (i === 0) {
-          quotas.push({
-            quota: i + 1,
-            dueDate: new Date(dueDate.getTime()),
-            originalValue: accounting.formatNumber(quotaOfAdjustment),
-          });
-        } else {
-          quotas.push({
-            quota: i + 1,
-            dueDate: new Date(dueDate.getTime()),
-            originalValue: accounting.formatNumber(originalValue_quota),
-          });
+        let quotaOfAdjustment =
+          _originalValue - (this.state.quotas - 1) * _quotaValue;
+        let quotas = [];
+        let i = 0;
+        let dueDate = new Date(this.state.purchaseDate.getTime());
+        for (i = 0; i < this.state.quotas; i++) {
+          let originalValue_quota = _quotaValue;
+          dueDate.setMonth(dueDate.getMonth() + 1);
+          if (i === 0) {
+            quotas.push({
+              quota: i + 1,
+              dueDate: new Date(dueDate.getTime()),
+              originalValue: accounting.formatNumber(quotaOfAdjustment),
+            });
+          } else {
+            quotas.push({
+              quota: i + 1,
+              dueDate: new Date(dueDate.getTime()),
+              originalValue: accounting.formatNumber(originalValue_quota),
+            });
+          }
         }
+        this.setState({
+          billsReceive: quotas,
+        });
+      } else {
+        this.setState({
+          messageOpen: true,
+          messageText: 'Informe o valor e a quantidade de parcelas!',
+          variantMessage: 'warning',
+        });
       }
-      this.setState({
-        billsReceive: quotas,
-      });
-    } else {
-      this.setState({
-        messageOpen: true,
-        messageText: 'Informe o valor e a quantidade de parcelas!',
-        variantMessage: 'warning',
-      });
+    } finally {
+      e.disabled = false;
     }
   };
 

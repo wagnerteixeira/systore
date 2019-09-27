@@ -19,7 +19,8 @@ namespace Systore.Api.Extensions
             services.AddScoped<IBillReceiveService, BillReceiveService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ISaleService, SaleService>();            
+            services.AddScoped<ISaleService, SaleService>();
+            services.AddScoped<IAuditService, AuditService>();
 
             return services;
         }
@@ -31,3 +32,4 @@ namespace Systore.Api.Extensions
         }
     }
 }
+

@@ -55,25 +55,8 @@ class ViewLog extends Component {
 
   fetchLogs = () => {
     getLogs(this.state.initialDate, this.state.finalDate).then(res => {
-      let logs = res.data.flatMap(log => {
-        return log.items.map(item => {
-          return {
-            collectionName: log.collectionName,
-            date: log.date,
-            operation:
-              log.operation === 'C'
-                ? 'Criação'
-                : log.operation === 'U'
-                ? 'Alteração'
-                : 'Exclusão',
-            user: log.user,
-            field: item.field,
-            newValue: item.newValue,
-            oldValue: item.oldValue,
-          };
-        });
-      });
-      this.setState({ logs: logs });
+      console.log(res);
+      this.setState({ logs: res.data });
     });
   };
 
@@ -192,10 +175,8 @@ class ViewLog extends Component {
           <TableBody>
             {Object.keys(logs).map(key => (
               <TableRow hover key={key}>
-                <TableCell padding="checkbox">{logs[key].user}</TableCell>
-                <TableCell padding="checkbox">
-                  {logs[key].collectionName}
-                </TableCell>
+                <TableCell padding="checkbox">{logs[key].userName}</TableCell>
+                <TableCell padding="checkbox">{logs[key].tableName}</TableCell>
                 <TableCell padding="checkbox">
                   {getDateTimeToString(logs[key].date)}
                 </TableCell>

@@ -1,14 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Systore.Domain.Dtos;
-using Systore.Domain.Entities;
 
-namespace Systore.Data.Abstractions
+namespace Systore.Domain.Abstractions
 {
-    public interface IHeaderAuditRepository 
+    public interface IAuditService
     {
-        Task<string> AddAsync(HeaderAudit entity);
         Task<List<AuditDto>> GetAuditsByDateAsync(DateTime initialDate, DateTime finalDate);
     }
 }
