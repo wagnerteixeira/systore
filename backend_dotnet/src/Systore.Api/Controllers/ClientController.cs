@@ -56,11 +56,7 @@ namespace Systore.Api.Controllers
         {
             try
             {
-                var count = await _service.GetWhereAsync(filterPaginateDto);
-
-                var json = JsonConvert.SerializeObject(count);
-                _logger.LogError(json);
-                _logger.LogError($"data {count.FirstOrDefault().DateOfBirth} {count.FirstOrDefault().DateOfBirth.Value.Kind}");
+                var count = await _service.GetWhereAsync(filterPaginateDto);                
 
                 return Ok(count);
 

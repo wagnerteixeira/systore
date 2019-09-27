@@ -106,7 +106,7 @@ function EditSale(props) {
   const [productCurrent, setProductCurrent] = useState({
     id: 0,
     productId: 0,
-    description: '',
+    productDescription: '',
     price: 0.0,
     quantity: 0.0,
   });
@@ -151,7 +151,7 @@ function EditSale(props) {
     setProductCurrent({
       id: 0,
       productId: 0,
-      description: '',
+      productDescription: '',
       price: 0.0,
       quantity: 0.0,
     });
@@ -170,7 +170,7 @@ function EditSale(props) {
     let total = 0.0;
     if (dataProducts)
       dataProducts.forEach(produto => {
-        total += produto.totalPrice;
+        if (produto.action !== 3) total += produto.totalPrice;
       });
     setFinalValue(total);
   }
@@ -187,7 +187,7 @@ function EditSale(props) {
       let newProduct = {
         id: 0,
         productId: product.id,
-        description: product.description,
+        productDescription: product.description,
         quantity: product.quantity,
         price: product.price,
         totalPrice: parseFloat(product.quantity) * parseFloat(product.price),
@@ -445,7 +445,7 @@ function EditSale(props) {
                             {dataProducts[key].productId}
                           </TableCell>
                           <TableCell padding="none" size="small">
-                            {dataProducts[key].description}
+                            {dataProducts[key].productDescription}
                           </TableCell>
                           <TableCell padding="none" size="small">
                             {dataProducts[key].price}

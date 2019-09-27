@@ -9,7 +9,6 @@ namespace Systore.Domain.Dtos
     {
         public int Id { get; set; }
         public int ClientId { get; set; }
-        public Client Client { get; set; }
         public decimal FinalValue { get; set; }
         public DateTime SaleDate { get; set; }
         public string Vendor { get; set; }

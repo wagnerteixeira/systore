@@ -62,7 +62,7 @@ function SaleProductModal(props) {
           productData: productCurrent,
           value: productCurrent.productId,
           label: `Código: ${productCurrent.productId} Descrição: ${
-            productCurrent.description
+            productCurrent.productDescription
           } `,
         }
       : null
@@ -162,7 +162,7 @@ function SaleProductModal(props) {
     setQuantity(0);
     setProductData({
       id: props.productId,
-      description: '',
+      productDescription: '',
       price: 0.0,
     });
     setSingle(null);

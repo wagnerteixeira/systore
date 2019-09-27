@@ -25,7 +25,6 @@ namespace Systore.Services
 
             Sale sale = new Sale()
             {
-                Client = entity.Client,
                 ClientId = entity.ClientId,
                 FinalValue = entity.FinalValue,
                 Id = entity.Id,

@@ -33,7 +33,6 @@ namespace Systore.Api.Controllers
                 Sale sale = await (_service as ISaleService).GetSaleFullById(id);
                 SaleDto saleDto = new SaleDto() {
                     ClientId = sale.ClientId,
-                    Client = sale.Client,
                     FinalValue = sale.FinalValue,
                     Id = sale.Id,
                     ItemSale = null,
@@ -68,7 +67,6 @@ namespace Systore.Api.Controllers
             {
                 Sale sale = new Sale()
                 {
-                    Client = entity.Client,
                     ClientId = entity.ClientId,
                     FinalValue = entity.FinalValue,
                     Id = entity.Id,
