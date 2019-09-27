@@ -12,7 +12,7 @@ namespace Systore.Domain.Dtos
         public int SaleId { get; set; }
 
         public int ProductId { get; set; }        
-
+        public string ProductDescription { get; set; }
         public decimal Price { get; set; }
 
         public decimal Quantity { get; set; }
