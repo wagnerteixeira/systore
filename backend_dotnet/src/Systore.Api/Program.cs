@@ -19,16 +19,20 @@ namespace Systore.Api
     {
 
         private static bool isProduction => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production";
-
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-            .AddEnvironmentVariables()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)            
-            .Build();
+        private static IConfiguration _configuration;
+        
 
         public static int Main(string[] args)
         {
+
+            _configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+            .AddCommandLine(args)
+            .AddEnvironmentVariables()
+            .Build();
+
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -51,7 +55,7 @@ namespace Systore.Api
             try
             {
                 Log.Information("Starting web host");
-                CreateWebHostBuilder(args).Build().Run();
+                CreateWebHostBuilder(args, _configuration).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -65,10 +69,10 @@ namespace Systore.Api
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args, IConfiguration configuration) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseConfiguration(Configuration)
+                .UseConfiguration(configuration)
                 .UseSerilog();
     }
 }

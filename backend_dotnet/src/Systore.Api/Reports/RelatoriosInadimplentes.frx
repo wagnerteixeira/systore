@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/03/2019 13:30:57" ReportInfo.Modified="09/26/2019 22:50:28" ReportInfo.CreatorVersion="2019.3.24.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/03/2019 13:30:57" ReportInfo.Modified="09/28/2019 12:57:30" ReportInfo.CreatorVersion="2019.3.5.0">
   <Dictionary>
-    <MySqlDataConnection Name="SystoreConnection" ConnectionString="rijcmlqomabmqtwD7y3BaVO988Xrns8n0+Fpps4V7SdlS+EOKRfEfgYlVHw/4pnKk9NgUQNE0HY3XrOI9SOQebvbIEN3OZg87Twk19K+JqPqTEUmgM+2gqF7NGvD+4jdu2UVgeR">
+    <MySqlDataConnection Name="SystoreConnection" ConnectionString="rijcmlqomabmqtwD7y3BaVO988Xrns8n0+Fpps4V7SdlS+EOKRfEfgYlVHw/4pnKk9NgUQNE0HY3XrOI9SOQebvbIEN3OZg87Twk19K+JqPqTEUmgNa9fsxYTdZbkFFhxf077BO">
       <TableDataSource Name="Table" DataType="System.Int32" Enabled="true" SelectCommand="select c.id&#10;     , c.Name&#10;     , c.Cpf&#10;     , c.Rg&#10;     , c.PostalCode &#10;     , c.Address&#10;     , c.AddressNumber &#10;     , c.Neighborhood &#10;     , c.City &#10;     , c.State&#10;     , DATE_FORMAT(c.DateOfBirth,'%d/%m/%Y') as DateOfBirth&#10;     , c.Phone1 &#10;     , c.Phone2 &#10;     , c.MotherName &#10;     , c.FatherName &#10;     , b.Code &#10;     , b.Quota&#10;     , DATE_FORMAT(b.DueDate, '%d/%m/%Y') as DueDate&#10;     , b.OriginalValue &#10;     , datediff(current_date(), b.DueDate) as DaysDelay&#10;from Client c&#10;join BillReceive b on c.Id = b.ClientId &#10;where &#10;##b.code in(1007572, 1007573) &#10;cast(b.DueDate as date) between  @dataInicial and @dataFinal &#10;and b.Situation = 0&#10;order by c.Name, c.Id">
         <Column Name="Cpf" DataType="System.String"/>
         <Column Name="Rg" DataType="System.String"/>
@@ -41,12 +41,12 @@
       <TextObject Name="Text29" Left="434.7" Top="3" Width="283.5" Height="15.9" Text="Impresso em [Date], página [Page#] de [TotalPages#]" HorzAlign="Right" WordWrap="false" Font="Arial, 8.25pt"/>
     </PageHeaderBand>
     <GroupHeaderBand Name="GroupHeader1" Top="91.15" Width="718.2" Height="103.95" Condition="[Table.Name]">
-      <TextObject Name="Text3" Left="349.65" Width="85.05" Height="18.9" Text="CNPJ/CPF:" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text3" Left="349.65" Top="1.9" Width="85.05" Height="18.9" Text="CNPJ/CPF:" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text4" Left="56.7" Width="292.95" Height="18.9" Text="[Table.Name]" WordWrap="false" Font="Arial, 10pt"/>
       <TextObject Name="Text5" Width="56.7" Height="18.9" Text="Nome:" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text2" Left="434.7" Width="122.85" Height="18.9" Text="[Table.Cpf]" WordWrap="false" Font="Arial, 10pt"/>
-      <TextObject Name="Text26" Left="542.55" Width="85.05" Height="18.9" Text="Data nasc.:" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text27" Left="628.15" Width="85.05" Height="18.9" Text="[Table.DateOfBirth]" WordWrap="false" Font="Arial, 10pt"/>
+      <TextObject Name="Text2" Left="434.7" Top="1.9" Width="122.85" Height="18.9" Text="[Table.Cpf]" WordWrap="false" Font="Arial, 10pt"/>
+      <TextObject Name="Text26" Left="542.55" Top="1.9" Width="85.05" Height="18.9" Text="Data nasc.:" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text27" Left="628.15" Top="1.9" Width="85.05" Height="18.9" Text="[Table.DateOfBirth]" WordWrap="false" Font="Arial, 10pt"/>
       <TextObject Name="Text30" Left="47.25" Top="18.9" Width="302.4" Height="18.9" Text="[Table.MotherName]" WordWrap="false" Font="Arial, 10pt"/>
       <TextObject Name="Text31" Top="18.9" Width="47.25" Height="18.9" Text="Mãe:" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text32" Left="387.45" Top="18.9" Width="330.75" Height="18.9" Text="[Table.FatherName]" WordWrap="false" Font="Arial, 10pt"/>
@@ -68,12 +68,12 @@
         <TextObject Name="Text1" Left="255.15" Width="66.15" Height="18.9" Text="[Table.Quota]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
         <TextObject Name="Text6" Left="170.1" Width="75.6" Height="18.9" Text="[Table.Code]" WordWrap="false" Font="Arial, 10pt"/>
         <TextObject Name="Text8" Left="340.2" Width="94.5" Height="18.9" Text="[Table.DueDate]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
-        <TextObject Name="Text10" Left="569.55" Width="122.85" Height="18.9" Text="R[FormatCurrency([Table.OriginalValue],2)]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
+        <TextObject Name="Text10" Left="569.55" Width="122.85" Height="18.9" Text="[FormatCurrency([Table.OriginalValue],2)]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
         <TextObject Name="Text25" Left="444.15" Width="103.95" Height="18.9" Text="[Table.DaysDelay]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
       </DataBand>
       <GroupFooterBand Name="GroupFooter1" Top="226" Width="718.2" Height="28.35">
         <TextObject Name="Text22" Left="170.1" Top="1.9" Width="274.05" Height="18.9" Text="Total do cliente:" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
-        <TextObject Name="Text23" Left="531.75" Top="1.9" Width="160.65" Height="18.9" Text="R[FormatCurrency([Total],2)]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
+        <TextObject Name="Text23" Left="531.75" Top="1.9" Width="160.65" Height="18.9" Text="[FormatCurrency([Total],2)]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
       </GroupFooterBand>
     </GroupHeaderBand>
     <PageFooterBand Name="PageFooter1" Top="258.35" Width="718.2" Height="18.9"/>

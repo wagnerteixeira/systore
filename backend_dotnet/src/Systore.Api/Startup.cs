@@ -47,6 +47,21 @@ namespace Systore.Api
             _env = env;
             _appSettingsSection = Configuration.GetSection("AppSettings");
             _appSettings = _appSettingsSection.Get<AppSettings>();
+
+
+            string conSystore = Configuration.GetConnectionString("SystoreContext");
+            Console.WriteLine(conSystore);
+            string conAudit = Configuration.GetConnectionString("AuditContext");
+            Console.WriteLine(conAudit);
+
+            var section = Configuration.GetSection("ConnectionStrings");
+            var a = section.GetValue<string>("SystoreContext");
+            Console.WriteLine(a);
+            var b = Configuration["ConnectionStrings:Redis"];
+            Console.WriteLine(b);
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

@@ -22,6 +22,7 @@ namespace Systore.Data.Repositories
         protected readonly DbSet<TEntity> _entities;
         protected readonly IHeaderAuditRepository _headerAuditRepository;
         private bool _inTransaction;
+        public bool IsConversion { get; set; }
 
         public BaseRepository(IDbContext context, IHeaderAuditRepository headerAuditRepository)
         {
@@ -29,6 +30,7 @@ namespace Systore.Data.Repositories
             _entities = _context.Instance.Set<TEntity>();
             _headerAuditRepository = headerAuditRepository;
             _inTransaction = false;
+            IsConversion = false;
         }
 
         public bool BeginTransaction()
@@ -295,9 +297,16 @@ namespace Systore.Data.Repositories
             {
                 if (_headerAuditRepository != null)
                 {
-                    var listAuditEntry = OnBeforeSaveChanges();
-                    await _context.Instance.SaveChangesAsync();
-                    OnAfterSaveChanges(listAuditEntry);
+                    if (IsConversion)
+                    {
+                        await _context.Instance.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        var listAuditEntry = OnBeforeSaveChanges();
+                        await _context.Instance.SaveChangesAsync();
+                        OnAfterSaveChanges(listAuditEntry);
+                    }
                 }
                 else
                     await _context.Instance.SaveChangesAsync();
