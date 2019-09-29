@@ -30,27 +30,7 @@ namespace Systore.Api.Controllers
         {            
             try
             {
-                Sale sale = await (_service as ISaleService).GetSaleFullById(id);
-                SaleDto saleDto = new SaleDto() {
-                    ClientId = sale.ClientId,
-                    FinalValue = sale.FinalValue,
-                    Id = sale.Id,
-                    ItemSale = null,
-                    SaleDate = sale.SaleDate,
-                    Vendor = sale.Vendor
-                };
-
-                saleDto.ItemSale = sale.ItemSale.Select(c => new ItemSaleDto() {
-                    Action = ActionItem.NoChanges,
-                    Id = c.Id,
-                    Price = c.Price,
-                    ProductId = c.ProductId,
-                    Quantity = c.Quantity,
-                    SaleId = c.SaleId,
-                    TotalPrice = c.TotalPrice
-                }).ToList();                
-
-                return Ok(saleDto);                
+                return Ok(await (_service as ISaleService).GetSaleFullById(id));
             }
             catch (Exception e)
             {

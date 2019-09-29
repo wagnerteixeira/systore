@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Systore.Domain.Dtos;
 using Systore.Domain.Entities;
 
 namespace Systore.Data.Abstractions
 {
     public interface ISaleRepository : IBaseRepository<Sale>
     {
-        Task<Sale> GetSaleFullByIdAsync(int id);
+        Task<SaleDto> GetSaleFullByIdAsync(int id);
     }
 }

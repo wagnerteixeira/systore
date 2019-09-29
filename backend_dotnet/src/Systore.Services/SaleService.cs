@@ -17,7 +17,7 @@ namespace Systore.Services
             _itemSaleRepository = itemSaleRepository;
         }
 
-        public Task<Sale> GetSaleFullById(int id) => (_repository as ISaleRepository).GetSaleFullByIdAsync(id);
+        public Task<SaleDto> GetSaleFullById(int id) => (_repository as ISaleRepository).GetSaleFullByIdAsync(id);
 
         public async Task<string> UpdateAsync(SaleDto entity)
         {

@@ -5,6 +5,7 @@ using Systore.Infra.Context;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Systore.Domain.Dtos;
 
 namespace Systore.Data.Repositories
 {
@@ -12,13 +13,34 @@ namespace Systore.Data.Repositories
     {
         public SaleRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
+
         }
 
-        public Task<Sale> GetSaleFullByIdAsync(int id) =>
+        public Task<SaleDto> GetSaleFullByIdAsync(int id) =>
              _entities
                .Where(c => c.Id == id)
                .Include(c => c.ItemSale)
-               .FirstOrDefaultAsync();        
+               .ThenInclude(iten => iten.Product)
+               .Select(c => new SaleDto()
+               {
+                   ClientId = c.ClientId,
+                   FinalValue = c.FinalValue,
+                   Id = c.Id,
+                   SaleDate = c.SaleDate,
+                   Vendor = c.Vendor,
+                   ItemSale = c.ItemSale.Select(i => new ItemSaleDto()
+                   {
+                       Action = Domain.Enums.ActionItem.NoChanges,
+                       Id = i.Id,
+                       Price = i.Price,
+                       ProductDescription = i.Product.Description,
+                       ProductId = i.ProductId,
+                       Quantity = i.Quantity,
+                       SaleId = i.SaleId,
+                       TotalPrice = i.TotalPrice
+                   }).ToList()
+               })
+               .FirstOrDefaultAsync();
 
     }
 }
