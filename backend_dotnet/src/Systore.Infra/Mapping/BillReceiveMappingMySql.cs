@@ -6,7 +6,8 @@ namespace Systore.Infra.Mapping
 {
     public class BillReceiveMappingMySql : IEntityTypeConfiguration<BillReceive>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<BillReceive> builder)
+
+         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<BillReceive> builder)
         {
             builder.HasKey(c => c.Id);
 
@@ -32,29 +33,25 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.PurchaseDate)
                 .HasColumnType("DATE")
                 .HasConversion(
-                    c => TimeZoneInfo.ConvertTimeFromUtc(c, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) ,
-                    c => TimeZoneInfo.ConvertTimeToUtc(c, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) 
-                    );
+                    c => TimeZoneHelper.ConvertTimeFromUtc(c),
+                    c => TimeZoneHelper.ConvertTimeToUtc(c)
+                );
 
 
             builder.Property(p => p.DueDate)
                 .HasColumnType("DATE")
                 .HasConversion(
-                    c => TimeZoneInfo.ConvertTimeFromUtc(c, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) ,
-                    c => TimeZoneInfo.ConvertTimeToUtc(c, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) 
-                    );
+                    c => TimeZoneHelper.ConvertTimeFromUtc(c),
+                    c => TimeZoneHelper.ConvertTimeToUtc(c)
+                );
 
 
             builder.Property(p => p.PayDate)
                 .HasColumnType("DATE")
                 .HasConversion(
-                    c => c.HasValue ?
-                        TimeZoneInfo.ConvertTimeFromUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
-                        c,
-                    c => c.HasValue ?
-                        TimeZoneInfo.ConvertTimeToUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
-                        c
-                    );
+                    c => TimeZoneHelper.ConvertTimeFromUtc(c),
+                    c => TimeZoneHelper.ConvertTimeToUtc(c)
+                );
 
 
             builder.Property(p => p.DaysDelay);

@@ -9,16 +9,17 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Systore.Infra.Context;
+using Systore.Infra;
 
 namespace Systore.Data.Repositories
 {
     public class BillReceiveRepository : BaseRepository<BillReceive>, IBillReceiveRepository
     {
         private decimal _interestTax = 0.0023333333333333333333333333M; //(0.07M / 30.0M)
-       
+
         public BillReceiveRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
         {
-           
+
         }
 
         public Task<int> CountBillReceivesByClient(int clientId) =>
@@ -26,7 +27,7 @@ namespace Systore.Data.Repositories
 
         public async Task<List<BillReceive>> GetBillReceivesByClient(int ClientId)
         {
-            var queryOpen = this._entities
+           var queryOpen = this._entities
               .Where(c => c.ClientId == ClientId && c.Situation == BillReceiveSituation.Open)
               .OrderBy(c => c.PurchaseDate)
               .ThenBy(c => c.Quota);
