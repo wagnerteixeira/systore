@@ -180,7 +180,7 @@ class BillReceiveCreateModal extends React.Component {
   };
 
   handleSaveQuotas = clientId => onClose => () => {
-    this.setState({ InSaving: true });
+    this.setState({ inSaving: true });
     let _originalValue = this.state.originalValue;
     let message = this.validadeSaveQuotas(_originalValue);
     if (message !== '') {
@@ -497,7 +497,7 @@ class BillReceiveCreateModal extends React.Component {
             variant="outlined"
             color="primary"
             className={classes.button}
-            Iisabled={this.state.inSaving}
+            disabled={this.state.inSaving}
             onClick={this.handleSaveQuotas(clientId)(onClose)}
           >
             Salvar
