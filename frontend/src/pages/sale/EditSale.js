@@ -97,6 +97,7 @@ function EditSale(props) {
     handleOpenMessage,
     message,
     clientData,
+    handleChangeData,
   } = props;
 
   const [single, setSingle] = useState(null);
@@ -128,7 +129,6 @@ function EditSale(props) {
       copy[key].action = 3;
       setDataProducts(copy);
     }
-    console.log(dataProducts);
   }
 
   useEffect(() => {
@@ -138,6 +138,7 @@ function EditSale(props) {
         label: `Código: ${clientData.id} Nome: ${clientData.name} Cpf: ${
           clientData.cpf
         } Data Nasc.: ${getDateToString(clientData.dateOfBirth)}`,
+        clientData: clientData,
       });
     } else setSingle(null);
   }, [clientData]);
@@ -181,11 +182,10 @@ function EditSale(props) {
   }
 
   function onSaveProduct(product) {
-    if (productCurrent.id > 0) {
-      //
-    } else {
+    if (!(productCurrent.id > 0)) {
       let newProduct = {
         id: 0,
+        saleId: data.id,
         productId: product.id,
         productDescription: product.description,
         quantity: product.quantity,
@@ -265,9 +265,10 @@ function EditSale(props) {
   }
 
   function save() {
-    data.clientId = single.clientData.id;
+    data.clientId = single.value;
     data.finalValue = finalValue;
     data.itemSale = dataProducts;
+    handleChangeData(data);
     handleSave();
   }
 

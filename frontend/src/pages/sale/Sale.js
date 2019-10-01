@@ -64,10 +64,14 @@ function Sale(props) {
     );
   }
 
+  function handleChangeData(data) {
+    setData(data);
+  }
+
   function handleSave() {
     if (data.id > 0) {
       saleService
-        .update(data)
+        .updateDto(data)
         .then(res => {
           handleCancel('SAVE');
           fetchSales();
@@ -81,7 +85,7 @@ function Sale(props) {
         });
     } else {
       saleService
-        .create(data)
+        .createDto(data)
         .then(res => {
           handleCancel('SAVE');
           fetchSales();
@@ -252,6 +256,7 @@ function Sale(props) {
           handleCancel={handleCancel}
           handleSave={handleSave}
           handleOpenMessage={handleOpenMessage}
+          handleChangeData={handleChangeData}
           message={message}
         />
       )}
