@@ -19,14 +19,33 @@ namespace Systore.Data.Repositories
         
         }
 
+        private string Validate(Product entity, bool edit)
+        {
+            if (IsConversion)
+                return "";
+            string validations = "";
+            if (string.IsNullOrWhiteSpace(entity.Description))
+                validations += $"Informe a descrição do produto|";
+            if (entity.Price == 0.0M)
+                validations += $"Informe o Preço do produto|";
+            return validations;
+
+        }
+
         public override Task<string> AddAsync(Product entity)
         {
+            string ret = Validate(entity, false);
+            if (!string.IsNullOrWhiteSpace(ret))
+                return Task.FromResult(ret); ;
             entity.ExportToBalance = true;
             return base.AddAsync(entity);
         }
 
         public override Task<string> UpdateAsync(Product entity)
         {
+            string ret = Validate(entity, true);
+            if (!string.IsNullOrWhiteSpace(ret))
+                return Task.FromResult(ret);
             entity.ExportToBalance = true;
             return base.UpdateAsync(entity);
         }

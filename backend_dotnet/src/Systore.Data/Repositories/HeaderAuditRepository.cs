@@ -71,7 +71,7 @@ namespace Systore.Data.Repositories
                                 FieldName = i.FieldName,
                                 Id = c.Id,
                                 NewValue = i.NewValue,
-                                OldValue = i.OldValue,
+                                PrimaryKey = i.PrimaryKey,
                                 Operation = GetOperationString(c.Operation),
                                 TableName = c.TableName,
                                 UserName = c.UserName

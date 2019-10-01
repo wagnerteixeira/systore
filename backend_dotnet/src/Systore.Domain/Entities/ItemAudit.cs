@@ -10,9 +10,8 @@ namespace Systore.Domain.Entities
         public int Id { get; set; }
         public int HeaderAuditId { get; set; }
         public string FieldName { get; set; }
-        public string OldValue { get; set; }
         public string NewValue { get; set; }
-
+        public string PrimaryKey { get; set; }
         public HeaderAudit HeaderAudit { get; set; }
     }
 }
