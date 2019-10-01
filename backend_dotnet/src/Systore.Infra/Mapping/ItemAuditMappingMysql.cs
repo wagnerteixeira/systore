@@ -22,7 +22,8 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.FieldName)
                 .HasMaxLength(50);
 
-            builder.Property(p => p.OldValue);
+            builder.Property(p => p.PrimaryKey)
+                .HasMaxLength(50);
 
             builder.Property(p => p.NewValue);
 

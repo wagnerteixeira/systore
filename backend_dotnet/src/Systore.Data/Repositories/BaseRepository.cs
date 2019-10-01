@@ -41,11 +41,11 @@ namespace Systore.Data.Repositories
             {
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return false;
             }
-            
+
         }
         public bool Commit()
         {
@@ -216,9 +216,10 @@ namespace Systore.Data.Repositories
                     {
                         auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                         {
-                            FieldName = propertyName,                            
-                            NewValue = (property.CurrentValue ?? "").ToString(),
+                            FieldName = propertyName,
+                            NewValue = property.CurrentValue.ToString(),
                         });
+                        auditEntry.PrimaryKeys.Add(property.CurrentValue.ToString());
                         continue;
                     }
 
@@ -241,11 +242,11 @@ namespace Systore.Data.Repositories
                             break;
 
                         case EntityState.Modified:
-                            if (property.IsModified)
+                            if ((property.IsModified) && !string.IsNullOrWhiteSpace((property.CurrentValue ?? "").ToString()))
                             {
                                 auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                                 {
-                                    FieldName = propertyName,                                    
+                                    FieldName = propertyName,
                                     NewValue = (property.CurrentValue ?? "").ToString(),
                                 });
                             }
@@ -269,22 +270,30 @@ namespace Systore.Data.Repositories
                         auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
                         {
                             FieldName = prop.Metadata.Name,
-                            OldValue = prop.CurrentValue.ToString(),
+
                             NewValue = prop.CurrentValue.ToString()
                         });
+                        auditEntry.PrimaryKeys.Add(prop.CurrentValue.ToString());
                     }
                     else
                     {
-                        auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
+                        if (!string.IsNullOrWhiteSpace((prop.CurrentValue ?? "").ToString()))
                         {
-                            FieldName = prop.Metadata.Name,
-
-                            NewValue = prop.CurrentValue.ToString()
-                        });
+                            auditEntry.HeaderAudit.ItemAudits.Add(new ItemAudit
+                            {
+                                FieldName = prop.Metadata.Name,
+                                NewValue = prop.CurrentValue.ToString()
+                            });
+                        }
                     }
 
                 }
-
+                string pk = string.Join('|', auditEntry.PrimaryKeys);
+                auditEntry.HeaderAudit.ItemAudits = auditEntry.HeaderAudit.ItemAudits.Select(c => 
+                {
+                    c.PrimaryKey = pk;
+                    return c;
+                }).ToList();
                 _headerAuditRepository.AddAsync(auditEntry.HeaderAudit);
             }
             return Task.CompletedTask;
@@ -348,10 +357,15 @@ namespace Systore.Data.Repositories
 
     public class AuditEntry
     {
+        public AuditEntry()
+        {
+            PrimaryKeys = new List<string>();
+        }
         public HeaderAudit HeaderAudit { get; set; } = new HeaderAudit();
         public List<PropertyEntry> TemporaryProperties { get; set; } = new List<PropertyEntry>();
 
         public bool HasTemporaryProperties => TemporaryProperties.Any();
+        public List<string> PrimaryKeys { get; set; }
 
     }
 }
