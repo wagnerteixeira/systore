@@ -34,9 +34,13 @@ namespace Systore.Services
         {
             decimal sumOriginalValue = 0;
             string errors = "";
+            if (createBillReceivesDto.PurchaseDate < new DateTime(1900, 01, 01))
+                errors = $"A data da venda não pode ser inferior a 01/01/1900";
+            
             foreach (var billReceive in createBillReceivesDto.BillReceives)
             {
                 sumOriginalValue += billReceive.OriginalValue;
+                
                 if (billReceive.DueDate < createBillReceivesDto.PurchaseDate)
                 {
                     if (errors != "")
