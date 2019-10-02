@@ -43,10 +43,10 @@ namespace Systore.Data.Repositories
 
             return _billReceives.Select(c =>
             {
-                var days = DateTime.Today - c.DueDate;
-                if ((c.Situation == BillReceiveSituation.Open) && (days.Days > 5))
+                var days = (DateTime.UtcNow.Date - c.DueDate.Date).Days - 1;
+                if ((c.Situation == BillReceiveSituation.Open) && (days > 5))
                 {
-                    c.DaysDelay = days.Days;
+                    c.DaysDelay = days;
                     var interestPerDay = _interestTax * c.DaysDelay;
                     c.Interest = Decimal.Round(c.OriginalValue * interestPerDay, 2);
                     c.FinalValue = c.OriginalValue + c.Interest;
