@@ -29,6 +29,8 @@ import {
 } from '../../utils/operators';
 import SaleProductModal from './SaleProductModal';
 
+import { ActionItem } from '../../utils/constants';
+
 const styles = theme => ({
   container: {
     marginTop: theme.spacing(3),
@@ -122,8 +124,10 @@ function EditSale(props) {
   }, [props.data.itemSale]);
 
   function handleDeleteProduct(key) {
-    if (dataProducts[key].action === 1)
-      setDataProducts(dataProducts.slice(key));
+    if (dataProducts[key].action === ActionItem.Insert){
+      let _dataProducts = [].concat(dataProducts.filter((_item, index) => index !== key));
+      setDataProducts(_dataProducts);
+    }
     else {
       let copy = [...dataProducts];
       copy[key].action = 3;
