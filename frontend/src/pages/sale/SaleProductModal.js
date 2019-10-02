@@ -25,7 +25,7 @@ const styles = theme => ({
     width: theme.spacing(80),
     overflowY: 'auto',
     overflowX: 'hidden',
-    maxHeight: '80%',
+    maxHeight: '80%'
   },
   margin: {
     margin: theme.spacing(1),
@@ -92,7 +92,7 @@ function SaleProductModal(props) {
 
     let filterType = '';
     if (columnSearch === 'id') filterType = 'Eq';
-    else filterType = 'StW';
+    else filterType = 'Con';
 
     const _limit = inputValue.trim().split(' ').length < 3 ? 10 : 1000;
 
@@ -235,7 +235,7 @@ function SaleProductModal(props) {
             id="price"
             label="Preço"
             className={classes.margin}
-            value={productData.price === 0 ? '' : productData.price}
+            value={!productData ? '' : productData.price === 0 ? '' : productData.price}
             margin="normal"
             disabled
             fullWidth
