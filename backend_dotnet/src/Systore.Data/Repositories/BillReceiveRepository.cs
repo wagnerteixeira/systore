@@ -48,7 +48,7 @@ namespace Systore.Data.Repositories
                 {
                     c.DaysDelay = days;
                     var interestPerDay = _interestTax * c.DaysDelay;
-                    c.Interest = Decimal.Round(c.OriginalValue * interestPerDay, 2);
+                    c.Interest = decimal.Round(c.OriginalValue * interestPerDay, 2);
                     c.FinalValue = c.OriginalValue + c.Interest;
                 }
                 else

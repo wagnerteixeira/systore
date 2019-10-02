@@ -406,17 +406,7 @@ function BillReceiveTable(props) {
                 {getNumberToString(
                   billsReceiveComplete
                     .filter(b => b.situation === 0)
-                    .reduce((prev, curr) => {
-                      return (
-                        parseFloat(
-                          getValueWithInterest(
-                            curr.originalValue,
-                            curr.dueDate,
-                            dateCurrent
-                          )
-                        ) + prev
-                      );
-                    }, 0.0)
+                    .reduce((prev, curr) => curr.finalValue + prev, 0.0)
                 )}
               </span>
             </Typography>
