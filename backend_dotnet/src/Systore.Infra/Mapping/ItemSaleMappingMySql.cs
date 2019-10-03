@@ -27,7 +27,7 @@ namespace Systore.Infra.Mapping
               .HasOne<Sale>(s => s.Sale)
               .WithMany(g => g.ItemSale)
               .HasForeignKey(s => s.SaleId)
-              .OnDelete(DeleteBehavior.Restrict);
+              .OnDelete(DeleteBehavior.Cascade);
 
             builder
               .HasOne<Product>(s => s.Product)

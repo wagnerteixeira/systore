@@ -14,9 +14,11 @@ namespace Systore.Data.Repositories
 {
     public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
-        public ProductRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository) : base(context, headerAuditRepository)
+        private readonly IItemSaleRepository _itemSaleRepository;
+        public ProductRepository(ISystoreContext context, IHeaderAuditRepository headerAuditRepository, IItemSaleRepository itemSaleRepository) : base(context, headerAuditRepository)
         {
-        
+
+            _itemSaleRepository = itemSaleRepository;
         }
 
         private string Validate(Product entity, bool edit)
@@ -32,6 +34,16 @@ namespace Systore.Data.Repositories
 
         }
 
+        private async Task<string> ValidateDelete(int id)
+        {
+            string validations = "";
+
+            if (await _itemSaleRepository.ExistsByProduct(id))
+                validations += "Não é possível excluir um produto que possua venda|"; 
+            return validations;
+
+        }
+
         public override Task<string> AddAsync(Product entity)
         {
             string ret = Validate(entity, false);
@@ -39,6 +51,14 @@ namespace Systore.Data.Repositories
                 return Task.FromResult(ret); ;
             entity.ExportToBalance = true;
             return base.AddAsync(entity);
+        }
+
+        public override async Task<string> RemoveAsync(int id)
+        {
+            string ret = await ValidateDelete(id);
+            if (!string.IsNullOrWhiteSpace(ret))
+                return ret;
+            return await base.RemoveAsync(id);
         }
 
         public override Task<string> UpdateAsync(Product entity)
