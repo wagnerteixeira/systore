@@ -29,7 +29,7 @@ import {
 } from '../../utils/operators';
 import SaleProductModal from './SaleProductModal';
 
-import { ActionItem } from '../../utils/constants';
+import { ActionItem } from '../../utils/enums';
 
 const styles = theme => ({
   container: {
@@ -169,7 +169,7 @@ function EditSale(props) {
     let copy = [...dataProducts];
     copy[key].quantity = event.target.value;
     copy[key].totalPrice = parseFloat(copy[key].quantity * copy[key].price);
-    copy[key].action = 2;
+    copy[key].action = ActionItem.Alter;
     setDataProducts(copy);
   };
 
@@ -177,7 +177,7 @@ function EditSale(props) {
     let total = 0.0;
     if (dataProducts)
       dataProducts.forEach(produto => {
-        if (produto.action !== 3) total += produto.totalPrice;
+        if (produto.action !== ActionItem.Delete) total += produto.totalPrice;
       });
     setFinalValue(total);
   }
@@ -197,7 +197,7 @@ function EditSale(props) {
         quantity: product.quantity,
         price: product.price,
         totalPrice: parseFloat(product.quantity) * parseFloat(product.price),
-        action: 1,
+        action: ActionItem.Insert,
       };
       setDataProducts([...dataProducts, newProduct]);
     }
@@ -270,7 +270,22 @@ function EditSale(props) {
       textPlaceHolder = 'nome';
   }
 
+  function validateSale() {
+    if (!single || !single.value) {
+      handleOpenMessage(true, 'warning', 'Cliente não informado');
+      return false;
+    }
+
+    if (!data.vendor || data.vendor.length === 0) {
+      handleOpenMessage(true, 'warning', 'Vendedor não informado');
+      return false;
+    }
+
+    return true;
+  }
+
   function save() {
+    if (!validateSale()) return;
     data.clientId = single.value;
     data.finalValue = finalValue;
     data.itemSale = dataProducts;
