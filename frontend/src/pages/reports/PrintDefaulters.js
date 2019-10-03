@@ -53,6 +53,25 @@ function PrintDefaulters(props) {
   });
 
   async function handlePrint() {
+    let currentDate = getCurrentDate();
+    if (initialDate > currentDate) {
+      setMessage({
+        messageOpen: true,
+        variantMessage: 'warning',
+        messageText: 'Data inicial maior que a data atual.',
+      });
+      return;
+    }
+
+    if (finalDate > currentDate) {
+      setMessage({
+        messageOpen: true,
+        variantMessage: 'warning',
+        messageText: 'Data final maior que a data atual.',
+      });
+      return;
+    }
+
     console.log(
       `${
         process.env.REACT_APP_API_PATH
