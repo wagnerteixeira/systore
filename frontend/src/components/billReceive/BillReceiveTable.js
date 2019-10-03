@@ -17,10 +17,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import {
   getDateToString,
-  getCurrentDate,
   getNumberDecimalToStringCurrency,
   getNumberToString,
-  getValueWithInterest,
 } from '../../utils/operators';
 
 import BillReceiveCreateModal from './BillReceiveCreateModal';
@@ -202,7 +200,6 @@ function BillReceiveTable(props) {
     handleOpenMessage,
     handleSaveClient,
   } = props;
-  const dateCurrent = getCurrentDate();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);

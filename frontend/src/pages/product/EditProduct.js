@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import NumberFormatCustom from '../../components/common/NumberFormatCustom';
+import { SaleType } from '../../utils/enums';
+import SelectGeneric from '../../components/common/SelectGeneric';
 
 const styles = theme => ({
   container: {
@@ -48,6 +50,11 @@ const styles = theme => ({
 });
 
 function EditProduct(props) {
+  const menuSaleType = [
+    { value: SaleType.Weight, description: 'Peso' },
+    { value: SaleType.Unit, description: 'Unidade' },
+  ];
+
   const {
     classes,
     data,
@@ -99,10 +106,10 @@ function EditProduct(props) {
               className={classes.item}
               item
               xs={12}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
+              sm={2}
+              md={2}
+              lg={2}
+              xl={2}
             >
               <TextField
                 className={classes.textField}
@@ -120,10 +127,10 @@ function EditProduct(props) {
               className={classes.item}
               item
               xs={12}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
+              sm={2}
+              md={2}
+              lg={2}
+              xl={2}
             >
               <TextField
                 id="expirationDays"
@@ -132,6 +139,23 @@ function EditProduct(props) {
                 value={data.expirationDays}
                 onChange={handleValueChangeInteger('expirationDays')}
                 fullWidth
+              />
+            </Grid>
+            <Grid
+              className={classes.item}
+              item
+              xs={12}
+              sm={2}
+              md={2}
+              lg={2}
+              xl={2}
+            >
+              <SelectGeneric
+                description="Tipo de venda"
+                showEmpty={false}
+                value={data.saleType}
+                onChange={handleValueChange('saleType')}
+                itens={menuSaleType}
               />
             </Grid>
             <Grid
