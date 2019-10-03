@@ -10,7 +10,7 @@ namespace Systore.Infra.Mapping
         {
             builder.HasKey(c => c.Id);
 
-            builder.ToTable("Client");
+            builder.ToTable("client");
 
             builder.Property(p => p.Id)
                       .ValueGeneratedOnAdd();
@@ -63,7 +63,7 @@ namespace Systore.Infra.Mapping
                 .HasMaxLength(30);
 
             builder.Property(p => p.JobName)
-                .HasMaxLength(50);
+                .HasMaxLength(60);
 
             builder.Property(p => p.Occupation)
                 .HasMaxLength(50);

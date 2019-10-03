@@ -8,7 +8,7 @@ namespace Systore.Infra.Mapping
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<User> builder)
         {
             builder.HasKey(c => c.Id);
-            builder.ToTable("User");
+            builder.ToTable("user");
             builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd();
 

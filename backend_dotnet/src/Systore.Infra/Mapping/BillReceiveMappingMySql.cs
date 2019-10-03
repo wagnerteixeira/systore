@@ -11,7 +11,7 @@ namespace Systore.Infra.Mapping
         {
             builder.HasKey(c => c.Id);
 
-            builder.ToTable("BillReceive");
+            builder.ToTable("billreceive");
 
             builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd();

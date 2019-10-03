@@ -12,7 +12,7 @@ namespace Systore.Infra.Mapping
         {
             builder.HasKey(c => c.Id);
 
-            builder.ToTable("HeaderAudit");
+            builder.ToTable("headeraudit");
 
             builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd();

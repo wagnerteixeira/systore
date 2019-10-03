@@ -12,7 +12,7 @@ namespace Systore.Infra.Mapping
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<ItemAudit> builder)
         {
             builder.HasKey(c => c.Id);
-            builder.ToTable("ItemAudit");
+            builder.ToTable("itemaudit");
 
             builder.Property(p => p.Id)
                 .ValueGeneratedOnAdd();
