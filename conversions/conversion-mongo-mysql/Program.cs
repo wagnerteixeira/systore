@@ -94,6 +94,7 @@ namespace conversion_mongo_mysql
                 Console.WriteLine($"Inserindo cliente {client.Name}-{client.Cpf}");
                 var clientRepository = new ClientRepository(context, null);
                 clientRepository.IsConversion = true;
+                client.Cpf = Utils.OnlyNumbers(client.Cpf);
                 string ret = await clientRepository.AddAsync(client);
                 if (string.IsNullOrWhiteSpace(ret))
                 {

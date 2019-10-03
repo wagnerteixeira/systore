@@ -286,6 +286,11 @@ class Client extends Component {
     this.setState({ data: { ...this.state.data, [name]: date } });
   };
 
+  handleValueChangeOnlyNumber = name => event => {
+    let _value = event.target.value.replace(/[^0-9]/g, '');
+    this.setState({ data: { ...this.state.data, [name]: _value } });
+  };
+
   handleCancel = previusOperation => {
     let nextState = { stateData: 'LIST' };
     if (previusOperation === 'SAVE') {
@@ -531,6 +536,7 @@ class Client extends Component {
             handleCancel={this.handleCancel}
             handleSave={this.handleSave}
             handleDateValueChange={this.handleDateValueChange}
+            handleValueChangeOnlyNumber={this.handleValueChangeOnlyNumber}
             handleOpenMessage={this.handleOpenMessage}
             handlePostalCodeChange={this.handlePostalCodeChange}
             handleCheckCpf={this.checkCpf}

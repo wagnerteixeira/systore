@@ -134,26 +134,24 @@ class EditClient extends Component {
     super(props);
     this.state = {
       tabValue: 'EDIT',
-      openModalAddress: false, 
-      postalCodes: [], 
+      openModalAddress: false,
+      postalCodes: [],
     };
-  }  
+  }
 
   handleTabChange = (event, value) => {
     this.setState({ tabValue: value });
   };
 
-  handleOpeModalAddress = (value) => {
-    this.setState({openModalAddress: value});
-  } 
+  handleOpeModalAddress = value => {
+    this.setState({ openModalAddress: value });
+  };
 
-
-   onCloseModalAddress = (event, reason) => {     
-    this.setState({openModalAddress: false});
+  onCloseModalAddress = (event, reason) => {
+    this.setState({ openModalAddress: false });
     if (reason === 'created') {
-      
     }
-  }
+  };
 
   handleSearchPostalCode = () => {
     const { handleOpenMessage } = this.props;
@@ -182,8 +180,12 @@ class EditClient extends Component {
       .get(`https://viacep.com.br/ws/${state}/${city}/${address}/json/`)
       .then(res => {
         if (res.data.erro) return;
-        let _postalCodes = res.data.map(item => ({ neighborhood: item.bairro, postalCode: item.cep,  address: item.logradouro }));               
-        this.setState({openModalAddress : true, postalCodes : _postalCodes});
+        let _postalCodes = res.data.map(item => ({
+          neighborhood: item.bairro,
+          postalCode: item.cep,
+          address: item.logradouro,
+        }));
+        this.setState({ openModalAddress: true, postalCodes: _postalCodes });
       });
   };
 
@@ -195,6 +197,7 @@ class EditClient extends Component {
       handleSave,
       handleCancel,
       handleDateValueChange,
+      handleValueChangeOnlyNumber,
       handlePostalCodeChange,
       handleCheckCpf,
       handleCheckDateBirth,
@@ -216,13 +219,13 @@ class EditClient extends Component {
         {tabValue === 'EDIT' && (
           <form className={classes.container} noValidate autoComplete="off">
             <div className={classes.back}>
-              <ChoosePostalCode 
-                open={this.state.openModalAddress} 
-                handleClose={this.onCloseModalAddress} 
+              <ChoosePostalCode
+                open={this.state.openModalAddress}
+                handleClose={this.onCloseModalAddress}
                 paperClass={classes.paperModalAddress}
-                rows={this.state.postalCodes}                
+                rows={this.state.postalCodes}
                 handlePostalCodeChange={handlePostalCodeChange}
-                />
+              />
               <Grid className={classes.itens} container spacing={3}>
                 <Grid
                   className={classes.item}
@@ -238,7 +241,7 @@ class EditClient extends Component {
                     label="Cpf"
                     className={classes.textField}
                     value={clientData.cpf}
-                    onChange={handleValueChange('cpf')}
+                    onChange={handleValueChangeOnlyNumber('cpf')}
                     onBlur={handleCheckCpf}
                     margin="normal"
                     fullWidth
@@ -500,7 +503,9 @@ class EditClient extends Component {
                     label="CEP"
                     className={classes.textField}
                     value={clientData.postalCode}
-                    onChange={(event)=> handlePostalCodeChange(event, 'textFieldCep')}
+                    onChange={event =>
+                      handlePostalCodeChange(event, 'textFieldCep')
+                    }
                     margin="normal"
                     fullWidth
                   />

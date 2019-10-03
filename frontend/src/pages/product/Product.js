@@ -9,6 +9,7 @@ import MessageSnackbar from '../../components/common/MessageSnackbar';
 import EditProduct from './EditProduct';
 import ViewProduct from './ViewProduct';
 import Confirm from '../../components/common/ConfirmAlert';
+import { SaleType } from '../../utils/enums';
 
 const styles = theme => ({
   root: {
@@ -106,7 +107,7 @@ function Product(props) {
     setStateData('EDIT_INSERT');
     setData({
       id: 0,
-      saleType: 0,
+      saleType: SaleType.Weight,
       price: 0.0,
       expirationDays: 0,
       description: '',

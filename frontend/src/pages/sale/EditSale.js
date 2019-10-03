@@ -149,10 +149,10 @@ function EditSale(props) {
     } else setSingle(null);
   }, [clientData]);
 
-  function handleEditProduct(key) {
+  /*function handleEditProduct(key) {
     setProductCurrent(dataProducts[key]);
     setOpenProductModal(true);
-  }
+  }*/
 
   function addProduct() {
     setProductCurrent({
