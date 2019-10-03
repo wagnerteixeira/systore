@@ -29,7 +29,7 @@ import {
 } from '../../utils/operators';
 import SaleProductModal from './SaleProductModal';
 
-import { ActionItem } from '../../utils/constants';
+import { ActionItem } from '../../utils/enums';
 
 const styles = theme => ({
   container: {
@@ -123,16 +123,18 @@ function EditSale(props) {
     if (props.data && props.data.itemSale) setDataProducts(props.data.itemSale);
   }, [props.data.itemSale]);
 
-  function handleDeleteProduct(key) {
-    if (dataProducts[key].action === ActionItem.Insert){
-      let _dataProducts = [].concat(dataProducts.filter((_item, index) => index !== key));
-      setDataProducts(_dataProducts);
-    }
+  function handleDeleteProduct(index) {
+    let _dataProducts = [];
+    if (dataProducts[index].action === ActionItem.Insert)
+      _dataProducts = [].concat(
+        dataProducts.filter((_item, _index) => _index !== index)
+      );
     else {
-      let copy = [...dataProducts];
-      copy[key].action = 3;
-      setDataProducts(copy);
+      _dataProducts = [...dataProducts];
+      _dataProducts[index].action = ActionItem.Delete;
     }
+    console.log(_dataProducts);
+    setDataProducts(_dataProducts);
   }
 
   useEffect(() => {
@@ -167,7 +169,7 @@ function EditSale(props) {
     let copy = [...dataProducts];
     copy[key].quantity = event.target.value;
     copy[key].totalPrice = parseFloat(copy[key].quantity * copy[key].price);
-    copy[key].action = 2;
+    copy[key].action = ActionItem.Alter;
     setDataProducts(copy);
   };
 
@@ -175,7 +177,7 @@ function EditSale(props) {
     let total = 0.0;
     if (dataProducts)
       dataProducts.forEach(produto => {
-        if (produto.action !== 3) total += produto.totalPrice;
+        if (produto.action !== ActionItem.Delete) total += produto.totalPrice;
       });
     setFinalValue(total);
   }
@@ -195,7 +197,7 @@ function EditSale(props) {
         quantity: product.quantity,
         price: product.price,
         totalPrice: parseFloat(product.quantity) * parseFloat(product.price),
-        action: 1,
+        action: ActionItem.Insert,
       };
       setDataProducts([...dataProducts, newProduct]);
     }
@@ -268,7 +270,22 @@ function EditSale(props) {
       textPlaceHolder = 'nome';
   }
 
+  function validateSale() {
+    if (!single || !single.value) {
+      handleOpenMessage(true, 'warning', 'Cliente não informado');
+      return false;
+    }
+
+    if (!data.vendor || data.vendor.length === 0) {
+      handleOpenMessage(true, 'warning', 'Vendedor não informado');
+      return false;
+    }
+
+    return true;
+  }
+
   function save() {
+    if (!validateSale()) return;
     data.clientId = single.value;
     data.finalValue = finalValue;
     data.itemSale = dataProducts;
@@ -442,32 +459,31 @@ function EditSale(props) {
               </TableHead>
               <TableBody>
                 {dataProducts &&
-                  Object.keys(dataProducts).map(key => {
-                    if (dataProducts[key].action !== 3)
+                  dataProducts
+                    .filter(item => item.action !== ActionItem.Delete)
+                    .map((item, index) => {
                       return (
-                        <TableRow hover key={key}>
+                        <TableRow hover key={index}>
                           <TableCell padding="none" size="small">
-                            {dataProducts[key].productId}
+                            {item.productId}
                           </TableCell>
                           <TableCell padding="none" size="small">
-                            {dataProducts[key].productDescription}
+                            {item.productDescription}
                           </TableCell>
                           <TableCell padding="none" size="small">
-                            {dataProducts[key].price}
+                            {item.price}
                           </TableCell>
                           <TableCell padding="none" size="small">
                             <Input
                               id="quantity"
-                              value={dataProducts[key].quantity}
-                              onChange={handleValueQuantityChange(key)}
+                              value={item.quantity}
+                              onChange={handleValueQuantityChange(index)}
                               margin="normal"
                               fullWidth
                             />
                           </TableCell>
                           <TableCell padding="none" size="large">
-                            {getNumberDecimalToStringCurrency(
-                              dataProducts[key].totalPrice
-                            )}
+                            {getNumberDecimalToStringCurrency(item.totalPrice)}
                           </TableCell>
                           <TableCell padding="none" align="right">
                             {/*                      
@@ -485,7 +501,7 @@ function EditSale(props) {
                               color="secondary"
                               aria-label="Delete"
                               className={classes.fab}
-                              onClick={() => handleDeleteProduct(key)}
+                              onClick={() => handleDeleteProduct(index)}
                               size="small"
                             >
                               <Icon fontSize="small">delete_icon</Icon>
@@ -493,7 +509,7 @@ function EditSale(props) {
                           </TableCell>
                         </TableRow>
                       );
-                  })}
+                    })}
               </TableBody>
             </Table>
           </Grid>
