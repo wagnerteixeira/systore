@@ -33,7 +33,10 @@ function Sale(props) {
     messageText: '',
   });
 
+  const [isSaving, setIsSaving] = useState(false);
+
   function handleCancel(previusOperation) {
+    setIsSaving(false);
     let nextMessage = message;
     if (previusOperation === 'SAVE') {
       nextMessage.messageOpen = true;
@@ -49,7 +52,7 @@ function Sale(props) {
     fetchSales();
   }
 
-  function handleDelete(rowData) {
+  function handleDelete(rowData) {    
     Confirm('Atenção', 'Confirma a exclusão?', () =>
       saleService
         .remove(rowData.id)
@@ -69,6 +72,7 @@ function Sale(props) {
   }
 
   function handleSave() {
+    setIsSaving(true);
     if (data.id > 0) {
       saleService
         .updateDto(data)
@@ -77,6 +81,7 @@ function Sale(props) {
           fetchSales();
         })
         .catch(error => {
+          setIsSaving(false);
           setMessage({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -91,6 +96,7 @@ function Sale(props) {
           fetchSales();
         })
         .catch(error => {
+          setIsSaving(false);
           setMessage({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -101,15 +107,18 @@ function Sale(props) {
   }
 
   async function handleEdit(rowData) {
+    setIsSaving(true);
+    setData({});
     setStateData('EDIT_INSERT');
     const clientDataResponse = await clientService.get(rowData.clientId);
     setClientData(clientDataResponse.data);
     saleService
       .getSaleFullById(rowData.id)
       .then(res => {
+        setIsSaving(false);
         setData(res.data);
       })
-      .catch(error => {
+      .catch(error => {        
         setMessage({
           messageOpen: true,
           messageText: getErrosFromApi(error),
@@ -258,6 +267,7 @@ function Sale(props) {
           handleOpenMessage={handleOpenMessage}
           handleChangeData={handleChangeData}
           message={message}
+          isSaving={isSaving}
         />
       )}
     </div>

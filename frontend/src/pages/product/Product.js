@@ -33,7 +33,10 @@ function Product(props) {
     messageText: '',
   });
 
+  const [isSaving, setIsSaving] = useState(false);
+
   function handleCancel(previusOperation) {
+    setIsSaving(false);
     let nextMessage = message;
     if (previusOperation === 'SAVE') {
       nextMessage.messageOpen = true;
@@ -50,11 +53,13 @@ function Product(props) {
   }
 
   function handleDelete(rowData) {
+    setIsSaving(true);
     Confirm('Atenção', 'Confirma a exclusão?', () =>
       productService
         .remove(rowData.id)
         .then(() => handleCancel('DELETE'))
         .catch(error => {
+          setIsSaving(false);
           setMessage({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -65,15 +70,17 @@ function Product(props) {
   }
 
   function handleSave() {
+    setIsSaving(true);
     if (data.id > 0) {
       productService
         .update(data)
         .then(res => {
-          handleCancel('SAVE');
           setData(res.data);
-          fetchProducts();
+          handleCancel('SAVE');          
+          //fetchProducts();
         })
         .catch(error => {
+          setIsSaving(false);
           setMessage({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -84,11 +91,12 @@ function Product(props) {
       productService
         .create(data)
         .then(res => {
-          handleCancel('SAVE');
           setData(res.data);
-          fetchProducts();
+          handleCancel('SAVE');          
+          //fetchProducts();
         })
         .catch(error => {
+          setIsSaving(false);
           setMessage({
             messageOpen: true,
             messageText: getErrosFromApi(error),
@@ -261,6 +269,7 @@ function Product(props) {
           handleSave={handleSave}
           handleOpenMessage={handleOpenMessage}
           handleValueChangeText={handleValueChangeText}
+          isSaving={isSaving}
         />
       )}
     </div>

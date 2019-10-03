@@ -25,7 +25,7 @@ const styles = theme => ({
     width: theme.spacing(80),
     overflowY: 'auto',
     overflowX: 'hidden',
-    height: '60%',
+    height: '70%',
   },
   margin: {
     margin: theme.spacing(1),

@@ -100,6 +100,7 @@ function EditSale(props) {
     message,
     clientData,
     handleChangeData,
+    isSaving,
   } = props;
 
   const [single, setSingle] = useState(null);
@@ -531,6 +532,7 @@ function EditSale(props) {
               color="primary"
               className={classes.button}
               onClick={save}
+              disabled={isSaving}
             >
               Salvar
             </Button>

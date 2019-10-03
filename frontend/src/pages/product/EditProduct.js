@@ -67,8 +67,9 @@ function EditProduct(props) {
     handleCancel,
     handleSave,
     handleValueDecimalChange,
+    isSaving,
   } = props;
-
+ 
   let _price = 0.0;
   if (typeof data.price == 'string') {
     if (data.price > 0)
@@ -77,6 +78,7 @@ function EditProduct(props) {
       );
   } else _price = accounting.formatNumber(data.price);
 
+  console.log(isSaving);    
   return (
     <>
       <form className={classes.container} noValidate autoComplete="off">
@@ -247,6 +249,7 @@ function EditProduct(props) {
               color="primary"
               className={classes.button}
               onClick={handleSave}
+              disabled={isSaving}
             >
               Salvar
             </Button>
