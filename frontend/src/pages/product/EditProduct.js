@@ -10,6 +10,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import NumberFormatCustom from '../../components/common/NumberFormatCustom';
 
+import accounting from 'accounting';
+
 const styles = theme => ({
   container: {
     marginTop: theme.spacing(3),
@@ -60,6 +62,14 @@ function EditProduct(props) {
     handleValueDecimalChange,
   } = props;
 
+  let _price = 0.0;
+  if (typeof data.price == 'string') {
+    if (data.price > 0)
+      _price = accounting.formatNumber(
+        accounting.unformat(data.price.replace('.', ','))
+      );
+  } else _price = accounting.formatNumber(data.price);
+
   return (
     <>
       <form className={classes.container} noValidate autoComplete="off">
@@ -107,7 +117,7 @@ function EditProduct(props) {
               <TextField
                 className={classes.textField}
                 label="Preço (R$)"
-                value={data.price || '0,00'}
+                value={_price}
                 onChange={handleValueDecimalChange('price')}
                 id="price"
                 fullWidth
