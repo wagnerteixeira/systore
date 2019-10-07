@@ -20,26 +20,18 @@ namespace Systore.Infra.Mapping
             //builder.Property(p => p.Code);
             builder.Property(p => p.RegistryDate)
                 .HasColumnType("DATE")
-                .HasConversion(
-                    c => c.HasValue ?
-                        TimeZoneInfo.ConvertTimeFromUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
-                        c,
-                    c => c.HasValue ?
-                        TimeZoneInfo.ConvertTimeToUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
-                        c
-                    );
+               .HasConversion(
+                    c => TimeZoneHelper.ConvertTimeFromUtc(c),
+                    c => TimeZoneHelper.ConvertTimeToUtc(c)
+                );
 
 
             builder.Property(p => p.DateOfBirth)
                 .HasColumnType("DATE")
                 .HasConversion(
-                    c => c.HasValue ?
-                        TimeZoneInfo.ConvertTimeFromUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
-                        c,
-                    c => c.HasValue ?
-                        TimeZoneInfo.ConvertTimeToUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
-                        c
-                    );
+                    c => TimeZoneHelper.ConvertTimeFromUtc(c),
+                    c => TimeZoneHelper.ConvertTimeToUtc(c)
+                );
 
             builder.Property(p => p.Address)
                 .HasMaxLength(150);
@@ -94,13 +86,9 @@ namespace Systore.Infra.Mapping
             builder.Property(p => p.AdmissionDate)
                 .HasColumnType("DATE")
                 .HasConversion(
-                    c => c.HasValue ?
-                        TimeZoneInfo.ConvertTimeFromUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
-                        c,
-                    c => c.HasValue ?
-                        TimeZoneInfo.ConvertTimeToUtc(c.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneHelper.TimeZoneId)) :
-                        c
-                    );
+                    c => TimeZoneHelper.ConvertTimeFromUtc(c),
+                    c => TimeZoneHelper.ConvertTimeToUtc(c)
+                );
 
             builder.Property(p => p.CivilStatus)
                 .HasColumnType("TINYINT");
