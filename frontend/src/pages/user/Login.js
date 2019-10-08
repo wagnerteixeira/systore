@@ -105,7 +105,6 @@ function Login(props) {
             onChange={handleValueChange('password')}
             fullWidth
             placeholder="Senha"
-            margin="normal"
             onKeyDown={keyPress}
             endAdornment={
               <InputAdornment position="end">

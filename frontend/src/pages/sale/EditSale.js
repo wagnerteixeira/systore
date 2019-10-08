@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Grid,
   TextField,
@@ -117,13 +117,16 @@ function EditSale(props) {
   });
   const [finalValue, setFinalValue] = useState(props.data.finalValue);
 
+  const updateFinalValueMemoized = useCallback(updateFinalValue, [
+    dataProducts,
+  ]);
   useEffect(() => {
-    updateFinalValue();
-  }, [dataProducts]);
+    updateFinalValueMemoized();
+  }, [updateFinalValueMemoized]);
 
   useEffect(() => {
     if (props.data && props.data.itemSale) setDataProducts(props.data.itemSale);
-  }, [props.data.itemSale]);
+  }, [props.data, props.data.itemSale]);
 
   function handleDeleteProduct(index) {
     let _dataProducts = [];

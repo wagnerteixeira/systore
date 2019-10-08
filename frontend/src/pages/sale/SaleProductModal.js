@@ -253,7 +253,7 @@ function SaleProductModal(props) {
           />
         </Grid>
         <Grid className={classes.item} item xs={12} sm={3} md={3} lg={3} xl={3}>
-          {productData.saleType == SaleType.Weight ? (
+          {productData.saleType === SaleType.Weight ? (
             <TextField
               id="quantity"
               label="Quantidade"
