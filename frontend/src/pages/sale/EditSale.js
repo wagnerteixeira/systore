@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Grid,
   TextField,
@@ -29,7 +29,8 @@ import {
 } from '../../utils/operators';
 import SaleProductModal from './SaleProductModal';
 
-import { ActionItem } from '../../utils/enums';
+import { ActionItem, SaleType } from '../../utils/enums';
+import NumberFormatCustom2 from '../../components/common/NumberFormatCustom2';
 
 const styles = theme => ({
   container: {
@@ -111,18 +112,22 @@ function EditSale(props) {
     id: 0,
     productId: 0,
     productDescription: '',
+    saleType: SaleType.Unit,
     price: 0.0,
     quantity: 0.0,
   });
   const [finalValue, setFinalValue] = useState(props.data.finalValue);
 
+  const updateFinalValueMemoized = useCallback(updateFinalValue, [
+    dataProducts,
+  ]);
   useEffect(() => {
-    updateFinalValue();
-  }, [dataProducts]);
+    updateFinalValueMemoized();
+  }, [updateFinalValueMemoized]);
 
   useEffect(() => {
     if (props.data && props.data.itemSale) setDataProducts(props.data.itemSale);
-  }, [props.data.itemSale]);
+  }, [props.data, props.data.itemSale]);
 
   function handleDeleteProduct(index) {
     let _dataProducts = [];
@@ -160,6 +165,7 @@ function EditSale(props) {
       id: 0,
       productId: 0,
       productDescription: '',
+      saleType: SaleType.Unit,
       price: 0.0,
       quantity: 0.0,
     });
@@ -168,7 +174,8 @@ function EditSale(props) {
 
   const handleValueQuantityChange = key => event => {
     let copy = [...dataProducts];
-    copy[key].quantity = event.target.value;
+    copy[key].quantity = parseFloat(event.target.value);
+    if (isNaN(copy[key].quantity)) copy[key].quantity = 0;
     copy[key].totalPrice = parseFloat(copy[key].quantity * copy[key].price);
     copy[key].action = ActionItem.Alter;
     setDataProducts(copy);
@@ -195,6 +202,7 @@ function EditSale(props) {
         saleId: data.id,
         productId: product.id,
         productDescription: product.description,
+        saleType: product.saleType,
         quantity: product.quantity,
         price: product.price,
         totalPrice: parseFloat(product.quantity) * parseFloat(product.price),
@@ -463,6 +471,7 @@ function EditSale(props) {
                   dataProducts
                     .filter(item => item.action !== ActionItem.Delete)
                     .map((item, index) => {
+                      console.log(item);
                       return (
                         <TableRow hover key={index}>
                           <TableCell padding="none" size="small">
@@ -475,13 +484,24 @@ function EditSale(props) {
                             {item.price}
                           </TableCell>
                           <TableCell padding="none" size="small">
-                            <Input
-                              id="quantity"
-                              value={item.quantity}
-                              onChange={handleValueQuantityChange(index)}
-                              margin="normal"
-                              fullWidth
-                            />
+                            {item.saleType === SaleType.Unit ? (
+                              <Input
+                                id="quantity"
+                                value={item.quantity}
+                                onChange={handleValueQuantityChange(index)}
+                                margin="normal"
+                                fullWidth
+                              />
+                            ) : (
+                              <Input
+                                id="quantity"
+                                value={item.quantity}
+                                onChange={handleValueQuantityChange(index)}
+                                margin="normal"
+                                fullWidth
+                                inputComponent={NumberFormatCustom2}
+                              />
+                            )}
                           </TableCell>
                           <TableCell padding="none" size="large">
                             {getNumberDecimalToStringCurrency(item.totalPrice)}

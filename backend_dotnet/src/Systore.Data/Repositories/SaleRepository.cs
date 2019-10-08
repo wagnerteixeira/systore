@@ -40,6 +40,7 @@ namespace Systore.Data.Repositories
                        TotalPrice = i.TotalPrice
                    }).ToList()
                })
+                .AsNoTracking()
                .FirstOrDefaultAsync();
 
     }
