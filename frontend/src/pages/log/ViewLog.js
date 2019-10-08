@@ -168,7 +168,6 @@ class ViewLog extends Component {
               <TableCell padding="checkbox">Data</TableCell>
               <TableCell padding="checkbox">Operação</TableCell>
               <TableCell padding="checkbox">Campo</TableCell>
-              <TableCell padding="checkbox">Valor Anterior</TableCell>
               <TableCell padding="checkbox">Valor Novo</TableCell>
             </TableRow>
           </TableHead>
@@ -181,8 +180,7 @@ class ViewLog extends Component {
                   {getDateTimeToString(logs[key].date)}
                 </TableCell>
                 <TableCell padding="checkbox">{logs[key].operation}</TableCell>
-                <TableCell padding="checkbox">{logs[key].field}</TableCell>
-                <TableCell padding="checkbox">{logs[key].oldValue}</TableCell>
+                <TableCell padding="checkbox">{logs[key].fieldName}</TableCell>
                 <TableCell padding="checkbox">{logs[key].newValue}</TableCell>
               </TableRow>
             ))}
