@@ -72,6 +72,15 @@ function PrintDefaulters(props) {
       return;
     }
 
+    if (initialDate > finalDate) {
+      setMessage({
+        messageOpen: true,
+        variantMessage: 'warning',
+        messageText: 'Data final menor que a data inicial.',
+      });
+      return;
+    }
+
     console.log(
       `${
         process.env.REACT_APP_API_PATH
