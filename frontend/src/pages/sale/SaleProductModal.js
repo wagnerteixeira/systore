@@ -11,6 +11,8 @@ import productService from '../../services/productService';
 import AsyncSelectGeneric from '../../components/common/AsyncSelectGeneric';
 
 import { FormControl, MenuItem, Select } from '@material-ui/core';
+import NumberFormatCustom2 from '../../components/common/NumberFormatCustom2';
+import { SaleType } from '../../utils/enums';
 
 const styles = theme => ({
   paper: {
@@ -71,7 +73,10 @@ function SaleProductModal(props) {
   const [prevSingle, setPrevSingle] = useState(null);
 
   useEffect(() => {
-    if (single) setProductData(single.productData);
+    if (single) {
+      setProductData(single.productData);
+      setQuantity(0);
+    }
   }, [single]);
 
   async function fetchProducts(
@@ -235,22 +240,42 @@ function SaleProductModal(props) {
             id="price"
             label="Preço"
             className={classes.margin}
-            value={!productData ? '' : productData.price === 0 ? '' : productData.price}
+            value={
+              !productData
+                ? ''
+                : productData.price === 0
+                ? ''
+                : productData.price
+            }
             margin="normal"
             disabled
             fullWidth
           />
         </Grid>
         <Grid className={classes.item} item xs={12} sm={3} md={3} lg={3} xl={3}>
-          <TextField
-            id="quantity"
-            label="Quantidade"
-            className={classes.margin}
-            value={quantity}
-            onChange={handleQuantityValue}
-            margin="normal"
-            fullWidth
-          />
+          {productData.saleType == SaleType.Weight ? (
+            <TextField
+              id="quantity"
+              label="Quantidade"
+              className={classes.margin}
+              value={quantity}
+              onChange={handleQuantityValue}
+              fullWidth
+              InputProps={{
+                inputComponent: NumberFormatCustom2,
+              }}
+            />
+          ) : (
+            <TextField
+              id="quantity"
+              label="Quantidade"
+              className={classes.margin}
+              value={quantity}
+              onChange={handleQuantityValue}
+              margin="normal"
+              fullWidth
+            />
+          )}
         </Grid>
       </Grid>
       <div>
