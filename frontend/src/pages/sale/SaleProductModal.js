@@ -245,7 +245,7 @@ function SaleProductModal(props) {
                 ? ''
                 : productData.price === 0
                 ? ''
-                : productData.price
+                : productData.price.toFixed(2)
             }
             margin="normal"
             disabled

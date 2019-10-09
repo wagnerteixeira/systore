@@ -481,7 +481,7 @@ function EditSale(props) {
                             {item.productDescription}
                           </TableCell>
                           <TableCell padding="none" size="small">
-                            {item.price}
+                            {item.price.toFixed(2)}
                           </TableCell>
                           <TableCell padding="none" size="small">
                             {item.saleType === SaleType.Unit ? (
