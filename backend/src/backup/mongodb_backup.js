@@ -40,11 +40,17 @@ exports.dbAutoBackUp = () => {
     currentDate = stringToDate(date); // Current date
     var newBackupDir =
       currentDate.getFullYear() +
-      "-" +
+      "_" +
       (currentDate.getMonth() + 1) +
-      "-" +
-      currentDate.getDate();
-    var newBackupPath = dbOptions.autoBackupPath + "mongodump-" + newBackupDir; // New backup path for current backup process
+      "_" +
+      currentDate.getDate() +
+      "_" +
+      currentDate.getHours() +
+      "_" +
+      currentDate.getMinutes() +
+      "_" +
+      currentDate.getSeconds();
+    var newBackupPath = dbOptions.autoBackupPath + "mongodump_" + newBackupDir; // New backup path for current backup process
     // check for remove old backup after keeping # of days given in configuration
     if (dbOptions.removeOldBackup == true) {
       beforeDate = _.clone(currentDate);

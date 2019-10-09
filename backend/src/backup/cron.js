@@ -1,7 +1,7 @@
 var CronJob = require("cron").CronJob;
 var Cron = require("./mongodb_backup.js");
 new CronJob(
-  "0 0 0 * * *",
+  "30 19 0 * * *",
   function() {
     Cron.dbAutoBackUp();
   },
