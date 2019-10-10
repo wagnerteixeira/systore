@@ -10,7 +10,7 @@ var dbOptions = {
   autoBackup: true,
   removeOldBackup: true,
   keepLastDaysBackup: 2,
-  autoBackupPath: "./" // i.e. /var/database-backup/
+  autoBackupPath: "/var/backup" //"C:\\bk\\" // i.e. /var/backup
 };
 /* return date object */
 const stringToDate = function(dateString) {

@@ -14,8 +14,8 @@ const backupFolderId = "1h95khEL8axPSQAAQbY3yX_Lzohx4yCH4";
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = `${__dirname}\\token.json`;
-const CREDENTIALS_PATH = `${__dirname}\\credentials.json`;
+const TOKEN_PATH = `${__dirname}/token.json`;
+const CREDENTIALS_PATH = `${__dirname}/credentials.json`;
 
 const test = () => {
   // Load client secrets from a local file.
@@ -30,7 +30,7 @@ const test = () => {
 
 const uploadBackup = async (folderName, folderPath) => {
   var archive = archiver.create("zip", {});
-  var fileName = `${folderName}.zip`;
+  var fileName = `${folderPath}.zip`;
   var output = fs.createWriteStream(fileName);
   archive.pipe(output);
   console.log("zip file");
@@ -53,7 +53,7 @@ const _uploadBackup = (auth, fileName, folderName) => {
   };
 
   const fileMetadata = {
-    name: fileName,
+    name: `${folderName}.zip`,
     parents: [backupFolderId]
   };
 
