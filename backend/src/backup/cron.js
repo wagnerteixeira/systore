@@ -1,11 +1,13 @@
 var CronJob = require("cron").CronJob;
-var Cron = require("./mongodb_backup.js");
-new CronJob(
-  "30 19 0 * * *",
-  function() {
-    Cron.dbAutoBackUp();
+var Cron = require("./backupTask");
+console.log(Cron.backupTask);
+
+exports.default = new CronJob({
+  cronTime: "0 28 00 * * *",
+  onTick: function() {
+    Cron.backupTask();
   },
-  null,
-  true,
-  "America/New_York"
-);
+  start: true,
+  onComplete: () => console.log("Complete backup"),
+  timeZone: "America/Sao_Paulo"
+});

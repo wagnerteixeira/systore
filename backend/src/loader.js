@@ -16,3 +16,4 @@ require("../src/api/log/logPlugin")(logConnection, headerLog, itemLog);
 require("./config/routes")(server, headerLog, itemLog);
 
 global.CronJob = require("./backup/cron");
+console.log(global.CronJob);

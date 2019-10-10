@@ -1,18 +1,25 @@
 const fs = require("fs");
 const readline = require("readline");
 const { google } = require("googleapis");
-const JSZip = require("jszip");
+var archiver = require("archiver");
 
 // If modifying these scopes, delete token.json.
-const SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"];
+const SCOPES = [
+  "https://www.googleapis.com/auth/drive.metadata",
+  "https://www.googleapis.com/auth/drive.file",
+  "https://www.googleapis.com/auth/drive"
+];
+
+const backupFolderId = "1h95khEL8axPSQAAQbY3yX_Lzohx4yCH4";
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = "token.json";
+const TOKEN_PATH = `${__dirname}\\token.json`;
+const CREDENTIALS_PATH = `${__dirname}\\credentials.json`;
 
 const test = () => {
   // Load client secrets from a local file.
-  fs.readFile("credentials.json", (err, content) => {
+  fs.readFile(CREDENTIALS_PATH, (err, content) => {
     if (err) return console.log("Error loading client secret file:", err);
     // Authorize a client with credentials, then call the Google Drive API.
     authorize(JSON.parse(content), listFiles);
@@ -21,37 +28,54 @@ const test = () => {
 
 //test();
 
-const uploadBackup = fileName => {
-  let zip = new JSZip();
-  fs.readFile("credentials.json", (err, content) => {
+const uploadBackup = async (folderName, folderPath) => {
+  var archive = archiver.create("zip", {});
+  var fileName = `${folderName}.zip`;
+  var output = fs.createWriteStream(fileName);
+  archive.pipe(output);
+  console.log("zip file");
+  await archive.directory(folderPath).finalize();
+
+  fs.readFile(CREDENTIALS_PATH, (err, content) => {
     if (err) return console.log("Error loading client secret file:", err);
     // Authorize a client with credentials, then call the Google Drive API.
-    authorize(JSON.parse(content), () => _uploadBackup(fileName));
+    console.log("upload file");
+    authorize(JSON.parse(content), _uploadBackup, [fileName, folderName]);
   });
 };
 
-const _uploadBackup = fileName => {
+const _uploadBackup = (auth, fileName, folderName) => {
+  console.log(`auth: ${auth} fileName ${fileName}`);
   const drive = google.drive({ version: "v3", auth });
-  const fileMetadata = {
-    name: fileName
+  const media = {
+    mimeType: "application/zip",
+    body: fs.createReadStream(fileName)
   };
 
-  const media = {
-    mimeType: "image/jpeg",
-    body: fs.createReadStream(filePath)
+  const fileMetadata = {
+    name: fileName,
+    parents: [backupFolderId]
   };
+
+  const requestBody = {
+    name: fileName,
+    mimeType: "application/zip"
+  };
+
   drive.files.create(
     {
       resource: fileMetadata,
+      // requestBody: requestBody,
       media: media,
       fields: "id"
     },
     function(err, file) {
+      console.log(`${JSON.stringify(file, null, 2)}`);
       if (err) {
         // Handle error
         console.error(err);
       } else {
-        callback(file.data.id);
+        //if (callback) callback(file.data.id);
       }
     }
   );
@@ -62,7 +86,9 @@ const _uploadBackup = fileName => {
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback) {
+function authorize(credentials, callback, paramsCallback) {
+  console.log(`autorize ${credentials} ${callback} ${paramsCallback}`);
+
   const { client_secret, client_id, redirect_uris } = credentials.installed;
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
@@ -72,9 +98,14 @@ function authorize(credentials, callback) {
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, (err, token) => {
-    if (err) return getAccessToken(oAuth2Client, callback);
+    if (err) {
+      if (paramsCallback)
+        return getAccessToken(oAuth2Client, callback, ...paramsCallback);
+      else return getAccessToken(oAuth2Client, callback);
+    }
     oAuth2Client.setCredentials(JSON.parse(token));
-    callback(oAuth2Client);
+    if (paramsCallback) callback(oAuth2Client, ...paramsCallback);
+    else callback(oAuth2Client);
   });
 }
 
@@ -84,7 +115,8 @@ function authorize(credentials, callback) {
  * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
  * @param {getEventsCallback} callback The callback for the authorized client.
  */
-function getAccessToken(oAuth2Client, callback) {
+function getAccessToken(oAuth2Client, callback, paramsCallback) {
+  console.log(`getAccessToken ${oAuth2Client} ${callback} ${paramsCallback}`);
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: "offline",
     scope: SCOPES
@@ -104,7 +136,8 @@ function getAccessToken(oAuth2Client, callback) {
         if (err) return console.error(err);
         console.log("Token stored to", TOKEN_PATH);
       });
-      callback(oAuth2Client);
+      console.log(`paramCallback ${JSON.stringify(paramsCallback)}`);
+      callback(oAuth2Client, ...paramsCallback);
     });
   });
 }

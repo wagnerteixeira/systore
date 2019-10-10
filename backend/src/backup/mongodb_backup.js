@@ -1,6 +1,8 @@
 var fs = require("fs");
 var _ = require("lodash");
-var exec = require("child_process").exec;
+//var exec = require("child_process").exec;
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
 var dbOptions = {
   host: "localhost",
   port: 27017,
@@ -32,7 +34,7 @@ const empty = function(mixedVar) {
   return false;
 };
 // Auto backup script
-exports.dbAutoBackUp = () => {
+exports.dbAutoBackUp = async () => {
   // check for auto backup is enabled or disabled
   if (dbOptions.autoBackup == true) {
     var date = new Date();
@@ -50,7 +52,7 @@ exports.dbAutoBackUp = () => {
       currentDate.getMinutes() +
       "_" +
       currentDate.getSeconds();
-    var newBackupPath = dbOptions.autoBackupPath + "mongodump_" + newBackupDir; // New backup path for current backup process
+    var newBackupPath = dbOptions.autoBackupPath + newBackupDir; // New backup path for current backup process
     // check for remove old backup after keeping # of days given in configuration
     if (dbOptions.removeOldBackup == true) {
       beforeDate = _.clone(currentDate);
@@ -76,15 +78,20 @@ exports.dbAutoBackUp = () => {
       //dbOptions.pass +
       " --out " +
       newBackupPath; // Command for mongodb dump process
-    exec(cmd, function(error, stdout, stderr) {
-      if (empty(error)) {
-        // check for remove old backup after keeping # of days given in configuration
-        if (dbOptions.removeOldBackup == true) {
-          if (fs.existsSync(oldBackupPath)) {
-            exec("rm -rf " + oldBackupPath, function(err) {});
-          }
+    console.log(`Executando backup do mongo cmd: ${cmd}`);
+    const { error, stdout, stderr } = await exec(cmd);
+    console.log(
+      `Backup executado  error: ${error} stdout: ${stdout} stderr: ${stderr}`
+    );
+    if (empty(error)) {
+      console.log(`Backup executado ${stdout}`);
+      // check for remove old backup after keeping # of days given in configuration
+      if (dbOptions.removeOldBackup == true) {
+        if (fs.existsSync(oldBackupPath)) {
+          exec("rm -rf " + oldBackupPath, function(err) {});
         }
       }
-    });
-  }
+    } else console.log(error, stderr);
+    return { newBackupPath, newBackupDir };
+  } else return "";
 };
