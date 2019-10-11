@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/03/2019 13:30:57" ReportInfo.Modified="10/10/2019 22:02:32" ReportInfo.CreatorVersion="2019.3.5.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/03/2019 13:30:57" ReportInfo.Modified="10/10/2019 22:15:20" ReportInfo.CreatorVersion="2019.3.5.0">
   <Dictionary>
     <MySqlDataConnection Name="SystoreConnection" ConnectionString="rijcmlqomabmqtwD7y3BaVO988Xrns8n0+Fpps4V7SdlS+EOKRfEfgYlVHw/4pnKk9NgUQNE0HY3XrOI9SOQebvbIEN3H3Fz5BgyJ4SNqbwVoM0nbA=">
       <TableDataSource Name="Table" DataType="System.Int32" Enabled="true" SelectCommand="select c.id&#10;     , c.Name&#10;     , c.Cpf&#10;     , c.Rg&#10;     , c.PostalCode &#10;     , c.Address&#10;     , c.AddressNumber &#10;     , c.Neighborhood &#10;     , c.City &#10;     , c.State&#10;     , DATE_FORMAT(c.DateOfBirth,'%d/%m/%Y') as DateOfBirth&#10;     , c.Phone1 &#10;     , c.Phone2 &#10;     , c.MotherName &#10;     , c.FatherName &#10;     , b.Code &#10;     , b.Quota&#10;     , DATE_FORMAT(b.DueDate, '%d/%m/%Y') as DueDate&#10;     , b.OriginalValue &#10;     , datediff(CONVERT_TZ(UTC_DATE(),'+00:00','-03:00'), b.DueDate) as DaysDelay&#10;from client c&#10;join billreceive b on c.Id = b.ClientId &#10;where &#10;##b.code in(1007572, 1007573) &#10;cast(b.DueDate as date) between  @dataInicial and @dataFinal &#10;and b.Situation = 0&#10;order by c.Name, c.Id">
@@ -69,7 +69,7 @@
         <TextObject Name="Text6" Left="170.1" Width="75.6" Height="18.9" Text="[Table.Code]" WordWrap="false" Font="Arial, 10pt"/>
         <TextObject Name="Text8" Left="340.2" Width="94.5" Height="18.9" Text="[Table.DueDate]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
         <TextObject Name="Text10" Left="569.55" Width="122.85" Height="18.9" Text="[FormatCurrency([Table.OriginalValue],2)]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
-        <TextObject Name="Text25" Left="444.15" Width="103.95" Height="18.9" Text="[Table.DaysDelay] -1" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
+        <TextObject Name="Text25" Left="444.15" Width="103.95" Height="18.9" Text="[Table.DaysDelay]" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt"/>
       </DataBand>
       <GroupFooterBand Name="GroupFooter1" Top="226" Width="718.2" Height="28.35">
         <TextObject Name="Text22" Left="170.1" Top="1.9" Width="274.05" Height="18.9" Text="Total do cliente:" WordWrap="false" Font="Arial, 10pt, style=Bold"/>
