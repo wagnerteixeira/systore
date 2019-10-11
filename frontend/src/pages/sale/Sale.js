@@ -20,9 +20,17 @@ const styles = theme => ({
   },
 });
 
+const initialValue = {
+  clientId: 0,
+  finalValue: 0,
+  id: 0,
+  itemSale: [],
+  vendor: '',
+};
+
 function Sale(props) {
   const [sales, setSales] = useState([]);
-  const [data, setData] = useState({});
+  const [data, setData] = useState(initialValue);
   const [clientData, setClientData] = useState({});
   const [stateData, setStateData] = useState('LIST');
   const [columnSearch, setColumnSearch] = useState('vendor');
@@ -52,7 +60,7 @@ function Sale(props) {
     fetchSales();
   }
 
-  function handleDelete(rowData) {    
+  function handleDelete(rowData) {
     Confirm('Atenção', 'Confirma a exclusão?', () =>
       saleService
         .remove(rowData.id)
@@ -108,7 +116,7 @@ function Sale(props) {
 
   async function handleEdit(rowData) {
     setIsSaving(true);
-    setData({});
+    setData(initialValue);
     setStateData('EDIT_INSERT');
     const clientDataResponse = await clientService.get(rowData.clientId);
     setClientData(clientDataResponse.data);
@@ -118,7 +126,7 @@ function Sale(props) {
         setIsSaving(false);
         setData(res.data);
       })
-      .catch(error => {        
+      .catch(error => {
         setMessage({
           messageOpen: true,
           messageText: getErrosFromApi(error),

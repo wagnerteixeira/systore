@@ -132,7 +132,7 @@ function BillReceive(props) {
 
   return (
     <Paper className={classes.root}>
-      <Grid container spacing={24}>
+      <Grid container spacing={8}>
         <Grid className={classes.item} item xs={12} sm={1} md={1} lg={1} xl={1}>
           <FormControl fullWidth>
             <Select

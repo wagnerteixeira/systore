@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import MaterialTable from 'material-table';
 import classNames from 'classnames';
-import { Paper, Grid, FormControl, InputLabel, Select, MenuItem, Input, Fab, Tooltip } from '@material-ui/core';
+import {
+  Paper,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Input,
+  Fab,
+  Tooltip,
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -36,7 +46,7 @@ const styles = theme => ({
   },
   margin: {
     margin: theme.spacing(1),
-  },  
+  },
   searchIcon: {
     margin: `${theme.spacing(2)}px 2px`,
   },
@@ -67,11 +77,21 @@ const styles = theme => ({
 function ViewSale(props) {
   const [selectedRow, setSelectedRow] = useState(null);
 
-  const { data, actions, classes, columnSearch, search, handleSearch, handleCreate, handleChangeTextSearch, handleRequestSearch } = props;
+  const {
+    data,
+    actions,
+    classes,
+    columnSearch,
+    search,
+    handleSearch,
+    handleCreate,
+    handleChangeTextSearch,
+    handleRequestSearch,
+  } = props;
 
   return (
     <Paper className={classes.root}>
-      <Grid container className={classes.itens} spacing={24}>
+      <Grid container className={classes.itens} spacing={3}>
         <Grid className={classes.item} item xs={12} sm={2} md={2} lg={2} xl={2}>
           <FormControl fullWidth className={classes.margin}>
             <InputLabel htmlFor="sort">Pesquisar por</InputLabel>
@@ -85,7 +105,7 @@ function ViewSale(props) {
             >
               <MenuItem value={'id'}>Código</MenuItem>
               <MenuItem value={'vendor'}>Vendedor</MenuItem>
-              <MenuItem value={'saleDate'}>Data de venda</MenuItem>              
+              <MenuItem value={'saleDate'}>Data de venda</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -156,7 +176,7 @@ function ViewSale(props) {
           { title: 'Data de venda', field: 'dateSale', primary: true },
         ]}
         data={data}
-        title=''
+        title=""
         localization={{
           pagination: {
             labelDisplayedRows: '{from}-{to} de {count}',
@@ -176,17 +196,17 @@ function ViewSale(props) {
             searchPlaceholder: 'Procurar',
             exportTitle: 'Gerar arquivo CSV dos dados da tela',
             exportAriaLabel: 'Exportar',
-            exportName: 'Exportar'
+            exportName: 'Exportar',
           },
           header: {
-            actions: 'Ações'
+            actions: 'Ações',
           },
           body: {
             emptyDataSourceMessage: 'Nenhum registro selecionado',
             filterRow: {
-              filterTooltip: 'Filtro'
-            }
-          }
+              filterTooltip: 'Filtro',
+            },
+          },
         }}
         actions={actions}
         options={{
@@ -197,13 +217,16 @@ function ViewSale(props) {
           headerStyle: { padding: '8px ' },
           filterCellStyle: { padding: '8px ' },
           rowStyle: rowData => ({
-            backgroundColor: (selectedRow && selectedRow.tableData.id === rowData.tableData.id) ? '#EEE' : '#FFF',
+            backgroundColor:
+              selectedRow && selectedRow.tableData.id === rowData.tableData.id
+                ? '#EEE'
+                : '#FFF',
           }),
         }}
         onRowClick={(evt, selectedRow) => setSelectedRow(selectedRow)}
       />
     </Paper>
-  )
+  );
 }
 
 export default withStyles(styles)(ViewSale);

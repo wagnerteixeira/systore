@@ -139,7 +139,6 @@ function EditSale(props) {
       _dataProducts = [...dataProducts];
       _dataProducts[index].action = ActionItem.Delete;
     }
-    console.log(_dataProducts);
     setDataProducts(_dataProducts);
   }
 
@@ -471,7 +470,6 @@ function EditSale(props) {
                   dataProducts
                     .filter(item => item.action !== ActionItem.Delete)
                     .map((item, index) => {
-                      console.log(item);
                       return (
                         <TableRow hover key={index}>
                           <TableCell padding="none" size="small">
