@@ -1,0 +1,48 @@
+version: '3.3'
+
+services:
+  systoreapi:
+    image: systoreapi:dev
+    deploy:
+      replicas: 3
+    build:
+      context: backend_dotnet
+      dockerfile: DockerFile
+    ports:
+      - "8085:80"
+    networks:
+      - systore_network
+  systorefront:
+    image: systore_front:dev
+    deploy:
+      replicas: 3
+    build:
+      context: frontend
+      dockerfile: DockerFile
+    ports:
+      - "80:80"
+    networks:
+      - systore_network
+  mysql:
+    image: mysql/mysql-server:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=12345678 
+      - MYSQL_ROOT_HOST=%
+    volumes:
+       - db-data:/var/lib/mysql/data
+    ports:
+      - "3306:3306"  
+    networks:
+       - systore_network
+    deploy:
+      mode: replicated
+      replicas: 1
+#      endpoint_mode: dnsrr
+
+volumes:
+  db-data:
+
+networks:
+  systore_network:
+    external:
+      name: systore_network

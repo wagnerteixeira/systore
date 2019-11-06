@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace Systore.Api.Controllers
     public class AuditController : ControllerBase
     {
         private readonly IAuditService _auditService;
+        private readonly ILogger<AuditController> _logger;
 
-        public AuditController(IAuditService auditService)
+        public AuditController(IAuditService auditService, ILogger<AuditController> logger)
         {
             _auditService = auditService;
+            _logger = logger;
         }
         [Authorize]
         [HttpGet("")]
@@ -28,8 +31,23 @@ namespace Systore.Api.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return SendBadRequest(e);
             }
+        }
+
+         protected IActionResult SendBadRequest(Exception e)
+        {
+            _logger.LogError(e, "Exception error: ");
+            string error = e.Message;
+            if (e.InnerException != null)
+            {
+                error += '|' + e.InnerException.Message;
+                if (e.InnerException.InnerException != null)
+                    error += '|' + e.InnerException.InnerException.Message;
+
+            }
+
+            return BadRequest(new { errors = error.Split('|') });
         }
     }
 }

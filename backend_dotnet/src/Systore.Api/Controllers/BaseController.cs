@@ -45,7 +45,7 @@ namespace Systore.Api.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return SendBadRequest(e);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Systore.Api.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return SendBadRequest(e);
             }
         }
 

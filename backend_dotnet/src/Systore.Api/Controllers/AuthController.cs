@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace Systore.Api.Controllers
 {
@@ -18,11 +19,13 @@ namespace Systore.Api.Controllers
     {
         private readonly IAuthService _authService;
         private IConfiguration _config;
-      
-        public AuthController(IAuthService authService, IConfiguration config)
+        private readonly ILogger<AuthController> _logger;
+
+        public AuthController(IAuthService authService, IConfiguration config, ILogger<AuthController> logger)
         {
             _authService = authService;
             _config = config;
+            _logger = logger;
         }
 
         [AllowAnonymous]
@@ -37,7 +40,7 @@ namespace Systore.Api.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return SendBadRequest(e);
             }
         }
 
@@ -52,7 +55,7 @@ namespace Systore.Api.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return SendBadRequest(e);
             }
         }
 
@@ -68,6 +71,21 @@ namespace Systore.Api.Controllers
                 Dispose(false);
             }
             _disposed = true;
+        }
+
+        protected IActionResult SendBadRequest(Exception e)
+        {
+            _logger.LogError(e, "Exception error: ");
+            string error = e.Message;
+            if (e.InnerException != null)
+            {
+                error += '|' + e.InnerException.Message;
+                if (e.InnerException.InnerException != null)
+                    error += '|' + e.InnerException.InnerException.Message;
+
+            }
+
+            return BadRequest(new { errors = error.Split('|') });
         }
 
         public void Dispose()
