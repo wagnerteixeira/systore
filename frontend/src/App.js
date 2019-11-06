@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider } from '@material-ui/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import ptLocale from 'date-fns/locale/pt-BR';
@@ -11,7 +11,7 @@ import { axiosOApi } from './services/axios';
 import MessageSnackbar from './components/common/MessageSnackbar';
 import Menu from './components/layout/Menu';
 
-import MuiTheme from './config/theme';
+import theme from './config/theme';
 
 import BillsReceive from './pages/billReceive/BillReceive';
 import Client from './pages/client/Client';
@@ -24,8 +24,6 @@ import BalanceLoad from './pages/balanceLoad/BalanceLoad';
 import PrintDefaulters from './pages/reports/PrintDefaulters';
 
 import localStorageService from './localStorage/localStorageService';
-
-const theme = MuiTheme;
 
 class App extends Component {
   constructor(props) {
@@ -134,7 +132,7 @@ class App extends Component {
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
         <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>
-          <MuiThemeProvider theme={theme}>
+          <ThemeProvider theme={theme}>
             {!logged ? (
               <Login
                 handleLogin={this.handleLogin}
@@ -175,7 +173,7 @@ class App extends Component {
               variant={variantMessage}
               message={messageText}
             />
-          </MuiThemeProvider>
+          </ThemeProvider>
         </BrowserRouter>
       </MuiPickersUtilsProvider>
     );

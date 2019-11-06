@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,7 +18,7 @@ import {
   Input,
 } from '@material-ui/core';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -43,12 +43,11 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'row',
   },
-});
+}));
 
 function Login(props) {
   const {
     showPassword,
-    classes,
     userName,
     password,
     handleLogin,
@@ -56,6 +55,7 @@ function Login(props) {
     handleClickShowPassword,
     keyPress,
   } = props;
+  const classes = useStyles();
   return (
     <div>
       <AppBar position="static">
@@ -132,10 +132,9 @@ function Login(props) {
 }
 
 Login.propTypes = {
-  classes: PropTypes.object.isRequired,
   handleLogin: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(Login);
+export default Login;

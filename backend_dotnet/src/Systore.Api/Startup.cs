@@ -232,6 +232,7 @@ namespace Systore.Api
             {                                                             // specifying the Swagger JSON endpoint.
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Systore");// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),                                                                         
             })
+            .UseMvc()
             .UseMetrics(lifetime)            
             .UseReport();
             

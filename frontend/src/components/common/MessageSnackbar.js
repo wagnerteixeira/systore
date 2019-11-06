@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -20,7 +20,7 @@ const variantIcon = {
   info: InfoIcon,
 };
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   margin: {
     margin: theme.spacing(1),
   },
@@ -47,7 +47,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
   },
-});
+}));
 
 const internalHandleClose = props => (event, reason) => {
   if (reason === 'clickaway') {
@@ -58,7 +58,8 @@ const internalHandleClose = props => (event, reason) => {
 };
 
 function MessageSnackbar(props) {
-  const { classes, open, message, variant, ...other } = props;
+  const { open, message, variant, ...other } = props;
+  const classes = useStyles();
   const Icon = variantIcon[variant];
   return (
     <Snackbar
@@ -79,10 +80,9 @@ function MessageSnackbar(props) {
             {props.message.split('<br/>').map((line, index) => {
               return (
                 <React.Fragment key={index}>
-                   {line} <br />
-                </React.Fragment>                 
-                
-              )
+                  {line} <br />
+                </React.Fragment>
+              );
             })}
           </span>
         }
@@ -104,7 +104,6 @@ function MessageSnackbar(props) {
 }
 
 MessageSnackbar.propTypes = {
-  classes: PropTypes.object.isRequired,
   onClose: PropTypes.func,
   teste: PropTypes.func,
   open: PropTypes.bool.isRequired,
@@ -112,4 +111,4 @@ MessageSnackbar.propTypes = {
   message: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(MessageSnackbar);
+export default MessageSnackbar;
