@@ -9,11 +9,11 @@ using System;
 using Systore.Infra;
 using Microsoft.Extensions.Options;
 using Systore.Domain;
-using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Systore.Domain.Dtos;
 using System.Collections.Generic;
 using Systore.Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Systore.Data.Repositories
 {

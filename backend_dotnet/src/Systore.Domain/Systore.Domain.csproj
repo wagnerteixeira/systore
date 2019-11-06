@@ -4,7 +4,7 @@
     <ProjectReference Include="..\Systore.Dtos\Systore.Dtos.csproj" />
   </ItemGroup>
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
 </Project>

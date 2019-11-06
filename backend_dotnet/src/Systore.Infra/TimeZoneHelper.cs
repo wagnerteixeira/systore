@@ -36,7 +36,7 @@ namespace Systore.Infra
         }
 
         public static DateTime? ConvertTimeFromUtc(DateTime? value)
-        {
+        {           
             try
             {
                 return value.HasValue ?

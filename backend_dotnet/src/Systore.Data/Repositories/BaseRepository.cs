@@ -197,7 +197,7 @@ namespace Systore.Data.Repositories
 
                 AuditEntry auditEntry = new AuditEntry();
 
-                auditEntry.HeaderAudit.TableName = entry.Metadata.Relational().TableName;
+                auditEntry.HeaderAudit.TableName = entry.Metadata.Name;
                 auditEntry.HeaderAudit.Date = DateTime.Now;
                 auditEntry.HeaderAudit.UserName = "?";
                 auditEntry.HeaderAudit.Operation = GetAuditOperation(entry.State);
