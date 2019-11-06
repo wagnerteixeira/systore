@@ -102,9 +102,7 @@ namespace Systore.Api
             Console.WriteLine($"Ambiente de {_env.EnvironmentName} debug: {_env.IsDevelopment()}");
 
 
-            services.Configure<AppSettings>(_appSettingsSection);
-
-            services.AddControllers();
+            services.Configure<AppSettings>(_appSettingsSection);            
 
             // configure jwt authentication
             Console.WriteLine($"ConnectionString: {_appSettings.ConnectionString}");
@@ -115,22 +113,22 @@ namespace Systore.Api
                 {
                     opts.Filters.Add(new AllowAnonymousFilter());
                 }).AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                    options.JsonSerializerOptions.DictionaryKeyPolicy = null;                    
-                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            }
+                { 
+                    options.SerializerSettings.Formatting = Formatting.Indented;
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+        }
             else
                 services.AddMvc()
                     .AddJsonOptions(options =>
                     {
-                        /*options.SerializerSettings.Formatting = Formatting.Indented;
+                        options.SerializerSettings.Formatting = Formatting.Indented;
                         options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;*/
-                        options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                        options.JsonSerializerOptions.DictionaryKeyPolicy = null;
-                    }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
 
@@ -188,8 +186,6 @@ namespace Systore.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
-            app.UseRouting();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -240,11 +236,7 @@ namespace Systore.Api
             .UseReport();
             
             Console.WriteLine($"Current culture: {CultureInfo.CurrentCulture}");
-            Console.WriteLine($"Local timezone {TimeZoneInfo.Local} Utc {TimeZoneInfo.Utc}");
-
-            app.UseEndpoints(endpoints => {
-                endpoints.MapControllers();
-            });
+            Console.WriteLine($"Local timezone {TimeZoneInfo.Local} Utc {TimeZoneInfo.Utc}");          
 
             // uncoment for automatic migration            
             InitializeDatabase(app);
