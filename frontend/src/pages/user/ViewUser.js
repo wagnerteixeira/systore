@@ -105,7 +105,7 @@ function ViewUser(props) {
   } = props;
   return (
     <Paper className={classes.root}>
-      <Grid container className={classes.itens} spacing={3}>
+      <Grid container className={classes.itens} spacing={0}>
         <Grid className={classes.item} item xs={12} sm={2} md={2} lg={2} xl={2}>
           <FormControl fullWidth className={classes.margin}>
             <InputLabel htmlFor="sort">Pesquisar por</InputLabel>
