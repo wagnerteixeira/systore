@@ -63,47 +63,47 @@ namespace check_conversion_mongo_mysql
                 Console.ReadKey();
                 return;
             }
-             clientsProceed = 27294;
-             while (clientsProceed < countClientesMysql)
-             {
+            clientsProceed = 0;
+            while (clientsProceed < countClientesMysql)
+            {
 
-                 foreach (var clientMongo in clients
-                     .Find(c => true)
-                     // .Find(c=> c.code == 71624)
-                     .Skip(clientsProceed)
-                     .Limit(1000)
-                     .ToList())
-                 {
-                     Systore.Domain.Entities.Client clientMysql;
-                     if (!string.IsNullOrWhiteSpace(clientMongo.cpf))
-                     {
-                         var clientsMysql = clientRepository.GetAll().Where(c => c.Cpf == Utils.OnlyNumbers(clientMongo.cpf)).ToList();
-                         if (clientsMysql.Count > 1)
-                         {
-                             Console.WriteLine($"Cliente do cpf {clientMongo.cpf} duplicado");
-                             clientMysql = clientsMysql.Where(c => c.Id == clientMongo.code).FirstOrDefault();
-                         }
-                         else
-                             clientMysql = clientsMysql.FirstOrDefault();
-                     }
-                     else
-                         clientMysql = clientRepository.GetAll().Where(c => c.Id == clientMongo.code).FirstOrDefault();
+                foreach (var clientMongo in clients
+                    .Find(c => true)
+                    // .Find(c=> c.code == 71624)
+                    .Skip(clientsProceed)
+                    .Limit(1000)
+                    .ToList())
+                {
+                    Systore.Domain.Entities.Client clientMysql;
+                    if (!string.IsNullOrWhiteSpace(clientMongo.cpf))
+                    {
+                        var clientsMysql = clientRepository.GetAll().Where(c => c.Cpf == Utils.OnlyNumbers(clientMongo.cpf)).ToList();
+                        if (clientsMysql.Count > 1)
+                        {
+                            Console.WriteLine($"Cliente do cpf {clientMongo.cpf} duplicado");
+                            clientMysql = clientsMysql.Where(c => c.Id == clientMongo.code).FirstOrDefault();
+                        }
+                        else
+                            clientMysql = clientsMysql.FirstOrDefault();
+                    }
+                    else
+                        clientMysql = clientRepository.GetAll().Where(c => c.Id == clientMongo.code).FirstOrDefault();
                     if ((clientMongo == null) || (clientMysql == null))
                         throw new NotSupportedException("Erro");
-                     if (!clientMongo.IsEqual(clientMysql))
-                     {
-                         Console.WriteLine($"Cliente {clientMysql.Id} incorreto {clientsProceed}");
-                         Console.ReadKey();
-                         var client2 = clientRepository.GetAll().Where(c => c.Id == clientMysql.Id).ToList().FirstOrDefault();
-                         clientMongo.IsEqual(client2);
-                     }
-                     else
-                         Console.WriteLine($"Cliente {clientMysql.Id} correto {clientsProceed}");
+                    if (!clientMongo.IsEqual(clientMysql))
+                    {
+                        Console.WriteLine($"Cliente {clientMysql.Id} incorreto {clientsProceed}");
+                        Console.ReadKey();
+                        var client2 = clientRepository.GetAll().Where(c => c.Id == clientMysql.Id).ToList().FirstOrDefault();
+                        clientMongo.IsEqual(client2);
+                    }
+                    else
+                        Console.WriteLine($"Cliente {clientMysql.Id} correto {clientsProceed}");
                     clientsProceed++;
-                 }
+                }
 
 
-             }
+            }
             billsReceiveProceed = 0;
             while (billsReceiveProceed < countBillReceiveMongo)
             {
@@ -131,7 +131,7 @@ namespace check_conversion_mongo_mysql
                         else
                             throw new NotSupportedException("Não é possivel definir");
                     }
-                    else 
+                    else
                         clientMysql = clientsMysql.FirstOrDefault();
 
                     var billReceivesMysql = billReceiveRepository

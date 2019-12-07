@@ -25,6 +25,9 @@ docker-compose up -d
 stop docker services
 docker-compose down
 
+create network
+docker network create --driver overlay systore_network
+
 deploy stack
 docker stack deploy -c docker-compose.yaml systoreapi
 
@@ -36,7 +39,7 @@ docker stack rm systoreapi
 docker run -it -p 3306:3300 --name mysql -e MYSQL_ROOT_PASSWORD=12345678 -v D:\mysql\data:/var/lib/mysql  -d mysql/mysql-server:8.0
 
 
-docker run -it -p 3306:3306 -p 33060:33060 --name mysql -e MYSQL_ROOT_PASSWORD=12345678 -e MYSQL_ROOT_HOST=% -v /var/mysql:/var/lib/mysql mysql/mysql-server:8.0
+docker run -it -p 3306:3306 -p 33060:33060 --name mysql -e MYSQL_ROOT_PASSWORD=12345678 -e MYSQL_ROOT_HOST=% -v systore_db-data:/var/lib/mysql mysql/mysql-server:8.0
 
 
 MYSQL_DATABASE=db

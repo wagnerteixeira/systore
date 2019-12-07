@@ -15,7 +15,7 @@ namespace check_conversion_mongo_mysql
 
         public static bool IsEqual(this BillReceive billReceive, Client client, Systore.Domain.Entities.BillReceive billReceiveCheck)
         {
-            if ((client.code != billReceiveCheck.ClientId) && (Utils.OnlyNumbers(client.cpf) != "70407982639"))
+            if ((client.code != billReceiveCheck.ClientId) && (Utils.OnlyNumbers(client.cpf) != "00925146692"))
                 return false;
             if (billReceive.code != billReceiveCheck.Code)
                 return false;
@@ -46,7 +46,7 @@ namespace check_conversion_mongo_mysql
         {
             if (client.name != clientCheck.Name)
                 return false;
-            if ((client.code != clientCheck.Id) && (client.cpf != "70407982639"))
+            if ((client.code != clientCheck.Id) && (Utils.OnlyNumbers(client.cpf) != "00925146692"))
                 return false;
             if (client.registry_date?.Date != clientCheck.RegistryDate?.Date)
                 return false;
