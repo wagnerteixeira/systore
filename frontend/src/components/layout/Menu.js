@@ -236,6 +236,7 @@ class Menu extends React.Component {
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
             />
+            {/*
             <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/product'}
               iconType="local_parking"
@@ -253,7 +254,7 @@ class Menu extends React.Component {
               listItemClassName={classes.listItemClassName}
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
-            />
+            />*/}
             <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/user'}
               iconType="accessibility_new"
@@ -263,6 +264,7 @@ class Menu extends React.Component {
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
             />
+            {/*
             <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/balance-load'}
               iconType="move_to_inbox"
@@ -273,7 +275,7 @@ class Menu extends React.Component {
               listItemClassName={classes.listItemClassName}
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
-            />
+            />*/}
             <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/print-defaulters'}
               iconType="money_off"
