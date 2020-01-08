@@ -1,19 +1,26 @@
-﻿using Systore.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
+using System.Linq;
+using Systore.Domain.Dtos;
 
 namespace Systore.Domain.Abstractions
 {
     public interface IBaseService<TEntity>
     {
-        string Add(TEntity entity);
-        TEntity Get(int id);
-        IEnumerable<TEntity> GetAll();
+        Task<string> AddAsync(TEntity entity);
+        Task<TEntity> GetAsync(int id);
+        IQueryable<TEntity> GetAll();
         Task<IEnumerable<TEntity>> GetAllAsync();
-        string Update(TEntity entity);
-        string Remove(int id);
+        Task<List<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<int> CountAllAsync();
+        Task<int> CountWhereAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<string> UpdateAsync(TEntity entity);
+        Task<string> RemoveAsync(int id);
+        Task<List<TEntity>> GetWhereAsync(FilterPaginateDto filterPaginateDto);
+        Task<int> CountWhereAsync(IEnumerable<FilterDto> filters);
+
     }
 }

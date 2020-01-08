@@ -30,47 +30,47 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(1),
-    overflowX: 'auto'
+    overflowX: 'auto',
   },
   table: {
-    minWidth: 700
+    minWidth: 700,
   },
   fab: {
     marginRight: `${theme.spacing(1)}px !important`,
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
   },
   fabEdit: {
     backgroundColor: theme.palette.edit.main,
     '&:hover': {
-      backgroundColor: theme.palette.edit.dark
-    }
+      backgroundColor: theme.palette.edit.dark,
+    },
   },
   tableRowHover: {
     '&:hover': {
-      backgroundColor: theme.palette.primary.main
-    }
+      backgroundColor: theme.palette.primary.main,
+    },
   },
   headerAcoes: {
-    paddingRight: `${theme.spacing(4)}px !important`
+    paddingRight: `${theme.spacing(4)}px !important`,
   },
   margin: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
   searchIcon: {
-    margin: `${theme.spacing(2)}px 2px`
+    margin: `${theme.spacing(2)}px 2px`,
   },
   itens: {
-    paddingTop: theme.spacing(2)
+    paddingTop: theme.spacing(2),
   },
   item: {
     paddingTop: `${theme.spacing(0.2)}px !important `,
-    paddingBottom: `${theme.spacing(0.2)}px !important `
+    paddingBottom: `${theme.spacing(0.2)}px !important `,
   },
   gridSearch: {
     paddingLeft: `${theme.spacing(0.2)}px !important `,
     [theme.breakpoints.down('xs')]: {
-      marginLeft: theme.spacing(1)
-    }
+      marginLeft: theme.spacing(1),
+    },
   },
   gridIcon: {
     paddingLeft: `${theme.spacing(2)}px !important `,
@@ -78,9 +78,9 @@ const styles = theme => ({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     [theme.breakpoints.down('md')]: {
-      marginRight: `${theme.spacing(3)}px !important `
-    }
-  }
+      marginRight: `${theme.spacing(3)}px !important `,
+    },
+  },
 });
 
 function ViewUser(props) {
@@ -101,11 +101,11 @@ function ViewUser(props) {
     search,
     handleSearch,
     handleChangeTextSearch,
-    handleCreate
+    handleCreate,
   } = props;
   return (
     <Paper className={classes.root}>
-      <Grid container className={classes.itens} spacing={24}>
+      <Grid container className={classes.itens} spacing={0}>
         <Grid className={classes.item} item xs={12} sm={2} md={2} lg={2} xl={2}>
           <FormControl fullWidth className={classes.margin}>
             <InputLabel htmlFor="sort">Pesquisar por</InputLabel>
@@ -114,10 +114,10 @@ function ViewUser(props) {
               onChange={handleRequestSort}
               inputProps={{
                 name: 'sort',
-                id: 'sort'
+                id: 'sort',
               }}
             >
-              <MenuItem value={'user_name'}>Nome</MenuItem>
+              <MenuItem value={'userName'}>Nome</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -191,9 +191,9 @@ function ViewUser(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'user_name'}
+                  active={columnSort === 'userName'}
                   direction={order}
-                  onClick={handleSort('user_name')}
+                  onClick={handleSort('userName')}
                 >
                   Nome
                 </TableSortLabel>
@@ -207,7 +207,7 @@ function ViewUser(props) {
         <TableBody>
           {Object.keys(users).map(key => (
             <TableRow hover key={key}>
-              <TableCell padding="checkbox">{users[key].user_name}</TableCell>
+              <TableCell padding="checkbox">{users[key].userName}</TableCell>
               <TableCell padding="none" align="right">
                 <Fab
                   color="primary"
@@ -244,7 +244,7 @@ function ViewUser(props) {
               }
               labelRowsPerPage={'Useres por página:'}
               SelectProps={{
-                native: true
+                native: true,
               }}
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -273,7 +273,7 @@ ViewUser.propTypes = {
   handleRequestSort: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleChangeTextSearch: PropTypes.func.isRequired,
-  handleCreate: PropTypes.func.isRequired
+  handleCreate: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ViewUser);

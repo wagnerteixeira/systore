@@ -22,6 +22,11 @@ export const getDateToString = date => {
   else return '';
 };
 
+export const getDateToStringUrl = date => {
+  if (date) return new Date(date).toISOString().substring(0, 10);
+  else return '';
+};
+
 export const getDateToStringYearTwoDigits = date => {
   if (date) {
     let _date = new Date(date);
@@ -43,19 +48,19 @@ export const getDateTimeToString = date => {
 };
 
 export const getNumberDecimalToStringCurrency = number => {
-  if (number && number['$numberDecimal'])
-    return `${parseFloat(number['$numberDecimal']).toLocaleString('pt-BR', {
+  if (number && number)
+    return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   else return '0,00';
 };
 
 export const getNumberDecimalToString = number => {
-  if (number && number['$numberDecimal'])
-    return `${parseFloat(number['$numberDecimal']).toLocaleString('pt-BR', {
+  if (number && number)
+    return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   else return '0,00';
 };
@@ -64,7 +69,7 @@ export const getNumberToString = number => {
   if (number)
     return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   else return '0,00';
 };
@@ -73,18 +78,20 @@ export const getNumberToString2 = number => {
   if (number)
     return `${parseFloat(number).toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   else return '0,00';
 };
 
-export const getDelayedDays = (due_date, pay_date) => {
-  let days = moment(pay_date).startOf('day').diff(moment(due_date).startOf('day'), 'days');
+export const getDelayedDays = (dueDate, payDate) => {
+  let days = moment(payDate)
+    .startOf('day')
+    .diff(moment(dueDate).startOf('day'), 'days');
   return days;
 };
 
-export const getValueWithInterest = (value, due_date, pay_date) => {
-  let days = getDelayedDays(due_date, pay_date);
+export const getValueWithInterest = (value, dueDate, payDate) => {
+  let days = getDelayedDays(dueDate, payDate);
   let p = 0;
   if (days >= 5) {
     p = (0.07 / 30) * days;
@@ -96,9 +103,8 @@ export const getValueWithInterest = (value, due_date, pay_date) => {
   }
 };
 
-export const getValueInterest = (value, due_date, pay_date) => {
-  let days = getDelayedDays(due_date, pay_date);
-  console.log(days);
+export const getValueInterest = (value, dueDate, payDate) => {
+  let days = getDelayedDays(dueDate, payDate);
   let p = 0;
   if (days >= 5) {
     p = (0.07 / 30) * days;
@@ -116,4 +122,13 @@ export const getCurrentDate = () => {
     new Date().getMonth(),
     new Date().getDate()
   );
+};
+
+export const strToDate = dateStr => {
+  try {
+    var parts = dateStr.split('/');
+    return new Date(parts[2], parts[1] - 1, parts[0]);
+  } catch {
+    return null;
+  }
 };

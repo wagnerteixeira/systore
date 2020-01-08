@@ -77,8 +77,8 @@ function EditUser(props) {
                 id="name"
                 label="Nome"
                 className={classes.textField}
-                value={data.user_name}
-                onChange={handleValueChange('user_name')}
+                value={data.userName}
+                onChange={handleValueChange('userName')}
                 margin="normal"
                 fullWidth
               />

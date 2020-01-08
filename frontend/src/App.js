@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider } from '@material-ui/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import ptLocale from 'date-fns/locale/pt-BR';
@@ -11,17 +11,19 @@ import { axiosOApi } from './services/axios';
 import MessageSnackbar from './components/common/MessageSnackbar';
 import Menu from './components/layout/Menu';
 
-import MuiTheme from './config/theme';
+import theme from './config/theme';
 
 import BillsReceive from './pages/billReceive/BillReceive';
 import Client from './pages/client/Client';
+import Product from './pages/product/Product';
+import Sale from './pages/sale/Sale';
 import User from './pages/user/User';
 import ViewLog from './pages/log/ViewLog';
 import Login from './pages/user/Login';
+import BalanceLoad from './pages/balanceLoad/BalanceLoad';
+import PrintDefaulters from './pages/reports/PrintDefaulters';
 
 import localStorageService from './localStorage/localStorageService';
-
-const theme = MuiTheme;
 
 class App extends Component {
   constructor(props) {
@@ -49,7 +51,7 @@ class App extends Component {
 
   handleLogin = async () => {
     let user = {
-      user_name: this.state.userName,
+      username: this.state.userName,
       password: this.state.password,
     };
 
@@ -67,6 +69,7 @@ class App extends Component {
         this.setState({
           logged: true,
           messageOpen: true,
+          showPassword: false,
           messageText: 'Usuário logado com sucesso!',
           variantMessage: 'success',
           userName: '',
@@ -76,7 +79,6 @@ class App extends Component {
         localStorageService.setItem('token', res.data.token);
       }
     } catch (e) {
-      console.log(e);
       let errors = e.response.data.errors
         ? e.response.data.errors.join('\n')
         : 'Verifique usuário e/ou senha!';
@@ -103,6 +105,10 @@ class App extends Component {
     this.setState({ [name]: event.target.value });
   };
 
+  handleClickShowPassword = () => {
+    this.setState({ showPassword: !this.state.showPassword });
+  };
+
   render() {
     const {
       userName,
@@ -113,11 +119,10 @@ class App extends Component {
       logged,
       user,
     } = this.state;
-
     if (!logged) {
       let _token = localStorageService.getItem('token');
       if (_token) {
-        axiosOApi.post('/validateToken', { token: _token }).then(res => {
+        axiosOApi.post('/validateToken', `"${_token}"`).then(res => {
           if (res.data.valid) {
             this.setState({ logged: true, user: res.data.user });
           }
@@ -127,12 +132,14 @@ class App extends Component {
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
         <BrowserRouter basename={process.env.REACT_APP_PUBLIC_URL}>
-          <MuiThemeProvider theme={theme}>
+          <ThemeProvider theme={theme}>
             {!logged ? (
               <Login
                 handleLogin={this.handleLogin}
                 handleValueChange={this.handleValueChange}
                 handleMessageClose={this.handleMessageClose}
+                showPassword={this.state.showPassword}
+                handleClickShowPassword={this.handleClickShowPassword}
                 keyPress={this.keyPress}
                 password={password}
                 userName={userName}
@@ -150,7 +157,11 @@ class App extends Component {
                 <Switch>
                   <Route path="/billsReceive" component={BillsReceive} />
                   <Route path="/client" component={Client} />
+                  <Route path="/product" component={Product} />
+                  <Route path="/sale" component={Sale} />
                   <Route path="/user" component={User} />
+                  <Route path="/balance-load" component={BalanceLoad} />
+                  <Route path="/print-defaulters" component={PrintDefaulters} />
                   {user.admin && <Route path="/log" component={ViewLog} />}
                   <Redirect from="*" to="/billsReceive" />
                 </Switch>
@@ -162,7 +173,7 @@ class App extends Component {
               variant={variantMessage}
               message={messageText}
             />
-          </MuiThemeProvider>
+          </ThemeProvider>
         </BrowserRouter>
       </MuiPickersUtilsProvider>
     );

@@ -133,23 +133,26 @@ class Menu extends React.Component {
     super(props);
     this.state = {
       user: props.user,
-
       drawerOpen: false,
       headerText: '',
-      password: '',
-      userName: '',
       messageOpen: false,
       variantMessage: 'success',
       messageText: '',
       anchorEl: null,
-      date: new Date().toLocaleString().slice(0, 16),
+      date: new Date(),
       interval: 0,
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let _interval = setInterval(
-      () => this.setState({ date: new Date().toLocaleString().slice(0, 16) }),
+      () =>
+        this.setState(prevState => {
+          prevState.date.setMinutes(prevState.date.getMinutes() + 1);
+          return {
+            date: prevState.date,
+          };
+        }),
       60000
     );
 
@@ -193,7 +196,6 @@ class Menu extends React.Component {
   render() {
     const { classes, handleLogout } = this.props;
     const { messageOpen, variantMessage, messageText, anchorEl } = this.state;
-
     return (
       <div className={classes.root}>
         <Drawer
@@ -235,10 +237,50 @@ class Menu extends React.Component {
               listItemTextClassName={classes.listItemTextClassName}
             />
             <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/product'}
+              iconType="local_parking"
+              primaryText="Produtos"
+              onClickButton={() => this.handleHeaderText('Produtos')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/sale'}
+              iconType="shopping_cart"
+              primaryText="Vendas"
+              onClickButton={() => this.handleHeaderText('Vendas')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
+            <IconListButton
               linkTo={process.env.REACT_APP_PUBLIC_URL + '/user'}
               iconType="accessibility_new"
               primaryText="Usuários"
               onClickButton={() => this.handleHeaderText('Usuários')}
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/balance-load'}
+              iconType="move_to_inbox"
+              primaryText="Carga da Balança"
+              onClickButton={() =>
+                this.handleHeaderText('Gerar carga da Balança')
+              }
+              listItemClassName={classes.listItemClassName}
+              iconClassName={classes.iconClassName}
+              listItemTextClassName={classes.listItemTextClassName}
+            />
+            <IconListButton
+              linkTo={process.env.REACT_APP_PUBLIC_URL + '/print-defaulters'}
+              iconType="money_off"
+              primaryText="Relatório de inadimplentes"
+              onClickButton={() =>
+                this.handleHeaderText('Relatório de inadimplentes')
+              }
               listItemClassName={classes.listItemClassName}
               iconClassName={classes.iconClassName}
               listItemTextClassName={classes.listItemTextClassName}
@@ -292,7 +334,7 @@ class Menu extends React.Component {
                 color="inherit"
                 className={classes.marginRight}
               >
-                {this.state.date}
+                {this.state.date.toLocaleString().slice(0, 16)}
               </Typography>
               <Typography variant="caption" className={classes.marginRight}>
                 {config.version}
@@ -304,7 +346,7 @@ class Menu extends React.Component {
                     color="inherit"
                     className={classes.userText}
                   >
-                    {this.state.user.user_name}
+                    {this.state.user.userName}
                   </Typography>
                 </ButtonBase>
                 <MaterialMenu

@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -20,7 +20,7 @@ const variantIcon = {
   info: InfoIcon,
 };
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   margin: {
     margin: theme.spacing(1),
   },
@@ -47,62 +47,68 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
   },
-});
+}));
 
 const internalHandleClose = props => (event, reason) => {
   if (reason === 'clickaway') {
-      return;
+    return;
   }
 
   props.onClose();
 };
 
 function MessageSnackbar(props) {
-    const { classes, open, message, variant, ...other } = props;
-    const Icon = variantIcon[variant];
-    return (
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          open={open}
-          autoHideDuration={3000}
-          onClose={internalHandleClose(props)}
-        >
-            <SnackbarContent
-                className={classNames(classes[variant], classes.margin)}
-                aria-describedby="client-snackbar"
-                message={
-                    <span id="client-snackbar" className={classes.message}>
-                    <Icon className={classNames(classes.icon, classes.iconVariant)} />
-                    {message}
-                    </span>
-                }
-                action={[
-                    <IconButton
-                    key="close"
-                    aria-label="Close"
-                    color="inherit"
-                    className={classes.close}
-                    onClick={internalHandleClose(props)}
-                    >
-                    <CloseIcon className={classes.icon} />
-                    </IconButton>,
-                ]}
-                {...other}
-            />
-        </Snackbar>
-    );
+  const { open, message, variant, ...other } = props;
+  const classes = useStyles();
+  const Icon = variantIcon[variant];
+  return (
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      open={open}
+      autoHideDuration={3000}
+      onClose={internalHandleClose(props)}
+    >
+      <SnackbarContent
+        className={classNames(classes[variant], classes.margin)}
+        aria-describedby="client-snackbar"
+        message={
+          <span id="client-snackbar" className={classes.message}>
+            <Icon className={classNames(classes.icon, classes.iconVariant)} />
+            {props.message.split('<br/>').map((line, index) => {
+              return (
+                <React.Fragment key={index}>
+                  {line} <br />
+                </React.Fragment>
+              );
+            })}
+          </span>
+        }
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            className={classes.close}
+            onClick={internalHandleClose(props)}
+          >
+            <CloseIcon className={classes.icon} />
+          </IconButton>,
+        ]}
+        {...other}
+      />
+    </Snackbar>
+  );
 }
 
 MessageSnackbar.propTypes = {
-  classes: PropTypes.object.isRequired,
   onClose: PropTypes.func,
   teste: PropTypes.func,
-  open: PropTypes.bool.isRequired, 
+  open: PropTypes.bool.isRequired,
   variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
-  message: PropTypes.string.isRequired,  
+  message: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(MessageSnackbar);
+export default MessageSnackbar;

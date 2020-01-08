@@ -2,23 +2,23 @@ import baseService from './baseService';
 
 import axios from './axios';
 
-const billsReceiveService = baseService('bills_receive');
+const billsReceiveService = baseService('BillReceive');
 
 const getBillsReceiveServiceByClient = id =>
-  axios.get(`/bills_receive/client/${id}`);
+  axios.get(`/BillReceive/client/${id}`);
 const getBillsReceiveServiceByClientPaid = id =>
-  axios.get(`/bills_receive/client/${id}/paid`);
+  axios.get(`/BillReceive/client/${id}/paid`);
 const getBillsReceiveServiceByClientNoPaid = id =>
-  axios.get(`/bills_receive/client/${id}/no_paid`);
-const createQuotas = (id, data) =>
-  axios.post(`/bills_receive/create_quotas/${id}`, data);
+  axios.get(`/BillReceive/client/${id}/no_paid`);
+const createBillReceives = (data) =>
+  axios.post(`/BillReceive/createBillReceives/`, data);
 
-billsReceiveService.remove = code => axios.delete(`/bills_receive/${code}`);
+billsReceiveService.remove = code => axios.delete(`/BillReceive/${code}`);
 
 export default {
   ...billsReceiveService,
   getBillsReceiveServiceByClient,
   getBillsReceiveServiceByClientPaid,
   getBillsReceiveServiceByClientNoPaid,
-  createQuotas,
+  createBillReceives,
 };

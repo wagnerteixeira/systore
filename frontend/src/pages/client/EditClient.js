@@ -134,26 +134,24 @@ class EditClient extends Component {
     super(props);
     this.state = {
       tabValue: 'EDIT',
-      openModalAddress: false, 
-      postalCodes: [], 
+      openModalAddress: false,
+      postalCodes: [],
     };
-  }  
+  }
 
   handleTabChange = (event, value) => {
     this.setState({ tabValue: value });
   };
 
-  handleOpeModalAddress = (value) => {
-    this.setState({openModalAddress: value});
-  } 
+  handleOpeModalAddress = value => {
+    this.setState({ openModalAddress: value });
+  };
 
-
-   onCloseModalAddress = (event, reason) => {     
-    this.setState({openModalAddress: false});
+  onCloseModalAddress = (event, reason) => {
+    this.setState({ openModalAddress: false });
     if (reason === 'created') {
-      
     }
-  }
+  };
 
   handleSearchPostalCode = () => {
     const { handleOpenMessage } = this.props;
@@ -182,8 +180,12 @@ class EditClient extends Component {
       .get(`https://viacep.com.br/ws/${state}/${city}/${address}/json/`)
       .then(res => {
         if (res.data.erro) return;
-        let _postalCodes = res.data.map(item => ({ neighborhood: item.bairro, postal_code: item.cep,  address: item.logradouro }));               
-        this.setState({openModalAddress : true, postalCodes : _postalCodes});
+        let _postalCodes = res.data.map(item => ({
+          neighborhood: item.bairro,
+          postalCode: item.cep,
+          address: item.logradouro,
+        }));
+        this.setState({ openModalAddress: true, postalCodes: _postalCodes });
       });
   };
 
@@ -195,6 +197,7 @@ class EditClient extends Component {
       handleSave,
       handleCancel,
       handleDateValueChange,
+      handleValueChangeOnlyNumber,
       handlePostalCodeChange,
       handleCheckCpf,
       handleCheckDateBirth,
@@ -216,13 +219,13 @@ class EditClient extends Component {
         {tabValue === 'EDIT' && (
           <form className={classes.container} noValidate autoComplete="off">
             <div className={classes.back}>
-              <ChoosePostalCode 
-                open={this.state.openModalAddress} 
-                handleClose={this.onCloseModalAddress} 
+              <ChoosePostalCode
+                open={this.state.openModalAddress}
+                handleClose={this.onCloseModalAddress}
                 paperClass={classes.paperModalAddress}
-                rows={this.state.postalCodes}                
+                rows={this.state.postalCodes}
                 handlePostalCodeChange={handlePostalCodeChange}
-                />
+              />
               <Grid className={classes.itens} container spacing={3}>
                 <Grid
                   className={classes.item}
@@ -238,7 +241,7 @@ class EditClient extends Component {
                     label="Cpf"
                     className={classes.textField}
                     value={clientData.cpf}
-                    onChange={handleValueChange('cpf')}
+                    onChange={handleValueChangeOnlyNumber('cpf')}
                     onBlur={handleCheckCpf}
                     margin="normal"
                     fullWidth
@@ -295,11 +298,11 @@ class EditClient extends Component {
                   xl={3}
                 >
                   <KeyboardDatePicker
-                    id="registry_date"
+                    id="registryDate"
                     label="Data de Registro"
                     className={classes.textField}
-                    value={clientData.registry_date}
-                    onChange={handleDateValueChange('registry_date')}
+                    value={clientData.registryDate}
+                    onChange={handleDateValueChange('registryDate')}
                     margin="normal"
                     format={'dd/MM/yyyy'}
                     fullWidth
@@ -315,11 +318,11 @@ class EditClient extends Component {
                   xl={3}
                 >
                   <KeyboardDatePicker
-                    id="date_of_birth"
+                    id="dateOfBirth"
                     label="Data de Aniversário"
                     className={classes.textField}
-                    value={clientData.date_of_birth}
-                    onChange={handleDateValueChange('date_of_birth')}
+                    value={clientData.dateOfBirth}
+                    onChange={handleDateValueChange('dateOfBirth')}
                     onBlur={handleCheckDateBirth}
                     margin="normal"
                     format={'dd/MM/yyyy'}
@@ -336,11 +339,11 @@ class EditClient extends Component {
                   xl={6}
                 >
                   <TextField
-                    id="place_of_birth"
+                    id="placeOfBirth"
                     label="Naturalidade"
                     className={classes.textField}
-                    value={clientData.place_of_birth}
-                    onChange={handleValueChange('place_of_birth')}
+                    value={clientData.placeOfBirth}
+                    onChange={handleValueChange('placeOfBirth')}
                     margin="normal"
                     fullWidth
                   />
@@ -374,11 +377,11 @@ class EditClient extends Component {
                   xl={2}
                 >
                   <TextField
-                    id="address_number"
+                    id="addressNumber"
                     label="Número"
                     className={classes.textField}
-                    value={clientData.address_number}
-                    onChange={handleValueChange('address_number')}
+                    value={clientData.addressNumber}
+                    onChange={handleValueChange('addressNumber')}
                     margin="normal"
                     fullWidth
                   />
@@ -496,11 +499,13 @@ class EditClient extends Component {
                   xl={4}
                 >
                   <TextField
-                    id="postal_code"
+                    id="postalCode"
                     label="CEP"
                     className={classes.textField}
-                    value={clientData.postal_code}
-                    onChange={(event)=> handlePostalCodeChange(event, 'textFieldCep')}
+                    value={clientData.postalCode}
+                    onChange={event =>
+                      handlePostalCodeChange(event, 'textFieldCep')
+                    }
                     margin="normal"
                     fullWidth
                   />
@@ -534,11 +539,11 @@ class EditClient extends Component {
                   xl={10}
                 >
                   <TextField
-                    id="job_name"
+                    id="jobName"
                     label="Empresa"
                     className={classes.textField}
-                    value={clientData.job_name}
-                    onChange={handleValueChange('job_name')}
+                    value={clientData.jobName}
+                    onChange={handleValueChange('jobName')}
                     margin="normal"
                     fullWidth
                   />
@@ -553,11 +558,11 @@ class EditClient extends Component {
                   xl={2}
                 >
                   <KeyboardDatePicker
-                    id="admission_date"
+                    id="admissionDate"
                     label="Data de Admissão"
                     className={classes.textField}
-                    value={clientData.admission_date}
-                    onChange={handleDateValueChange('admission_date')}
+                    value={clientData.admissionDate}
+                    onChange={handleDateValueChange('admissionDate')}
                     margin="normal"
                     format={'dd/MM/yyyy'}
                     fullWidth
@@ -594,8 +599,8 @@ class EditClient extends Component {
                   <SelectGeneric
                     description="Estado civil"
                     showEmpty={false}
-                    value={clientData.civil_status}
-                    onChange={handleValueChange('civil_status')}
+                    value={clientData.civilStatus}
+                    onChange={handleValueChange('civilStatus')}
                     itens={menuCivilStatus}
                   />
                 </Grid>
@@ -628,11 +633,11 @@ class EditClient extends Component {
                   xl={6}
                 >
                   <TextField
-                    id="father_name"
+                    id="fatherName"
                     label="Pai"
                     className={classes.textField}
-                    value={clientData.father_name}
-                    onChange={handleValueChange('father_name')}
+                    value={clientData.fatherName}
+                    onChange={handleValueChange('fatherName')}
                     margin="normal"
                     fullWidth
                   />
@@ -647,11 +652,11 @@ class EditClient extends Component {
                   xl={6}
                 >
                   <TextField
-                    id="mother_name"
+                    id="motherName"
                     label="Mãe"
                     className={classes.textField}
-                    value={clientData.mother_name}
-                    onChange={handleValueChange('mother_name')}
+                    value={clientData.motherName}
+                    onChange={handleValueChange('motherName')}
                     margin="normal"
                     fullWidth
                   />
@@ -782,7 +787,7 @@ class EditClient extends Component {
         )}
         {tabValue === 'LIST' && (
           <BillReceiveTable
-            clientId={this.props.clientData._id}
+            clientId={this.props.clientData.id}
             clientData={this.props.clientData}
             handleOpenMessage={this.props.handleOpenMessage}
             handleSaveClient={this.props.handleSave}

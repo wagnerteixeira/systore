@@ -34,15 +34,15 @@ class User extends Component {
     users: [],
     countUsers: 0,
     data: {
-      _id: '',
-      user_name: '',
-      email: '',
+      id: '',
+      userName: '',
+      admin: false,
       password: ''
     },
     page: 0,
     rowsPerPage: 5,
-    order: 'asc',
-    columnSort: 'user_name',
+    order: 'Asc',
+    columnSort: 'userName',
     search: '',
     messageOpen: false,
     variantMessage: 'success',
@@ -62,11 +62,11 @@ class User extends Component {
 
   fetchUsers = (page, rowsPerPage, columnSort, order, filter) => {
     userservice
-      .count(columnSort, filter)
+      .count(columnSort, 'StW', filter)
       .then(res => this.setState({ countUsers: res.data.value }));
     const skip = page * rowsPerPage;
     userservice
-      .getAll(skip, rowsPerPage, columnSort, columnSort, order, 'rg', filter)
+      .getAll(skip, rowsPerPage, columnSort, columnSort, order, 'StW', filter)
       .then(res => {
         this.setState({
           stateData: 'LIST',
@@ -74,9 +74,8 @@ class User extends Component {
           selectedIndex: '0',
           users: res.data,
           data: {
-            _id: '',
-            user_name: '',
-            email: '',
+            id: '',
+            userName: '',            
             password: '',
             admin: false
           },
@@ -134,10 +133,9 @@ class User extends Component {
         );
     } else {
       let user = {
-        user_name: this.state.data.user_name,
-        email: this.state.data.email,
-        password: this.state.data.password,
-        admin: false
+        userName: this.state.data.userName,
+        admin: this.state.data.admin,
+        password: this.state.data.password,        
       };
       userservice
         .create(user)
@@ -155,7 +153,7 @@ class User extends Component {
   handleDelete = key => {
     Confirm('Atenção', 'Confirma a exclusão?', () => 
       userservice
-        .remove(this.state.users[key]._id)
+        .remove(this.state.users[key].id)
         .then(() => this.handleCancel('DELETE'))
         .catch(error =>
           this.setState({
@@ -180,8 +178,8 @@ class User extends Component {
     this.setState({
       stateData: 'EDIT_INSERT',
       data: {
-        _id: '',
-        user_name: '',
+        id: '',
+        userName: '',
         email: '',
         password: ''
       }
@@ -209,9 +207,9 @@ class User extends Component {
   };
 
   handleSort = property => event => {
-    let order = 'asc';
-    if (this.state.columnSort === property && this.state.order === 'asc') {
-      order = 'desc';
+    let order = 'Asc';
+    if (this.state.columnSort === property && this.state.order === 'Asc') {
+      order = 'Desc';
     }
 
     this.fetchUsers(

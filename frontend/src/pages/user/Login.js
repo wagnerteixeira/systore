@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { withStyles } from '@material-ui/core/styles';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,8 +10,15 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import config from '../../config/config.json';
+import {
+  InputAdornment,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Input,
+} from '@material-ui/core';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -35,17 +43,19 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'row',
   },
-});
+}));
 
 function Login(props) {
   const {
-    classes,
+    showPassword,
     userName,
     password,
     handleLogin,
     handleValueChange,
+    handleClickShowPassword,
     keyPress,
   } = props;
+  const classes = useStyles();
   return (
     <div>
       <AppBar position="static">
@@ -77,22 +87,37 @@ function Login(props) {
             shrink: true,
           }}
         />
-        <TextField
-          id="password"
-          label="Senha"
-          value={password}
-          className={classes.textField}
-          type="password"
-          onChange={handleValueChange('password')}
-          autoComplete="current-password"
-          fullWidth
-          placeholder="Senha"
+        <FormControl
           margin="normal"
-          onKeyDown={keyPress}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
+          required
+          fullWidth
+          className={classes.textField}
+        >
+          <InputLabel htmlFor="password" shrink={true}>
+            Senha
+          </InputLabel>
+          <Input
+            name="password"
+            autoComplete="current-password"
+            id="password"
+            value={password}
+            type={showPassword ? 'text' : 'password'}
+            onChange={handleValueChange('password')}
+            fullWidth
+            placeholder="Senha"
+            onKeyDown={keyPress}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="Toggle password visibility"
+                  onClick={handleClickShowPassword}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
         <Button
           variant="contained"
           color="primary"
@@ -107,10 +132,9 @@ function Login(props) {
 }
 
 Login.propTypes = {
-  classes: PropTypes.object.isRequired,
   handleLogin: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(Login);
+export default Login;

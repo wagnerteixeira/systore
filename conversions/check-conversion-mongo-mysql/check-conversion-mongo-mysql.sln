@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "check-conversion-mongo-mysql", "check-conversion-mongo-mysql.csproj", "{BEDE64AD-3AE5-4D66-AE11-6190C199A1AF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systore.Domain", "..\..\backend_dotnet\src\Systore.Domain\Systore.Domain.csproj", "{2154D539-08F8-4949-89E7-A5D3B8A0F07A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systore.Dtos", "..\..\backend_dotnet\src\Systore.Dtos\Systore.Dtos.csproj", "{97BDA995-1FE8-4ECC-9097-2A92582CCDCB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "conversion-mongo-mysql", "..\conversion-mongo-mysql\conversion-mongo-mysql.csproj", "{0688971F-0A26-4EB5-8ECD-E7E47F456E57}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systore.Infra", "..\..\backend_dotnet\src\Systore.Infra\Systore.Infra.csproj", "{4C3A5504-81F2-4442-B97D-4FDB41CBEE49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systore.Data", "..\..\backend_dotnet\src\Systore.Data\Systore.Data.csproj", "{CDE0A7EC-666A-4CB3-8C9B-4CC719FF403D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEDE64AD-3AE5-4D66-AE11-6190C199A1AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDE64AD-3AE5-4D66-AE11-6190C199A1AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDE64AD-3AE5-4D66-AE11-6190C199A1AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDE64AD-3AE5-4D66-AE11-6190C199A1AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2154D539-08F8-4949-89E7-A5D3B8A0F07A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2154D539-08F8-4949-89E7-A5D3B8A0F07A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2154D539-08F8-4949-89E7-A5D3B8A0F07A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2154D539-08F8-4949-89E7-A5D3B8A0F07A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97BDA995-1FE8-4ECC-9097-2A92582CCDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97BDA995-1FE8-4ECC-9097-2A92582CCDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97BDA995-1FE8-4ECC-9097-2A92582CCDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97BDA995-1FE8-4ECC-9097-2A92582CCDCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0688971F-0A26-4EB5-8ECD-E7E47F456E57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0688971F-0A26-4EB5-8ECD-E7E47F456E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0688971F-0A26-4EB5-8ECD-E7E47F456E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0688971F-0A26-4EB5-8ECD-E7E47F456E57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C3A5504-81F2-4442-B97D-4FDB41CBEE49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C3A5504-81F2-4442-B97D-4FDB41CBEE49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C3A5504-81F2-4442-B97D-4FDB41CBEE49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C3A5504-81F2-4442-B97D-4FDB41CBEE49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDE0A7EC-666A-4CB3-8C9B-4CC719FF403D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDE0A7EC-666A-4CB3-8C9B-4CC719FF403D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDE0A7EC-666A-4CB3-8C9B-4CC719FF403D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDE0A7EC-666A-4CB3-8C9B-4CC719FF403D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BBDDF234-E889-4B20-980D-3C3BA6E1B158}
+	EndGlobalSection
+EndGlobal

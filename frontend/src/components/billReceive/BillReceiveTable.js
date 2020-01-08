@@ -17,12 +17,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import {
   getDateToString,
-  getDelayedDays,
-  getCurrentDate,
   getNumberDecimalToStringCurrency,
   getNumberToString,
-  getValueWithInterest,
-  getValueInterest,
 } from '../../utils/operators';
 
 import BillReceiveCreateModal from './BillReceiveCreateModal';
@@ -112,7 +108,6 @@ const stylesMenu = theme => ({
 
 function _MenuAcoes(props) {
   const {
-    handleSaveClient,
     handleCloseMenuAcoes,
     anchorElMenuAcoes,
     handlePrintBillReceiveGroupByCode,
@@ -131,7 +126,7 @@ function _MenuAcoes(props) {
       open={Boolean(anchorElMenuAcoes)}
       onClose={handleCloseMenuAcoes}
     >
-      {situation === 'O' && (
+      {situation === 0 && (
         <MenuItem
           onClick={() => {
             handleEditBillReceive(billReceiveKey);
@@ -144,8 +139,8 @@ function _MenuAcoes(props) {
       )}
       <MenuItem
         onClick={() => {
-            handlePrintBillReceiveGroupByCode(billReceiveKey);
-            handleCloseMenuAcoes();
+          handlePrintBillReceiveGroupByCode(billReceiveKey);
+          handleCloseMenuAcoes();
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -153,8 +148,8 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-            handlePrintBillReceive(billReceiveKey);
-            handleCloseMenuAcoes();          
+          handlePrintBillReceive(billReceiveKey);
+          handleCloseMenuAcoes();
         }}
       >
         <Icon className={classes.iconPadding}>print </Icon>
@@ -162,8 +157,8 @@ function _MenuAcoes(props) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-            handlePrintBillReceivesOpen();
-            handleCloseMenuAcoes();
+          handlePrintBillReceivesOpen();
+          handleCloseMenuAcoes();
         }}
       >
         <Icon className={classes.iconPadding}>print</Icon>
@@ -205,7 +200,6 @@ function BillReceiveTable(props) {
     handleOpenMessage,
     handleSaveClient,
   } = props;
-  const dateCurrent = getCurrentDate();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -220,7 +214,7 @@ function BillReceiveTable(props) {
   const [dadosMenuAcoes, setDadosMenuAcoes] = useState({
     anchorEl: null,
     billReceiveKey: '',
-    situation: 'O',
+    situation: 0,
   });
 
   useEffect(() => {
@@ -246,14 +240,13 @@ function BillReceiveTable(props) {
   }
 
   function handleOpenCreateModal() {
-    if ((clientId === '0' || clientId === '') && handleSaveClient) {
+    if ((clientId === 0 || clientId === '') && handleSaveClient) {
       Confirm(
         'Atenção',
         'Cliente ainda não está salvo, para continuar é preciso salvar.',
         () => handleSaveClient(() => setOpenCreateModal(true))
       );
-    } else 
-      setOpenCreateModal(true);
+    } else setOpenCreateModal(true);
   }
 
   function handleSaveBillReceive(reason, print, clientData, billReceive) {
@@ -294,7 +287,7 @@ function BillReceiveTable(props) {
 
   function handlePrintBillReceivesOpen() {
     internalPrintBillReceives(
-      billsReceiveComplete.filter(item => item.situation === 'O')
+      billsReceiveComplete.filter(item => item.situation === 0)
     );
   }
 
@@ -324,7 +317,6 @@ function BillReceiveTable(props) {
           setbillsReceiveComplete(billsReceiveCompleteWithoutDeleted);
         })
         .catch(error => {
-          console.log(error.response);
           handleOpenMessage(true, 'error', getErrosFromApi(error));
         })
     );
@@ -344,7 +336,7 @@ function BillReceiveTable(props) {
         setbillsReceive([]);*/
   }
 
-  function onCloseCreateModal(event, reason) {    
+  function onCloseCreateModal(event, reason) {
     setOpenCreateModal(false);
     if (reason === 'created') {
       handleOpenMessage(false, 'success', '');
@@ -391,18 +383,16 @@ function BillReceiveTable(props) {
         >
           INCLUIR
         </Button>
-        {!(clientId === '0' || clientId === '') && (
+        {!(clientId === 0 || clientId === '') && (
           <>
             <Typography style={{ paddingLeft: 10 }}>
               Saldo devedor sem juros:{'  '}
               <span style={{ fontWeight: 600, color: 'red' }}>
                 {getNumberToString(
                   billsReceiveComplete
-                    .filter(b => b.situation === 'O')
+                    .filter(b => b.situation === 0)
                     .reduce((prev, curr) => {
-                      return (
-                        parseFloat(curr.original_value['$numberDecimal']) + prev
-                      );
+                      return parseFloat(curr.originalValue) + prev;
                     }, 0.0)
                 )}
               </span>
@@ -412,18 +402,8 @@ function BillReceiveTable(props) {
               <span style={{ fontWeight: 600, color: 'red' }}>
                 {getNumberToString(
                   billsReceiveComplete
-                    .filter(b => b.situation === 'O')
-                    .reduce((prev, curr) => {
-                      return (
-                        parseFloat(
-                          getValueWithInterest(
-                            curr.original_value['$numberDecimal'],
-                            curr.due_date,
-                            dateCurrent
-                          )
-                        ) + prev
-                      );
-                    }, 0.0)
+                    .filter(b => b.situation === 0)
+                    .reduce((prev, curr) => curr.finalValue + prev, 0.0)
                 )}
               </span>
             </Typography>
@@ -443,7 +423,7 @@ function BillReceiveTable(props) {
               <TableCell size="small">Valor</TableCell>
               {/*<TableCell size="small" align="left">
                 Situação
-                  </TableCell>*/}              
+                  </TableCell>*/}
               <TableCell size="small">Valor pago/atual</TableCell>
               <TableCell size="small">Juros</TableCell>
               <TableCell size="small">Dias em atraso</TableCell>
@@ -454,20 +434,15 @@ function BillReceiveTable(props) {
           </TableHead>
           <TableBody>
             {Object.keys(billsReceive).map(key => {
-              let _daysDelay =
-                billsReceive[key].pay_date != null
-                  ? billsReceive[key].days_delay
-                  : getDelayedDays(billsReceive[key].due_date, dateCurrent);
-              if (parseInt(_daysDelay) <= 0) _daysDelay = '';
               return (
                 <TableRow
                   className={
-                    billsReceive[key].situation === 'O' && classes.openRow
+                    billsReceive[key].situation === 0 && classes.openRow
                   }
                   key={key}
                 >
                   <TableCell size="small">
-                    {getDateToString(billsReceive[key].purchase_date)}
+                    {getDateToString(billsReceive[key].purchaseDate)}
                   </TableCell>
                   <TableCell size="small">
                     <div className={classes.ellipses}>
@@ -477,50 +452,32 @@ function BillReceiveTable(props) {
                   <TableCell size="small">{billsReceive[key].code}</TableCell>
                   <TableCell size="small">{billsReceive[key].quota}</TableCell>
                   <TableCell>
-                    {getDateToString(billsReceive[key].due_date)}
+                    {getDateToString(billsReceive[key].dueDate)}
                   </TableCell>
                   <TableCell size="small">
-                    {getDateToString(billsReceive[key].pay_date)}
+                    {getDateToString(billsReceive[key].payDate)}
                   </TableCell>
                   <TableCell size="small">
                     {getNumberDecimalToStringCurrency(
-                      billsReceive[key].original_value
+                      billsReceive[key].originalValue
                     )}
                   </TableCell>
                   {/*<TableCell size="small" align="left">
-{billsReceive[key].situation === 'C' ? 'QUITADO' : 'ABERTO'}
+{billsReceive[key].situation === 1 ? 'QUITADO' : 'ABERTO'}
 </TableCell>*/}
                   <TableCell size="small">
-                    {getNumberToString(
-                      billsReceive[key].pay_date != null
-                        ? billsReceive[key].final_value['$numberDecimal']
-                        : parseFloat(
-                            getValueWithInterest(
-                              billsReceive[key].original_value[
-                                '$numberDecimal'
-                              ],
-                              billsReceive[key].due_date,
-                              dateCurrent
-                            )
-                          )
+                    {getNumberDecimalToStringCurrency(
+                      billsReceive[key].finalValue
                     )}
                   </TableCell>
                   <TableCell size="small">
-                    {getNumberToString(
-                      billsReceive[key].pay_date != null
-                        ? billsReceive[key].interest['$numberDecimal']
-                        : parseFloat(
-                            getValueInterest(
-                              billsReceive[key].original_value[
-                                '$numberDecimal'
-                              ],
-                              billsReceive[key].due_date,
-                              dateCurrent
-                            )
-                          )
+                    {getNumberDecimalToStringCurrency(
+                      billsReceive[key].interest
                     )}
                   </TableCell>
-                  <TableCell size="small">{_daysDelay}</TableCell>
+                  <TableCell size="small">
+                    {billsReceive[key].daysDelay}
+                  </TableCell>
                   <TableCell size="small" align="left">
                     <Fab
                       color="primary"
@@ -534,42 +491,6 @@ function BillReceiveTable(props) {
                     >
                       <TouchApp fontSize="small" />
                     </Fab>
-                    {/*<Fab
-                      color="secondary"
-                      aria-label="Delete"
-                      className={classNames(classes.fab, classes.fabEdit)}
-                      onClick={() => handlePrintBillReceiveGroupByCode(key)}
-                      size="small"
-                    >
-                      <Icon fontSize="small">event_note</Icon>
-                    </Fab>
-                    <Fab
-                      color="secondary"
-                      aria-label="Delete"
-                      className={classNames(classes.fab, classes.fabEdit)}
-                      onClick={() => handlePrintBillReceive(key)}
-                      size="small"
-                    >
-                      <Icon fontSize="small">local_printshop</Icon>
-                    </Fab>
-                    <Fab
-                      color="primary"
-                      aria-label="Edit"
-                      className={classNames(classes.fab, classes.fabEdit)}
-                      onClick={() => handleEditBillReceive(key)}
-                      size="small"
-                    >
-                      <Icon fontSize="small">edit_icon</Icon>
-                    </Fab>
-                    <Fab
-                      color="secondary"
-                      aria-label="Delete"
-                      className={classes.fab}
-                      onClick={() => handleDeleteBillReceive(key)}
-                      size="small"
-                    >
-                      <Icon fontSize="small">delete_icon</Icon>
-                    </Fab>*/}
                   </TableCell>
                 </TableRow>
               );

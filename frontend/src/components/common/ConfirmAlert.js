@@ -4,46 +4,47 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { Button } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import { withStyles } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 
 import muiTheme from '../../config/theme';
 
-const theme = muiTheme;
-
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   container: {
     marginTop: theme.spacing(3),
     display: 'block',
     padding: theme.spacing(5),
     width: theme.spacing(70),
-   /* borderStyle: 'solid',
+    /* borderStyle: 'solid',
     borderWidth: '1px',
     borderColor: theme.palette.primary.main,*/
   },
-  title:{
+  title: {
     margin: theme.spacing(1),
     marginLeft: 0,
   },
   button: {
     margin: theme.spacing(1),
     marginLeft: 0,
-  }
-});
+  },
+}));
 
 function Message(props) {
-  const {classes}  = props;
+  const classes = useStyles();
   return (
-    <Paper className={classes.container}  elevation={1}>
-      <Typography className={classes.title} variant="h5" component="h3">{props.title}</Typography>
-      <Typography component="p">{
-        props.message.split('<br/>').map((line, index) => {
-          return(
+    <Paper className={classes.container} elevation={1}>
+      <Typography className={classes.title} variant="h5" component="h3">
+        {props.title}
+      </Typography>
+      <Typography component="p">
+        {props.message.split('<br/>').map((line, index) => {
+          return (
             <>
-              {line} <br/>
+              {line} <br />
             </>
-          )
-        }) }</Typography>               
+          );
+        })}
+      </Typography>
       <Button
         className={classes.button}
         variant="outlined"
@@ -55,27 +56,35 @@ function Message(props) {
       >
         Sim
       </Button>
-      <Button className={classes.button} variant="outlined"
-              color="secondary" onClick={props.onClose}>Não</Button>
+      <Button
+        className={classes.button}
+        variant="outlined"
+        color="secondary"
+        onClick={props.onClose}
+      >
+        Não
+      </Button>
     </Paper>
-  )
+  );
 }
-
-const ConfirmBody = withStyles(styles)(Message);
 
 const Confirm = (title, message, onYes) => {
- confirmAlert({
+  confirmAlert({
     customUI: ({ onClose }) => {
       return (
-        <div className='custom-ui'>
-          <MuiThemeProvider theme={theme}>
-            <ConfirmBody title={title} message={message} onClose={onClose} onYes={onYes} />
-          </MuiThemeProvider>
+        <div className="custom-ui">
+          <ThemeProvider theme={muiTheme}>
+            <Message
+              title={title}
+              message={message}
+              onClose={onClose}
+              onYes={onYes}
+            />
+          </ThemeProvider>
         </div>
       );
-    }
+    },
   });
-}
-
+};
 
 export default Confirm;

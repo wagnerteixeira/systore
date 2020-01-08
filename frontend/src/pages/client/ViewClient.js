@@ -110,7 +110,7 @@ function ViewClient(props) {
   } = props;
   return (
     <Paper className={classes.root}>
-      <Grid container className={classes.itens} spacing={24}>
+      <Grid container className={classes.itens} spacing={0}>
         <Grid className={classes.item} item xs={12} sm={2} md={2} lg={2} xl={2}>
           <FormControl fullWidth className={classes.margin}>
             <InputLabel htmlFor="sort">Pesquisar por</InputLabel>
@@ -122,10 +122,10 @@ function ViewClient(props) {
                 id: 'sort',
               }}
             >
-              <MenuItem value={'code'}>Código</MenuItem>
+              <MenuItem value={'id'}>Código</MenuItem>
               <MenuItem value={'name'}>Nome</MenuItem>
               <MenuItem value={'cpf'}>Cpf</MenuItem>
-              <MenuItem value={'date_of_birth'}>Data de nascimento</MenuItem>
+              <MenuItem value={'dateOfBirth'}>Data de nascimento</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -199,9 +199,9 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'code'}
+                  active={columnSort === 'id'}
                   direction={order}
-                  onClick={handleSort('code')}
+                  onClick={handleSort('id')}
                 >
                   Código
                 </TableSortLabel>
@@ -244,9 +244,9 @@ function ViewClient(props) {
                 enterDelay={300}
               >
                 <TableSortLabel
-                  active={columnSort === 'date_of_birth'}
+                  active={columnSort === 'dateOfBirth'}
                   direction={order}
-                  onClick={handleSort('date_of_birth')}
+                  onClick={handleSort('dateOfBirth')}
                 >
                   Data de nascimento
                 </TableSortLabel>
@@ -265,7 +265,7 @@ function ViewClient(props) {
           {Object.keys(clients).map(key => (
             <TableRow hover key={key}>
               <TableCell padding="none" size="small">
-                {clients[key].code}
+                {clients[key].id}
               </TableCell>
               <TableCell padding="none" size="small">
                 {clients[key].name}
@@ -274,7 +274,7 @@ function ViewClient(props) {
                 {clients[key].cpf}
               </TableCell>
               <TableCell padding="none" size="small">
-                {getDateToString(clients[key].date_of_birth)}
+                {getDateToString(clients[key].dateOfBirth)}
               </TableCell>
               <TableCell padding="none" align="right">
                 <Fab

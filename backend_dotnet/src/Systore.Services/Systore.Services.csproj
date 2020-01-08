@@ -3,6 +3,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Systore.Data\Systore.Data.csproj" />
     <ProjectReference Include="..\Systore.Domain\Systore.Domain.csproj" />
+    <ProjectReference Include="..\Systore.Dtos\Systore.Dtos.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
 
   <PropertyGroup>

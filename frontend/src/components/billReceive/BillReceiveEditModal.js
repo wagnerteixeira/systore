@@ -50,32 +50,32 @@ class BillReceiveEditModal extends React.Component {
       messageText: '',
       printQuota: false,
       data: {
-        _id: props.bill._id,
+        id: props.bill.id,
         client: props.bill.client,
         code: props.bill.code,
         quota: props.bill.quota,
-        original_value: props.bill.original_value['$numberDecimal'],
+        originalValue: props.bill.originalValue,
         interest:
-          props.bill.pay_date != null
-            ? props.bill.interest['$numberDecimal']
+          props.bill.payDate != null
+            ? props.bill.interest
             : getValueInterest(
-                props.bill.original_value['$numberDecimal'],
-                props.bill.due_date,
+                props.bill.originalValue,
+                props.bill.dueDate,
                 getCurrentDate()
               ),
-        final_value:
-          props.bill.pay_date != null
-            ? props.bill.final_value['$numberDecimal']
+        finalValue:
+          props.bill.payDate != null
+            ? props.bill.finalValue
             : getValueWithInterest(
-                props.bill.original_value['$numberDecimal'],
-                props.bill.due_date,
+                props.bill.originalValue,
+                props.bill.dueDate,
                 getCurrentDate()
               ),
-        purchase_date: props.bill.purchase_date,
-        due_date: props.bill.due_date,
-        pay_date:
-          props.bill.pay_date != null ? props.bill.pay_date : getCurrentDate(),
-        days_delay: props.bill.days_delay,
+        purchaseDate: props.bill.purchaseDate,
+        dueDate: props.bill.dueDate,
+        payDate:
+          props.bill.payDate != null ? props.bill.payDate : getCurrentDate(),
+        daysDelay: props.bill.daysDelay,
         situation: props.bill.situation,
         vendor: props.bill.vendor,
       },
@@ -94,9 +94,9 @@ class BillReceiveEditModal extends React.Component {
     this.setState({
       data: {
         ...this.state.data,
-        interest: event.target.value,
-        final_value:
-          parseFloat(this.state.data.original_value) +
+        interest: parseFloat(event.target.value),
+        finalValue:
+          parseFloat(this.state.data.originalValue) +
           parseFloat(event.target.value),
       },
     });
@@ -108,10 +108,9 @@ class BillReceiveEditModal extends React.Component {
 
   validadePay = () => {
     let message = '';
-    if (!this.state.data.final_value || this.state.data.final_value <= 0)
+    if (!this.state.data.finalValue || this.state.data.finalValue <= 0)
       message += 'Informe o valor pago!\n\n';
-    if (!this.state.data.pay_date)
-      message += 'Informe a data de pagamento!\n\n';
+    if (!this.state.data.payDate) message += 'Informe a data de pagamento!\n\n';
     return message;
   };
 
@@ -125,11 +124,18 @@ class BillReceiveEditModal extends React.Component {
       });
       return;
     }
-    data.situation = 'C';
+    data.situation = 1;
+    data.clientId = this.props.clientData.id;
+    data.client = this.props.clientData;
     billsReceiveservice
       .update(data)
-      .then(res => {                       
-        this.props.handleSave('saved', this.state.printQuota, this.props.clientData, [{ ...res.data }]);        
+      .then(res => {
+        this.props.handleSave(
+          'saved',
+          this.state.printQuota,
+          this.props.clientData,
+          [{ ...res.data }]
+        );
       })
       .catch(error => console.log(error.response));
   };
@@ -138,18 +144,18 @@ class BillReceiveEditModal extends React.Component {
     this.setState({ [name]: event.target.checked });
   };
 
-  handleGenerateInterest = () => {    
+  handleGenerateInterest = () => {
     let value = getValueInterest(
-      this.state.data.original_value,
-      this.state.data.due_date,
-      this.state.data.pay_date
-    );    
+      this.state.data.originalValue,
+      this.state.data.dueDate,
+      this.state.data.payDate
+    );
     this.setState({
       data: {
         ...this.state.data,
-        interest: value,
-        final_value:
-          parseFloat(this.state.data.original_value) + parseFloat(value),
+        interest: parseFloat(value),
+        finalValue:
+          parseFloat(this.state.data.originalValue) + parseFloat(value),
       },
     });
   };
@@ -165,10 +171,10 @@ class BillReceiveEditModal extends React.Component {
       printQuota,
     } = this.state;
 
-    let _original_value = parseFloat(data.original_value)
+    let _originalValue = parseFloat(data.originalValue)
       .toFixed(2)
       .replace('.', ',');
-    let _final_value = parseFloat(data.final_value)
+    let _finalValue = parseFloat(data.finalValue)
       .toFixed(2)
       .replace('.', ',');
     let _interest_value = parseFloat(data.interest)
@@ -207,10 +213,10 @@ class BillReceiveEditModal extends React.Component {
             xl={4}
           >
             <TextField
-              id="purchase_date"
+              id="purchaseDate"
               label="Data da venda"
               className={classes.textField}
-              value={getDateToString(data.purchase_date)}
+              value={getDateToString(data.purchaseDate)}
               margin="normal"
               fullWidth
               InputProps={{
@@ -228,10 +234,10 @@ class BillReceiveEditModal extends React.Component {
             xl={4}
           >
             <TextField
-              id="due_date"
+              id="dueDate"
               label="Data de vencimento"
               className={classes.textField}
-              value={getDateToString(data.due_date)}
+              value={getDateToString(data.dueDate)}
               margin="normal"
               fullWidth
               InputProps={{
@@ -249,15 +255,15 @@ class BillReceiveEditModal extends React.Component {
             xl={4}
           >
             <KeyboardDatePicker
-              id="pay_date"
+              id="payDate"
               label="Data de Pagamento"
               className={classes.textField}
-              value={data.pay_date}
-              onChange={this.handleDateValueChangeBill('pay_date')}
+              value={data.payDate}
+              onChange={this.handleDateValueChangeBill('payDate')}
               margin="normal"
               format={'dd/MM/yyyy'}
               fullWidth
-              ref="pay_date"
+              ref="payDate"
             />
           </Grid>
           <Grid
@@ -336,11 +342,11 @@ class BillReceiveEditModal extends React.Component {
             xl={5}
           >
             <TextField
-              id="original_value"
+              id="originalValue"
               label="Valor"
               className={classes.textField}
-              value={_original_value}
-              onChange={this.handleValueChangeBill('original_value')}
+              value={_originalValue}
+              onChange={this.handleValueChangeBill('originalValue')}
               margin="normal"
               fullWidth
               InputProps={{
@@ -409,17 +415,17 @@ class BillReceiveEditModal extends React.Component {
             xl={5}
           >
             <TextField
-              id="final_value"
+              id="finalValue"
               label="Valor pago"
               className={classes.textField}
-              value={_final_value}
-              onChange={this.handleValueChangeBill('final_value')}
+              value={_finalValue}
+              onChange={this.handleValueChangeBill('finalValue')}
               margin="normal"
               fullWidth
               InputProps={{
                 inputComponent: NumberFormatCustom,
               }}
-              ref="final_value"
+              ref="finalValue"
             />
           </Grid>
           <Grid
@@ -442,7 +448,7 @@ class BillReceiveEditModal extends React.Component {
               }
               label="Imprimir parcela"
             />
-            </Grid>
+          </Grid>
         </Grid>
         <div>
           <Button

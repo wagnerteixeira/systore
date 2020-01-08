@@ -10,7 +10,35 @@ import ViewClient from './ViewClient';
 import clientservice from '../../services/clientService';
 import Confirm from '../../components/common/ConfirmAlert';
 import { getErrosFromApi } from '../../utils/errorsHelper';
-import { getCurrentDate } from '../../utils/operators';
+import { getCurrentDate, strToDate } from '../../utils/operators';
+
+const initialData = {
+  id: 0,
+  name: '',
+  registryDate: new Date(),
+  dateOfBirth: null,
+  address: '',
+  neighborhood: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  cpf: '',
+  seller: '',
+  jobName: '',
+  occupation: '',
+  placeOfBirth: '',
+  spouse: '',
+  note: '',
+  phone1: '',
+  phone2: '',
+  addressNumber: '',
+  complement: '',
+  admissionDate: null,
+  civilStatus: 0,
+  fatherName: '',
+  motherName: '',
+  billsReceives: [],
+};
 
 const styles = theme => ({
   root: {
@@ -32,38 +60,10 @@ class Client extends Component {
     selectedIndex: '0',
     clients: [],
     countClients: 0,
-    data: {
-      _id: '',
-      name: '',
-      code: 0,
-      cpf: '',
-      rg: '',
-      registry_date: null,
-      date_of_birth: null,
-      place_of_birth: '',
-      address: '',
-      address_number: '',
-      complement: '',
-      neighborhood: '',
-      city: '',
-      state: '',
-      postal_code: '',
-      seller: '',
-      job_name: '',
-      admission_date: null,
-      occupation: '',
-      civil_status: 0,
-      spouse: '',
-      phone1: '',
-      phone2: '',
-      note: '',
-      father_name: '',
-      mother_name: '',
-      bills_receives: [],
-    },
+    data: initialData,
     page: 0,
     rowsPerPage: 5,
-    order: 'asc',
+    order: 'Asc',
     columnSort: 'name',
     columnSearch: 'name',
     search: '',
@@ -91,28 +91,56 @@ class Client extends Component {
     order,
     filter
   ) => {
-    if (columnSearch === 'code' && /\D/.test(filter)) {
+    if (filter.length === 0) {
+      this.setState({ columnSearch });
+      return;
+    }
+    if (columnSearch === 'id' && /\D/.test(filter)) {
       this.setState({
         messageOpen: true,
         messageText: 'Informe somente números na pesquisa por código.',
         variantMessage: 'warning',
       });
       return;
+    } else if (columnSearch === 'dateOfBirth') {
+      if (
+        !/^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/i.test(
+          filter
+        )
+      ) {
+        this.setState({
+          messageOpen: true,
+          messageText: 'Informe uma data como por exemplo 01/03/2019.',
+          variantMessage: 'warning',
+        });
+        return;
+      }
+
+      filter = strToDate(filter);
+      if (!filter) {
+        this.setState({
+          messageOpen: true,
+          messageText: 'Informe uma data como por exemplo 01/03/2019.',
+          variantMessage: 'warning',
+        });
+        return;
+      }
     }
 
     let filterType = '';
-    if (columnSearch === 'code') filterType = 'eq';
-    else filterType = 'rg';
+    if (columnSearch === 'id' || columnSearch === 'dateOfBirth')
+      filterType = 'Eq';
+    else filterType = 'StW';
 
     clientservice.count(columnSearch, filterType, filter).then(res => {
-      if (filter !== '' && parseInt(res.data.value) === 0) {
+      if (filter !== '' && parseInt(res.data) === 0) {
         this.setState({
           messageOpen: true,
           messageText: 'Não foi encontrado nenhum cliente com o filtro.',
           variantMessage: 'warning',
         });
       }
-      this.setState({ countClients: res.data.value });
+      this.setState({ countClients: res.data });
     });
     const skip = page * rowsPerPage;
     clientservice
@@ -131,27 +159,7 @@ class Client extends Component {
           inEdit: false,
           selectedIndex: '0',
           clients: res.data,
-          data: {
-            _id: '',
-            name: '',
-            cpf: '',
-            registry_date: new Date(),
-            date_of_birth: null,
-            place_of_birth: '',
-            address: '',
-            neighborhood: '',
-            city: '',
-            state: '',
-            postal_code: '',
-            seller: '',
-            job_name: '',
-            occupation: '',
-            spouse: '',
-            phone1: '',
-            phone2: '',
-            note: '',
-            bills_receives: [],
-          },
+          data: initialData,
           page: page,
           rowsPerPage: rowsPerPage,
           columnSort: columnSort,
@@ -169,10 +177,10 @@ class Client extends Component {
   };
 
   checkCpf = () => {
-    console.log(this.state.inEdit, this.state.data._id, this.state.data.cpf);
     const cpf = this.state.data.cpf.replace(/\D+/g, '');
+    if (cpf === '') return;
     clientservice
-      .existCpf(this.state.inEdit ? 1 : 0, this.state.data._id, cpf)
+      .existCpf(this.state.inEdit ? 1 : 0, this.state.data.id, cpf)
       .then(res => {
         if (!res.data === 'OK') {
           this.setState({
@@ -192,32 +200,32 @@ class Client extends Component {
   };
 
   checkDateBirth = () => {
-    if (this.state.data.date_of_birth > getCurrentDate()) {
+    if (this.state.data.dateOfBirth > getCurrentDate()) {
       this.setState({
         messageOpen: true,
         messageText: 'Data de nascimento não pode ser maior que a data atual',
         variantMessage: 'warning',
       });
     }
-  }
+  };
 
   handleCreate = () => {
     this.setState({
       stateData: 'EDIT_INSERT',
       data: {
-        _id: '',
+        id: 0,
         name: '',
         cpf: '',
-        registry_date: new Date(),
-        date_of_birth: null,
-        place_of_birth: '',
+        registryDate: new Date(),
+        dateOfBirth: null,
+        placeOfBirth: '',
         address: '',
         neighborhood: '',
         city: '',
         state: '',
-        postal_code: '',
+        postalCode: '',
         seller: '',
-        job_name: '',
+        jobName: '',
         occupation: '',
         spouse: '',
         phone1: '',
@@ -232,10 +240,10 @@ class Client extends Component {
     this.setState({ data: { ...this.state.data, [name]: event.target.value } });
   };
 
-  handlePostalCodeChange = (event, origin) => {    
-    if (origin === 'textFieldCep'){
+  handlePostalCodeChange = (event, origin) => {
+    if (origin === 'textFieldCep') {
       this.setState({
-        data: { ...this.state.data, postal_code: event.target.value },
+        data: { ...this.state.data, postalCode: event.target.value },
       });
       if (event.target.value.length === 8) {
         axios
@@ -262,16 +270,25 @@ class Client extends Component {
         // uf: "MG"
         // unidade: ""
       }
-    }
-    else if (origin === 'choosePostalCode'){
+    } else if (origin === 'choosePostalCode') {
       this.setState({
-        data: { ...this.state.data, postal_code: event.target.value.postal_code, address: event.target.value.address, neighborhood: event.target.value.neighborhood },
+        data: {
+          ...this.state.data,
+          postalCode: event.target.value.postalCode,
+          address: event.target.value.address,
+          neighborhood: event.target.value.neighborhood,
+        },
       });
-    };
+    }
   };
 
   handleDateValueChange = name => date => {
     this.setState({ data: { ...this.state.data, [name]: date } });
+  };
+
+  handleValueChangeOnlyNumber = name => event => {
+    let _value = event.target.value.replace(/[^0-9]/g, '');
+    this.setState({ data: { ...this.state.data, [name]: _value } });
   };
 
   handleCancel = previusOperation => {
@@ -329,7 +346,7 @@ class Client extends Component {
     } else {
       let _data = {
         ...this.state.data,
-        _id: undefined,
+        id: undefined,
         phone1: this.state.data.phone1.replace(/\D/g, ''),
         phone2: this.state.data.phone2.replace(/\D/g, ''),
       };
@@ -363,7 +380,7 @@ class Client extends Component {
   handleDelete = key => {
     Confirm('Atenção', 'Confirma a exclusão?', () =>
       clientservice
-        .remove(this.state.clients[key]._id)
+        .remove(this.state.clients[key].id)
         .then(() => this.handleCancel('DELETE'))
         .catch(error => {
           this.setState({
@@ -407,9 +424,9 @@ class Client extends Component {
   };
 
   handleSort = property => event => {
-    let order = 'asc';
-    if (this.state.columnSort === property && this.state.order === 'asc') {
-      order = 'desc';
+    let order = 'Asc';
+    if (this.state.columnSort === property && this.state.order === 'Asc') {
+      order = 'Desc';
     }
     this.fetchClients(
       this.state.page,
@@ -422,6 +439,7 @@ class Client extends Component {
   };
 
   handleRequestSearch = event => {
+    console.log(this.state.columnSearch, event.target.value);
     if (this.state.columnSearch !== event.target.value) {
       this.fetchClients(
         this.state.page,
@@ -518,6 +536,7 @@ class Client extends Component {
             handleCancel={this.handleCancel}
             handleSave={this.handleSave}
             handleDateValueChange={this.handleDateValueChange}
+            handleValueChangeOnlyNumber={this.handleValueChangeOnlyNumber}
             handleOpenMessage={this.handleOpenMessage}
             handlePostalCodeChange={this.handlePostalCodeChange}
             handleCheckCpf={this.checkCpf}

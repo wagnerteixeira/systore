@@ -20,12 +20,12 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
     x: _x,
     y: 18
   }); //numero_compra
-  items.push({ text: clientData.code, x: _x + 32, y: 18 }); //cod_cliente
+  items.push({ text: clientData.id, x: _x + 32, y: 18 }); //cod_cliente
   items.push({ text: clientData.name, x: _x + 66, y: 18 }); //nome_cliente
   //linha 2
   items.push({ text: billReceive.vendor, x: _x, y: 30 }); //vendedor
   items.push({
-    text: getDateToStringYearTwoDigits(billReceive.due_date),
+    text: getDateToStringYearTwoDigits(billReceive.dueDate),
     x: _x + 32,
     y: 30
   }); //data_vencimento
@@ -34,42 +34,42 @@ const createPageForPrintLX300 = (clientData, billReceive) => {
     x: _x + 66,
     y: 30
   }); //numero_compra
-  items.push({ text: clientData.code, x: _x + 89, y: 30 }); //cod_cliente
+  items.push({ text: clientData.id, x: _x + 89, y: 30 }); //cod_cliente
   items.push({
-    text: getDateToString(billReceive.due_date),
+    text: getDateToString(billReceive.dueDate),
     x: _x + 120,
     y: 30
   }); //data_vencimento
   //linha 3
   items.push({
-    text: getNumberDecimalToString(billReceive.original_value),
+    text: getNumberDecimalToString(billReceive.originalValue),
     x: _x + 36,
     y: 44
   }); //valor
   items.push({
-    text: getDateToStringYearTwoDigits(billReceive.purchase_date),
+    text: getDateToStringYearTwoDigits(billReceive.purchaseDate),
     x: _x + 66,
     y: 44
   }); //data_compra
   items.push({ text: billReceive.vendor, x: _x + 89, y: 44 }); //vendedor
   items.push({
-    text: getNumberDecimalToString(billReceive.original_value),
+    text: getNumberDecimalToString(billReceive.originalValue),
     x: _x + 125,
     y: 44
   }); //valor
   //linha 4
   let totalValue =
-    billReceive.pay_date != null
-      ? billReceive.final_value['$numberDecimal']
+    billReceive.payDate != null
+      ? billReceive.finalValue
       : parseFloat(
           getValueWithInterest(
-            billReceive.original_value['$numberDecimal'],
-            billReceive.due_date,
+            billReceive.originalValue,
+            billReceive.dueDate,
             dateCurrent
           )
         );
   let interest =
-    totalValue - parseFloat(billReceive.original_value['$numberDecimal']);
+    totalValue - parseFloat(billReceive.originalValue);
   if (interest > 0) {
     items.push({
       text: getNumberToString2(interest),
@@ -108,12 +108,12 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
     x: 8,
     y: 23
   }); //numero_compra
-  items.push({ text: clientData.code, x: 40, y: 23 }); //cod_cliente
+  items.push({ text: clientData.id, x: 40, y: 23 }); //cod_cliente
   items.push({ text: clientData.name, x: 74, y: 23 }); //nome_cliente
   //linha 2
   items.push({ text: billReceive.vendor, x: 8, y: 34 }); //vendedor
   items.push({
-    text: getDateToStringYearTwoDigits(billReceive.due_date),
+    text: getDateToStringYearTwoDigits(billReceive.dueDate),
     x: 40,
     y: 34
   }); //data_vencimento
@@ -122,38 +122,38 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
     x: 74,
     y: 34
   }); //numero_compra
-  items.push({ text: clientData.code, x: 97, y: 34 }); //cod_cliente
-  items.push({ text: getDateToString(billReceive.due_date), x: 128, y: 34 }); //data_vencimento
+  items.push({ text: clientData.id, x: 97, y: 34 }); //cod_cliente
+  items.push({ text: getDateToString(billReceive.dueDate), x: 128, y: 34 }); //data_vencimento
   //linha 3
   items.push({
-    text: getNumberDecimalToString(billReceive.original_value),
+    text: getNumberDecimalToString(billReceive.originalValue),
     x: 44,
     y: 48
   }); //valor
   items.push({
-    text: getDateToStringYearTwoDigits(billReceive.purchase_date),
+    text: getDateToStringYearTwoDigits(billReceive.purchaseDate),
     x: 74,
     y: 46
   }); //data_compra
   items.push({ text: billReceive.vendor, x: 97, y: 45 }); //vendedor
   items.push({
-    text: getNumberDecimalToString(billReceive.original_value),
+    text: getNumberDecimalToString(billReceive.originalValue),
     x: 133,
     y: 47
   }); //valor
   //linha 4
   let totalValue =
-    billReceive.pay_date != null
-      ? billReceive.final_value['$numberDecimal']
+    billReceive.payDate != null
+      ? billReceive.finalValue
       : parseFloat(
           getValueWithInterest(
-            billReceive.original_value['$numberDecimal'],
-            billReceive.due_date,
+            billReceive.originalValue,
+            billReceive.dueDate,
             dateCurrent
           )
         );
   let interest =
-    totalValue - parseFloat(billReceive.original_value['$numberDecimal']);
+    totalValue - parseFloat(billReceive.originalValue);
   console.log(interest);
   if (interest > 0) {
     items.push({
@@ -168,8 +168,8 @@ const createPageForPrintFX890 = (clientData, billReceive) => {
     }); //juros
   }
   //linha 5
-  let final_value = getNumberDecimalToString(billReceive.final_value);
-  if (final_value !== '0,00') {
+  let finalValue = getNumberDecimalToString(billReceive.finalValue);
+  if (finalValue !== '0,00') {
     items.push({
       text: getNumberToString2(totalValue),
       x: 44,
