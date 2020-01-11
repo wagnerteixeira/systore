@@ -14,10 +14,10 @@ namespace Systore.Worker.Works.BackupMysqlToGDrive
 {
     public class Backup
     {
-        private readonly ILogger<Backup> _logger;
+        private readonly ILogger<Work> _logger;
         private readonly IConfiguration _configuration;
         private readonly BackupConfigurations _backupConfigurations;
-        public Backup(ILogger<Backup> logger, IConfiguration configuration)
+        public Backup(ILogger<Work> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
@@ -36,6 +36,8 @@ namespace Systore.Worker.Works.BackupMysqlToGDrive
             var backup = new BackupMysql(_backupConfigurations.ConnectionString);
             var folderPath = $"{Path.GetTempPath()}{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}";
             var backupFile = $"{folderPath}\\backup.sql";
+           
+            Directory.CreateDirectory(folderPath);
             string ret = backup.BackupDatabase(backupFile); 
 
             if (!string.IsNullOrWhiteSpace(ret))
