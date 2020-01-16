@@ -21,12 +21,12 @@ namespace Systore.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("client/{clientid}")]
-        public async Task<IActionResult> GetBillReceivesByClient(int ClientId)
+        [HttpGet("client/{clientId}")]
+        public async Task<IActionResult> GetBillReceivesByClient(int clientId)
         {
             try
             {
-                var result = await (_service as IBillReceiveService).GetBillReceivesByClient(ClientId);
+                var result = await (_service as IBillReceiveService).GetBillReceivesByClient(clientId);
                 return Ok(result);
             }
             catch (Exception e)
@@ -36,12 +36,12 @@ namespace Systore.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("client/{clientid}/paid")]                
-        public async Task<IActionResult> GetPaidBillReceivesByClient(int ClientId)
+        [HttpGet("client/{clientId}/paid")]                
+        public async Task<IActionResult> GetPaidBillReceivesByClient(int clientId)
         {
             try
             {
-                var result = await (_service as IBillReceiveService).GetPaidBillReceivesByClient(ClientId);
+                var result = await (_service as IBillReceiveService).GetPaidBillReceivesByClient(clientId);
                 return Ok(result);
             }
             catch (Exception e)
@@ -51,12 +51,12 @@ namespace Systore.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("client/{clientid}/nopaid")]
-        public async Task<IActionResult> GetNoPaidBillReceivesByClient(int ClientId)
+        [HttpGet("client/{clientId}/nopaid")]
+        public async Task<IActionResult> GetNoPaidBillReceivesByClient(int clientId)
         {
             try
             {
-                var result = await (_service as IBillReceiveService).GetNoPaidBillReceivesByClient(ClientId);
+                var result = await (_service as IBillReceiveService).GetNoPaidBillReceivesByClient(clientId);
                 return Ok(result);
             }
             catch (Exception e)
