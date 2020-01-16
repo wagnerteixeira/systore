@@ -43,7 +43,7 @@ namespace Systore.Data.Repositories
 
             return _billReceives.Select(c =>
             {
-                var days = (DateTime.UtcNow.Date - c.DueDate.Date).Days - 1;
+                var days = (DateTime.UtcNow.Date - c.DueDate.Date).Days;
                 if ((c.Situation == BillReceiveSituation.Open) && (days > 5))
                 {
                     c.DaysDelay = days;
