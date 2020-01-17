@@ -1,3 +1,14 @@
 {
-
+  "WorkerConfigurations": {
+    "Workers": [
+      {
+        "CronExpression": "34 01 * * *",
+        "WorkerName": "Systore.Worker.Works.BackupMysqlToGDrive"
+      },
+      {
+        "CronExpression": "34 01 * * *",
+        "WorkerName": "Systore.Worker.Works.BackupMysqlToGDrive"
+      }
+    ]
+  }
 }

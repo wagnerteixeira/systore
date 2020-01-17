@@ -17,5 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Systore.Worker.Abstractions\Systore.Worker.Abstractions.csproj" />
+    <ProjectReference Include="..\Works\Systore.Worker.Works.BackpMysql\Systore.Worker.Works.BackupMysqlToGDrive.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 </Project>

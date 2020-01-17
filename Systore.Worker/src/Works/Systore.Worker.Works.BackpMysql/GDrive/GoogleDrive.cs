@@ -18,10 +18,10 @@ namespace Systore.Worker.Works.BackupMysqlToGDrive.GDrive
     {
         private static string[] _scopes = { DriveService.Scope.Drive };
         private static string _applicationName = "Systore.Worker.Works.BackupMysqlToGDrive";
-        private readonly ILogger<Backup> _logger;
+        private readonly ILogger<Work> _logger;
         private readonly BackupConfigurations _backupConfigurations;
 
-        public GoogleDrive(ILogger<Backup> logger, IConfiguration configuration)
+        public GoogleDrive(ILogger<Work> logger, IConfiguration configuration)
         {
             _logger = logger;
             _backupConfigurations = new BackupConfigurations();           
@@ -85,6 +85,7 @@ namespace Systore.Worker.Works.BackupMysqlToGDrive.GDrive
              //   request.ProgressChanged += Request_ProgressChanged;
              //   request.ResponseReceived += Request_ResponseReceived;
                 request.Upload();
+                _logger.LogInformation($"File {name} uploaded to google drive");
             }
 
             var file = request.ResponseBody;
