@@ -1,15 +1,10 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using Systore.Domain.Entities;
 using Systore.Domain.Abstractions;
 using Systore.Dtos;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using Newtonsoft.Json;
@@ -24,11 +19,9 @@ namespace Systore.Api.Controllers
         private readonly IAuthService _authService;
         private IConfiguration _config;
         private readonly ILogger<AuthController> _logger;
+        private ValidationReleaseDto _validationReleaseDto = new ValidationReleaseDto();
 
         public AuthController(IAuthService authService, IConfiguration config, ILogger<AuthController> logger)
-        private ValidationReleaseDto _validationReleaseDto = new ValidationReleaseDto();
-      
-        public AuthController(IAuthService authService, IConfiguration config)
         {
             _authService = authService;
             _config = config;
