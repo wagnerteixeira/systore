@@ -11,17 +11,24 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using RestSharp;
+using Newtonsoft.Json;
 
 namespace Systore.Api.Controllers
 {
     [Route("oapi")]
     public class AuthController : ControllerBase, IDisposable
     {
+        private readonly string _urlRelease = "https://us-central1-check-release-265504.cloudfunctions.net/checkRelease";
+        private readonly string _clientId = "santo-pecado-systore";
         private readonly IAuthService _authService;
         private IConfiguration _config;
         private readonly ILogger<AuthController> _logger;
 
         public AuthController(IAuthService authService, IConfiguration config, ILogger<AuthController> logger)
+        private ValidationReleaseDto _validationReleaseDto = new ValidationReleaseDto();
+      
+        public AuthController(IAuthService authService, IConfiguration config)
         {
             _authService = authService;
             _config = config;
@@ -34,7 +41,13 @@ namespace Systore.Api.Controllers
         {
             try
             {
-               
+                var releaseOk = await VerifyRelease();
+
+                if (!releaseOk)
+                {
+                    return BadRequest(_validationReleaseDto);
+                }
+
                 var result = await _authService.Login(loginRequestDto);
                 return Ok(result);
             }
@@ -59,6 +72,28 @@ namespace Systore.Api.Controllers
             }
         }
 
+        private async Task<bool> VerifyRelease()
+        {
+            var client = new RestClient();
+            client.BaseUrl = new Uri(_urlRelease);
+
+            var request = new RestRequest(Method.POST);
+            request.AddParameter("clientId", _clientId);
+
+
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                _validationReleaseDto = JsonConvert.DeserializeObject<ValidationReleaseDto>(response.Content);
+
+                return _validationReleaseDto.Release;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         private bool _disposed = false;
         protected virtual void Dispose(bool disposing)
