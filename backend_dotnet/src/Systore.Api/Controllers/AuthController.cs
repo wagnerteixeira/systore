@@ -19,7 +19,6 @@ namespace Systore.Api.Controllers
         private readonly IAuthService _authService;
         private IConfiguration _config;
         private readonly ILogger<AuthController> _logger;
-        private ValidationReleaseDto _validationReleaseDto = new ValidationReleaseDto();
 
         public AuthController(IAuthService authService, IConfiguration config, ILogger<AuthController> logger)
         {
@@ -29,16 +28,20 @@ namespace Systore.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login")]        
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
             try
             {
-                var releaseOk = await VerifyRelease();
+                var validationRelease = await VerifyRelease();
 
-                if (!releaseOk)
-                {
-                    return BadRequest(_validationReleaseDto);
+                if (!validationRelease.Release)
+                {                      
+                    return StatusCode(402, new LoginResponseDto()
+                    {
+                        Valid = false,
+                        Relese = false
+                    });
                 }
 
                 var result = await _authService.Login(loginRequestDto);
@@ -51,13 +54,13 @@ namespace Systore.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("validateToken")]               
+        [HttpPost("validateToken")]
         public async Task<IActionResult> ValidateToken([FromBody] string token)
         {
             try
-            {                
+            {
                 var result = await Task.Run(() => _authService.ValidateToken(token));
-                return Ok(result);               
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -65,27 +68,19 @@ namespace Systore.Api.Controllers
             }
         }
 
-        private async Task<bool> VerifyRelease()
+        private async Task<ValidationReleaseDto> VerifyRelease()
         {
-            var client = new RestClient();
-            client.BaseUrl = new Uri(_urlRelease);
+            var client = new RestClient(_urlRelease);
 
             var request = new RestRequest(Method.POST);
             request.AddParameter("clientId", _clientId);
 
-
             IRestResponse response = await client.ExecuteAsync(request);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                _validationReleaseDto = JsonConvert.DeserializeObject<ValidationReleaseDto>(response.Content);
-
-                return _validationReleaseDto.Release;
-            }
+                return JsonConvert.DeserializeObject<ValidationReleaseDto>(response.Content);
             else
-            {
-                return false;
-            }
+                throw new Exception($"Erro ao verificar licença {response.StatusCode} {response.ErrorMessage} ");
         }
 
         private bool _disposed = false;
