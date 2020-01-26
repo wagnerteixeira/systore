@@ -1,22 +1,21 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using Systore.Domain.Entities;
 using Systore.Domain.Abstractions;
 using Systore.Dtos;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using Microsoft.Extensions.Logging;
+using RestSharp;
+using Newtonsoft.Json;
 
 namespace Systore.Api.Controllers
 {
     [Route("oapi")]
     public class AuthController : ControllerBase, IDisposable
     {
+        private readonly string _urlRelease = "https://us-central1-check-release-265504.cloudfunctions.net/checkRelease";
+        private readonly string _clientId = "santo-pecado-systore";
         private readonly IAuthService _authService;
         private IConfiguration _config;
         private readonly ILogger<AuthController> _logger;
@@ -29,12 +28,22 @@ namespace Systore.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login")]        
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
             try
             {
-               
+                var validationRelease = await VerifyRelease();
+
+                if (!validationRelease.Release)
+                {                      
+                    return StatusCode(402, new LoginResponseDto()
+                    {
+                        Valid = false,
+                        Relese = false
+                    });
+                }
+
                 var result = await _authService.Login(loginRequestDto);
                 return Ok(result);
             }
@@ -45,13 +54,13 @@ namespace Systore.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("validateToken")]               
+        [HttpPost("validateToken")]
         public async Task<IActionResult> ValidateToken([FromBody] string token)
         {
             try
-            {                
+            {
                 var result = await Task.Run(() => _authService.ValidateToken(token));
-                return Ok(result);               
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -59,6 +68,20 @@ namespace Systore.Api.Controllers
             }
         }
 
+        private async Task<ValidationReleaseDto> VerifyRelease()
+        {
+            var client = new RestClient(_urlRelease);
+
+            var request = new RestRequest(Method.POST);
+            request.AddParameter("clientId", _clientId);
+
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<ValidationReleaseDto>(response.Content);
+            else
+                throw new Exception($"Erro ao verificar licença {response.StatusCode} {response.ErrorMessage} ");
+        }
 
         private bool _disposed = false;
         protected virtual void Dispose(bool disposing)

@@ -17,7 +17,7 @@ namespace Systore.Data.Repositories
 
         public async Task<User> GetUserByUsernameAndPassword(string userName, string password)
         {
-            return await _entities.Where(c => c.UserName.ToUpper() == userName.ToUpper() && c.Password == password).FirstAsync();
+            return await _entities.Where(c => c.UserName.ToUpper() == userName.ToUpper() && c.Password == password).FirstOrDefaultAsync();
         }
     }
 }

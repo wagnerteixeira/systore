@@ -79,15 +79,27 @@ class App extends Component {
         localStorageService.setItem('token', res.data.token);
       }
     } catch (e) {
-      let errors = e.response.data.errors
-        ? e.response.data.errors.join('\n')
-        : 'Verifique usuário e/ou senha!';
-      this.setState({
-        logged: false,
-        messageOpen: true,
-        messageText: errors,
-        variantMessage: 'error',
-      });
+      console.log(e);
+      console.log(e.response);
+      if (e.response.status == 402) {
+        this.setState({
+          logged: false,
+          messageOpen: true,
+          messageText:
+            'Sistema não liberado. Verifique se há alguma pendência financeira.',
+          variantMessage: 'error',
+        });
+      } else {
+        let errors = e.response.data.errors
+          ? e.response.data.errors.join('\n')
+          : 'Verifique usuário e/ou senha!';
+        this.setState({
+          logged: false,
+          messageOpen: true,
+          messageText: errors,
+          variantMessage: 'error',
+        });
+      }
     }
   };
 

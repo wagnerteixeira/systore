@@ -112,10 +112,10 @@ namespace Systore.Services
                 return new LoginResponseDto()
                 {
                     Valid = false,
+                    Relese = true
                 };
             }
         }
-
 
     }
 }
