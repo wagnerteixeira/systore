@@ -11,7 +11,7 @@ namespace Systore.Worker.MefTest
     {
         public async Task<string> ExecuteAsync(CancellationToken stoppingToken)
         {
-            //await Task.Delay(1000);
+            await Task.Delay(1000);
             return "Executed";
         }
     }

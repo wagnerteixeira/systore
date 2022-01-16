@@ -73,14 +73,14 @@ namespace Systore.Worker.Service
                         var work = new Work(_workLogger, _configuration);
                         var task = work.ExecuteAsync(stoppingToken);
 
-                        task.ContinueWith((res) =>
+                        await task.ContinueWith((res) =>
                         {
                             if (res.Status == TaskStatus.RanToCompletion)
                                 _logger.LogInformation($"Worker finally running at: {DateTimeOffset.Now} res: {res.Result}");
                             else
                                 _logger.LogError("Error when executing worker", res.Exception);
 
-                        });
+                        }, stoppingToken);
 
 
                         worker.NextLocalTime = GetNextLocalTime(worker);

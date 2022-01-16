@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Systore.Worker.Service.Configurations;
-using Microsoft.Extensions.Hosting;
+
 
 namespace Systore.Worker.Service.Extensions
 {

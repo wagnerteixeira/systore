@@ -10,14 +10,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Google.Apis.Upload;
 using Systore.Worker.Works.BackupMysqlToGDrive;
 
 namespace Systore.Worker.Works.BackupMysqlToGDrive.GDrive
 {
     public class GoogleDrive
     {
-        private static string[] _scopes = { DriveService.Scope.Drive };
-        private static string _applicationName = "Systore.Worker.Works.BackupMysqlToGDrive";
         private readonly ILogger<Work> _logger;
         private readonly BackupConfigurations _backupConfigurations;
 
@@ -32,32 +31,13 @@ namespace Systore.Worker.Works.BackupMysqlToGDrive.GDrive
 
         private DriveService GetDriveService()
         {
-            UserCredential credential;
-
-            using (var stream =
-                new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
-            {
-                // The file token.json stores the user's access and refresh tokens, and is created
-                // automatically when the authorization flow completes for the first time.
-                string credPath = "token.json";
-
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    _scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-
-                _logger.LogInformation("Credential file saved to: " + credPath);
-
-
-            }
+            var credential = GoogleCredential.FromFile("credentials.json")
+                .CreateScoped(DriveService.ScopeConstants.Drive);
 
             // Create Drive API service.
             var service = new DriveService(new BaseClientService.Initializer()
             {
-                HttpClientInitializer = credential,
-                ApplicationName = _applicationName,
+                HttpClientInitializer = credential
             });
 
             return service;
@@ -72,25 +52,18 @@ namespace Systore.Worker.Works.BackupMysqlToGDrive.GDrive
                 Name = name,
                 Parents = new List<string> { _backupConfigurations.ParentFolderInDrive }
             };
-
-            FilesResource.CreateMediaUpload request;
-
-            using (var stream = new System.IO.FileStream(zipedFile,
-                                    System.IO.FileMode.Open))
+            
+            using var fsSource = new FileStream(zipedFile, FileMode.Open, FileAccess.Read);
+            
+            var request = service.Files.Create(fileMetadata, fsSource, "application/zip");
+            var results = request.Upload();
+            if (results.Status == UploadStatus.Failed)
             {
-                request = service.Files.Create(
-                    fileMetadata, stream, "application/zip");
-
-                request.Fields = "id";
-             //   request.ProgressChanged += Request_ProgressChanged;
-             //   request.ResponseReceived += Request_ResponseReceived;
-                request.Upload();
-                _logger.LogInformation($"File {name} uploaded to google drive");
+                _logger.LogError("Error when uploading file with message: {message}", results.Exception.Message);
+                throw results.Exception;
             }
-
-            var file = request.ResponseBody;
-
-            return !string.IsNullOrWhiteSpace(file?.Id);
+            _logger.LogInformation("File {name} uploaded to google drive", name);
+            return true;
         }
 
         public void InitializeGoogleDrive()
