@@ -31,7 +31,7 @@ namespace Systore.Worker.Works.BackupMysqlToGDrive.GDrive
 
         private DriveService GetDriveService()
         {
-            var credential = GoogleCredential.FromFile("credentials.json")
+            var credential = GoogleCredential.FromFile(_backupConfigurations.CredentialsPath)
                 .CreateScoped(DriveService.ScopeConstants.Drive);
 
             // Create Drive API service.

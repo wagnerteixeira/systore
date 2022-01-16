@@ -9,5 +9,6 @@ namespace Systore.Worker.Works.BackupMysqlToGDrive
         public string ConnectionString { get; set; }
         public string AuditConnectionString { get; set; }
         public string ParentFolderInDrive { get; set; }
+        public string CredentialsPath { get; set; }
     }
 }
