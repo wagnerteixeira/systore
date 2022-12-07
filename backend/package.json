@@ -20,7 +20,7 @@
     "cors": "^2.8.5",
     "cron": "^1.7.2",
     "dotenv": "^7.0.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-list-routes": "latest",
     "express-query-int": "^3.0.0",
     "googleapis": "39",
