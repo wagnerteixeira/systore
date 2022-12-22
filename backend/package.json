@@ -24,7 +24,7 @@
     "express-list-routes": "latest",
     "express-query-int": "^3.0.0",
     "googleapis": "39",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.11",
     "method-override": "^3.0.0",
     "mongoose": "^5.4.20",
